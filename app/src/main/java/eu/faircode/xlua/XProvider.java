@@ -48,6 +48,7 @@ import android.util.Log;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -332,6 +333,40 @@ class XProvider {
         return result;
     }
 
+    private static List<String> getExpApps(Context context) {
+        try {
+            Bundle call = context.getContentResolver().call(Uri.parse("content://me.weishu.exposed.CP/"), "apps", null, null);
+            if (call == null) {
+                return Collections.emptyList();
+            }
+            ArrayList<String> stringArrayList = call.getStringArrayList("apps");
+            if (stringArrayList == null) {
+                return Collections.emptyList();
+            }
+            return stringArrayList;
+        } catch (Throwable th) {
+            return Collections.emptyList();
+        }
+    }
+
+    private static Collection<ApplicationInfo> getApplications(Context context) {
+        List<String> expApps = getExpApps(context);
+        PackageManager packageManager = context.getPackageManager();
+        if (expApps.isEmpty()) {
+            return packageManager.getInstalledApplications(0);
+        } else {
+            List<ApplicationInfo> apps = new ArrayList<>();
+            for (String expApp : expApps) {
+                try {
+                    apps.add(packageManager.getApplicationInfo(expApp, 0));
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            return apps;
+        }
+    }
+
     private static Cursor getApps(Context context, String[] selection, boolean marshall) throws Throwable {
         Map<String, XApp> apps = new HashMap<>();
 
@@ -342,8 +377,9 @@ class XProvider {
         long ident = Binder.clearCallingIdentity();
         try {
             // Get installed apps for current user
-            PackageManager pm = Util.createContextForUser(context, userid).getPackageManager();
-            for (ApplicationInfo ai : pm.getInstalledApplications(0))
+            Context contextForUser = Util.createContextForUser(context, userid);
+            PackageManager pm = contextForUser.getPackageManager();
+            for (ApplicationInfo ai : getApplications(contextForUser))
                 if (!ai.packageName.startsWith(BuildConfig.APPLICATION_ID))
                     try {
                         int esetting = pm.getApplicationEnabledSetting(ai.packageName);

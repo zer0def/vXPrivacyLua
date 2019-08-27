@@ -55,6 +55,7 @@
 
         <provider
             android:name=".VXP"
+            android:exported="true"
             android:authorities="eu.faircode.xlua.vxp"
             android:process=":vxp" />
     </application>
