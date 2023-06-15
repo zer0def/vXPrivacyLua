@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.lang.Exception;
+import java.lang.NoClassDefFoundError;
+
+import de.robv.android.xposed.XposedBridge;
 
 public class XposedUtil {
     private static final String TAG = "XLua.XposedUtil";
@@ -42,10 +46,18 @@ public class XposedUtil {
         }
     }
 
+    private static boolean hasXposedApi() {
+        try { XposedBridge.getXposedVersion(); } catch (NoClassDefFoundError|Exception e) { return false; }
+        return true;
+    }
+
     public static boolean isVirtualXposed() {
+        return true;
+        /*
         return  !TextUtils.isEmpty(System.getProperty("vxp"))
                 || !TextUtils.isEmpty(System.getProperty("exp"))
                 || isExpModuleActive();
+        */
     }
 
     public static List<String> getExpApps(Context context) {

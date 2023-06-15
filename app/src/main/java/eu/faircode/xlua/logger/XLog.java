@@ -101,7 +101,7 @@ public class XLog {
         if(ENFORCE_CAT_LOG) {
             XBasicLog log = XBasicLog.create(tag, msg, null, className, methodName, dumpStack, getLastCall);
             Log.i(log.tag, log.message);
-            if(xposedLog) XposedBridge.log(log.toString());
+            //if(xposedLog) XposedBridge.log(log.toString());
         }
     }
 

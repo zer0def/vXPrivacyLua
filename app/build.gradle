@@ -1,8 +1,10 @@
 apply plugin: 'com.android.application'
 
-//def keystorePropertiesFile = rootProject.file("keystore.properties")
-//def keystoreProperties = new Properties()
-//keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+/*
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+*/
 
 android {
     compileSdkVersion 33
@@ -20,6 +22,7 @@ android {
         archivesBaseName = "XPL-EX-v$versionName-$versionCode"
     }
 
+    /*
     signingConfigs {
         release {
             if (System.getenv('GITHUB_WORKSPACE') != null) {
@@ -41,15 +44,16 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+    */
+
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
-    }
-
-    buildFeatures {
-        viewBinding true
     }
 
     buildTypes {
@@ -58,9 +62,11 @@ android {
             minifyEnabled false
             useProguard = false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            /*
             if (signingConfigs.release.storeFile) {
                 signingConfig signingConfigs.release
             }
+            */
         }
 
         debug {
@@ -69,9 +75,11 @@ android {
             minifyEnabled false
             useProguard = false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            /*
             if (signingConfigs.release.storeFile) {
                 signingConfig signingConfigs.release
             }
+            */
         }
     }
 
