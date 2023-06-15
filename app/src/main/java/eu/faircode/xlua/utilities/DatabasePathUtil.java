@@ -19,7 +19,7 @@ public class DatabasePathUtil {
     //make a function to ensure not alot of copies ? find what has all the files
 
     public static void log(String data, boolean error) {
-        XposedBridge.log(data);
+        //XposedBridge.log(data);
         if(error)
             Log.e(TAG, data);
         else

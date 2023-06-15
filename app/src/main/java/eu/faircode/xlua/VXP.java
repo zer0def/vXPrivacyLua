@@ -73,7 +73,7 @@ public class VXP extends ContentProvider {
             //return XProvider.query(getContext(), projection[0].split("\\.")[1], selectionArgs);
         } catch (Throwable ex) {
             Log.e(TAG, Log.getStackTraceString(ex));
-            XposedBridge.log(ex);
+            //XposedBridge.log(ex);
             return null;
         }
     }
