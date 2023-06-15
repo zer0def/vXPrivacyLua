@@ -38,6 +38,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 
+import java.lang.Exception;
+import java.lang.NoClassDefFoundError;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
@@ -47,6 +49,8 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
+
+import de.robv.android.xposed.XposedBridge;
 
 class Util {
     private final static String TAG = "XLua.Util";
@@ -196,10 +200,18 @@ class Util {
         }
     }
 
+    private static boolean hasXposedApi() {
+        try { XposedBridge.getXposedVersion(); } catch (NoClassDefFoundError|Exception e) { return false; }
+        return true;
+    }
+
     static boolean isVirtualXposed() {
+        return true;
+        /*
         return !TextUtils.isEmpty(System.getProperty("vxp"))
                 || !TextUtils.isEmpty(System.getProperty("exp"))
                 || isExpModuleActive();
+        */
     }
 
     public static int resolveColor(Context context, int attr) {

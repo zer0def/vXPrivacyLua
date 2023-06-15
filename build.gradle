@@ -12,6 +12,7 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url 'https://api.xposed.info' }
         maven {
             url 'https://maven.google.com'
         }
