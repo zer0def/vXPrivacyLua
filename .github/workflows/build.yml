@@ -1,0 +1,32 @@
+name: vXPrivacyLua
+
+on:
+  workflow_dispatch:
+
+jobs:
+  android_build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: JDK 8 setup
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Build artifacts
+      run: chmod +x gradlew; ./gradlew --no-daemon --stacktrace assembleDebug
+
+    - name: Publish artifacts
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        api_uri="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases"
+        upload_uri="https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases"
+
+        tag=$(awk '/(^|\s)versionName\s/ {print $NF}' app/build.gradle | sed 's/"//g')-$(awk '/(^|\s)versionCode\s/ {print $NF}' app/build.gradle | sed 's/"//g')
+        id=$(echo "{\"tag_name\":\"${tag}\",\"name\":\"${tag}-debug\",\"body\":\"${tag}\",\"draft\":true}" | curl -fs -H "Authorization: token ${GITHUB_TOKEN}" -H "Content-Type: application/json" -d@- "${api_uri}" | jq -r .id)
+        curl -fs -H "Authorization: token ${GITHUB_TOKEN}" -H "Content-Type: application/octet-stream" -o /dev/null --data-binary "@app/build/outputs/apk/debug/XPrivacyLua-v${tag}-debug.apk" "${upload_uri}/${id}/assets?name=${GITHUB_REPOSITORY##*/}-v${tag}-debug.apk"
+        echo '{"draft":false}' | curl -fs -H "Authorization: token ${GITHUB_TOKEN}" -H "Content-Type: application/json" -d@- -o /dev/null -XPATCH "${api_uri}/${id}"
