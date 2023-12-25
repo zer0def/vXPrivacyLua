@@ -1,0 +1,398 @@
+[
+  {
+    "name": "java.vendor",
+    "mockValue": "God",
+    "defaultValue": "God",
+    "enabled": true
+  },
+  {
+    "name": "java.specification.vendor",
+    "mockValue": "God",
+    "defaultValue": "God",
+    "enabled": true
+  },
+  {
+    "name": "java.vm.vendor",
+    "mockValue": "God",
+    "defaultValue": "God",
+    "enabled": true
+  },
+  {
+    "name": "java.vm.specification.vendor",
+    "mockValue": "God",
+    "defaultValue": "God",
+    "enabled": true
+  },
+  {
+    "name": "java.vendor.url",
+    "mockValue": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "defaultValue": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "enabled": true
+  },
+  {
+    "name": "java.vm.version",
+    "mockValue": "1.0",
+    "defaultValue": "1.0",
+    "enabled": true
+  },
+  {
+    "name": "java.runtime.version",
+    "mockValue": "1.0",
+    "defaultValue": "1.0",
+    "enabled": true
+  },
+  {
+    "name": "java.vm.name",
+    "mockValue": "Dalvik",
+    "defaultValue": "Dalvik",
+    "enabled": true
+  },
+  {
+    "name": "java.runtime.name",
+    "mockValue": "Dalvik",
+    "defaultValue": "Dalvik",
+    "enabled": true
+  },
+  {
+    "name": "os.arch",
+    "mockValue": "x86_64",
+    "defaultValue": "x86_64",
+    "enabled": true
+  },
+  {
+    "name": "os.name",
+    "mockValue": "Unix",
+    "defaultValue": "Unix",
+    "enabled": true
+  },
+  {
+    "name": "os.version",
+    "mockValue": "Kool-Kernel-RS3899238",
+    "defaultValue": "Kool-Kernel-RS3899238",
+    "enabled": true
+  },
+  {
+    "name": "user.home",
+    "mockValue": "Nandroid",
+    "defaultValue": "Nandroid",
+    "enabled": true
+  },
+  {
+    "name": "user.name",
+    "mockValue": "Nandroid",
+    "defaultValue": "Nandroid",
+    "enabled": true
+  },
+  {
+    "name": "build.date.utc",
+    "mockValue": "1621470459",
+    "defaultValue": "1621470459",
+    "enabled": true
+  },
+  {
+    "name": "build.description",
+    "mockValue": "redfin-user 9 RQ3A.210705.001 7380771 release-keys",
+    "defaultValue": "redfin-user 9 RQ3A.210705.001 7380771 release-keys",
+    "enabled": true
+  },
+  {
+    "name": "build.fingerprint",
+    "mockValue": "google/redfin/redfin:11/RQ3A.210705.001/7380771:user/release-keys",
+    "defaultValue": "google/redfin/redfin:11/RQ3A.210705.001/7380771:user/release-keys",
+    "enabled": true
+  },
+  {
+    "name": "build.date",
+    "mockValue": "Thu May 20 00:27:39 UTC 2021",
+    "defaultValue": "Thu May 20 00:27:39 UTC 2021",
+    "enabled": true
+  },
+  {
+    "name": "build.display.id",
+    "mockValue": "RQ3A.210705.001",
+    "defaultValue": "RQ3A.210705.001",
+    "enabled": true
+  },
+  {
+    "name": "build.flavor",
+    "mockValue": "redfin-user",
+    "defaultValue": "redfin-user",
+    "enabled": true
+  },
+  {
+    "name": "build.host",
+    "mockValue": "abfarm628",
+    "defaultValue": "abfarm628",
+    "enabled": true
+  },
+  {
+    "name": "build.id",
+    "mockValue": "RQ3A.210705.001",
+    "defaultValue": "RQ3A.210705.001",
+    "enabled": true
+  },
+  {
+    "name": "build.product",
+    "mockValue": "redfin",
+    "defaultValue": "redfin",
+    "enabled": true
+  },
+  {
+    "name": "build.user",
+    "mockValue": "God",
+    "defaultValue": "God",
+    "enabled": true
+  },
+  {
+    "name": "build.version.release",
+    "mockValue": "9",
+    "defaultValue": "9",
+    "enabled": true
+  },
+  {
+    "name": "build.debugable",
+    "mockValue": "0",
+    "defaultValue": "0",
+    "enabled": true
+  },
+  {
+    "name": "build.version.security_patch",
+    "mockValue": "2024-05-05",
+    "defaultValue": "2024-05-05",
+    "enabled": true
+  },
+  {
+    "name": "product.cpu.abi",
+    "mockValue": "armeabi-v7a",
+    "defaultValue": "armeabi-v7a",
+    "enabled": true
+  },
+  {
+    "name": "product.system.brand",
+    "mockValue": "Apple",
+    "defaultValue": "Apple",
+    "enabled": true
+  },
+  {
+    "name": "product.system.device",
+    "mockValue": "Apple12+Pro",
+    "defaultValue": "Apple12+Pro",
+    "enabled": true
+  },
+  {
+    "name": "product.system.manufacturer",
+    "mockValue": "Apple",
+    "defaultValue": "Apple",
+    "enabled": true
+  },
+  {
+    "name": "product.system.model",
+    "mockValue": "12Pro",
+    "defaultValue": "12Pro",
+    "enabled": true
+  },
+  {
+    "name": "product.model",
+    "mockValue": "12Pro",
+    "defaultValue": "12Pro",
+    "enabled": true
+  },
+  {
+    "name": "product.name",
+    "mockValue": "12Pro",
+    "defaultValue": "12Pro",
+    "enabled": true
+  },
+  {
+    "name": "product.device",
+    "mockValue": "12Pro",
+    "defaultValue": "12Pro",
+    "enabled": true
+  },
+  {
+    "name": "product.system.name",
+    "mockValue": "12Pro",
+    "defaultValue": "12Pro",
+    "enabled": true
+  },
+  {
+    "name": "product.nickname",
+    "mockValue": "IPhone 12 Pro",
+    "defaultValue": "IPhone 12 Pro",
+    "enabled": true
+  },
+  {
+    "name": "version.sdk",
+    "mockValue": "28",
+    "defaultValue": "28",
+    "enabled": true
+  },
+  {
+    "name": "product.locale",
+    "mockValue": "ER",
+    "defaultValue": "ER",
+    "enabled": true
+  },
+  {
+    "name": "board.platform",
+    "mockValue": "A12",
+    "defaultValue": "A12",
+    "enabled": true
+  },
+  {
+    "name": "version.incremental",
+    "mockValue": "ice.varun.20240505.10000",
+    "defaultValue": "ice.varun.20240505.10000",
+    "enabled": true
+  },
+  {
+    "name": "version.codename",
+    "mockValue": "BET",
+    "defaultValue": "BET",
+    "enabled": true
+  },
+  {
+    "name": "preview_sdk_fingerprint",
+    "mockValue": "BET",
+    "defaultValue": "BET",
+    "enabled": true
+  },
+  {
+    "name": "net.bt.name",
+    "mockValue": "Ghost",
+    "defaultValue": "Ghost",
+    "enabled": true
+  },
+  {
+    "name": "ro.nfc.port",
+    "mockValue": "1337",
+    "defaultValue": "1337",
+    "enabled": true
+  },
+  {
+    "name": "vendor.camera.privapp",
+    "mockValue": "com.apple.camera",
+    "defaultValue": "com.apple.camera",
+    "enabled": true
+  },
+  {
+    "name": "overlay.izat.optin",
+    "mockValue": "appl",
+    "defaultValue": "appl",
+    "enabled": true
+  },
+  {
+    "name": "ro.modversion",
+    "mockValue": "NULL",
+    "defaultValue": "NULL",
+    "enabled": true
+  },
+  {
+    "name": "bluetooth.soc",
+    "mockValue": "NULL",
+    "defaultValue": "NULL",
+    "enabled": true
+  },
+  {
+    "name": "net.dns",
+    "mockValue": "0.0.0.0",
+    "defaultValue": "0.0.0.0",
+    "enabled": true
+  },
+  {
+    "name": "persist.sys.exif.model",
+    "mockValue": "Z958",
+    "defaultValue": "Z958",
+    "enabled": true
+  },
+  {
+    "name": "boot.device",
+    "mockValue": "DRG",
+    "defaultValue": "DRG",
+    "enabled": true
+  },
+  {
+    "name": "sys.timezone",
+    "mockValue": "NULL",
+    "defaultValue": "NULL",
+    "enabled": true
+  },
+  {
+    "name": "system.build.type",
+    "mockValue": "User",
+    "defaultValue": "User",
+    "enabled": true
+  },
+  {
+    "name": "ro.boot.serialno",
+    "mockValue": "7B6EECA64C307B17",
+    "defaultValue": "7B6EECA64C307B17",
+    "enabled": true
+  },
+  {
+    "name": "gsm.operator.numeric",
+    "mockValue": "0010",
+    "defaultValue": "0010",
+    "enabled": true
+  },
+  {
+    "name": "gsm.sim.operator.numeric",
+    "mockValue": "0010",
+    "defaultValue": "0010",
+    "enabled": true
+  },
+  {
+    "name": "gsm.operator.alpha",
+    "mockValue": "Unknown",
+    "defaultValue": "Unknown",
+    "enabled": true
+  },
+  {
+    "name": "gsm.sim.operator.alpha",
+    "mockValue": "Unknown",
+    "defaultValue": "Unknown",
+    "enabled": true
+  },
+  {
+    "name": "gsm.operator.iso-country",
+    "mockValue": "xx",
+    "defaultValue": "xx",
+    "enabled": true
+  },
+  {
+    "name": "gsm.sim.operator.iso-country",
+    "mockValue": "xx",
+    "defaultValue": "xx",
+    "enabled": true
+  },
+  {
+    "name": "ro.vendor",
+    "mockValue": "Apple",
+    "defaultValue": "Apple",
+    "enabled": true
+  },
+  {
+    "name": "ro.netflix.bsp_rev",
+    "mockValue": "Q855-16947-1",
+    "defaultValue": "Q855-16947-1",
+    "enabled": true
+  },
+  {
+    "name": "lineage",
+    "mockValue": " ",
+    "defaultValue": " ",
+    "enabled": true
+  },
+  {
+    "name": "ro.rr",
+    "mockValue": " ",
+    "defaultValue": " ",
+    "enabled": true
+  },
+  {
+    "name": "rr.ota.version",
+    "mockValue": " ",
+    "defaultValue": " ",
+    "enabled": true
+  }
+]

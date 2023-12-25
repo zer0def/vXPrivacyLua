@@ -153,7 +153,7 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
 
                 case R.id.ivSettings:
                     PackageManager pm = view.getContext().getPackageManager();
-                    Intent settings = pm.getLaunchIntentForPackage(Util.PRO_PACKAGE_NAME);
+                    Intent settings = pm.getLaunchIntentForPackage(XUtil.PRO_PACKAGE_NAME);
                     if (settings == null) {
                         Intent browse = new Intent(Intent.ACTION_VIEW);
                         browse.setData(Uri.parse("https://lua.xprivacy.eu/pro/"));
@@ -234,7 +234,7 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
                     args.putBoolean("delete", !assign);
                     args.putBoolean("kill", app.forceStop);
                     context.getContentResolver()
-                            .call(XProvider.getURI(), "xlua", "assignHooks", args);
+                            .call(XSecurity.getURI(), "xlua", "assignHooks", args);
                 }
             });
         }
@@ -249,6 +249,8 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
     }
 
     AdapterApp(Context context) {
+        //This is to create the icons for each app.xml item
+        //Needs context
         TypedValue typedValue = new TypedValue();
         context.getTheme().resolveAttribute(android.R.attr.listPreferredItemHeight, typedValue, true);
         int height = TypedValue.complexToDimensionPixelSize(typedValue.data, context.getResources().getDisplayMetrics());
@@ -291,6 +293,8 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
     }
 
     void setShow(enumShow value) {
+        //What kind of apps to show (system, only with icon etc ... )
+        //The button at the Top with 3 lines
         if (show != value) {
             show = value;
             getFilter().filter(query);
@@ -298,6 +302,9 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
     }
 
     void setGroup(String name) {
+        //Set the group from the Spinner / Drop Down Menu at top of UI menu
+        //That being said ALL is all but specific kinds
+        //Get passed down to here to update view as well as show Restrict button
         if (group == null ? name != null : !group.equals(name)) {
             group = name;
             this.dataChanged = true;
@@ -306,6 +313,8 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
     }
 
     void restrict(final Context context) {
+        //This is just the restrict button if im not mistaken
+        //Note this button will only be visible when specific group is selected
         final List<Bundle> actions = new ArrayList<>();
 
         boolean revert = false;
@@ -359,13 +368,16 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
             public void run() {
                 for (Bundle args : actions)
                     context.getContentResolver()
-                            .call(XProvider.getURI(), "xlua", "assignHooks", args);
+                            .call(XSecurity.getURI(), "xlua", "assignHooks", args);
             }
         });
     }
 
     @Override
     public Filter getFilter() {
+        //Some big filter shit
+        //Dunno rn we no need filter for PROPS
+        //Also Filter is a liternal class from java hmm didnt know
         return new Filter() {
             private boolean expanded1 = false;
 
@@ -573,8 +585,9 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
 
         // App info
         holder.itemView.setBackgroundColor(app.system
-                ? Util.resolveColor(holder.itemView.getContext(), R.attr.colorSystem)
+                ? XUtil.resolveColor(holder.itemView.getContext(), R.attr.colorSystem)
                 : resources.getColor(android.R.color.transparent, null));
+
         holder.tvLabel.setText(app.label);
         holder.tvUid.setText(Integer.toString(app.uid));
         holder.tvPackage.setText(app.packageName);

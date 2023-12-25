@@ -21,6 +21,8 @@
 ******************************************************************************/
 package org.luaj.vm2.lib;
 
+import android.util.Log;
+
 import java.io.InputStream;
 
 import org.luaj.vm2.Globals;
@@ -30,9 +32,9 @@ import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 
-/** 
- * Subclass of {@link LibFunction} which implements the lua standard package and module 
- * library functions. 
+/**
+ * Subclass of {@link LibFunction} which implements the lua standard package and module
+ * library functions.
  * 
  * <h3>Lua Environment Variables</h3>
  * The following variables are available to lua scrips when this library has been loaded:
@@ -50,14 +52,14 @@ import org.luaj.vm2.Varargs;
  * </ul>
  * 
  * <h3>Loading</h3>
- * Typically, this library is included as part of a call to either 
+ * Typically, this library is included as part of a call to either
  * {@link org.luaj.vm2.lib.jse.JsePlatform#standardGlobals()} or {@link org.luaj.vm2.lib.jme.JmePlatform#standardGlobals()}
  * <pre> {@code
  * Globals globals = JsePlatform.standardGlobals();
  * System.out.println( globals.get("require").call"foo") );
  * } </pre>
  * <p>
- * To instantiate and use it directly, 
+ * To instantiate and use it directly,
  * link it into your globals table via {@link LuaValue#load(LuaValue)} using code such as:
  * <pre> {@code
  * Globals globals = new Globals();
@@ -67,8 +69,8 @@ import org.luaj.vm2.Varargs;
  * } </pre>
  * <h3>Limitations</h3>
  * This library has been implemented to match as closely as possible the behavior in the corresponding library in C.
- * However, the default filesystem search semantics are different and delegated to the bas library 
- * as outlined in the {@link BaseLib} and {@link org.luaj.vm2.lib.jse.JseBaseLib} documentation. 
+ * However, the default filesystem search semantics are different and delegated to the bas library
+ * as outlined in the {@link BaseLib} and {@link org.luaj.vm2.lib.jse.JseBaseLib} documentation.
  * <p>
  * @see LibFunction
  * @see BaseLib
@@ -78,26 +80,41 @@ import org.luaj.vm2.Varargs;
  * @see <a href="http://www.lua.org/manual/5.2/manual.html#6.3">Lua 5.2 Package Lib Reference</a>
  */
 public class PackageLib extends TwoArgFunction {
+	static final LuaString _LOADED      = valueOf("loaded");
+	private static final LuaString _LOADLIB     = valueOf("loadlib");
+	static final LuaString _PRELOAD     = valueOf("preload");
+	static final LuaString _PATH        = valueOf("path");
+	static final LuaString _SEARCHPATH  = valueOf("searchpath");
+	static final LuaString _SEARCHERS   = valueOf("searchers");
 
 	/** The default value to use for package.path.  This can be set with the system property
 	 * <code>"luaj.package.path"</code>, and is <code>"?.lua"</code> by default. */
-	public static String DEFAULT_LUA_PATH;
+	public static final String DEFAULT_LUA_PATH;
 	static {
+		Log.i("Luaj", "PackageLib Static Init...");
+		String path = null;
 		try {
-			DEFAULT_LUA_PATH = System.getProperty("luaj.package.path");
+			path = "?.lua";
+			//We can hook System.getProperty causing a crash since its loop inlined
+			//path = System.getProperty("luaj.package.path");
+			//we r looking possibly right at the issue here
+			//we hook this function yet it invokes it self hence why the hook fails...
+
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		if (DEFAULT_LUA_PATH == null)
-			DEFAULT_LUA_PATH = "?.lua";
-	}
+		if (path == null) {
+			path = "?.lua";
+		}
 
-	private static final LuaString _LOADED      = valueOf("loaded");
-	private static final LuaString _LOADLIB     = valueOf("loadlib");
-	private static final LuaString _PRELOAD     = valueOf("preload");
-	private static final LuaString _PATH        = valueOf("path");
-	private static final LuaString _SEARCHPATH  = valueOf("searchpath");
-	private static final LuaString _SEARCHERS   = valueOf("searchers");
+		DEFAULT_LUA_PATH = path;
+		Log.i("Luaj", "PackageLib Static Init Completed: " + path);
+		try {
+			Log.i("Luaj", _LOADED.toString());
+			Log.i("Luaj", _PRELOAD.toString());
+			Log.i("Luaj", DEFAULT_LUA_PATH.toString());
+		}catch (Exception e) { }
+	}
 	
 	/** The globals that were used to load this library. */
 	Globals globals;
@@ -119,6 +136,7 @@ public class PackageLib extends TwoArgFunction {
 	private static final String FILE_SEP = System.getProperty("file.separator");
 
 	public PackageLib() {}
+
 
 	/** Perform one-time initialization on the library by adding package functions
 	 * to the supplied environment, and returning it as the return value.
@@ -153,7 +171,7 @@ public class PackageLib extends TwoArgFunction {
 	}
 
 
-	/** Set the lua path used by this library instance to a new value.  
+	/** Set the lua path used by this library instance to a new value.
 	 * Merely sets the value of {@link path} to be used in subsequent searches. */
 	public void setLuaPath( String newLuaPath ) {
 		package_.set(_PATH, LuaValue.valueOf(newLuaPath));
@@ -165,33 +183,33 @@ public class PackageLib extends TwoArgFunction {
 	
 	// ======================== Package loading =============================
 
-	/** 
+	/**
 	 * require (modname)
 	 * 
-	 * Loads the given module. The function starts by looking into the package.loaded table 
-	 * to determine whether modname is already loaded. If it is, then require returns the value 
+	 * Loads the given module. The function starts by looking into the package.loaded table
+	 * to determine whether modname is already loaded. If it is, then require returns the value
 	 * stored at package.loaded[modname]. Otherwise, it tries to find a loader for the module.
 	 * 
-	 * To find a loader, require is guided by the package.searchers sequence. 
-	 * By changing this sequence, we can change how require looks for a module. 
+	 * To find a loader, require is guided by the package.searchers sequence.
+	 * By changing this sequence, we can change how require looks for a module.
 	 * The following explanation is based on the default configuration for package.searchers.
 	 * 
-	 * First require queries package.preload[modname]. If it has a value, this value 
-	 * (which should be a function) is the loader. Otherwise require searches for a Lua loader using 
-	 * the path stored in package.path. If that also fails, it searches for a Java loader using 
+	 * First require queries package.preload[modname]. If it has a value, this value
+	 * (which should be a function) is the loader. Otherwise require searches for a Lua loader using
+	 * the path stored in package.path. If that also fails, it searches for a Java loader using
 	 * the classpath, using the public default constructor, and casting the instance to LuaFunction.
 	 * 
-	 * Once a loader is found, require calls the loader with two arguments: modname and an extra value 
+	 * Once a loader is found, require calls the loader with two arguments: modname and an extra value
 	 * dependent on how it got the loader. If the loader came from a file, this extra value is the file name.
-	 * If the loader is a Java instance of LuaFunction, this extra value is the environment.  
-	 * If the loader returns any non-nil value, require assigns the returned value to package.loaded[modname]. 
-	 * If the loader does not return a non-nil value and has not assigned any value to package.loaded[modname], 
+	 * If the loader is a Java instance of LuaFunction, this extra value is the environment.
+	 * If the loader returns any non-nil value, require assigns the returned value to package.loaded[modname].
+	 * If the loader does not return a non-nil value and has not assigned any value to package.loaded[modname],
 	 * then require assigns true to this entry.
 	 * In any case, require returns the final value of package.loaded[modname].
-	 *  
+	 * 
 	 * If there is any error loading or running the module, or if it cannot find any loader for the module,
 	 * then require raises an error.
-	 */	
+	 */
 	public class require extends OneArgFunction {
 		public LuaValue call( LuaValue arg ) {
 			LuaString name = arg.checkstring();
@@ -210,7 +228,7 @@ public class PackageLib extends TwoArgFunction {
 			for ( int i=1; true; i++ ) {
 				LuaValue searcher = tbl.get(i);
 				if ( searcher.isnil() ) {
-					error( "module '"+name+"' not found: "+name+sb );				
+					error( "module '"+name+"' not found: "+name+sb );
 			    }
 							
 			    /* call loader with module name as argument */
@@ -226,14 +244,14 @@ public class PackageLib extends TwoArgFunction {
 			result = loader.arg1().call(name, loader.arg(2));
 			if ( ! result.isnil() )
 				loaded.set( name, result );
-			else if ( (result = loaded.get(name)) == _SENTINEL ) 
+			else if ( (result = loaded.get(name)) == _SENTINEL )
 				loaded.set( name, result = LuaValue.TRUE );
 			return result;
 		}
 	}
 
 	public static class loadlib extends VarArgFunction {
-		public Varargs loadlib( Varargs args ) {
+		public Varargs invoke( Varargs args ) {
 			args.checkstring(1);
 			return varargsOf(NIL, valueOf("dynamic libraries not enabled"), valueOf("absent"));
 		}
@@ -243,7 +261,7 @@ public class PackageLib extends TwoArgFunction {
 		public Varargs invoke(Varargs args) {
 			LuaString name = args.checkstring(1);
 			LuaValue val = package_.get(_PRELOAD).get(name);
-			return val.isnil()? 
+			return val.isnil()?
 				valueOf("\n\tno field package.preload['"+name+"']"):
 				val;
 		}
@@ -252,11 +270,10 @@ public class PackageLib extends TwoArgFunction {
 	public class lua_searcher extends VarArgFunction {
 		public Varargs invoke(Varargs args) {
 			LuaString name = args.checkstring(1);
-			InputStream is = null;
 					
 			// get package path
 			LuaValue path = package_.get(_PATH);
-			if ( ! path.isstring() ) 
+			if ( ! path.isstring() )
 				return valueOf("package.path is not a string");
 		
 			// get the searchpath function.
@@ -268,7 +285,7 @@ public class PackageLib extends TwoArgFunction {
 			LuaString filename = v.arg1().strvalue();
 		
 			// Try to load the file.
-			v = globals.loadfile(filename.tojstring()); 
+			v = globals.loadfile(filename.tojstring());
 			if ( v.arg1().isfunction() )
 				return LuaValue.varargsOf(v.arg1(), filename);
 			
@@ -353,9 +370,9 @@ public class PackageLib extends TwoArgFunction {
 				StringBuffer sb = new StringBuffer(j);
 				for ( int i=0; i<j; i++ ) {
 					c = filename.charAt(i);
-					sb.append( 
+					sb.append(
 							 (isClassnamePart(c))? c:
-							 ((c=='/') || (c=='\\'))? '.': '_' ); 
+							 ((c=='/') || (c=='\\'))? '.': '_' );
 				}
 				return sb.toString();
 			}
@@ -374,5 +391,5 @@ public class PackageLib extends TwoArgFunction {
 		default:
 			return false;
 		}
-	}	
+	}
 }

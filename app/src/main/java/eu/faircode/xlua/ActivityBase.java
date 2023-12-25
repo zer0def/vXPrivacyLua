@@ -20,11 +20,13 @@
 package eu.faircode.xlua;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ActivityBase extends AppCompatActivity {
     private String theme;
+    private static final String TAG = "XLua.ActivityBase";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,5 +38,15 @@ public class ActivityBase extends AppCompatActivity {
 
     String getThemeName() {
         return (theme == null ? "light" : theme);
+    }
+
+    void setDarkMode() { setThemeName("dark"); }
+    void setLightMode() { setThemeName("light"); }
+    private void setThemeName(String name) {
+        Log.i(TAG, "Set Theme=" + name);
+        XProvider.putSetting(this, "global", "theme", name);
+        theme = name;
+        setTheme("dark".equals(name) ? R.style.AppThemeDark : R.style.AppThemeLight);
+        recreate();
     }
 }

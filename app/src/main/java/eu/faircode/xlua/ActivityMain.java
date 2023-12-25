@@ -110,7 +110,7 @@ public class ActivityMain extends ActivityBase {
 
         // Get drawer layout
         drawerLayout = findViewById(R.id.drawer_layout);
-        drawerLayout.setScrimColor(Util.resolveColor(this, R.attr.colorDrawerScrim));
+        drawerLayout.setScrimColor(XUtil.resolveColor(this, R.attr.colorDrawerScrim));
 
         // Create drawer toggle
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name) {
@@ -144,10 +144,12 @@ public class ActivityMain extends ActivityBase {
         // Initialize drawer
         boolean notifyNew = XProvider.getSettingBoolean(this, "global", "notify_new_apps");
         boolean restrictNew = XProvider.getSettingBoolean(this, "global", "restrict_new_apps");
+        //String theme = XProvider.getSetting(this,"global", "theme");
+        boolean isDark = getThemeName().equals("dark");
 
         final ArrayAdapterDrawer drawerArray = new ArrayAdapterDrawer(ActivityMain.this, R.layout.draweritem);
 
-        if (!Util.isVirtualXposed())
+        if (!XposedUtil.isVirtualXposed())
             drawerArray.add(new DrawerItem(this, R.string.menu_notify_new, notifyNew, new DrawerItem.IListener() {
                 @Override
                 public void onClick(DrawerItem item) {
@@ -156,7 +158,7 @@ public class ActivityMain extends ActivityBase {
                 }
             }));
 
-        if (!Util.isVirtualXposed())
+        if (!XposedUtil.isVirtualXposed())
             drawerArray.add(new DrawerItem(this, R.string.menu_restrict_new, restrictNew, new DrawerItem.IListener() {
                 @Override
                 public void onClick(DrawerItem item) {
@@ -169,7 +171,7 @@ public class ActivityMain extends ActivityBase {
             @Override
             public void onClick(DrawerItem item) {
                 PackageManager pm = getPackageManager();
-                Intent companion = pm.getLaunchIntentForPackage(Util.PRO_PACKAGE_NAME);
+                Intent companion = pm.getLaunchIntentForPackage(XUtil.PRO_PACKAGE_NAME);
                 if (companion == null) {
                     Intent browse = new Intent(Intent.ACTION_VIEW);
                     browse.setData(Uri.parse("https://lua.xprivacy.eu/pro/"));
@@ -215,6 +217,36 @@ public class ActivityMain extends ActivityBase {
             }
         }));
 
+        drawerArray.add(new DrawerItem(this, R.string.menu_dark, isDark, new DrawerItem.IListener() {
+            @Override
+            public void onClick(DrawerItem item) {
+                //XProvider.putSettingBoolean(ActivityMain.this, "global", "notify_new_apps", item.isChecked());
+                //theme = XProvider.getSetting(this, "global", "theme");
+                if(item.isChecked())
+                    setDarkMode();
+                else
+                    setLightMode();
+                drawerArray.notifyDataSetChanged();
+            }
+        }));
+
+        drawerArray.add(new DrawerItem(this, R.string.menu_props, new DrawerItem.IListener() {
+            @Override
+            public void onClick(DrawerItem item) {
+                menuProps();
+                //Intent intent = new Intent(ActivityMain.this, ActivityProps.class);
+            }
+        }));
+
+        drawerArray.add(new DrawerItem(this, R.string.menu_cpumaps, new DrawerItem.IListener() {
+            @Override
+            public void onClick(DrawerItem item) {
+                menuCPU();
+                //menuProps();
+                //Intent intent = new Intent(ActivityMain.this, ActivityProps.class);
+            }
+        }));
+
         drawerList.setAdapter(drawerArray);
 
         checkFirstRun();
@@ -234,7 +266,7 @@ public class ActivityMain extends ActivityBase {
         setIntent(intent);
 
         if (this.menu != null)
-            updateMenu(this.menu);
+            updateMenu(this.menu);//maybe we dont need out mnu
     }
 
     @Override
@@ -265,6 +297,7 @@ public class ActivityMain extends ActivityBase {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        //for top menu add function fuck whatdgkjshdflkhsdkjfh
         Log.i(TAG, "Prepare options");
 
         // Search
@@ -377,6 +410,10 @@ public class ActivityMain extends ActivityBase {
     private void menuHelp() {
         startActivity(new Intent(this, ActivityHelp.class));
     }
+    private void menuProps() { startActivity(new Intent(this, ActivityProps.class)); }
+    private void menuDBs() { startActivity(new Intent(this, ActivityDatabase.class)); }
+    private void menuCPU() { startActivity(new Intent(this, ActivityCpu.class)); }
+
 
     public void updateMenu(Menu menu) {
         // Search
@@ -396,7 +433,7 @@ public class ActivityMain extends ActivityBase {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean firstRun = prefs.getBoolean("firstrun", true);
         if (firstRun && firstRunDialog == null) {
-            final Util.DialogObserver observer = new Util.DialogObserver();
+            final XUtil.DialogObserver observer = new XUtil.DialogObserver();
 
             LayoutInflater inflater = LayoutInflater.from(this);
             View view = inflater.inflate(R.layout.license, null, false);

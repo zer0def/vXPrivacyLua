@@ -141,7 +141,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                         ifPackageAdd.addAction(Intent.ACTION_PACKAGE_ADDED);
                         ifPackageAdd.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED);
                         ifPackageAdd.addDataScheme("package");
-                        Util.createContextForUser(context, userid).registerReceiver(new ReceiverPackage(), ifPackageAdd);
+                        XUtil.createContextForUser(context, userid).registerReceiver(new ReceiverPackage(), ifPackageAdd);
                     }
                 } catch (Throwable ex) {
                     Log.e(TAG, Log.getStackTraceString(ex));
@@ -177,16 +177,24 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
         Class<?> clsSet = Class.forName("com.android.providers.settings.SettingsProvider", false, lpparam.classLoader);
 
         // Bundle call(String method, String arg, Bundle extras)
+        //Make sure settings is exposed a sa content provider res, you can try to mass flood hook
+        //make sure check caller
         Method mCall = clsSet.getMethod("call", String.class, String.class, Bundle.class);
         XposedBridge.hookMethod(mCall, new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                //We hook Method in Settings called "call" >> Bundle call(String method, String arg, Bundle extras)
+                //Each time we invoke com.android.providers.settings.SettingsProvider >> Bundle.call we Invoke the Stuff below ?
+                //Possibly this helps us get system access to modify system files ?
+
                 try {
                     String method = (String) param.args[0];
                     String arg = (String) param.args[1];
                     Bundle extras = (Bundle) param.args[2];
 
-                    if ("xlua".equals(method))
+                    //Log.i(TAG, "Internal Settings System Bundle Hook Called! >> " + method + " " + arg);
+
+                    if ("xlua".equals(method)) {
                         if ("getVersion".equals(arg)) {
                             Bundle result = new Bundle();
                             result.putInt("version", version);
@@ -204,6 +212,23 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                                 XposedBridge.log(ex);
                                 param.setResult(null);
                             }
+                    }
+                    else if("mock".equals(method)) {
+                        //Log.i(TAG, "mock_call=" + arg);
+                        try {
+                            Method mGetContext = param.thisObject.getClass().getMethod("getContext");
+                            Context context = (Context) mGetContext.invoke(param.thisObject);
+                            //param.setResult(XDBGum.call(context, arg, extras));
+                            param.setResult(XMockProvider.callHandler(context, arg, extras));
+                        }catch (IllegalArgumentException ex) {
+                            Log.i(TAG, "Error: " + ex.getMessage());
+                            param.setThrowable(ex);
+                        }catch (Throwable ex) {
+                            Log.e(TAG, Log.getStackTraceString(ex));
+                            XposedBridge.log(ex);
+                            param.setResult(null);
+                        }
+                    }
                 } catch (Throwable ex) {
                     Log.e(TAG, Log.getStackTraceString(ex));
                     XposedBridge.log(ex);
@@ -217,18 +242,53 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 try {
+
+                    //context.getContentResolver()
+                    //        .query(XProvider.getURI(), new String[]{"xlua.getSettings"}, "pkg = ? AND uid = ?", new String[]{"global", Integer.toString(uid)}, null);
+
+                    //     com.android.providers.settings.SettingsProvider => Cursor query(Uri uri, String[] projection, String where, String[] whereArgs, String order)
+                    //
+                    //[0] URI
+                    //[1] Projection
+                    //[2] Selection
+                    //
+                    //
+                    //
+
+                    //[0] URI
+                    //[1] Projection (Method to Invoke)
+                    //[2] N/A
+                    //[3] Selection (Extra Args to know what to find / filter out)
+
                     String[] projection = (String[]) param.args[1];
                     String[] selection = (String[]) param.args[3];
                     if (projection != null && projection.length > 0 &&
-                            projection[0] != null && projection[0].startsWith("xlua.")) {
-                        try {
-                            Method mGetContext = param.thisObject.getClass().getMethod("getContext");
-                            Context context = (Context) mGetContext.invoke(param.thisObject);
-                            param.setResult(XProvider.query(context, projection[0].split("\\.")[1], selection));
-                        } catch (Throwable ex) {
-                            Log.e(TAG, Log.getStackTraceString(ex));
-                            XposedBridge.log(ex);
-                            param.setResult(null);
+                            projection[0] != null) {
+
+                        if(projection[0].startsWith("xlua.")) {
+                            try {
+                                Log.i(TAG, "QEURY=" + projection[0]);
+                                Method mGetContext = param.thisObject.getClass().getMethod("getContext");
+                                Context context = (Context) mGetContext.invoke(param.thisObject);
+                                param.setResult(XProvider.query(context, projection[0].split("\\.")[1], selection));
+                            } catch (Throwable ex) {
+                                Log.e(TAG, Log.getStackTraceString(ex));
+                                XposedBridge.log(ex);
+                                param.setResult(null);
+                            }
+                        }
+                        else if(projection[0].startsWith("mock.")) {
+                            try {
+                                Log.i(TAG, "QEURY=" + projection[0]);
+                                Method mGetContext = param.thisObject.getClass().getMethod("getContext");
+                                Context context = (Context) mGetContext.invoke(param.thisObject);
+                                param.setResult(XMockProvider.queryHandler(context, projection[0].split("\\.")[1], selection));
+                                //param.setResult(XDBGum.query(context, projection[0].split("\\.")[1], selection));
+                            }catch (Throwable ex) {
+                                Log.e(TAG, Log.getStackTraceString(ex));
+                                XposedBridge.log(ex);
+                                param.setResult(null);
+                            }
                         }
                     }
                 } catch (Throwable ex) {
@@ -255,9 +315,9 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                         Context context = (Application) param.getResult();
 
                         // Check for isolate process
-                        int userid = Util.getUserId(uid);
-                        int start = Util.getUserUid(userid, 99000);
-                        int end = Util.getUserUid(userid, 99999);
+                        int userid = XUtil.getUserId(uid);
+                        int start = XUtil.getUserUid(userid, 99000);
+                        int end = XUtil.getUserUid(userid, 99999);
                         boolean isolated = (uid >= start && uid <= end);
                         if (isolated) {
                             Log.i(TAG, "Skipping isolated " + lpparam.packageName + ":" + uid);
@@ -275,14 +335,17 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
     }
 
     private void hookPackage(final XC_LoadPackage.LoadPackageParam lpparam, int uid, final Context context) throws Throwable {
+        //We can maybe do something like insert it / bind the list of xmockprops to the XAPP instance
+        //Update each when needed ?
         // Get assigned hooks
         List<XHook> hooks = new ArrayList<>();
         Cursor chooks = null;
         try {
             chooks = context.getContentResolver()
-                    .query(XProvider.getURI(), new String[]{"xlua.getAssignedHooks2"},
+                    .query(XSecurity.getURI(), new String[]{"xlua.getAssignedHooks2"},
                             "pkg = ? AND uid = ?", new String[]{lpparam.packageName, Integer.toString(uid)},
                             null);
+
             while (chooks != null && chooks.moveToNext()) {
                 byte[] marshaled = chooks.getBlob(0);
                 Parcel parcel = Parcel.obtain();
@@ -303,7 +366,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
         Cursor csettings1 = null;
         try {
             csettings1 = context.getContentResolver()
-                    .query(XProvider.getURI(), new String[]{"xlua.getSettings"},
+                    .query(XSecurity.getURI(), new String[]{"xlua.getSettings"},
                             "pkg = ? AND uid = ?", new String[]{"global", Integer.toString(uid)},
                             null);
             while (csettings1 != null && csettings1.moveToNext())
@@ -317,7 +380,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
         Cursor csettings2 = null;
         try {
             csettings2 = context.getContentResolver()
-                    .query(XProvider.getURI(), new String[]{"xlua.getSettings"},
+                    .query(XSecurity.getURI(), new String[]{"xlua.getSettings"},
                             "pkg = ? AND uid = ?", new String[]{lpparam.packageName, Integer.toString(uid)},
                             null);
             while (csettings2 != null && csettings2.moveToNext())
@@ -474,8 +537,12 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                                 LuaValue[] args;
                                 synchronized (threadGlobals) {
                                     Thread thread = Thread.currentThread();
+
+                                    //Log.i(TAG, "Init Globals... " + thread.getId());
                                     if (!threadGlobals.containsKey(thread))
                                         threadGlobals.put(thread, getGlobals(context, hook, settings));
+
+                                    //Log.i(TAG, "Finished Global Init");
                                     Globals globals = threadGlobals.get(thread);
 
                                     // Define functions
@@ -490,6 +557,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                                     // Build arguments
                                     args = new LuaValue[]{
                                             CoerceJavaToLua.coerce(hook),
+                                            //Create XPARAM here
                                             CoerceJavaToLua.coerce(new XParam(context, param, settings))
                                     };
                                 }
@@ -635,7 +703,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                         for (Bundle args : work)
                             try {
                                 context.getContentResolver()
-                                        .call(XProvider.getURI(), "xlua", "report", args);
+                                        .call(XSecurity.getURI(), "xlua", "report", args);
                             } catch (Throwable ex) {
                                 Log.e(TAG, Log.getStackTraceString(ex));
                                 XposedBridge.log(ex);
@@ -778,6 +846,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
     }
 
     private static Globals getGlobals(Context context, XHook hook, Map<String, String> settings) {
+        //Log.i(TAG, "Grabbing Globals <getGlobals>");
         Globals globals = JsePlatform.standardGlobals();
         // base, bit32, coroutine, io, math, os, package, string, table, luajava
 
@@ -859,6 +928,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 }
 
                 private void execute(String when, MethodHookParam param) {
+                    //I dont think this shit is invoked..
                     Log.i(TAG, "Dynamic invoke " + param.method);
                     List<LuaValue> values = new ArrayList<>();
                     values.add(LuaValue.valueOf(when));

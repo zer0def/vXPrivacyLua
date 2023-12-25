@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="eu.faircode.xlua.ActivityMain">
 
+    <!-- This is the loading icon -->
     <ProgressBar
         android:id="@+id/pbApplication"
         style="@style/Base.Widget.AppCompat.ProgressBar"
@@ -16,6 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- This is the drop down that displays all the groups -->
     <Spinner
         android:id="@+id/spGroup"
         android:layout_width="0dp"
@@ -26,6 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Same as Text View maybe button has no purpose ? this all is just the Top View over the app.xml under menu/main.xml -->
     <Button
         android:id="@+id/btnRestrict"
         android:layout_width="wrap_content"
@@ -36,6 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- That text in top Right says Restrict -->
     <TextView
         android:id="@+id/tvRestrict"
         android:layout_width="wrap_content"
@@ -48,6 +52,7 @@
         app:layout_constraintEnd_toEndOf="@id/btnRestrict"
         app:layout_constraintTop_toTopOf="@id/btnRestrict" />
 
+    <!-- Refresh drag down -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="0dp"
@@ -65,6 +70,8 @@
             android:scrollbars="vertical" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <!-- This may just be the thing that holds the app.xml elements -->
+    <!-- Constraint to the top Spinner/Drop down -->
     <androidx.constraintlayout.widget.Group
         android:id="@+id/grpApplication"
         android:layout_width="0dp"

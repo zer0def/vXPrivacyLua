@@ -113,7 +113,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
                     break;
 
                 case R.id.tvGroup:
-                    cbAssigned.setChecked(!cbAssigned.isChecked());
+                    cbAssigned.setChecked(!cbAssigned.isChecked());//Invoke the onCheck
                     break;
             }
         }
@@ -182,7 +182,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
             }
         });
 
-        notifyDataSetChanged();
+        notifyDataSetChanged();//Invoke to Update the UI
     }
 
     @Override

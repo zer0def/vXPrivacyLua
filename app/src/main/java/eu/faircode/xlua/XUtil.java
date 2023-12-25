@@ -25,13 +25,13 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Process;
 import android.os.UserHandle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -45,11 +45,24 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
 
-class Util {
+public class XUtil {
     private final static String TAG = "XLua.Util";
 
     static final String PRO_PACKAGE_NAME = "eu.faircode.xlua.pro";
     private static final int PER_USER_RANGE = 100000;
+
+    public static String getApk(Context context) {
+        // Read built-in definition
+
+        try{
+            PackageManager pm = context.getPackageManager();
+            ApplicationInfo ai = pm.getApplicationInfo(BuildConfig.APPLICATION_ID, 0);
+            return ai.publicSourceDir;
+        }catch (Throwable ex) {
+            Log.e(TAG, Log.getStackTraceString(ex));
+            return "com.";//Add in
+        }
+    }
 
     static void setPermissions(String path, int mode, int uid, int gid) {
         try {
@@ -106,6 +119,15 @@ class Util {
         }
     }
 
+    static String getSha1FingerprintString(Context context, String packageName) throws Throwable {
+        byte[] bys = getSha1Fingerprint(context, packageName);
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bys)
+            sb.append(Integer.toString(b & 0xff, 16).toLowerCase());
+
+        return sb.toString();
+    }
+
     static byte[] getSha1Fingerprint(Context context, String packageName) throws Throwable {
         PackageManager pm = context.getPackageManager();
         PackageInfo packageInfo = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
@@ -114,7 +136,7 @@ class Util {
     }
 
     static Context createContextForUser(Context context, int userid) throws Throwable {
-        if (isVirtualXposed())
+        if (XposedUtil.isVirtualXposed())
             return context;
 
         // public UserHandle(int h)
@@ -140,7 +162,7 @@ class Util {
             nm.createNotificationChannel(channel);
         }
 
-        if (Util.isVirtualXposed()) {
+        if (XposedUtil.isVirtualXposed()) {
             nm.notify(tag, id, notification);
             return;
         }
@@ -148,14 +170,14 @@ class Util {
         // public void notifyAsUser(String tag, int id, Notification notification, UserHandle user)
         Method mNotifyAsUser = nm.getClass().getDeclaredMethod(
                 "notifyAsUser", String.class, int.class, Notification.class, UserHandle.class);
-        mNotifyAsUser.invoke(nm, tag, id, notification, Util.getUserHandle(userid));
+        mNotifyAsUser.invoke(nm, tag, id, notification, XUtil.getUserHandle(userid));
         Log.i(TAG, "Notified " + tag + ":" + id + " as " + userid);
     }
 
     static void cancelAsUser(Context context, String tag, int id, int userid) throws Throwable {
         NotificationManager nm = context.getSystemService(NotificationManager.class);
 
-        if (Util.isVirtualXposed()) {
+        if (XposedUtil.isVirtualXposed()) {
             nm.cancel(tag, id);
             return;
         }
@@ -163,12 +185,8 @@ class Util {
         // public void cancelAsUser(String tag, int id, UserHandle user)
         Method mCancelAsUser = nm.getClass().getDeclaredMethod(
                 "cancelAsUser", String.class, int.class, UserHandle.class);
-        mCancelAsUser.invoke(nm, tag, id, Util.getUserHandle(userid));
+        mCancelAsUser.invoke(nm, tag, id, XUtil.getUserHandle(userid));
         Log.i(TAG, "Cancelled " + tag + ":" + id + " as " + userid);
-    }
-
-    static boolean isVirtualXposed() {
-        return !TextUtils.isEmpty(System.getProperty("vxp"));
     }
 
     public static int resolveColor(Context context, int attr) {

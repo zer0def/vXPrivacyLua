@@ -30,6 +30,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +39,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -46,6 +48,7 @@ import java.util.zip.ZipFile;
 
 public class XHook implements Parcelable {
     private final static String TAG = "XLua.XHook";
+    //we can jsut do a key exchange system
 
     private boolean builtin = false;
     private String collection;
@@ -226,9 +229,109 @@ public class XHook implements Parcelable {
         }
     }
 
+    static ArrayList<XHook> readHooksEx(Context context, String apk)  throws IOException, JSONException {
+        Log.i(TAG, "Reading all Hooks in JSON");
+        ZipFile zipFile = null;
+        ArrayList<XHook> hooks_all = new ArrayList<>();
+        try {
+            zipFile = new ZipFile(apk);
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                if (entry.getName().startsWith("assets/") && entry.getName().endsWith("hooks.json")) {
+                    Log.i(TAG, "Found entry for [hooks.json] => " + entry);
+                    ArrayList<XHook> read_hooks = readHooksFromEntry(entry, zipFile);
+                    if(!read_hooks.isEmpty()) {
+                        hooks_all.addAll(read_hooks);
+                    }
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "Failed to read Hooks! " + e);
+        } finally {
+            if (zipFile != null)
+                try { zipFile.close();
+                } catch (IOException ignored) { }
+        }
+
+        return hooks_all;
+    }
+
+    static ArrayList<XHook> readHooksFromEntry(ZipEntry entry, ZipFile zipFile) {
+        Log.i(TAG, "Parsing hooks from: " + entry);
+        ArrayList<XHook> hooks = new ArrayList<>();
+
+        String entryName = entry.getName();
+        String entryPath = entryName.substring(0, entryName.length() - 11);
+        boolean isBuiltIn = entryName.endsWith("assets/hooks.json");
+
+        Log.i(TAG, "Parsing::[" + entryPath + "]::[" + isBuiltIn + "]");
+
+        InputStream is = null;
+        try {
+            is = zipFile.getInputStream(entry);
+            String json = new Scanner(is).useDelimiter("\\A").next();
+            JSONArray jarray = new JSONArray(json);
+
+            for(int i = 0; i < jarray.length(); i++) {
+                XHook hook = XHook.fromJSONObject(jarray.getJSONObject(i));
+                if (hook.luaScript.startsWith("@")) {
+                    hook.builtin = isBuiltIn || hook.builtin;
+                    //ZipEntry luaEntry = zipFile.getEntry("assets/" + hook.luaScript.substring(1) + ".lua");
+                    String luaContents = getLuaScript(zipFile, entryPath, hook.luaScript.substring(1) + ".lua");
+                    if(luaContents == null) {
+                        Log.e(TAG, "Failed to Init Hook: " + hook.getId() + " => " + entry);
+                        continue;
+                    }
+
+                    hook.luaScript = luaContents;
+                }
+                hooks.add(hook);
+            }
+
+        }catch (Exception e) {
+            Log.e(TAG, "Failed to Read Hooks from ZIP Entry::" + entry + "\n" + e);
+        }finally {
+            if (is != null)
+                try { is.close();
+                } catch (IOException ignored) { }
+        }
+
+        return hooks;
+    }
+
+    static String getLuaScript(ZipFile zipFile, String path, String scriptName) {
+        String entryLua = path + "/" + scriptName;
+        //String entryLua = path + "/" + hook.luaScript.substring(1) + ".lua";
+        //Log.i(TAG, "Finding LUA Entry::" + entryLua);
+        ZipEntry luaEntry = zipFile.getEntry(entryLua);
+        if (luaEntry == null && path != "assets") {
+            return getLuaScript(zipFile, "assets", scriptName);
+            //throw new IllegalArgumentException(scriptName + " not found for " + hook.getId());
+        }
+        else {
+            InputStream lis = null;
+            try {
+                lis = zipFile.getInputStream(luaEntry);
+                return new Scanner(lis).useDelimiter("\\A").next();
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to Grab Script: " + entryLua);
+            }finally {
+                if (lis != null)
+                    try {
+                        lis.close();
+                    } catch (IOException ignored) {
+                    }
+            }
+        }
+
+        return null;
+    }
+
     // Read hook definitions from asset file
     static ArrayList<XHook> readHooks(Context context, String apk) throws IOException, JSONException {
-        ZipFile zipFile = null;
+        return readHooksEx(context, apk);
+        /*ZipFile zipFile = null;
         try {
             zipFile = new ZipFile(apk);
             ZipEntry zipEntry = zipFile.getEntry("assets/hooks.json");
@@ -243,7 +346,8 @@ public class XHook implements Parcelable {
                 JSONArray jarray = new JSONArray(json);
                 for (int i = 0; i < jarray.length(); i++) {
                     XHook hook = XHook.fromJSONObject(jarray.getJSONObject(i));
-                    hook.builtin = true;
+                    //hook.builtin = true;
+                    //if(hook.builtin == false)
 
                     // Link script
                     if (hook.luaScript.startsWith("@")) {
@@ -282,7 +386,7 @@ public class XHook implements Parcelable {
                     zipFile.close();
                 } catch (IOException ignored) {
                 }
-        }
+        }*/
     }
 
     String toJSON() throws JSONException {

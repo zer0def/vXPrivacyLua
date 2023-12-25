@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemViewDatabase"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btDeleteDatabase"
+        android:layout_width="102dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="181dp"
+        android:text="Delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btExportDatabase"
+        app:layout_constraintTop_toBottomOf="@+id/tvDatabasePath" />
+
+    <TextView
+        android:id="@+id/tvDatabaseName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:lines="1"
+        android:text="mock.db"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        app:layout_constraintStart_toStartOf="@+id/tvDatabasePath" />
+
+    <TextView
+        android:id="@+id/tvDatabasePath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:ellipsize="start"
+        android:focusable="false"
+        android:singleLine="true"
+        android:text="/data/system/xlua"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        app:layout_constraintStart_toStartOf="@+id/btExportDatabase"
+        app:layout_constraintTop_toBottomOf="@id/tvDatabaseName" />
+
+    <Button
+        android:id="@+id/btExportDatabase"
+        android:layout_width="102dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:text="Export"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDatabasePath" />
+</androidx.constraintlayout.widget.ConstraintLayout>

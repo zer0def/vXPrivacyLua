@@ -19,17 +19,39 @@
 
 package eu.faircode.xlua;
 
+import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Debug;
+import android.os.Parcel;
+import android.telephony.CellLocation;
 import android.util.Log;
+import android.view.inputmethod.EditorInfo;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 import de.robv.android.xposed.XC_MethodHook;
+import eu.faircode.xlua.cpu.XMockCpuUtils;
+import eu.faircode.xlua.utilities.FileUtil;
+import eu.faircode.xlua.utilities.LuaLongUtil;
+import eu.faircode.xlua.utilities.MemoryUtil;
+import eu.faircode.xlua.utilities.NetworkUtil;
+import eu.faircode.xlua.utilities.ReflectUtil;
+import eu.faircode.xlua.utilities.StringUtils;
 
 public class XParam {
     private static final String TAG = "XLua.XParam";
@@ -74,6 +96,165 @@ public class XParam {
         this.settings = settings;
     }
 
+    //
+    //Start of FILTER Functions
+    //
+
+    @SuppressWarnings("unused")
+    public String filterBuildProperty(String property) {
+        if(!StringUtils.isValidString(property))
+            return XMockUtils.NOT_BLACKLISTED;
+
+        if(XMockUtils.isPropVxpOrLua(property)) {
+            Log.i(TAG, "Skipping Property avoid Stack Overflow / Recursion");
+            return XMockUtils.NOT_BLACKLISTED;
+        }
+
+        Log.i(TAG, "Checking Property=" + property);
+        return XMockUtils.filterProperty(property, XMockProxyApi.queryGetMockProps(getApplicationContext()));
+    }
+
+    @SuppressWarnings("unused")
+    public boolean filterSettingsSecure(String setting) throws Throwable {
+        Object arg = getArgument(1);
+        if(arg == null)
+            return false;
+
+        if (!(arg instanceof String))
+            return false;
+
+        String set = (String)arg;
+
+        switch (setting) {
+            case "android_id":
+                if(set.equals("android_id")) {
+                    String fake = getSetting("value.android_id", "0000000000000000");
+                    setResult(fake);
+                    return true;
+                }
+                break;
+            case "bluetooth_name":
+                if(set.equals("bluetooth_name")) {
+                    setResult("00:00:00:00:00:00");
+                    return true;
+                }
+                break;
+        }
+
+        return false;
+    }
+
+    //
+    //End of FILTER Functions
+    //
+
+    //
+    //Start of Memory/CPU Functions
+    //
+
+    @SuppressWarnings("unused")
+    public File createFakeMeminfoFile(int totalGigabytes, int availableGigabytes) { return FileUtil.generateFakeFile(MemoryUtil.generateFakeMeminfoContents(totalGigabytes, availableGigabytes)); }
+
+    @SuppressWarnings("unused")
+    public FileDescriptor createFakeMeminfoFileDescriptor(int totalGigabytes, int availableGigabytes) { return FileUtil.generateFakeFileDescriptor(MemoryUtil.generateFakeMeminfoContents(totalGigabytes, availableGigabytes)); }
+
+    @SuppressWarnings("unused")
+    public void populateMemoryInfo(ActivityManager.MemoryInfo memoryInfo, int totalMemoryInGB, int availableMemoryInGB) { XMemoryUtils.populateMemoryInfo(memoryInfo, totalMemoryInGB, availableMemoryInGB); }
+
+    @SuppressWarnings("unused")
+    public ActivityManager.MemoryInfo getFakeMemoryInfo(int totalMemoryInGB, int availableMemoryInGB) { return XMemoryUtils.getMemory(totalMemoryInGB, availableMemoryInGB); }
+
+    @SuppressWarnings("unused")
+    public FileDescriptor createFakeCpuinfoFileDescriptor() { return XMockCpuUtils.generateFakeFileDescriptor(XMockProxyApi.callGetSelectedMockCpuMap(getApplicationContext())); }
+
+    @SuppressWarnings("unused")
+    public File createFakeCpuinfoFile() { return XMockCpuUtils.generateFakeFile(XMockProxyApi.callGetSelectedMockCpuMap(getApplicationContext())); }
+
+    //
+    //End of Memory/CPU Functions
+    //
+
+    //
+    //Start of ETC Util Functions
+    //
+
+    @SuppressWarnings("unused")
+    public byte[] getIpAddressBytes(String ipAddress) { return NetworkUtil.stringIpAddressToBytes(ipAddress); }
+
+    @SuppressWarnings("unused")
+    public byte[] getFakeIpAddressBytes() { return NetworkUtil.stringIpAddressToBytes(getSetting("net.host_address")); }
+
+    @SuppressWarnings("unused")
+    public int getFakeIpAddressInt() { return NetworkUtil.stringIpAddressToInt(getSetting("net.host_address")); }
+
+    @SuppressWarnings("unused")
+    public byte[] getFakeMacAddressBytes() { return NetworkUtil.macStringToBytes(getSetting("net.mac")); }
+
+    @SuppressWarnings("unused")
+    public String gigabytesToBytesString(int gigabytes) { return Long.toString((long) gigabytes * 1073741824L); }
+
+    //
+    //End of ETC Util Functions
+    //
+
+    //
+    //Start of Query / Call Functions
+    //
+
+    @SuppressWarnings("unused")
+    public String[] extractSelectionArgs() {
+        String[] sel = null;
+        if(paramTypes[2].getName().equals(Bundle.class.getName())){
+            Bundle bundle = (Bundle) getArgument(2);
+            if(bundle != null) {
+                sel = bundle.getStringArray("android:query-arg-sql-selection-args");
+            }
+        }
+        else if(paramTypes[3].getName().equals(String[].class.getName()))
+            sel = (String[]) getArgument(3);
+
+        return sel;
+    }
+
+    @SuppressWarnings("unused")
+    public boolean queryFilterAfter(String filter) throws Throwable {
+        Uri uri = (Uri)getArgument(0);
+        if(uri == null) return false;
+        return queryFilterAfter(filter, uri);
+    }
+
+    @SuppressWarnings("unused")
+    public boolean queryFilterAfter(String filter, Uri uri) throws Throwable {
+        String authority = uri.getAuthority();
+        Cursor ret = (Cursor) getResult();
+
+        if(ret == null || authority == null)
+            return false;
+
+        switch (filter) {
+            case "gsf_id":
+                if(authority.equals("com.google.android.gsf.gservices")) {
+                    String[] args = extractSelectionArgs();
+                    if (args == null)
+                        return false;
+
+                    for(String arg : args) {
+                        if(arg.equals("android_id")) {
+                            setResult(new MatrixCursor(ret.getColumnNames()));
+                            return true;
+                        }
+                    }
+                }
+                break;
+        }
+
+        return false;
+    }
+
+    //
+    //End of Query / Call Functions
+    //
+
     @SuppressWarnings("unused")
     public Context getApplicationContext() {
         return this.context;
@@ -95,6 +276,98 @@ public class XParam {
     }
 
     @SuppressWarnings("unused")
+    public int getSDKCode() {
+        return Build.VERSION.SDK_INT;
+    }
+
+    @SuppressWarnings("unused")
+    public void printFileContents(String filePath) {
+        FileUtil.printContents(filePath);
+    }
+
+    //
+    //Start of REFLECT Functions
+    //
+
+    @SuppressWarnings("unused")
+    public Class<Byte> getByteType() { return Byte.TYPE; }
+
+    @SuppressWarnings("unused")
+    public Class<Integer> getIntType() { return Integer.TYPE; }
+
+    @SuppressWarnings("unused")
+    public Class<Character> getCharType() { return Character.TYPE; }
+
+    @SuppressWarnings("unused")
+    public byte[] createByteArray(int size) { return new byte[size]; }
+
+    @SuppressWarnings("unused")
+    public int[] createIntArray(int size) { return new int[size]; }
+
+    @SuppressWarnings("unused")
+    public Character[] createCharArray(int size) { return new Character[size]; }
+
+    @SuppressWarnings("unused")
+    public boolean javaMethodExists(String className, String methodName) { return ReflectUtil.javaMethodExists(className, methodName); }
+
+    @SuppressWarnings("unused")
+    public Class<?> getClassType(String className) { return ReflectUtil.getClassType(className); }
+
+    @SuppressWarnings("unused")
+    public Object createReflectArray(String className, int size) { return ReflectUtil.createArray(className, size); }
+
+    @SuppressWarnings("unused")
+    public Object createReflectArray(Class<?> classType, int size) { return ReflectUtil.createArray(classType, size); }
+
+    //
+    //End of REFLECT Functions
+    //
+
+
+    //
+    //START OF LONG HELPER FUNCTIONS
+    //
+
+    @SuppressWarnings("unused")
+    public String getFieldLong(Object instance, String fieldName) { return Long.toString(LuaLongUtil.getFieldValue(instance, fieldName)); }
+
+    @SuppressWarnings("unused")
+    public void setFieldLong(Object instance, String fieldName, String longValue) { LuaLongUtil.setLongFieldValue(instance, fieldName, longValue); }
+
+    @SuppressWarnings("unused")
+    public void parcelWriteLong(Parcel parcel, String longValue) { LuaLongUtil.parcelWriteLong(parcel, longValue); }
+
+    @SuppressWarnings("unused")
+    public String parcelReadLong(Parcel parcel) { return LuaLongUtil.parcelReadLong(parcel); }
+
+    @SuppressWarnings("unused")
+    public void bundlePutLong(Bundle bundle, String key, String longValue) { LuaLongUtil.bundlePutLong(bundle, key, longValue); }
+
+    @SuppressWarnings("unused")
+    public String bundleGetLong(Bundle bundle, String key) { return LuaLongUtil.bundleGetLong(bundle, key); }
+
+    @SuppressWarnings("unused")
+    public void setResultToLong(String long_value) throws Throwable {
+        try {
+            setResult(Long.parseLong(long_value));
+        }catch (Exception e) { Log.e(TAG, "Failed to set Result as Long, make sure its a NUMERIC Value: " + e); }
+    }
+
+    @SuppressWarnings("unused")
+    public String getResultLong() throws Throwable {
+        try {
+            return Long.toString((long)getResult());
+        }catch (Exception e) {
+            Log.e(TAG, "Failed Get Result as Long String:\n" + e + "\n" + Log.getStackTraceString(e));
+            return "0";
+        }
+    }
+
+    //
+    //END OF LONG HELPER FUNCTIONS
+    //
+
+    @SuppressWarnings("unused")
     public Object getThis() {
         if (this.field == null)
             return this.param.thisObject;
@@ -108,6 +381,12 @@ public class XParam {
             throw new ArrayIndexOutOfBoundsException("Argument #" + index);
         return this.param.args[index];
     }
+
+    @SuppressWarnings("unused")
+    public void setArgumentString(int index, Object value) { setArgument(index, (String)String.valueOf(value)); }
+
+    @SuppressWarnings("unused")
+    public void setArgumentString(int index, String value) { setArgument(index, value); }
 
     @SuppressWarnings("unused")
     public void setArgument(int index, Object value) {
@@ -141,7 +420,18 @@ public class XParam {
     }
 
     @SuppressWarnings("unused")
+    public void setResultString(Object result) throws Throwable { setResult(String.valueOf(result)); }
+
+    @SuppressWarnings("unused")
+    public void setResultString(String result) throws Throwable { setResult(result); }
+
+    @SuppressWarnings("unused")
+    public void setResultByteArray(Byte[] result) throws Throwable { setResult(result); }
+
+    @SuppressWarnings("unused")
     public void setResult(Object result) throws Throwable {
+        //Do Note they have support if you pass a LONG String
+        //
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Set " + this.getPackageName() + ":" + this.getUid() +
                     " result=" + result + " return=" + this.returnType);
@@ -159,6 +449,26 @@ public class XParam {
                 this.param.setResult(result);
         else
             this.field.set(null, result);
+    }
+
+    @SuppressWarnings("unused")
+    public int getSettingInt(String name, int defaultValue) {
+        String setting = getSetting(name);
+        if(!StringUtils.isValidString(setting))
+            return defaultValue;
+
+        try {
+            return Integer.parseInt(setting);
+        }catch (Exception e) {
+            Log.e(TAG, "Invalid Numeric Input::\n", e);
+            return defaultValue;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public String getSetting(String name, String defaultValue) {
+        String setting = getSetting(name);
+        return StringUtils.isValidString(setting) ? setting : defaultValue;
     }
 
     @SuppressWarnings("unused")
@@ -225,13 +535,13 @@ public class XParam {
             if (long.class.equals(type))
                 return (long) (int) value;
             else if (float.class.equals(type))
-                return (float) (int) value;
-            else if (double.class.equals(type))
-                return (double) (int) value;
-        } else if (Double.class.equals(value.getClass())) {
-            if (float.class.equals(type))
-                return (float) (double) value;
-        } else if (value instanceof String && int.class.equals(type))
+            return (float) (int) value;
+        else if (double.class.equals(type))
+            return (double) (int) value;
+    } else if (Double.class.equals(value.getClass())) {
+        if (float.class.equals(type))
+            return (float) (double) value;
+    } else if (value instanceof String && int.class.equals(type))
             return Integer.parseInt((String) value);
         else if (value instanceof String && long.class.equals(type))
             return Long.parseLong((String) value);

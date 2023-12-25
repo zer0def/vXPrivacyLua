@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemViewCpu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvCpuMapContents"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:text="Processor 0:\nProcessor 1:"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        app:layout_constraintEnd_toEndOf="@+id/cbCpuSelected"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCpuModelName" />
+
+    <TextView
+        android:id="@+id/tvCpuModelName"
+        android:layout_width="101dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="6dp"
+        android:clickable="false"
+        android:ellipsize="start"
+        android:focusable="false"
+        android:singleLine="true"
+        android:text="SM850"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        app:layout_constraintEnd_toEndOf="@+id/tvCpuName"
+        app:layout_constraintStart_toEndOf="@+id/tvCpuManName"
+        app:layout_constraintTop_toBottomOf="@+id/tvCpuName" />
+
+    <TextView
+        android:id="@+id/tvCpuName"
+        android:layout_width="272dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="8dp"
+        android:clickable="false"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:lines="1"
+        android:text="Snapdragon 600/650"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        app:layout_constraintEnd_toStartOf="@+id/cbCpuSelected"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintStart_toEndOf="@+id/ivCpuIcon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivCpuIcon"
+        android:layout_width="?android:attr/listPreferredItemHeightSmall"
+        android:layout_height="?android:attr/listPreferredItemHeightSmall"
+        android:layout_marginTop="8dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintStart_toEndOf="@+id/ivCpuExpander"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCpuManName"
+        android:layout_width="101dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp"
+        android:clickable="false"
+        android:ellipsize="start"
+        android:focusable="false"
+        android:singleLine="true"
+        android:text="Qualcomm"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        app:layout_constraintStart_toStartOf="@+id/tvCpuName"
+        app:layout_constraintTop_toBottomOf="@+id/tvCpuName" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/cbCpuSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCpuIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivCpuIcon"
+        app:layout_constraintVertical_bias="0.687" />
+
+    <ImageView
+        android:id="@+id/ivCpuExpander"
+        android:layout_width="30dp"
+        android:layout_height="?android:attr/listPreferredItemHeightSmall"
+        android:alpha="0.5"
+        android:clickable="false"
+        android:focusable="false"
+        android:src="?attr/expander"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCpuIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivCpuIcon"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

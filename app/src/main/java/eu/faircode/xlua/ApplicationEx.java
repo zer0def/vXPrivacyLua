@@ -20,14 +20,22 @@
 package eu.faircode.xlua;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 public class ApplicationEx extends Application {
     private static final String TAG = "XLua.App";
 
+    private static volatile Context context;
+
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Create version=" + BuildConfig.VERSION_NAME);
+        ApplicationEx.context = getApplicationContext();
+    }
+
+    public static Context getAppContext() {
+        return ApplicationEx.context;
     }
 }

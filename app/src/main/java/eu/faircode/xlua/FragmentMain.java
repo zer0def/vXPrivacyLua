@@ -70,6 +70,7 @@ public class FragmentMain extends Fragment {
     private SwipeRefreshLayout swipeRefresh;
     private AdapterApp rvAdapter;
 
+    //Filter what apps to show not needed for us
     private AdapterApp.enumShow show = AdapterApp.enumShow.none;
 
     @Override
@@ -82,10 +83,12 @@ public class FragmentMain extends Fragment {
         tvRestrict = main.findViewById(R.id.tvRestrict);
         grpApplication = main.findViewById(R.id.grpApplication);
 
-        int colorAccent = Util.resolveColor(getContext(), R.attr.colorAccent);
+        int colorAccent = XUtil.resolveColor(getContext(), R.attr.colorAccent);
 
         swipeRefresh = main.findViewById(R.id.swipeRefresh);
         swipeRefresh.setColorSchemeColors(colorAccent, colorAccent, colorAccent);
+
+        //RIP
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -107,6 +110,7 @@ public class FragmentMain extends Fragment {
         rvAdapter = new AdapterApp(getActivity());
         rvApplication.setAdapter(rvAdapter);
 
+        //This point i dont use cuz its the menu drop down items
         spAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
         spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -139,14 +143,16 @@ public class FragmentMain extends Fragment {
             }
         });
 
+
+        //BTNRESTRICT is when you select a group it turns into a button
         btnRestrict.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 XGroup selected = (XGroup) spGroup.getSelectedItem();
-                Util.areYouSure(
+                XUtil.areYouSure(
                         (ActivityBase) getActivity(),
                         getString(R.string.msg_restrict_sure, selected.title),
-                        new Util.DoubtListener() {
+                        new XUtil.DoubtListener() {
                             @Override
                             public void onSure() {
                                 rvAdapter.restrict(getContext());
@@ -224,6 +230,8 @@ public class FragmentMain extends Fragment {
                 pbApplication.setVisibility(View.GONE);
                 grpApplication.setVisibility(View.VISIBLE);
 
+                //This will determine if its all or a actual name
+                //If a actual grouup is selected then show the restrict button
                 XGroup selected = (XGroup) spGroup.getSelectedItem();
                 String group = (selected == null ? null : selected.name);
                 tvRestrict.setVisibility(group == null ? View.VISIBLE : View.GONE);
@@ -252,13 +260,17 @@ public class FragmentMain extends Fragment {
             Log.i(TAG, "Data loader started");
             DataHolder data = new DataHolder();
             try {
+
+                XMockProxyApi.queryGetMockCpuMaps(getContext());
+                XMockProxyApi.queryGetMockProps(getContext());
+
                 data.theme = XProvider.getSetting(getContext(), "global", "theme");
                 if (data.theme == null)
                     data.theme = "light";
 
                 // Define hooks
                 if (BuildConfig.DEBUG) {
-                    String apk = getContext().getApplicationInfo().publicSourceDir;
+                    /*String apk = getContext().getApplicationInfo().publicSourceDir;
                     List<XHook> hooks = XHook.readHooks(getContext(), apk);
                     Log.i(TAG, "Loaded hooks=" + hooks.size());
                     for (XHook hook : hooks) {
@@ -266,8 +278,8 @@ public class FragmentMain extends Fragment {
                         args.putString("id", hook.getId());
                         args.putString("definition", hook.toJSON());
                         getContext().getContentResolver()
-                                .call(XProvider.getURI(), "xlua", "putHook", args);
-                    }
+                                .call(XSecurity.getURI(), "xlua", "putHook", args);
+                    }*/
                 }
 
                 String show = XProvider.getSetting(getContext(), "global", "show");
@@ -288,7 +300,7 @@ public class FragmentMain extends Fragment {
                 // Load groups
                 Resources res = getContext().getResources();
                 Bundle result = getContext().getContentResolver()
-                        .call(XProvider.getURI(), "xlua", "getGroups", new Bundle());
+                        .call(XSecurity.getURI(), "xlua", "getGroups", new Bundle());
                 if (result != null)
                     for (String name : result.getStringArray("groups")) {
                         String g = name.toLowerCase().replaceAll("[^a-z]", "_");
@@ -318,7 +330,7 @@ public class FragmentMain extends Fragment {
                 Cursor chooks = null;
                 try {
                     chooks = getContext().getContentResolver()
-                            .query(XProvider.getURI(), new String[]{"xlua.getHooks2"}, null, null, null);
+                            .query(XSecurity.getURI(), new String[]{"xlua.getHooks2"}, null, null, null);
                     while (chooks != null && chooks.moveToNext()) {
                         byte[] marshaled = chooks.getBlob(0);
                         Parcel parcel = Parcel.obtain();
@@ -337,7 +349,7 @@ public class FragmentMain extends Fragment {
                 Cursor capps = null;
                 try {
                     capps = getContext().getContentResolver()
-                            .query(XProvider.getURI(), new String[]{"xlua.getApps2"}, null, null, null);
+                            .query(XSecurity.getURI(), new String[]{"xlua.getApps2"}, null, null, null);
                     while (capps != null && capps.moveToNext()) {
                         byte[] marshaled = capps.getBlob(0);
                         Parcel parcel = Parcel.obtain();

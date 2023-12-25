@@ -2,6 +2,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_filter_list_white_24dp"
+        android:title="@string/menu_show"
+        android:visible="false"
+        app:showAsAction="always">
+        <menu>
+            <group
+                android:id="@+id/groupModeShow"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menu_show_privacy"
+                    android:title="@string/menu_show_priv" />
+                <item
+                    android:id="@+id/menu_show_reverse"
+                    android:title="@string/menu_show_rev" />
+                <item
+                    android:id="@+id/menu_show_bypass"
+                    android:title="@string/menu_show_byp" />
+            </group>
+        </menu>
+    </item>
+    <item
         android:id="@+id/menu_show"
         android:icon="@drawable/ic_filter_list_white_24dp"
         android:title="@string/menu_show"

@@ -1,0 +1,357 @@
+[
+  //Regex Used to find improper formated : is "\s+:"
+
+  {
+    "name": "Exynos 4412",
+    "model": "EX4412",
+    "manufacturer": "Samsung",
+    "contents": "Processor\t: ARMv7 Processor rev 0 (v7l)\nprocessor\t: 0\nBogoMIPS\t: 1592.52\n\nprocessor\t: 1\nBogoMIPS\t: 3185.04\n\nprocessor\t: 2\nBogoMIPS\t: 3185.04\n\nprocessor\t: 3\nBogoMIPS\t: 2388.78\n\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls\nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x3\nCPU part\t: 0xc09\nCPU revision\t: 0\n\nChip revision\t: 0011\nHardware\t: SMDK4x12\nRevision\t: 0002\nSerial\t: c9c3af6f42f73a00",
+    "selected": false
+  },
+
+  {
+    "name": "Exynos 7580",
+    "model": "7580",
+    "manufacturer": "Samsung",
+    "contents": "Processor\t: AArch64 Processor rev 3 (aarch64)\nprocessor\t: 0\nprocessor\t: 1\nFeatures\t: fp asimd aes pmull sha1 sha2 crc32 wp half thumb fastmult vfp edsp neon vfpv3 tlsi vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 3\n\nHardware\t: SAMSUNG Exynos7580",
+    "selected": false
+  },
+
+  {
+    "name": "Samsung s3 ATT",
+    "model": "M2_ATT",
+    "manufacturer": "Samsung",
+    "contents": "Processor\t: ARMv7 Processor rev 4 (v7l)\nprocessor\t: 0\nBogoMIPS\t: 13.53\n\nprocessor\t: 1\nBogoMIPS\t: 13.53\n\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 \nCPU implementer\t: 0x51\nCPU architecture: 7\nCPU variant\t: 0x1\nCPU part\t: 0x04d\nCPU revision\t: 4\n\nHardware\t: SAMSUNG M2_ATT\nRevision\t: 0010\nSerial\t\t: 0000eb0d0000f3a2",
+    "selected": false
+  },
+
+  {
+    "name": "Huawei p8",
+    "model": "hi6210sft",
+    "manufacturer": "Huawei",
+    "contents": "Processor\t: AArch64 Processor rev 3 (aarch64)\nprocessor\t: 0\nprocessor\t: 1\nprocessor\t: 2\nprocessor\t: 3\nprocessor\t: 4\nprocessor\t: 5\nprocessor\t: 6\nprocessor\t: 7\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 wp half thumb fastmult vfp edsp neon vfpv3 tlsi vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 3\n\nHardware\t: hi6210sft",
+    "selected": false
+  },
+
+  {
+    "name": "Huawei p9",
+    "model": "hi6250",
+    "manufacturer": "Huawei",
+    "contents": "Processor\t: AArch64 Processor rev 4 (aarch64)\nprocessor\t: 0\nprocessor\t: 1\nprocessor\t: 2\nprocessor\t: 3\nprocessor\t: 4\nprocessor\t: 5\nprocessor\t: 6\nprocessor\t: 7\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 wp half thumb fastmult vfp edsp neon vfpv3 tlsi vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nHardware\t: hi6250",
+    "selected": false
+  },
+
+  {
+    "name": "ARM A55-A78",
+    "model": "SM6450",
+    "manufacturer": "Cortex",
+    "contents": "processor\t: 0\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd05\nCPU revision\t: 0\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd05\nCPU revision\t: 0\n\nprocessor\t: 2\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd05\nCPU revision\t: 0\n\nprocessor\t: 3\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd05\nCPU revision\t: 0\n\nprocessor\t: 4\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd41\nCPU revision\t: 2\n\nprocessor\t: 5\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd41\nCPU revision\t: 2\n\nprocessor\t: 6\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd41\nCPU revision\t: 2\n\nprocessor\t: 7\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd41\nCPU revision\t: 2",
+    "selected": false
+  },
+
+  {
+    "name": "Cortex-A7",
+    "model": "sc8830",
+    "manufacturer": "Cortex",
+    "contents": "Processor\t: ARMv7 Processor rev 5 (v7l)\nprocessor\t: 0\nmodel name\t: ARMv7 Processor rev 5 (v7l)\nBogoMIPS\t: 2413.36\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xc07\nCPU revision\t: 5\n\nprocessor\t: 1\nmodel name\t: ARMv7 Processor rev 5 (v7l)\nBogoMIPS\t: 2419.91\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xc07\nCPU revision\t: 5\n\nprocessor\t: 2\nmodel name\t: ARMv7 Processor rev 5 (v7l)\nBogoMIPS\t: 2419.91\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xc07\nCPU revision\t: 5\n\nprocessor\t: 3\nmodel name\t: ARMv7 Processor rev 5 (v7l)\nBogoMIPS\t: 2419.91\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xc07\nCPU revision\t: 5\n\nHardware\t: sc8830\nRevision\t: 0005\nSerial\t\t: 4200ff80dc185400",
+    "selected": false
+  },
+
+  {
+    "name": "Cortex-A72 / A53",
+    "model": "MT6797T",
+    "manufacturer": "MediaTek",
+    "contents": "Processor\t: AArch64 Processor rev 4 (aarch64)\nprocessor\t: 4\nmodel name\t: AArch64 Processor rev 4 (aarch64)\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 8\nmodel name\t: AArch64 Processor rev 4 (aarch64)\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd08\nCPU revision\t: 1\n\nHardware\t: MT6797T",
+    "selected": false
+  },
+
+  {
+    "name": "Helio X30",
+    "model": "mt6799",
+    "manufacturer": "MediaTek",
+    "contents": "processor\t: 0\nProcessor\t: AArch64 Processor rev 1 (aarch64)\nmodel name\t: AArch64 Processor rev 1 (aarch64)\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd04\nCPU revision\t: 1\n\nHardware\t: mt6799",
+    "selected": false
+  },
+
+  {
+    "name": "Coretext-A53",
+    "model": "MT6752",
+    "manufacturer": "MediaTek",
+    "contents": "Processor\t: AArch64 Processor rev 2 (aarch64)\nprocessor\t: 0\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd aes pmull sha1 sha2 crc32 wp half thumb fastmult vfp edsp neon vfpv3 tlsi vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 2\n\nHardware\t: MT6752",
+    "selected": false
+  },
+
+  {
+    "name": "Sony Xperia SL",
+    "model": "fuji",
+    "manufacturer": "MediaTek",
+    "contents": "Processor\t: ARMv7 Processor rev 4 (v7l)\nprocessor\t: 0\nBogoMIPS\t: 13.52\n\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls \nCPU implementer\t: 0x51\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0x02d\nCPU revision\t: 4\n\nHardware\t: fuji\nRevision\t: 0000\nSerial\t\t: 0000000000000000",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 200",
+    "model": "MSM8210 CS",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: ARMv7 Processor rev 3 (v7l)\nprocessor\t: 0\nBogoMIPS\t: 38.40\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\n\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xc07\nCPU revision\t: 3\n\nHardware\t: Qualcomm MSM 8610 (Flattened Device Tree)\nRevision\t: 82b0\nSerial\t\t: 9433a00212000000\nDevice\t\t: condor\nRadio\t\t: 1\nMSM Hardware\t: MSM8210 CS",
+    "selected": false
+  },
+
+
+  {
+    "name": "Snapdragon 400/1",
+    "model": "MSM8226",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: ARMv7 Processor rev 3 (v7l)\nprocessor\t: 0\nBogoMIPS\t: 38.40\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\n\nprocessor\t: 2\nBogoMIPS\t: 38.40\n\nprocessor\t: 3\nBogoMIPS\t: 38.40\n\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xc07\nCPU revision\t: 3\n\nHardware\t: Qualcomm MSM8226\nRevision\t: 8400\nSerial\t\t: d1c59d080f000000\nDevice\t\t: titan\nRadio\t\t: 5\nMSM Hardware\t: MSM8226 CS",
+    "selected": false
+  },
+
+  {
+    //hmm
+    "name": "Snapdragon 400/2",
+    "model": "MSM8926",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: ARMv7 Processor rev 3 (v7l)\nprocessor\t: 0\nBogoMIPS\t: 38.40\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\n\nprocessor\t: 2\nBogoMIPS\t: 38.40\n\nprocessor\t: 3\nBogoMIPS\t: 38.40\n\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xc07\nCPU revision\t: 3\n\nHardware\t: Qualcomm MSM 8226 (Flattened Device Tree)\nRevision\t: 82d0\nSerial\t\t: 1063b20615000000\nDevice\t\t: peregrine\nRadio\t\t: 1\nMSM Hardware\t: MSM8926",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 410/412",
+    "model": "MSM8916",
+    "manufacturer": "Qualcomm",
+    "contents": "processor\t: 0\nmodel name\t: ARMv7 Processor rev 0 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 0\n\nprocessor\t: 1\nmodel name\t: ARMv7 Processor rev 0 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 0\n\nprocessor\t: 2\nmodel name\t: ARMv7 Processor rev 0 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 0\n\nprocessor\t: 3\nmodel name\t: ARMv7 Processor rev 0 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 0\n\nHardware\t: Qualcomm Technologies, Inc MSM8916\nRevision\t: 0005\nSerial\t\t: 0000023100006111\nProcessor\t: ARMv7 Processor rev 0 (v7l)",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 430",
+    "model": "MSM8937",
+    "manufacturer": "Qualcomm",
+    "contents": "processor\t: 0\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm aes pmull sha1 sha2 crc32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 1\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm aes pmull sha1 sha2 crc32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 2\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm aes pmull sha1 sha2 crc32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 3\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm aes pmull sha1 sha2 crc32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 4\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm aes pmull sha1 sha2 crc32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 5\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm aes pmull sha1 sha2 crc32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 6\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm aes pmull sha1 sha2 crc32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 7\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm aes pmull sha1 sha2 crc32 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nHardware\t: Qualcomm Technologies, Inc MSM8937\nRevision\t: 8500\nSerial\t\t: d693e67e00000000\nProcessor\t: ARMv7 Processor rev 4 (v7l)\nDevice\t\t: cedric\nRadio\t\t: LATAM\nMSM Hardware\t: MSM8937",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 600",
+    "model": "QCT APQ8064 MTP",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: ARMv7 Processor rev 0 (v7l)\nprocessor\t: 0\nBogoMIPS\t: 13.53\n\nprocessor\t: 1\nBogoMIPS\t: 13.53\n\nprocessor\t: 2\nBogoMIPS\t: 13.53\n\nprocessor\t: 3\nBogoMIPS\t: 13.53\n\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 \nCPU implementer\t: 0x51\nCPU architecture: 7\nCPU variant\t: 0x1\nCPU part\t: 0x06f\nCPU revision\t: 0\n\nHardware\t: QCT APQ8064 MTP\nRevision\t: 000a\nSerial\t\t: 0000000000000000",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 617",
+    "model": "MSM8952 ",
+    "manufacturer": "Qualcomm",
+    "contents": "processor\t: 0\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 1\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 2\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 3\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 4\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 5\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 6\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 7\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 38.00\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nHardware\t: Qualcomm Technologies, Inc MSM8952\nRevision\t: 82a0\nSerial\t\t: 4e7abe0200000000\nProcessor\t: ARMv7 Processor rev 4 (v7l)\nDevice\t\t: athene_13mp\nRadio\t\t: US\nMSM Hardware\t: MSM8952",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 732G",
+    "model": "SM7150",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: AArch64 Processor rev 14 (aarch64)\nprocessor\t: 0\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x805\nCPU revision\t: 14\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x805\nCPU revision\t: 14\n\nprocessor\t: 2\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x805\nCPU revision\t: 14\n\nprocessor\t: 3\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x805\nCPU revision\t: 14\n\nprocessor\t: 4\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x805\nCPU revision\t: 14\n\nprocessor\t: 5\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x805\nCPU revision\t: 14\n\nprocessor\t: 6\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x804\nCPU revision\t: 14\n\nprocessor\t: 7\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x804\nCPU revision\t: 14\n\nHardware\t: Qualcomm Technologies, Inc SM7150",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 845",
+    "model": "SDM845",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: AArch64 Processor rev 13 (aarch64)\nprocessor\t: 0\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x7\nCPU part\t: 0x803\nCPU revision\t: 12\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x7\nCPU part\t: 0x803\nCPU revision\t: 12\n\nprocessor\t: 2\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x7\nCPU part\t: 0x803\nCPU revision\t: 12\n\nprocessor\t: 3\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x7\nCPU part\t: 0x803\nCPU revision\t: 12\n\nprocessor\t: 4\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x6\nCPU part\t: 0x802\nCPU revision\t: 13\n\nprocessor\t: 5\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x6\nCPU part\t: 0x802\nCPU revision\t: 13\n\nprocessor\t: 6\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x6\nCPU part\t: 0x802\nCPU revision\t: 13\n\nprocessor\t: 7\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x6\nCPU part\t: 0x802\nCPU revision\t: 13\n\nHardware\t: Qualcomm Technologies, Inc SDM845\n",
+    "selected": false
+  },
+
+  {
+    "name": "Helio G80",
+    "model": "MT6768",
+    "manufacturer": "MediaTek",
+    "contents": "processor\t: 0\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp asimddp sha512 ssbs\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd05\nCPU revision\t: 0\n\nprocessor\t: 1\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp asimddp sha512 ssbs\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd05\nCPU revision\t: 0\n\nprocessor\t: 2\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp asimddp sha512 ssbs\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd05\nCPU revision\t: 0\n\nprocessor\t: 3\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp asimddp sha512 ssbs\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd05\nCPU revision\t: 0\n\nprocessor\t: 4\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp asimddp sha512 ssbs\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd05\nCPU revision\t: 0\n\nprocessor\t: 5\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp asimddp sha512 ssbs\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd05\nCPU revision\t: 0\n\nprocessor\t: 6\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp asimddp sha512 ssbs\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x3\nCPU part\t: 0xd0a\nCPU revision\t: 1\n\nprocessor\t: 7\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp asimddp sha512 ssbs\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x3\nCPU part\t: 0xd0a\nCPU revision\t: 1\n\nHardware\t: MT6769V/CB",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 615",
+    "model": "MSM8939",
+    "manufacturer": "Qualcomm",
+    "contents": "processor\t: 0\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 1\n\nprocessor\t: 1\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 1\n\nprocessor\t: 2\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 1\n\nprocessor\t: 3\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 1\n\nprocessor\t: 4\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 1\n\nprocessor\t: 5\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 1\n\nprocessor\t: 6\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 1\n\nprocessor\t: 7\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 evtstrm \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 1\n\nHardware\t: Qualcomm Technologies, Inc MSM8939\nRevision\t: 000b\nSerial\t\t: 00008b890000c27a\nProcessor\t: ARMv7 Processor rev 1 (v7l)",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 450/625/626/632",
+    "model": "MSM8953",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: AArch64 Processor rev 4 (aarch64)\nprocessor\t: 0\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 2\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 3\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 4\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 5\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 6\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 7\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nHardware\t: Qualcomm Technologies, Inc MSM8953",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 650",
+    "model": "MSM8956",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: AArch64 Processor rev 4 (aarch64)\nprocessor\t: 0\nprocessor\t: 1\nprocessor\t: 2\nprocessor\t: 3\nprocessor\t: 4\nprocessor\t: 5\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 wp half thumb fastmult vfp edsp neon vfpv3 tlsi vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nHardware\t: Qualcomm Technologies, Inc MSM8956",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 652",
+    "model": "MSM8976",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: AArch64 Processor rev 0 (aarch64)\nprocessor\t: 0\nprocessor\t: 1\nprocessor\t: 2\nprocessor\t: 3\nprocessor\t: 4\nprocessor\t: 5\nprocessor\t: 6\nprocessor\t: 7\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 \nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd08\nCPU revision\t: 0\n\nHardware\t: Qualcomm Technologies, Inc MSM8976\nRevision\t: 0009\nSerial\t\t: 00007fc7000046a9",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 805/Nexus 6",
+    "model": "APQ 8084",
+    "manufacturer": "Qualcomm",
+    "contents": "processor\t: 0\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt \nCPU implementer\t: 0x51\nCPU architecture: 7\nCPU variant\t: 0x3\nCPU part\t: 0x06f\nCPU revision\t: 1\n\nprocessor\t: 1\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt \nCPU implementer\t: 0x51\nCPU architecture: 7\nCPU variant\t: 0x3\nCPU part\t: 0x06f\nCPU revision\t: 1\n\nprocessor\t: 2\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt \nCPU implementer\t: 0x51\nCPU architecture: 7\nCPU variant\t: 0x3\nCPU part\t: 0x06f\nCPU revision\t: 1\n\nprocessor\t: 3\nmodel name\t: ARMv7 Processor rev 1 (v7l)\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt \nCPU implementer\t: 0x51\nCPU architecture: 7\nCPU variant\t: 0x3\nCPU part\t: 0x06f\nCPU revision\t: 1\n\nHardware\t: Qualcomm APQ 8084 (Flattened Device Tree)\nRevision\t: 83a0\nSerial\t\t: 68123d0111000000\nDevice\t\t: shamu\nRadio\t\t: 6\nMSM Hardware\t: APQ8084 ES1.1",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 808",
+    "model": "MSM8992",
+    "manufacturer": "Qualcomm",
+    "contents": "processor\t: 0\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 3\n\nprocessor\t: 1\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 3\n\nprocessor\t: 2\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 3\n\nprocessor\t: 3\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 3\n\nprocessor\t: 4\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd07\nCPU revision\t: 2\n\nprocessor\t: 5\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd07\nCPU revision\t: 2\n\nHardware\t: Qualcomm Technologies, Inc MSM8992",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 810",
+    "model": "MSM8994",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: AArch64 Processor rev 2 (aarch64)\nprocessor\t: 0\nprocessor\t: 1\nprocessor\t: 2\nprocessor\t: 3\nprocessor\t: 4\nprocessor\t: 5\nprocessor\t: 6\nprocessor\t: 7\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 wp half thumb fastmult vfp edsp neon vfpv3 tlsi vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 2\n\nHardware\t: Qualcomm Technologies, Inc MSM8994",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 820/821",
+    "model": "MSM8996",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: AArch64 Processor rev 2 (aarch64)\nprocessor\t: 0\nmodel name\t: AArch64 Processor rev 2 (aarch64)\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0x211\nCPU revision\t: 2\n\nprocessor\t: 1\nmodel name\t: AArch64 Processor rev 2 (aarch64)\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0x211\nCPU revision\t: 2\n\nprocessor\t: 2\nmodel name\t: AArch64 Processor rev 2 (aarch64)\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0x205\nCPU revision\t: 2\n\nprocessor\t: 3\nmodel name\t: AArch64 Processor rev 2 (aarch64)\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0x205\nCPU revision\t: 2\n\nHardware\t: Qualcomm Technologies, Inc MSM8996\nRevision\t: 000f\nHardware\t: Qualcomm Technologies, Inc MSM8996",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 821 Pro",
+    "model": "MSM8996pro",
+    "manufacturer": "Qualcomm",
+    "contents": "processor\t: 0\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0x201\nCPU revision\t: 1\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0x201\nCPU revision\t: 1\n\nprocessor\t: 2\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0x205\nCPU revision\t: 1\n\nprocessor\t: 3\nBogoMIPS\t: 38.40\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0x205\nCPU revision\t: 1\n\nHardware\t: Qualcomm Technologies, Inc MSM8996pro",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 835",
+    "model": "MSM8998",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: AArch64 Processor rev 1 (aarch64)\nprocessor\t: 0\nBogoMIPS\t: 38.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xa\nCPU part\t: 0x801\nCPU revision\t: 4\n\nprocessor\t: 1\nBogoMIPS\t: 38.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xa\nCPU part\t: 0x801\nCPU revision\t: 4\n\nprocessor\t: 2\nBogoMIPS\t: 38.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xa\nCPU part\t: 0x801\nCPU revision\t: 4\n\nprocessor\t: 3\nBogoMIPS\t: 38.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xa\nCPU part\t: 0x801\nCPU revision\t: 4\n\nprocessor\t: 4\nBogoMIPS\t: 38.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xa\nCPU part\t: 0x800\nCPU revision\t: 1\n\nprocessor\t: 5\nBogoMIPS\t: 38.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xa\nCPU part\t: 0x800\nCPU revision\t: 1\n\nprocessor\t: 6\nBogoMIPS\t: 38.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xa\nCPU part\t: 0x800\nCPU revision\t: 1\n\nprocessor\t: 7\nBogoMIPS\t: 38.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xa\nCPU part\t: 0x800\nCPU revision\t: 1\n\nHardware\t: Qualcomm Technologies, Inc MSM8998",
+    "selected": false
+  },
+
+  {
+    "name": "Xiaomi Redmi 2a",
+    "model": "Leadcore Innopower",
+    "manufacturer": "Qualcomm",
+    "contents": "processor\t: 0\nmodel name\t: ARMv7 Processor rev 5 (v7l)\nProcessor\t: ARMv7 Processor rev 5 (v7l)\nBogoMIPS\t: 1244.61\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xc07\nCPU revision\t: 5\n\nHardware\t: Leadcore Innopower\nRevision\t: 0000\nSerial\t\t: 0000000000000000",
+    "selected": false
+  },
+
+  {
+    "name": "Nexus S",
+    "model": "herring",
+    "manufacturer": "Google",
+    "contents": "Processor\t: ARMv7 Processor rev 2 (v7l)\nBogoMIPS\t: 99.26\nFeatures\t: swp half thumb fastmult vfp edsp thumbee neon vfpv3 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x2\nCPU part\t: 0xc08\nCPU revision\t: 2\n\nHardware\t: herring\nRevision\t: 0022\nSerial\t\t: 363581cc0b5f00ec",
+    "selected": false
+  },
+
+  {
+    "name": "Nexus 10",
+    "model": "Manta",
+    "manufacturer": "Google",
+    "contents": "Processor\t: ARMv7 Processor rev 4 (v7l)\nprocessor\t: 0\nBogoMIPS\t: 997.78\n\nprocessor\t: 1\nBogoMIPS\t: 997.78\n\nFeatures\t: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xc0f\nCPU revision\t: 4\n\nHardware\t: Manta\nRevision\t: 0008\nSerial\t\t: 4733303344323352",
+    "selected": false
+  },
+
+  {
+    "name": "Exynos 7580",
+    "model": "7580",
+    "manufacturer": "SAMSUNG",
+    "contents": "Processor\t: AArch64 Processor rev 3 (aarch64)\nprocessor\t: 0\nprocessor\t: 1\nprocessor\t: 2\nprocessor\t: 3\nFeatures\t: fp asimd aes pmull sha1 sha2 crc32 wp half thumb fastmult vfp edsp neon vfpv3 tlsi vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 3\n\nHardware\t: SAMSUNG Exynos7580",
+    "selected": false
+  },
+
+  {
+    "name": "iconia one",
+    "model": "MT8167B",
+    "manufacturer": "MediaTek",
+    "contents": "processor\t: 0\nmodel name\t: ARMv8 Processor rev 1 (v8l)\nProcessor\t: AArch64 Processor rev 1 (aarch64)\nmodel name\t: AArch64 Processor rev 1 (aarch64)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd04\nCPU revision\t: 1\n\nprocessor\t: 1\nmodel name\t: ARMv8 Processor rev 1 (v8l)\nProcessor\t: AArch64 Processor rev 1 (aarch64)\nmodel name\t: AArch64 Processor rev 1 (aarch64)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd04\nCPU revision\t: 1\n\nprocessor\t: 2\nmodel name\t: ARMv8 Processor rev 1 (v8l)\nProcessor\t: AArch64 Processor rev 1 (aarch64)\nmodel name\t: AArch64 Processor rev 1 (aarch64)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd04\nCPU revision\t: 1\n\nHardware\t: MT8167B",
+    "selected": false
+  },
+
+  {
+    "name": "Denali-3",
+    "model": "MT6735P",
+    "manufacturer": "MediaTek",
+    "contents": "Processor\t: ARMv7 Processor rev 4 (v7l)\nprocessor\t: 0\nmodel name\t: ARMv7 Processor rev 4 (v7l)\nBogoMIPS\t: 32.39\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm sha2 \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nHardware\t: MT6735P\nRevision\t: 0000\nSerial\t\t: 0000000000000000",
+    "selected": false
+  },
+
+  {
+    "name": "Cortex-A7/-A17",
+    "model": "MT6595",
+    "manufacturer": "MediaTek",
+    "contents": "Processor\t: ARMv7 Processor rev 5 (v7l)\nprocessor\t: 0\nBogoMIPS\t: 38.40\nFeatures\t: swp half thumb fastmult vfp edsp thumbee neon vfpv3 tls vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 7\nCPU variant\t: 0x0\nCPU part\t: 0xc07\nCPU revision\t: 5\n\nHardware\t: MT6595\nRevision\t: 0000\nSerial\t\t: 0000000000000000",
+    "selected": false
+  },
+
+  {
+    "name": "Jetson TX1",
+    "model": "jetson_tx1",
+    "manufacturer": "Nvidia",
+    "contents": "processor\t: 0\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd07\nCPU revision\t: 1\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd07\nCPU revision\t: 1\n\nprocessor\t: 2\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd07\nCPU revision\t: 1\n\nprocessor\t: 3\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x1\nCPU part\t: 0xd07\nCPU revision\t: 1\n\nHardware\t: jetson_tx1\nRevision\t: 0000\nSerial\t\t: 088403e800000000",
+    "selected": false
+  },
+
+  {
+    "name": "Helio P10",
+    "model": "MT6755",
+    "manufacturer": "MediaTek",
+    "contents": "Processor\t: AArch64 Processor rev 2 (aarch64)\nprocessor\t: 0\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd aes pmull sha1 sha2 crc32 wp half thumb fastmult vfp edsp neon vfpv3 tlsi vfpv4 idiva idivt \nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 2\n\nHardware\t: MT6755",
+    "selected": false
+  },
+
+  {
+    "name": "Helio P70",
+    "model": "MT6771V/C",
+    "manufacturer": "MediaTek",
+    "contents": "Processor\t: AArch64 Processor rev 4 (aarch64)\nprocessor\t: 0\nmodel name\t: ARMv8 Processor rev 4 (v8l)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 1\nmodel name\t: ARMv8 Processor rev 4 (v8l)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 2\nmodel name\t: ARMv8 Processor rev 4 (v8l)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 3\nmodel name\t: ARMv8 Processor rev 4 (v8l)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd03\nCPU revision\t: 4\n\nprocessor\t: 4\nmodel name\t: ARMv8 Processor rev 2 (v8l)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd09\nCPU revision\t: 2\n\nprocessor\t: 5\nmodel name\t: ARMv8 Processor rev 2 (v8l)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd09\nCPU revision\t: 2\n\nprocessor\t: 6\nmodel name\t: ARMv8 Processor rev 2 (v8l)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd09\nCPU revision\t: 2\n\nprocessor\t: 7\nmodel name\t: ARMv8 Processor rev 2 (v8l)\nBogoMIPS\t: 26.00\nFeatures\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt lpae evtstrm aes pmull sha1 sha2 crc32\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd09\nCPU revision\t: 2\n\nHardware\t: MT6771V/C",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 8 Gen 1",
+    "model": "SM8475",
+    "manufacturer": "Qualcomm",
+    "contents": "processor\t: 0\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint i8mm bti\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd46\nCPU revision\t: 3\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint i8mm bti\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd46\nCPU revision\t: 3\n\nprocessor\t: 2\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint i8mm bti\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd46\nCPU revision\t: 3\n\nprocessor\t: 3\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint i8mm bti\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x0\nCPU part\t: 0xd46\nCPU revision\t: 3\n\nprocessor\t: 4\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint i8mm bti\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd47\nCPU revision\t: 0\n\nprocessor\t: 5\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint i8mm bti\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd47\nCPU revision\t: 0\n\nprocessor\t: 6\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint i8mm bti\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd47\nCPU revision\t: 0\n\nprocessor\t: 7\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint i8mm bti\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd48\nCPU revision\t: 0",
+    "selected": false
+  },
+
+  {
+    "name": "ARM A55-A76",
+    "model": "MT6853V/TNZA",
+    "manufacturer": "Cortex",
+    "contents": "processor\t: 0\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp\nasimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd05\nCPU revision\t: 0\nprocessor\t: 1\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp\nasimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd05\nCPU revision\t: 0\nprocessor\t: 2\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp\nasimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd05\nCPU revision\t: 0\nprocessor\t: 3\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp\nasimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd05\nCPU revision\t: 0\nprocessor\t: 4\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp\nasimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd05\nCPU revision\t: 0\nprocessor\t: 5\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp\nasimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x2\nCPU part\t: 0xd05\nCPU revision\t: 0\nprocessor\t: 6\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp\nasimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x4\nCPU part\t: 0xd0b\nCPU revision\t: 0\nprocessor\t: 7\nBogoMIPS\t: 26.00\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp\nasimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x41\nCPU architecture: 8\nCPU variant\t: 0x4\nCPU part\t: 0xd0b\nCPU revision\t: 0\nHardware\t: MT6853V/TNZA\nHardware\t: MT6853V/TNZA",
+    "selected": false
+  },
+
+  {
+    "name": "Snapdragon 855",
+    "model": "SM8150",
+    "manufacturer": "Qualcomm",
+    "contents": "Processor\t: AArch64 Processor rev 14 (aarch64)\nprocessor\t: 0\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x805\nCPU revision\t: 14\n\nprocessor\t: 1\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x805\nCPU revision\t: 14\n\nprocessor\t: 2\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x805\nCPU revision\t: 14\n\nprocessor\t: 3\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x805\nCPU revision\t: 14\n\nprocessor\t: 4\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x804\nCPU revision\t: 14\n\nprocessor\t: 5\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x804\nCPU revision\t: 14\n\nprocessor\t: 6\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x804\nCPU revision\t: 14\n\nprocessor\t: 7\nBogoMIPS\t: 38.40\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp\nCPU implementer\t: 0x51\nCPU architecture: 8\nCPU variant\t: 0xd\nCPU part\t: 0x804\nCPU revision\t: 14\n\nHardware\t: Qualcomm Technologies, Inc SM8150",
+    "selected": false
+  }
+]

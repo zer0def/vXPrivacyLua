@@ -33,7 +33,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,7 +41,6 @@ import android.os.Parcel;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.StrictMode;
-import android.provider.Settings;
 import android.util.Log;
 
 import java.io.File;
@@ -64,20 +62,15 @@ class XProvider {
 
     private static SQLiteDatabase db = null;
     private static ReentrantReadWriteLock dbLock = new ReentrantReadWriteLock(true);
+    private static ReentrantReadWriteLock dbLock_props = new ReentrantReadWriteLock(true);
 
     private static Map<String, XHook> hooks = null;
     private static Map<String, XHook> builtins = null;
 
     final static String cChannelName = "xlua";
 
-    static Uri getURI() {
-        if (Util.isVirtualXposed())
-            return Uri.parse("content://eu.faircode.xlua.vxp/");
-        else
-            return Settings.System.CONTENT_URI;
-    }
-
     static void loadData(Context context) throws RemoteException {
+        //XMockProvider.loadData(context);
         try {
             synchronized (lock) {
                 if (db == null)
@@ -155,6 +148,14 @@ class XProvider {
     static Cursor query(Context context, String method, String[] selection) throws RemoteException {
         loadData(context);
 
+        /*csettings1 = context.getContentResolver()
+                .query(XProvider.getURI(), new String[]{"xlua.getSettings"},
+                        "pkg = ? AND uid = ?", new String[]{"global", Integer.toString(uid)},
+                        null);
+        while (csettings1 != null && csettings1.moveToNext())
+            settings.put(csettings1.getString(0), csettings1.getString(1));*/
+
+
         Cursor result = null;
         StrictMode.ThreadPolicy originalPolicy = StrictMode.getThreadPolicy();
         try {
@@ -206,7 +207,7 @@ class XProvider {
     }
 
     private static Bundle getVersion(Context context, Bundle extras) throws Throwable {
-        if (Util.isVirtualXposed()) {
+        if (XposedUtil.isVirtualXposed()) {
             PackageInfo pi = context.getPackageManager().getPackageInfo(BuildConfig.APPLICATION_ID, 0);
             Bundle result = new Bundle();
             result.putInt("version", pi.versionCode);
@@ -216,7 +217,7 @@ class XProvider {
     }
 
     private static Bundle putHook(Context context, Bundle extras) throws Throwable {
-        enforcePermission(context);
+        XSecurity.checkCaller(context);
 
         // Get arguments
         String id = extras.getString("id");
@@ -285,10 +286,10 @@ class XProvider {
         return new Bundle();
     }
 
-    private static Bundle getGroups(Context context, Bundle extras) throws Throwable {
+    private static Bundle  getGroups(Context context, Bundle extras) throws Throwable {
         List<String> groups = new ArrayList<>();
 
-        List<String> collection = getCollection(context, Util.getUserId(Binder.getCallingUid()));
+        List<String> collection = getCollection(context, XUtil.getUserId(Binder.getCallingUid()));
 
         synchronized (lock) {
             for (XHook hook : hooks.values())
@@ -304,7 +305,7 @@ class XProvider {
     @SuppressLint("WrongConstant")
     private static Cursor getHooks(Context context, String[] selection, boolean marshall) throws Throwable {
         boolean all = (selection != null && selection.length == 1 && "all".equals(selection[0]));
-        List<String> collection = getCollection(context, Util.getUserId(Binder.getCallingUid()));
+        List<String> collection = getCollection(context, XUtil.getUserId(Binder.getCallingUid()));
 
         List<XHook> hv = new ArrayList();
         synchronized (lock) {
@@ -336,14 +337,17 @@ class XProvider {
         Map<String, XApp> apps = new HashMap<>();
 
         int cuid = Binder.getCallingUid();
-        int userid = Util.getUserId(cuid);
+        int userid = XUtil.getUserId(cuid);
 
         // Access package manager as system user
         long ident = Binder.clearCallingIdentity();
         try {
-            // Get installed apps for current user
-            PackageManager pm = Util.createContextForUser(context, userid).getPackageManager();
-            for (ApplicationInfo ai : pm.getInstalledApplications(0))
+            //https://github.com/zer0def/vXPrivacyLua/commit/c030dd1880afda81b989185f8e2527c8358db799
+            //For TaiChi support
+            Context contextForUser = XUtil.createContextForUser(context, userid);
+            PackageManager pm = contextForUser.getPackageManager();
+
+            for (ApplicationInfo ai : XposedUtil.getApplications(contextForUser))
                 if (!ai.packageName.startsWith(BuildConfig.APPLICATION_ID))
                     try {
                         int esetting = pm.getApplicationEnabledSetting(ai.packageName);
@@ -417,8 +421,8 @@ class XProvider {
             try {
                 Cursor cursor = null;
                 try {
-                    int start = Util.getUserUid(userid, 0);
-                    int end = Util.getUserUid(userid, Process.LAST_APPLICATION_UID);
+                    int start = XUtil.getUserUid(userid, 0);
+                    int end = XUtil.getUserUid(userid, Process.LAST_APPLICATION_UID);
                     cursor = db.query(
                             "assignment",
                             new String[]{"package", "uid", "hook", "installed", "used", "restricted", "exception"},
@@ -484,7 +488,7 @@ class XProvider {
 
     @SuppressLint("MissingPermission")
     private static Bundle assignHooks(Context context, Bundle extras) throws Throwable {
-        enforcePermission(context);
+        XSecurity.checkCaller(context);
 
         List<String> hookids = extras.getStringArrayList("hooks");
         String packageName = extras.getString("packageName");
@@ -547,7 +551,7 @@ class XProvider {
         }
 
         if (kill)
-            forceStop(context, packageName, Util.getUserId(uid));
+            forceStop(context, packageName, XUtil.getUserId(uid));
 
         return new Bundle();
     }
@@ -561,7 +565,7 @@ class XProvider {
         int uid = Integer.parseInt(selection[1]);
         MatrixCursor result = new MatrixCursor(new String[]{marshall ? "blob" : "json", "used"});
 
-        List<String> collection = getCollection(context, Util.getUserId(uid));
+        List<String> collection = getCollection(context, XUtil.getUserId(uid));
 
         dbLock.readLock().lock();
         try {
@@ -616,7 +620,7 @@ class XProvider {
 
         String packageName = selection[0];
         int uid = Integer.parseInt(selection[1]);
-        int userid = Util.getUserId(uid);
+        int userid = XUtil.getUserId(uid);
         MatrixCursor result = new MatrixCursor(new String[]{"name", "value"});
 
         dbLock.readLock().lock();
@@ -654,7 +658,7 @@ class XProvider {
         String hookid = extras.getString("hook");
         String packageName = extras.getString("packageName");
         int uid = extras.getInt("uid");
-        int userid = Util.getUserId(uid);
+        int userid = XUtil.getUserId(uid);
         String event = extras.getString("event");
         long time = extras.getLong("time");
         Bundle data = extras.getBundle("data");
@@ -748,7 +752,7 @@ class XProvider {
 
         long ident = Binder.clearCallingIdentity();
         try {
-            Context ctx = Util.createContextForUser(context, userid);
+            Context ctx = XUtil.createContextForUser(context, userid);
             PackageManager pm = ctx.getPackageManager();
             Resources resources = pm.getResourcesForApplication(BuildConfig.APPLICATION_ID);
 
@@ -785,7 +789,7 @@ class XProvider {
 
                 builder.setAutoCancel(true);
 
-                Util.notifyAsUser(ctx, "xlua_use_" + hook.getGroup(), uid, builder.build(), userid);
+                XUtil.notifyAsUser(ctx, "xlua_use_" + hook.getGroup(), uid, builder.build(), userid);
             }
 
             // Notify exception
@@ -812,7 +816,7 @@ class XProvider {
 
                 builder.setAutoCancel(true);
 
-                Util.notifyAsUser(ctx, "xlua_exception", uid, builder.build(), userid);
+                XUtil.notifyAsUser(ctx, "xlua_exception", uid, builder.build(), userid);
             }
         } finally {
             Binder.restoreCallingIdentity(ident);
@@ -822,15 +826,15 @@ class XProvider {
     }
 
     private static Cursor getLog(Context context, String[] selection) throws Throwable {
-        enforcePermission(context);
+        XSecurity.checkCaller(context);
 
         if (selection != null)
             throw new IllegalArgumentException("selection invalid");
 
         int cuid = Binder.getCallingUid();
-        int userid = Util.getUserId(cuid);
-        int start = Util.getUserUid(userid, 0);
-        int end = Util.getUserUid(userid, Process.LAST_APPLICATION_UID);
+        int userid = XUtil.getUserId(cuid);
+        int start = XUtil.getUserUid(userid, 0);
+        int end = XUtil.getUserUid(userid, Process.LAST_APPLICATION_UID);
 
         dbLock.readLock().lock();
         try {
@@ -860,6 +864,8 @@ class XProvider {
         args.putString("category", "global");
         args.putString("name", "collection");
         String collection = getSetting(context, args).getString("value", "Privacy");
+        //Grabs all the Kind of Groups
+
         List<String> result = new ArrayList<>();
         Collections.addAll(result, collection.split(","));
         return result;
@@ -881,6 +887,7 @@ class XProvider {
                             "user = ? AND category = ? AND name = ?",
                             new String[]{Integer.toString(userid), category, name},
                             null, null, null);
+
                     if (cursor.moveToNext())
                         value = (cursor.isNull(0) ? null : cursor.getString(0));
                 } finally {
@@ -903,8 +910,10 @@ class XProvider {
         return result;
     }
 
+
+
     private static Bundle putSetting(Context context, Bundle extras) throws Throwable {
-        enforcePermission(context);
+        XSecurity.checkCaller(context);
 
         int userid = extras.getInt("user");
         String category = extras.getString("category");
@@ -950,14 +959,14 @@ class XProvider {
     }
 
     private static Bundle initApp(Context context, Bundle extras) throws Throwable {
-        enforcePermission(context);
+        XSecurity.checkCaller(context);
 
         String packageName = extras.getString("packageName");
         int uid = extras.getInt("uid");
         boolean kill = extras.getBoolean("kill", false);
 
-        int userid = Util.getUserId(uid);
-        List<String> collection = getCollection(context, Util.getUserId(uid));
+        int userid = XUtil.getUserId(uid);
+        List<String> collection = getCollection(context, XUtil.getUserId(uid));
 
         List<String> hookids = new ArrayList<>();
         synchronized (lock) {
@@ -1001,7 +1010,7 @@ class XProvider {
     }
 
     private static Bundle clearApp(Context context, Bundle extras) throws Throwable {
-        enforcePermission(context);
+        XSecurity.checkCaller(context);
 
         String packageName = extras.getString("packageName");
         int uid = extras.getInt("uid");
@@ -1010,7 +1019,7 @@ class XProvider {
 
         long assignments;
         long settings = 0;
-        int userid = Util.getUserId(uid);
+        int userid = XUtil.getUserId(uid);
 
         dbLock.writeLock().lock();
         try {
@@ -1044,7 +1053,7 @@ class XProvider {
     }
 
     private static Bundle clearData(Context context, Bundle extras) throws Throwable {
-        enforcePermission(context);
+        XSecurity.checkCaller(context);
 
         int userid = extras.getInt("user");
         Log.i(TAG, "Clearing data user=" + userid);
@@ -1057,8 +1066,8 @@ class XProvider {
                     db.delete("assignment", null, null);
                     db.delete("setting", null, null);
                 } else {
-                    int start = Util.getUserUid(userid, 0);
-                    int end = Util.getUserUid(userid, Process.LAST_APPLICATION_UID);
+                    int start = XUtil.getUserUid(userid, 0);
+                    int end = XUtil.getUserUid(userid, Process.LAST_APPLICATION_UID);
                     db.delete(
                             "assignment",
                             "uid >= ? AND uid <= ?",
@@ -1080,43 +1089,8 @@ class XProvider {
         return new Bundle();
     }
 
-    private static void enforcePermission(Context context) throws SecurityException {
-        int cuid = Util.getAppId(Binder.getCallingUid());
-
-        // Access package manager as system user
-        long ident = Binder.clearCallingIdentity();
-        try {
-            // Allow system
-            if (cuid == Process.SYSTEM_UID)
-                return;
-
-            // Allow same signature
-            PackageManager pm = context.getPackageManager();
-            int uid = pm.getApplicationInfo(BuildConfig.APPLICATION_ID, 0).uid;
-            if (pm.checkSignatures(cuid, uid) == PackageManager.SIGNATURE_MATCH)
-                return;
-
-            // Allow specific signature
-            String[] cpkg = pm.getPackagesForUid(cuid);
-            if (cpkg.length > 0) {
-                byte[] bytes = Util.getSha1Fingerprint(context, cpkg[0]);
-                StringBuilder sb = new StringBuilder();
-                for (byte b : bytes)
-                    sb.append(Integer.toString(b & 0xff, 16).toLowerCase());
-
-                Resources resources = pm.getResourcesForApplication(BuildConfig.APPLICATION_ID);
-                if (sb.toString().equals(resources.getString(R.string.pro_fingerprint)))
-                    return;
-            }
-            throw new SecurityException("Signature error cuid=" + cuid);
-        } catch (Throwable ex) {
-            throw new SecurityException(ex);
-        } finally {
-            Binder.restoreCallingIdentity(ident);
-        }
-    }
-
     private static void loadHooks(Context context) throws Throwable {
+        Log.i(TAG, "<loadHooks>");
         hooks = new HashMap<>();
         builtins = new HashMap<>();
 
@@ -1165,7 +1139,7 @@ class XProvider {
     private static SQLiteDatabase getDatabase(Context context) throws Throwable {
         // Build database file
         File dbFile;
-        if (Util.isVirtualXposed())
+        if (XposedUtil.isVirtualXposed())
             dbFile = new File(context.getFilesDir(), "xlua.db");
         else {
             dbFile = new File(
@@ -1180,16 +1154,16 @@ class XProvider {
         SQLiteDatabase _db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
         Log.i(TAG, "Database file=" + dbFile);
 
-        if (!Util.isVirtualXposed()) {
+        if (!XposedUtil.isVirtualXposed()) {
             // Set database file permissions
             // Owner: rwx (system)
             // Group: rwx (system)
             // World: ---
-            Util.setPermissions(dbFile.getParentFile().getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
+            XUtil.setPermissions(dbFile.getParentFile().getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
             File[] files = dbFile.getParentFile().listFiles();
             if (files != null)
                 for (File file : files)
-                    Util.setPermissions(file.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
+                    XUtil.setPermissions(file.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
         }
 
         dbLock.writeLock().lock();
@@ -1360,7 +1334,7 @@ class XProvider {
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo(BuildConfig.APPLICATION_ID, 0);
             Bundle result = context.getContentResolver()
-                    .call(XProvider.getURI(), "xlua", "getVersion", new Bundle());
+                    .call(XSecurity.getURI(), "xlua", "getVersion", new Bundle());
             return (result != null && pi.versionCode == result.getInt("version"));
         } catch (Throwable ex) {
             Log.e(TAG, Log.getStackTraceString(ex));
@@ -1383,7 +1357,7 @@ class XProvider {
     }
 
     static boolean getSettingBoolean(Context context, String category, String name) {
-        return getSettingBoolean(context, Util.getUserId(Process.myUid()), category, name);
+        return getSettingBoolean(context, XUtil.getUserId(Process.myUid()), category, name);
     }
 
     static boolean getSettingBoolean(Context context, int user, String category, String name) {
@@ -1391,7 +1365,7 @@ class XProvider {
     }
 
     static String getSetting(Context context, String category, String name) {
-        return getSetting(context, Util.getUserId(Process.myUid()), category, name);
+        return getSetting(context, XUtil.getUserId(Process.myUid()), category, name);
     }
 
     static String getSetting(Context context, int user, String category, String name) {
@@ -1400,18 +1374,20 @@ class XProvider {
         args.putString("category", category);
         args.putString("name", name);
         Bundle result = context.getContentResolver()
-                .call(XProvider.getURI(), "xlua", "getSetting", args);
+                .call(XSecurity.getURI(), "xlua", "getSetting", args);
         return (result == null ? null : result.getString("value"));
     }
 
     static void putSetting(Context context, String category, String name, String value) {
         Bundle args = new Bundle();
-        args.putInt("user", Util.getUserId(Process.myUid()));
+        args.putInt("user", XUtil.getUserId(Process.myUid()));
         args.putString("category", category);
         args.putString("name", name);
         args.putString("value", value);
-        context.getContentResolver().call(XProvider.getURI(), "xlua", "putSetting", args);
+        context.getContentResolver().call(XSecurity.getURI(), "xlua", "putSetting", args);
     }
+
+    //static void putSettingBoolean(Context context, String )
 
     static void putSettingBoolean(Context context, String category, String name, boolean value) {
         putSetting(context, category, name, Boolean.toString(value));
