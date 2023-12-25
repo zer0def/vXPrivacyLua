@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
+//def keystorePropertiesFile = rootProject.file("keystore.properties")
+//def keystoreProperties = new Properties()
 
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+//keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 30
@@ -12,18 +12,18 @@ android {
         applicationId "eu.faircode.xlua"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 136
-        versionName "1.35"
-        archivesBaseName = "XPrivacyLua-v$versionName-$versionCode"
+        versionCode 137
+        versionName "1.40"
+        archivesBaseName = "XPL-EX-v$versionName-$versionCode"
     }
-    signingConfigs {
+    /signingConfigs {
         release {
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
         }
-    }
+    }/
 
     buildTypes {
         release {
@@ -31,7 +31,7 @@ android {
             minifyEnabled true
             useProguard = true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            //signingConfig signingConfigs.release
         }
         debug {
             shrinkResources false
