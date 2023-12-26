@@ -31,8 +31,8 @@ Help
 ------------
 
 [XLuaPrivacy DEFINE](https://github.com/M66B/XPrivacyLua/blob/master/DEFINE.md) <br>
-[XPL-EX API](https://github.com/0bbedCode/XPL-EX/blob/main/API.md) <br>
-[XPL-EX Examples](https://github.com/0bbedCode/XPL-EX/blob/main/LUAEXAMPLES.md) <br>
+[XPL-EX API](https://github.com/0bbedCode/XPL-EX/blob/new/APIHELP.md) <br>
+[XPL-EX Examples](https://github.com/0bbedCode/XPL-EX/blob/new/LUAHELP.md) <br>
 [Hooked Apis in XPL-EX](https://github.com/0bbedCode/XPL-EX/blob/main/HOOKED.md) <br>
 
 Do note for every Hook that is not re-created or added within the 'PrivacyEx' or XPL-EX Collection (it will be added) but you can use both Collections at once.<br>
