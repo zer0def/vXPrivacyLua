@@ -1,62 +1,94 @@
-XPrivacyLua
-===========
+# XPL-EX
+Hooking + Privacy Framework For Android 6.0 +
 
-Really simple to use privacy manager for Android 6 and later (successor of [XPrivacy](https://forum.xda-developers.com/xposed/modules/xprivacy-ultimate-android-privacy-app-t2320783"]XPrivacy[/URL])).
+XPL-EX is an Android application designed to enhance complete app privacy. It is an extension of "XPrivacy-Lua" by "M66B." This application is entirely open-source, free from advertisements, analytics, and does not require any financial contribution. It's a fully free solution with a strict policy of no logs and no server connections. Currently, XPL-EX is in the early beta stage of this fork. Its primary function is to safeguard your device information, ensuring that other installed applications cannot access it beyond necessary limits. The app employs various hooks to target methods that retrieve data, whether through outdated, deprecated, or new techniques, it will be hooked.
 
-<br>
+In today's world, the sale and misuse of personal data have become commonplace, often leading to resigned acceptance of constant surveillance. However, XPL-EX challenges this norm, offering a pathway to complete privacy and a way to evade the intrusive eyes of 'Big Brother.' This app is the first installment in a series of upcoming documents aimed at achieving a secure and completely private device. Adherence to specific standards can place users beyond the reach of major surveillance agencies. This multi-part project will be freely accessible, thoroughly documented, and open to the global community. 
 
-**This project is not supported anymore**
+I am getting old my self , I slowly show, but for the future generations or just for those who fear this will be for them.
 
-<br>
-
-Revoking Android permissions from apps often let apps crash or malfunction.
-XPrivacyLua solves this by feeding apps fake data instead of real data.
-
-Features
---------
-
-* Simple to use
-* Manage any user or system app
-* [Extensible](https://github.com/M66B/XPrivacyLua/blob/master/DEFINE.md)
-* Multi-user support
-* Free and open source
-
-Restrictions
+Part (1) XPL-EX
 ------------
 
-* Determine activity (fake unknown activity, see [here](https://developers.google.com/location-context/activity-recognition/))
-* Get applications (hide installed apps and [widgets](https://developer.android.com/reference/android/appwidget/AppWidgetManager.html))
-* Get calendars (hide calendars)
-* Get call log (hide call log)
-* Get contacts (hide contacts with the pro option to allow (non) starred contacts, hide blocked numbers)
-* Get location (fake location, hide [NMEA](https://en.wikipedia.org/wiki/NMEA_0183) messages)
-* Get messages (hide MMS, SMS, SIM, voicemail)
-* Get sensors (hide all available sensors)
-* Read [account](https://developer.android.com/reference/android/accounts/Account.html) name (fake name, mostly e-mail address)
-* Read clipboard (fake paste)
-* Read identifiers (fake build serial number, Android ID, advertising ID, GSF ID)
-* Read notifications (fake [status bar notifications](https://developer.android.com/reference/android/service/notification/StatusBarNotification.html))
-* Read network data (hide cell info, Wi-Fi networks, fake Wi-Fi network name)
-* Read sync data (hide [sync data](https://developer.android.com/training/sync-adapters/creating-sync-adapter.html))
-* Read telephony data (fake IMEI, MEI, SIM serial number, voicemail number, etc)
-* Record audio (prevent recording)
-* Record video (prevent recording)
-* Send messages (prevent sending MMS, SMS, data)
-* Use analytics ([Fabric/Crashlytics](https://get.fabric.io/), [Facebook app events](https://developers.facebook.com/docs/reference/androidsdk/current/facebook/com/facebook/appevents/appeventslogger.html/), [Firebase Analytics](https://firebase.google.com/docs/analytics/), [Google Analytic](https://www.google.com/analytics/), [Mixpanel](https://mixpanel.com/), [Segment](https://segment.com/))
-* Use camera (fake camera not available and/or hide cameras)
-* Use tracking (fake user agent for [WebView](https://developer.android.com/reference/android/webkit/WebView.html) only, [Build properties](https://developer.android.com/reference/android/os/Build.html), network/SIM country/operator)
+Intercepting apps at the API level of your device can effectively obscure the type of device on which they are running. To achieve this, it's crucial to address both Native and Java components. Native hooking is a feature set to be introduced to XPL-EX, which currently supports Java through the 'XPOSED' Framework for hooking purposes.
 
-The tracking restrictions will work only if the code of the target app was not [obfuscated](https://developer.android.com/studio/build/shrink-code.html).
-The other restrictions will work always.
+The concept is straightforward: to apps, your device appears as something entirely different. For example, an app might perceive your device as a "Samsung Galaxy from Iceland with a SIM carrier named 'LeetPrivacy,' boasting 400 GB of RAM, a 90-core CPU, an Android ID of 0000000000000000, and an IMEI of 000." In reality, however, it could be a "Google Pixel from America with a Verizon SIM, 8 GB of RAM, and an 8-core CPU." Extreme examples like the "400 GB of RAM" are used to illustrate the point, although they might make the device more conspicuous.
 
-Hide or fake?
+The overarching aim is to limit the information apps can access or gather about our devices, even those allowed through our firewall.
 
-* Hide: return empty list
-* Fake: return empty or fake value
+Additionally, there are emerging techniques like "keystroke dynamics" used to identify individuals based on their typing patterns. While not widely adopted or entirely accurate, they are still utilized. It's important to note that nearly every app, especially those from major social media platforms like TikTok, Facebook, and Instagram, records data on your phone.
 
-It is possible to add custom restriction definitions, see [this FAQ](https://github.com/M66B/XPrivacyLua/blob/master/FAQ.md#user-content-faq8) for details.
+I am ObbedCode, extending my warm regards to everyone. I hope you appreciate this contribution. My goal is simply to give to the community, with no expectation of payment. Love all, and remember to protect your privacy!
 
-You can see all technical details [here](https://github.com/M66B/XPrivacyLua/blob/master/app/src/main/assets/hooks.json).
+
+To Come
+------------
+XPL-EX is not just an application designed for privacy; it also harbors potential for future enhancements in areas such as reverse engineering and concealing elements like Xposed, root access, and more. However, the primary focus remains steadfastly on privacy, with other features set to follow in due course.
+
+This repository will offer a modified version of the Pro Companion app, which will facilitate free communication with XPL-EX. In time, the plan is to integrate all these functionalities into a single, unified application. This strategic approach ensures that while we expand the app's capabilities, its core mission of ensuring user privacy remains at the forefront.
+
+Help
+------------
+
+[XLuaPrivacy DEFINE](https://github.com/M66B/XPrivacyLua/blob/master/DEFINE.md) <br>
+[XPL-EX API](https://github.com/0bbedCode/XPL-EX/blob/main/API.md) <br>
+[XPL-EX Examples](https://github.com/0bbedCode/XPL-EX/blob/main/LUAEXAMPLES.md) <br>
+[Hooked Apis in XPL-EX](https://github.com/0bbedCode/XPL-EX/blob/main/HOOKED.md) <br>
+
+Do note for every Hook that is not re-created or added within the 'PrivacyEx' or XPL-EX Collection (it will be added) but you can use both Collections at once.<br>
+You cen switch between the two collections in the "XPrivacy-LUA Pro Companion App". Please Avoid Selecting Hook Groups with similar Hooks
+
+If the Hooks do not appear , nor the Collection appears in the Pro Companion App even after a Reboot. <br>
+Use a root file explorer navigate to the Directory "/data/system/xlua/" Backup any File in there (xlua) database, then delete it. Restart the Device <br>
+Later versions this will be 'fixed' / alot easier to work with within the UI etc <br>
+
+### Telegram Group
+https://t.me/xplexex
+
+### Telegram
+https://t.me/obbedcode
+
+### Discord , Nulled (ObbedCode)<br><br>
+
+## XPL-EX Development Roadmap
+
+### Completed Features
+- [X] Hook Java APIs
+- [X] Compatibility with Xposed, LSPosed, EdXposed, ThaiChi, VXP
+- [X] Dynamic Privacy Features (Free and Open Source Software)
+- [X] Modification of Hook Behavior using LUA Scripts
+- [X] Built-in Pre-defined Hooks for Enhanced Privacy
+- [X] UI Component for Intercepting System Properties (`System.getProperty` / `SystemProperties.get`)
+- [X] UI Component to Select CPU Maps for the System Information File `/proc/cpuinfo`
+- [X] Expanded API Functions for Use in LUA Scripts
+- [X] Updated LUA Core (Note: Current version does not support BIG INT still...)
+- [X] Enhanced and Optimized Hooks for Android 14 and or Just Enhanced
+- [X] Dark Mode Feature in Main Application
+
+### Planned Enhancements
+- [ ] Add new Text to different languages (Tanslation)
+- [ ] Class Finder to Identify Classes Inheriting Specific Interfaces (e.g., `javax.microedition.khronos.opengles.GL10`)
+- [ ] Protection Against Inner Process Communication
+- [ ] Adding Icons and Refining Text & Names for CPUs
+- [ ] Updating and Fixing LUA Code for More Hooks
+- [ ] Secure Communication between Hook and XPL-EX
+- [ ] Code Cleanup (Focus on UI Development)
+- [ ] Hook Native APIs
+- [ ] Target Native APIs (e.g., `__system_property_get`, `popen`, `fopen`, `open`, `exec`) for Enhanced Privacy
+- [ ] Additional API Functions for LUA Scripts
+- [ ] Integration of 'M66B's "XPrivacyLua-Pro Companion App" Features into Main App "XPL-EX"
+- [ ] UI for Modifying/Mocking Specific Device Sensors
+- [ ] Built-in Pre-defined Hooks for Reverse Engineering, Logging, Bypassing/Hiding, and Disabling Ad Libraries in Apps
+- [ ] Mode/View Switcher (e.g., "Reverse Engineering Mode," "Privacy Mode")
+- [ ] System for Selecting Phone Configurations for Spoofing
+- [ ] Support for Frida
+- [ ] Floating Menu in Hooked Apps for UI Inspection (Similar to "Reflect Master")
+- [ ] Incorporation of Engaging Visual Elements and Progress Indicators
+- [ ] Documentation Refinement and Language Corrections
+
+**Note:** This roadmap is subject to change based on project development and user feedback.
+
+* From https://github.com/M66B/XPrivacyLua
 
 Notes
 -----
@@ -73,102 +105,66 @@ Compatibility
 XPrivacyLua is supported on Android 6.0 Marshmallow and later.
 For Android 4.0.3 KitKat to Android 5.1.1 Lollipop you can use [XPrivacy](https://github.com/M66B/XPrivacy/blob/master/README.md) (unsupported though).
 
-XPrivacyLua is supported for smartphones and tablets only. XPrivacyLua is not supported on emulators.
+XPL-EX is supported for smartphones and tablets only. XPL-EX is not supported on emulators.
 
 Hooking *com.google.android.gms.location.ActivityRecognitionResult.extractResult* (restriction *Determine activity*)
 is known to fail with *script:25 vm error: java.lang.ClassNotFoundException: com.google.android.gms.location.DetectedActivity*
-and *script:28 attempt to call nil* for some apps, like Google Maps and NetFlix, for yet unknown reasons.
+and *script:28 attempt to call nil* for some apps, like Google Maps and NetFlix, for yet unknown reasons. (maybe I can fix this OBC)
 
 Installation
 ------------
 
 * Install [Magisk](https://www.xda-developers.com/how-to-install-magisk/)
 * Android 6-7: download, install, and activate [Xposed](http://forum.xda-developers.com/xposed)
-* Android 8-12: download, install, and activate [LSPosed](https://forum.xda-developers.com/t/lsposed-xposed-framework-8-0-11-0-edxposed-alternetive.4228973/) ~~or [EdXposed](https://forum.xda-developers.com/t/official-edxposed-the-successor-of-xposed-oreo-pie-q-r-2020-07-19.4070199)~~
-* Download, install, and activate [XPrivacyLua](https://github.com/Xposed-Modules-Repo/eu.faircode.xlua/releases)
+* Android 8.1-12: download, install, and activate [LSPosed](https://forum.xda-developers.com/t/lsposed-xposed-framework-8-0-11-0-edxposed-alternetive.4228973/) ~~or [EdXposed](https://forum.xda-developers.com/t/official-edxposed-the-successor-of-xposed-oreo-pie-q-r-2020-07-19.4070199)~~
+* Download, install, and activate [XPL-EX]()
 
 LSPosed: please make sure that any app you want to restrict is [in the 'scope'](https://github.com/LSPosed/LSPosed/wiki/How-to-use-it#install--activate-modules) of LSposed.
 
 Certificate fingerprints:
 
-* MD5: 42:93:4F:A4:D5:AC:53:7B:04:97:3B:29:A6:6E:7B:B3
-* SHA1: 10:62:0A:E9:61:D7:88:54:F6:C9:CD:87:2C:43:88:23:28:49:C7:99
-* SHA256: 5E:69:9C:5D:AF:61:2C:AB:71:3A:35:BB:38:7C:F6:A8:86:8C:A0:DD:5D:CE:B4:CE:C1:53:8E:82:65:21:95:77
+* MD5: N/A
+* SHA1: N/A
+* SHA256: N/A
 
 Frequently Asked Questions
 --------------------------
 
-See [here](https://github.com/M66B/XPrivacyLua/blob/master/FAQ.md) for a list of often asked questions.
+See [here](https://github.com/M66B/XPrivacyLua/blob/master/FAQ.md) for a list of often asked questions. (XPrivacy-Lua)
 
-Support
--------
 
-Only the XPrivacyLua version released in the Xposed repository is supported.
-
-XPrivacyLua with [Island](http://forum.xda-developers.com/android/-t3366295), etc is not supported.
-
-* For support on Xposed, please go [here](http://forum.xda-developers.com/xposed)
-* For support on XPrivacyLua, please go [here](https://forum.xda-developers.com/xposed/modules/xprivacylua6-0-android-privacy-manager-t3730663)
-
-Donations
----------
-
-See [here](https://lua.xprivacy.eu/) about how you can donate.
-
-Contributing
+Donate ;)
 ------------
 
-*Documentation*
+https://lua.xprivacy.eu/<br>
+https://github.com/M66B/XPrivacyLua
 
-Contributions to this document and the frequently asked questions
-are prefered in the form of [pull requests](https://help.github.com/articles/creating-a-pull-request/).
+Thanks M66B for what you have left us now I will continue <3 
 
-*Translations*
 
-* You can translate the in-app texts of XPrivacyLua [here](https://crowdin.com/project/xprivacylua/)
-* You can download the in-app texts of XPrivacyLua Pro for translation [here](https://lua.xprivacy.eu/strings_pro.xml)
-* If your language is not listed, please send a message through [this contact form](https://contact.faircode.eu/)
+More From Obbed
+------------
 
-*Source code*
+This app alone is not enough to "hide" you more so combine it with a Complex Security System. XPL-EX will only protect apps from identifying you in any way.
 
-Building XPrivacyLua from source code is straightforward with [Android Studio](http://developer.android.com/sdk/).
-It is expected that you can solve build problems yourself, so there is no support on building.
+***[AFWall+]*** with AFWall Anti Leak Module (Dont allow anything through that firewall not even the kernel) <br>
+***[AppOps]*** rikka.appops to have Permission Control over your Apps (further restrict them)<br>
+***[OVPN/Mullvad]*** Super Private <3 or Just use TOR ORBot (AFWalls has ability block those apps with allowed internet to only use the Internet if TOR is Connected)<br>
+***[Hail]*** Disable / Freeze System Apps such as Google Play Services, Google Play etc <br>
+***[Greenify]*** 5.0 Beta (because it is still useful all apps need to die in the background no matter)<br>
+***[AdAway]*** Open Source System Wide AdBlocker allows you to add Repos to Block custom or more Trackers / Ads. (SYSTEM WIDE) so its super cool<br>
+***[BromiteWebview]*** Modifed System Webview with More Pirvacy<br>
+***[Sensor Disabler]*** Sensors Matter , Disable them all or Mock them ! Ps newer versions of Android has a Disable all Sensors on the Device Button<br>
+***[Camera/Mic Blocker]*** Or you have have a phyisical pop up camera like the one seen on the Oneplus7 Pro to truly know if your being peeped on. Newer versions of Android also notifys you when your MIC or CAM are being used<br>
+***[SD Maid]*** Version before there new version is good at being a System UTIL but also shows you all apps that start when the Phone Starts allowing you to disable them<br>
+***[Hide My Applist]*** Best Xposed App to Hide Apps from other Apps<br>
+***[Custom Router Firmware w VPN & Firewall & AdBlock]***  OpenWRT <3
+***[Custom ROM + Custom kernel]*** Open Source Cool ROM with a Cool String Kernel >:)<br><br>
 
-Source code contributions are prefered in the form of [pull requests](https://help.github.com/articles/creating-a-pull-request/).
-Please [contact me](https://contact.faircode.eu/) first to tell me what your plans are.
+Once again do not let anything through that firewall not even on that list (AdAway, VPN, Webview) sure but the rest dont even let those through the great wall
+Ps its not poor security having root if the user isnt the user to get click jacked or tricked into installing fake modules... dont be dumb
 
-Please note that you agree to the license below by contributing, including the copyright.
+Cool Band
 
-Attribution
------------
 
-XPrivacyLua uses:
-
-* [LuaJ](https://sourceforge.net/projects/luaj/). Copyright 2007-2013 LuaJ. All rights reserved. See [license](http://luaj.sourceforge.net/license.txt).
-* [Glide](https://bumptech.github.io/glide/). Copyright 2014 Google, Inc. All rights reserved. See [license](https://raw.githubusercontent.com/bumptech/glide/master/LICENSE).
-* [Android Support Library](https://developer.android.com/tools/support-library/). Copyright (C) 2011 The Android Open Source Project. See [license](https://android.googlesource.com/platform/frameworks/support/+/master/LICENSE.txt).
-
-License
--------
-
-[GNU General Public License version 3](https://www.gnu.org/licenses/gpl.txt)
-
-Copyright (c) 2017-2021 Marcel Bokhorst. All rights reserved
-
-XPrivacyLua is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-XPrivacyLua is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with XPrivacyLua. If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
-
-Trademarks
-----------
-
-*Android is a trademark of Google Inc. Google Play is a trademark of Google Inc*
+![292759617-b59f1a2a-a4b5-4276-97f1-796175aee834](https://github.com/0bbedCode/XPL-EX/assets/114315756/17a59b9d-6e1e-43e9-9aa8-0cccb81a1164)
