@@ -299,7 +299,68 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
         });
     }
 
+    /*private monitorApplication(final  XC_LoadPackage.LoadPackageParam lpparam)throws Throwable {
+        XposedBridge.hookAllMethods(ClassLoader.class, "loadClass", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                super.afterHookedMethod(param);
+
+                Log.i("HookedApp", "Class Loaded");
+
+            }
+        });
+    }*/
+
     private void hookApplication(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        //Each app will have a table of items hashmap <Class, Class[]>
+
+
+
+
+        XposedBridge.hookAllMethods(ClassLoader.class, "loadClass", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                super.afterHookedMethod(param);
+
+
+            }
+        });
+
+        /*XposedBridge.hookAllMethods(Application.class, "attach", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                Log.i(TAG, "Hook invoked for: android.app.Application:attach  ... now resolving MainActivity");
+                Context context = (Context) param.thisObject;
+                PackageManager pm = context.getPackageManager();
+                Intent launchIntent = pm.getLaunchIntentForPackage(lpparam.packageName);
+                if (launchIntent == null) {
+                    return; // No main activity found
+                }
+                ResolveInfo resolveInfo = pm.resolveActivity(launchIntent, 0);
+                final String mainActivityName = resolveInfo.activityInfo.name;
+
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream);
+
+                //writer.append("ddd");
+
+                Log.i(TAG, "Found MainActiviy now Hooking ClassLoader:loadClass to Sleep before user Code Execution: " + mainActivityName);
+
+                XposedBridge.hookAllMethods(ClassLoader.class, "loadClass", new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        String className = (String) param.args[0];
+                        if (mainActivityName.equals(className)) {
+                            Log.i(TAG, "Hook Invoked for: java.lang.ClassLoader:loadClass(MainActivity) Now sleeping... (Hurry Inject your scripts skid!!)");
+                            // Introduce a delay of 5 seconds
+                            Thread.sleep(5000);
+                        }
+                    }
+                });
+            }
+        });*/
+
+
         final int uid = Process.myUid();
         final boolean tiramisu = (Build.VERSION.SDK_INT >= 33);
         // https://android.googlesource.com/platform/frameworks/base/+/169aeafb2d97b810ae123ad036d0c58336961c55%5E%21/#F1

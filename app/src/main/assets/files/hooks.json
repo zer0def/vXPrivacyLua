@@ -1,14 +1,35 @@
 [
 
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "ID.Drivers",
+    "name": "File.exists/Drivers",
+    "author": "OBC",
+    "className": "java.io.File",
+    "methodName": "exists",
+    "parameterTypes": [  ],
+    "returnType": "boolean",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_file_exists"
+  },
+
 
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "ID.Drivers.IO",
+    "group": "ID.Drivers",
     "name": "File.list/Drivers",
     "author": "OBC",
     "className": "java.io.File",
-    "methodName": "open",
+    "methodName": "list",
     "parameterTypes": [  ],
     "returnType": "[Ljava.lang.String;",
     "minSdk": 4,
@@ -25,11 +46,11 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "ID.Drivers.IO",
+    "group": "ID.Drivers",
     "name": "File.list/FileNameFilter/Drivers",
     "author": "OBC",
     "className": "java.io.File",
-    "methodName": "open",
+    "methodName": "list",
     "parameterTypes": [ "java.io.FilenameFilter" ],
     "returnType": "[Ljava.lang.String;",
     "minSdk": 4,
@@ -46,7 +67,7 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "ID.Drivers.IO",
+    "group": "ID.Drivers",
     "name": "File.listFiles/Drivers",
     "author": "OBC",
     "className": "java.io.File",
@@ -67,7 +88,7 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "ID.Drivers.IO",
+    "group": "ID.Drivers",
     "name": "File.listFiles/FileNameFilter/Drivers",
     "author": "OBC",
     "className": "java.io.File",
@@ -85,12 +106,55 @@
     "luaScript": "@id_file_file_array"
   },
 
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "ID.Drivers",
+    "name": "File.listFiles/FileFilter/Drivers",
+    "author": "OBC",
+    "className": "java.io.File",
+    "methodName": "listFiles",
+    "parameterTypes": [ "java.io.FileFilter" ],
+    "returnType": "[Ljava.io.File;",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_file_file_array"
+  },
+
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "ID.Drivers",
+    "name": "File.listRoots/Drivers",
+    "author": "OBC",
+    "className": "java.io.File",
+    "methodName": "listRoots",
+    "parameterTypes": [ ],
+    "returnType": "[Ljava.io.File;",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_file_file_array"
+  },
+
+
 
   //id_file_string_array
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "ID.Drivers.IO",
+    "group": "ID.Drivers",
     "name": "BlockGuardOs.access/Drivers",
     "author": "OBC",
     "className": "libcore.io.BlockGuardOs",
@@ -111,7 +175,28 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "ID.Drivers.IO",
+    "group": "ID.Drivers",
+    "name": "ForwardingOs.access/Drivers",
+    "author": "OBC",
+    "className": "libcore.io.ForwardingOs",
+    "methodName": "access",
+    "parameterTypes": [ "java.lang.String", "int" ],
+    "returnType": "boolean",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_device_drivers_two"
+  },
+
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "ID.Drivers",
     "name": "IoBridge.open/Drivers",
     "author": "OBC",
     "className": "libcore.io.IoBridge",

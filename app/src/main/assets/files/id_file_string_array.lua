@@ -6,7 +6,7 @@ function after(hook, param)
     end
 
     if param:isDriverFile(ths:getPath()) then
-        log("Is Diriver Folder Root: " .. ths:getPath())
+        log("Is Driver Folder Root: " .. ths:getPath())
         param:setResult(null)
         return true
     end
