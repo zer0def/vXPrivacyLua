@@ -390,9 +390,18 @@
     "enabled": true
   },
   {
-    "name": "rr.ota.version",
+    "name": "ro.boot.fpsensor",
+    "mockValue": " ",
+    "defaultValue": " ",
+    "enabled": true
+  },
+
+  {
+    "name": "ro.boot.fp",
     "mockValue": " ",
     "defaultValue": " ",
     "enabled": true
   }
+
+
 ]

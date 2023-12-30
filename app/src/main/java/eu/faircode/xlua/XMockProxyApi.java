@@ -60,11 +60,13 @@ public class XMockProxyApi {
     //
 
     public static Bundle callPutMockProp(Context context, XMockPropIO prop) {
+        Log.i(TAG, "callMockProp=" + prop);
         return invokeCall(context, "putMockProp",
                 XMockPropIO.Convert.toBundle(prop));
     }
 
     public static Bundle callPutMockProps(Context context, List<XMockPropIO> props) {
+        Log.i(TAG, "callPutMockProps=" + props.size());
         return invokeCall(context, "putMockProps",
                 XMockPropIO.Convert.toBundle(props));
     }

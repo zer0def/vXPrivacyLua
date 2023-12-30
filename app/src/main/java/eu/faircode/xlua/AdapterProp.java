@@ -134,7 +134,7 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
             switch (id) {
                 case R.id.cbMockTheProp:
                     prop.enabled = isChecked;
-                    notifyDataSetChanged();
+                    //notifyDataSetChanged();
                     //notifyDataSetChanged(); put ?
                     executor.submit(new Runnable() {
                         @Override
@@ -161,9 +161,8 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
         public void afterTextChanged(Editable editable) {
             XMockPropIO prop = props.get(getAdapterPosition());
             prop.mockValue = editable.toString();
-            if(!props_modified.contains(prop)) {
+            if(!props_modified.contains(prop))
                 props_modified.add(prop);
-            }
         }
 
         @Override
@@ -219,7 +218,11 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
                             @Override
                             public void run() {
                                 if(ret == null) {
-                                    Toast.makeText(context, "Fail to Save :(", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Should be saved ! ? eh it returned Nulled", Toast.LENGTH_SHORT).show();
+                                    //Snackbar.make(this, context.getString("Hiiiiiiiiii"), Snackbar.LENGTH_LONG).show();
+                                    //Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.msg_no_service), Snackbar.LENGTH_INDEFINITE);
+
+                                    //Haha this Invokes :P least its not denying it working keke
                                     return;
                                 }
 
@@ -232,13 +235,19 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
                                     case 0:
                                         Toast.makeText(context, "Saved!", Toast.LENGTH_SHORT).show();
                                         break;
-                                }                        }
+                                }
+
+                                notifyDataSetChanged();
+                            }
                         });
                     }
 
                     //props_modified.clear();
                 }
             });
+            //notifyDataSetChanged();
+        }else {
+            Toast.makeText(context, "Nothing Needs to be Saved !", Toast.LENGTH_SHORT).show();
         }
     }
 

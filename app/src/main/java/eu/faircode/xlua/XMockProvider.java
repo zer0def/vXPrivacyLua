@@ -185,6 +185,7 @@ public class XMockProvider {
     //
 
     public static Bundle putMockProp(Context context, Bundle extras) {
+        Log.i(TAG, "pre [putMockProp]");
         Bundle ret = new Bundle();
         XMockPropIO prop = XMockPropIO.Convert.fromBundle(extras);
         Log.i(TAG, "[putMockProp] Prop=[" + prop + "]");
@@ -193,6 +194,7 @@ public class XMockProvider {
     }
 
     public static Bundle putMockProps(Context context, Bundle extras) {
+        Log.i(TAG, "pre [putMockProps]");
         Bundle ret = new Bundle();
         List<XMockPropIO> props = XMockPropIO.Convert.fromBundleArray(extras);
         Log.i(TAG, "[putMockProps] Data to Write Size=" + props.size());

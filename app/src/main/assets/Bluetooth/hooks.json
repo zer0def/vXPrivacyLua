@@ -1,4 +1,28 @@
 [
+
+  //getBluetoothAddress
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "ID.Bluetooth",
+    "name": "InputDevice.getBluetoothAddress",
+    "author": "OBC",
+    "className": "android.view.InputDevice",
+    "methodName": "getBluetoothAddress",
+    "parameterTypes": [ ],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "Bluetooth MAC Address",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_bluetoothadapter_getaddress"
+  },
+
+
   {
     "builtin": false,
     "collection": "PrivacyEx",

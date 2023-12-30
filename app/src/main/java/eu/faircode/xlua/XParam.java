@@ -31,6 +31,7 @@ import android.os.Debug;
 import android.os.Parcel;
 import android.telephony.CellLocation;
 import android.util.Log;
+import android.view.InputDevice;
 import android.view.inputmethod.EditorInfo;
 
 import java.io.File;
@@ -39,13 +40,17 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.WeakHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 import de.robv.android.xposed.XC_MethodHook;
 import eu.faircode.xlua.cpu.XMockCpuUtils;
+import eu.faircode.xlua.display.MotionRangeUtil;
 import eu.faircode.xlua.utilities.FileUtil;
 import eu.faircode.xlua.utilities.LuaLongUtil;
 import eu.faircode.xlua.utilities.MemoryUtil;
@@ -101,6 +106,9 @@ public class XParam {
     //
 
     @SuppressWarnings("unused")
+    public boolean isDriverFiles(String pathOrFile) { return FileUtil.isDeviceDriver(pathOrFile); }
+
+    @SuppressWarnings("unused")
     public String filterBuildProperty(String property) {
         if(!StringUtils.isValidString(property))
             return XMockUtils.NOT_BLACKLISTED;
@@ -148,6 +156,21 @@ public class XParam {
     //End of FILTER Functions
     //
 
+    @SuppressWarnings("unused")
+    public boolean isDriverFile(String path) { return FileUtil.isDeviceDriver(path); }
+
+    @SuppressWarnings("unused")
+    public File[] filterFilesArray(File[] files) { return FileUtil.filterFileArray(files); }
+
+    @SuppressWarnings("unused")
+    public List<File> filterFilesList(List<File> files) { return FileUtil.filterFileList(files); }
+
+    @SuppressWarnings("unused")
+    public String[] filterFileStringArray(String[] files) { return FileUtil.filterArray(files); }
+
+    @SuppressWarnings("unused")
+    public List<String> filterFileStringList(List<String> files) { return FileUtil.filterList(files); }
+
     //
     //Start of Memory/CPU Functions
     //
@@ -175,8 +198,40 @@ public class XParam {
     //
 
     //
+    //Start of Display Functions
+    //
+
+    @SuppressWarnings("unused")
+    public InputDevice.MotionRange createXAxis(int height) { return MotionRangeUtil.createXAxis(height); }
+
+    @SuppressWarnings("unused")
+    public InputDevice.MotionRange createYAxis(int width) { return MotionRangeUtil.createYAxis(width); }
+
+    //
+    //End of Display Functions
+    //
+
+    //
     //Start of ETC Util Functions
     //
+
+    @SuppressWarnings("unused")
+    public String generateRandomString(int min, int max) { return generateRandomString(ThreadLocalRandom.current().nextInt(min, max + 1)); }
+
+    @SuppressWarnings("unused")
+    public String generateRandomString(int length) {
+        String characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder stringBuilder = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            char randomChar = characters.charAt(index);
+            stringBuilder.append(randomChar);
+        }
+
+        return stringBuilder.toString();
+    }
 
     @SuppressWarnings("unused")
     public byte[] getIpAddressBytes(String ipAddress) { return NetworkUtil.stringIpAddressToBytes(ipAddress); }

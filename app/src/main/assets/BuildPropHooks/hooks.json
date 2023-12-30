@@ -459,7 +459,7 @@
     "settings":["build.SECURITY_PATCH"]
   },
 
-  /*{
+  {
     "builtin": false,
     "collection": "PrivacyEx",
     "group": "ID.Build",
@@ -468,7 +468,7 @@
     "className": "android.os.Build",
     "methodName": "#TIME",
     "parameterTypes": [ ],
-    "returnType": "java.lang.String",
+    "returnType": "long",
     "minSdk": 4,
     "maxSdk": 999,
     "version": 1,
@@ -479,7 +479,29 @@
     "notify":false,
     "luaScript": "@id_build_time",
     "settings":["build.TIME"]
-  },*/
+  },
+
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "ID.Build",
+    "name": "Build.SOC_MODEL",
+    "author": "OBC",
+    "className": "android.os.Build",
+    "methodName": "#SOC_MODEL",
+    "parameterTypes": [ ],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_build_soc_model",
+    "settings":["build.SOC_MODEL"]
+  },
 
   {
     "builtin": false,

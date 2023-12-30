@@ -9,11 +9,99 @@ import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import eu.faircode.xlua.cpu.XMockCpuIO;
 
 public class FileUtil {
     private static final String TAG = "XLua.FileUtil";
+
+    //       String[] ss = new String[] {"fpc1020", "fpc_fpc1020", "fpc1020", "fpc_fpc1020", "fpc1020", "fp_fpc1020", "fpc1020", "fpc,fpc1020", "fpc1020", "fp_fpc1155", "fpc1145", "fpc1145","fpc1145_device", "fingerprint_fpc", "goodix_fp",  "goodix_fp", "0.goodix_fp", "fpc1145",  "0.fpc1145", "fpc1020",  "fingerprint", "silead_fp", "0.silead_fp", "cdfinger_fp",  "silead_fp", "goodix_fp", "goodix_fingerprint", "cdfinger_fp", "cdfinger_fingerprint", "goodix_fp", "goodix,fingerprint", "fpc1020","fingerprint_fpc", "goodix_fp","fingerprint_goodix", "qbt1000","qbt2000",  "elan",  "elan","elan_elan_fp", "esfp0", "egistec_fp" };
+    public static boolean isDeviceDriver(String filePath) {
+        if(filePath.contains("sys/devices/system/cpu/"))
+            return false;
+
+        ///sys/bus/platform/driver
+        if(filePath.contains("/sys/bus/platform/drivers") ||
+                filePath.contains("/sys/devices/soc") ||
+                filePath.contains("/sys/class/fingerprint") ||
+                filePath.contains("/sys/class/camera") ||
+                filePath.contains("/sys/android_camera") ||
+                filePath.contains("/sys/project_info") ||
+                filePath.contains("/vendor/etc") ||
+                filePath.contains("/sys/block/sda/device/model") ||
+                filePath.contains("/sys/class/block") ||
+                filePath.contains("/proc/scsi") ||
+                filePath.contains("/proc/bus/input") ||
+                filePath.contains("/sys/class/sensors") ||
+                filePath.contains("/sys/bus/spi/drivers") ||
+                filePath.contains("/sys/class/fingerprint/fingerprint/name")) {
+
+            Log.i(TAG, "PATH_FOUND=" + filePath);
+            return true;
+        }
+
+        return false;
+    }
+
+    public static List<File> filterFileList(List<File> files) {
+        List<File> fs = new ArrayList<>();
+        for(File f : files)
+            if(!FileUtil.isDeviceDriver(f.getPath()))
+                fs.add(f);
+
+        Log.i(TAG, "SZ=" + files.size() + "  >> FSZA=" + fs.size());
+
+        if(fs.size() == files.size())
+            return files;
+
+        return fs.isEmpty() ? null : fs;
+    }
+
+    public static File[] filterFileArray(File[] files) {
+        List<File> fs = new ArrayList<>();
+        for(File f : files)
+            if(!FileUtil.isDeviceDriver(f.getPath()))
+                fs.add(f);
+
+        Log.i(TAG, "SZ=" + files.length + "  >> FSZA=" + fs.size());
+
+
+        if(fs.size() == files.length)
+            return files;
+
+        return fs.isEmpty() ? null : fs.toArray(new File[fs.size()]);
+    }
+
+
+    public static List<String> filterList(List<String> files) {
+        List<String> fs = new ArrayList<>();
+        for(String s : files)
+            if(!FileUtil.isDeviceDriver(s))
+                fs.add(s);
+
+        Log.i(TAG, "SZ=" + files.size() + "  >> FSZA=" + fs.size());
+
+        if(fs.size() == files.size())
+            return files;
+
+        return fs.isEmpty() ? null : fs;
+    }
+
+    public static String[] filterArray(String[] files) {
+        List<String> fs = new ArrayList<>();
+        for(String s : files)
+            if(!FileUtil.isDeviceDriver(s))
+                fs.add(s);
+
+        Log.i(TAG, "SZ=" + files.length + "  >> FSZA=" + fs.size());
+
+        if(fs.size() == files.length)
+            return files;
+
+        return fs.isEmpty() ? null : fs.toArray(new String[fs.size()]);
+    }
 
     public static FileDescriptor generateFakeFileDescriptor(String contents) {
         Log.i(TAG, "Generating Fake File Descriptor...");

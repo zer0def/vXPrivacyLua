@@ -134,6 +134,8 @@ public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
 
             List<XMockPropIO> ps = new ArrayList<>();
 
+            Log.i(TAG, "XMockPropIO.fromBundleArray(Bundle)=" + names.length);
+
             for (int i = 0; i < names.length; i++)
                 ps.add(new XMockPropIO(names[i], values[i], defValues[i], enValues[i]));
 
