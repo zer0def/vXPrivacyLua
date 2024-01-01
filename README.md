@@ -1,14 +1,16 @@
 # XPL-EX
 Hooking + Privacy Framework For Android 6.0 +
 
+
+
+XPL-EX (Long & Boring)
+------------
+
 XPL-EX is an Android application designed to enhance complete app privacy. It is an extension of "XPrivacy-Lua" by "M66B." This application is entirely open-source, free from advertisements, analytics, and does not require any financial contribution. It's a fully free solution with a strict policy of no logs and no server connections. Currently, XPL-EX is in the early beta stage of this fork. Its primary function is to safeguard your device information, ensuring that other installed applications cannot access it beyond necessary limits. The app employs various hooks to target methods that retrieve data, whether through outdated, deprecated, or new techniques, it will be hooked.
 
 In today's world, the sale and misuse of personal data have become commonplace, often leading to resigned acceptance of constant surveillance. However, XPL-EX challenges this norm, offering a pathway to complete privacy and a way to evade the intrusive eyes of 'Big Brother.' This app is the first installment in a series of upcoming documents aimed at achieving a secure and completely private device. Adherence to specific standards can place users beyond the reach of major surveillance agencies. This multi-part project will be freely accessible, thoroughly documented, and open to the global community. 
 
 I am getting old my self , I slowly show, but for the future generations or just for those who fear this will be for them.
-
-Part (1) XPL-EX
-------------
 
 Intercepting apps at the API level of your device can effectively obscure the type of device on which they are running. To achieve this, it's crucial to address both Native and Java components. Native hooking is a feature set to be introduced to XPL-EX, which currently supports Java through the 'XPOSED' Framework for hooking purposes.
 
@@ -18,7 +20,20 @@ The overarching aim is to limit the information apps can access or gather about 
 
 Additionally, there are emerging techniques like "keystroke dynamics" used to identify individuals based on their typing patterns. While not widely adopted or entirely accurate, they are still utilized. It's important to note that nearly every app, especially those from major social media platforms like TikTok, Facebook, and Instagram, records data on your phone.
 
-I am ObbedCode, extending my warm regards to everyone. I hope you appreciate this contribution. My goal is simply to give to the community, with no expectation of payment. Love all, and remember to protect your privacy!
+
+XPL-EX (Simple)
+------------
+XPL-EX Paired with the Pro Companion app, it delivers an app that can dynamically define Xposed Hooks without having to compile a whole APK. Hooking apps at runtime will allow you to modify your target app in ways such as translating in-app text to different languages.
+Bypassing features, disabling popups, or providing privacy. The requirements are the Xposed Framework and Android 6.0 or higher. Root is not a requirement unless the Xposed Framework you choose requires it.
+This app will only protect you from apps at runtime getting your device information, from device IDs to screen resolution. The goal of this app is to provide complete in-app privacy control for any and all apps.
+
+In App
+------------
+
+<img src="https://github.com/0bbedCode/XPL-EX/assets/114315756/d32115bd-2c6b-4a57-93bb-b7f8d523448c" width="311" height="640">
+<img src="https://github.com/0bbedCode/XPL-EX/assets/114315756/a160a7c1-b4ce-4c89-8989-ce96fca7a474" width="311" height="640">
+<img src="https://github.com/0bbedCode/XPL-EX/assets/114315756/d51e9c78-6efb-48f2-876a-ef5c69e48fd6" width="311" height="640">
+<img src="https://github.com/0bbedCode/XPL-EX/assets/114315756/25b82519-309f-4b0e-9d12-87091ec699d6" width="311" height="640">
 
 
 To Come
@@ -30,7 +45,7 @@ This repository will offer a modified version of the Pro Companion app, which wi
 Help
 ------------
 
-[XLuaPrivacy DEFINE](https://github.com/M66B/XPrivacyLua/blob/master/DEFINE.md) <br>
+[XPL DEFINE](https://github.com/M66B/XPrivacyLua/blob/master/DEFINE.md) <br>
 [XPL-EX API](https://github.com/0bbedCode/XPL-EX/blob/new/APIHELP.md) <br>
 [XPL-EX Examples](https://github.com/0bbedCode/XPL-EX/blob/new/LUAHELP.md) <br>
 [Hooked Apis in XPL-EX](https://github.com/0bbedCode/XPL-EX/blob/main/HOOKED.md) <br>
@@ -48,7 +63,13 @@ https://t.me/xplexex
 ### Telegram
 https://t.me/obbedcode
 
+### Telegram Discussion Chat
+https://t.me/XPLEXCHAT
+
 ### Discord , Nulled (ObbedCode)<br><br>
+
+Images
+------------
 
 ## XPL-EX Development Roadmap
 
@@ -102,7 +123,7 @@ Notes
 Compatibility
 -------------
 
-XPrivacyLua is supported on Android 6.0 Marshmallow and later.
+XPL-EX is supported on Android 6.0 Marshmallow and later.
 For Android 4.0.3 KitKat to Android 5.1.1 Lollipop you can use [XPrivacy](https://github.com/M66B/XPrivacy/blob/master/README.md) (unsupported though).
 
 XPL-EX is supported for smartphones and tablets only. XPL-EX is not supported on emulators.
@@ -158,11 +179,11 @@ This app alone is not enough to "hide" you more so combine it with a Complex Sec
 ***[Camera/Mic Blocker]*** Or you have have a phyisical pop up camera like the one seen on the Oneplus7 Pro to truly know if your being peeped on. Newer versions of Android also notifys you when your MIC or CAM are being used<br>
 ***[SD Maid]*** Version before there new version is good at being a System UTIL but also shows you all apps that start when the Phone Starts allowing you to disable them<br>
 ***[Hide My Applist]*** Best Xposed App to Hide Apps from other Apps<br>
-***[Custom Router Firmware w VPN & Firewall & AdBlock]***  OpenWRT <3
+***[Custom Router Firmware w VPN & Firewall & AdBlock]***  OpenWRT <3<br>
 ***[Custom ROM + Custom kernel]*** Open Source Cool ROM with a Cool String Kernel >:)<br><br>
 
 Once again do not let anything through that firewall not even on that list (AdAway, VPN, Webview) sure but the rest dont even let those through the great wall
-Ps its not poor security having root if the user isnt the user to get click jacked or tricked into installing fake modules... dont be dumb
+Ps its not poor security having root if the user isnt the user to get click jacked or tricked into installing fake modules... dont be dumb<br><br>
 
 Cool Band
 
