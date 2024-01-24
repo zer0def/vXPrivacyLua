@@ -44,10 +44,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
 
+import eu.faircode.xlua.api.objects.xlua.hook.Assignment;
+import eu.faircode.xlua.api.objects.xlua.hook.xHook;
+
+import eu.faircode.xlua.api.objects.xlua.app.xApp;
+
+
 public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> {
     private static final String TAG = "XLua.Group";
 
-    private XApp app;
+    private xApp app;
     private List<Group> groups = new ArrayList<>();
 
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -76,7 +82,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
             cbAssigned.setOnCheckedChangeListener(this);
         }
 
-        private void unwire() {
+        private void unWire() {
             ivException.setOnClickListener(null);
             tvGroup.setOnClickListener(null);
             cbAssigned.setOnCheckedChangeListener(null);
@@ -88,13 +94,13 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
             switch (view.getId()) {
                 case R.id.ivException:
                     StringBuilder sb = new StringBuilder();
-                    for (XAssignment assignment : app.getAssignments(group.name))
-                        if (assignment.hook.getGroup().equals(group.name))
-                            if (assignment.exception != null) {
+                    for (Assignment assignment : app.getAssignments(group.name))
+                        if (assignment.getHook().getGroup().equals(group.name))
+                            if (assignment.getException() != null) {
                                 sb.append("<b>");
-                                sb.append(Html.escapeHtml(assignment.hook.getId()));
+                                sb.append(Html.escapeHtml(assignment.getHook().getId()));
                                 sb.append("</b><br><br>");
-                                for (String line : assignment.exception.split("\n")) {
+                                for (String line : assignment.getException().split("\n")) {
                                     sb.append(Html.escapeHtml(line));
                                     sb.append("<br>");
                                 }
@@ -133,11 +139,11 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
         setHasStableIds(true);
     }
 
-    void set(XApp app, List<XHook> hooks, Context context) {
+    void set(xApp app, List<xHook> hooks, Context context) {
         this.app = app;
 
         Map<String, Group> map = new HashMap<>();
-        for (XHook hook : hooks) {
+        for (xHook hook : hooks) {
             Group group;
             if (map.containsKey(hook.getGroup()))
                 group = map.get(hook.getGroup());
@@ -155,18 +161,18 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
             group.hooks.add(hook);
         }
 
-        for (String groupid : map.keySet()) {
-            for (XAssignment assignment : app.assignments)
-                if (assignment.hook.getGroup().equals(groupid)) {
-                    Group group = map.get(groupid);
-                    if (assignment.exception != null)
+        for (String groupId : map.keySet()) {
+            for (Assignment assignment : app.getAssignments())
+                if (assignment.getHook().getGroup().equals(groupId)) {
+                    Group group = map.get(groupId);
+                    if (assignment.getException() != null)
                         group.exception = true;
-                    if (assignment.installed >= 0)
+                    if (assignment.getInstalled() >= 0)
                         group.installed++;
-                    if (assignment.hook.isOptional())
+                    if (assignment.getHook().isOptional())
                         group.optional++;
-                    if (assignment.restricted)
-                        group.used = Math.max(group.used, assignment.used);
+                    if (assignment.getRestricted())
+                        group.used = Math.max(group.used, assignment.getUsed());
                     group.assigned++;
                 }
         }
@@ -202,7 +208,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.unwire();
+        holder.unWire();
         Group group = groups.get(position);
 
         // Get localized group name
@@ -232,7 +238,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
         int optional = 0;
         long used = -1;
         int assigned = 0;
-        List<XHook> hooks = new ArrayList<>();
+        List<xHook> hooks = new ArrayList<>();
 
         Group() {
         }

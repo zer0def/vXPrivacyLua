@@ -24,9 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +40,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -58,12 +57,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import eu.faircode.xlua.api.XLuaCallApi;
+import eu.faircode.xlua.api.XLuaQueryApi;
+import eu.faircode.xlua.utilities.CollectionUtil;
+
+import eu.faircode.xlua.api.objects.xlua.hook.xHook;
+import eu.faircode.xlua.api.objects.xlua.app.xApp;
+
+
 public class FragmentMain extends Fragment {
     private final static String TAG = "XLua.Fragment";
 
     private ProgressBar pbApplication;
     private Spinner spGroup;
-    private ArrayAdapter<XGroup> spAdapter;
+    private ArrayAdapter<XUiGroup> spAdapter;
     private Button btnRestrict;
     private TextView tvRestrict;
     private Group grpApplication;
@@ -129,7 +136,7 @@ public class FragmentMain extends Fragment {
             }
 
             private void updateSelection() {
-                XGroup selected = (XGroup) spGroup.getSelectedItem();
+                XUiGroup selected = (XUiGroup) spGroup.getSelectedItem();
                 String group = (selected == null ? null : selected.name);
 
                 if (group == null ? spGroup.getTag() != null : !group.equals(spGroup.getTag())) {
@@ -148,7 +155,7 @@ public class FragmentMain extends Fragment {
         btnRestrict.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                XGroup selected = (XGroup) spGroup.getSelectedItem();
+                XUiGroup selected = (XUiGroup) spGroup.getSelectedItem();
                 XUtil.areYouSure(
                         (ActivityBase) getActivity(),
                         getString(R.string.msg_restrict_sure, selected.title),
@@ -232,7 +239,7 @@ public class FragmentMain extends Fragment {
 
                 //This will determine if its all or a actual name
                 //If a actual grouup is selected then show the restrict button
-                XGroup selected = (XGroup) spGroup.getSelectedItem();
+                XUiGroup selected = (XUiGroup) spGroup.getSelectedItem();
                 String group = (selected == null ? null : selected.name);
                 tvRestrict.setVisibility(group == null ? View.VISIBLE : View.GONE);
                 btnRestrict.setVisibility(group == null ? View.INVISIBLE : View.VISIBLE);
@@ -260,13 +267,18 @@ public class FragmentMain extends Fragment {
             Log.i(TAG, "Data loader started");
             DataHolder data = new DataHolder();
             try {
+                //Make Sure this is no longer needed
+                //XMockProxyApi.queryGetMockCpuMaps(getContext());
+                //XMockProxyApi.queryGetMockProps(getContext());
 
-                XMockProxyApi.queryGetMockCpuMaps(getContext());
-                XMockProxyApi.queryGetMockProps(getContext());
+                Log.i(TAG, "Getting theme");
 
-                data.theme = XProvider.getSetting(getContext(), "global", "theme");
-                if (data.theme == null)
-                    data.theme = "light";
+                data.theme = XLuaCallApi.getTheme(getContext());
+
+                Log.i(TAG, "theme=" + data.theme);
+                //data.theme = XLuaCallCommander.getSettingValue(getContext(), "theme");
+                //if (data.theme == null)
+                //    data.theme = "light";
 
                 // Define hooks
                 if (BuildConfig.DEBUG) {
@@ -282,7 +294,13 @@ public class FragmentMain extends Fragment {
                     }*/
                 }
 
-                String show = XProvider.getSetting(getContext(), "global", "show");
+                Log.i(TAG, "Getting Show");
+
+                //                String show = XProvider.getSetting(getContext(), "global", "show");
+                String show = XLuaCallApi.getSettingValue(getContext(), "show");
+
+                Log.i(TAG, "show=" + show);
+
                 if (show != null && show.equals("user"))
                     data.show = AdapterApp.enumShow.user;
                 else if (show != null && show.equals("all"))
@@ -290,79 +308,65 @@ public class FragmentMain extends Fragment {
                 else
                     data.show = AdapterApp.enumShow.icon;
 
-                // Get collection
-                String collection = XProvider.getSetting(getContext(), "global", "collection");
-                if (collection == null)
-                    data.collection.add("Privacy");
-                else
-                    Collections.addAll(data.collection, collection.split(","));
+                Log.i(TAG, "Getting Collection");
 
+                // Get collection
+                String collection = XLuaCallApi.getSettingValue(getContext(), "collection");
+
+                Log.i(TAG, "Get Collection=" + collection);
+
+
+                if (collection == null) data.collection.add("Privacy");
+                else Collections.addAll(data.collection, collection.split(","));
+
+                //if is null then thats fine we will set it ?
+                //so why is it not setting it then ?
+
+
+                Log.i(TAG, "Getting groups");
                 // Load groups
                 Resources res = getContext().getResources();
-                Bundle result = getContext().getContentResolver()
-                        .call(XSecurity.getURI(), "xlua", "getGroups", new Bundle());
-                if (result != null)
-                    for (String name : result.getStringArray("groups")) {
+                List<String> groupsCopy = XLuaCallApi.getGroups(getContext());
+                if(CollectionUtil.isValid(groupsCopy)) {
+                    Log.i(TAG, " groups=" + groupsCopy.size());
+                    for(String name : groupsCopy) {
                         String g = name.toLowerCase().replaceAll("[^a-z]", "_");
                         int id = res.getIdentifier("group_" + g, "string", getContext().getPackageName());
 
-                        XGroup group = new XGroup();
+                        XUiGroup group = new XUiGroup();
                         group.name = name;
                         group.title = (id > 0 ? res.getString(id) : name);
                         data.groups.add(group);
                     }
+                }else {
+                    Log.i(TAG, "groups is null");
+                }
 
                 final Collator collator = Collator.getInstance(Locale.getDefault());
                 collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
-                Collections.sort(data.groups, new Comparator<XGroup>() {
+                Collections.sort(data.groups, new Comparator<XUiGroup>() {
                     @Override
-                    public int compare(XGroup group1, XGroup group2) {
+                    public int compare(XUiGroup group1, XUiGroup group2) {
                         return collator.compare(group1.title, group2.title);
                     }
                 });
 
-                XGroup all = new XGroup();
+                XUiGroup all = new XUiGroup();
                 all.name = null;
                 all.title = getContext().getString(R.string.title_all);
                 data.groups.add(0, all);
 
+                Log.i(TAG, "Getting Hooks");
                 // Load hooks
-                Cursor chooks = null;
-                try {
-                    chooks = getContext().getContentResolver()
-                            .query(XSecurity.getURI(), new String[]{"xlua.getHooks2"}, null, null, null);
-                    while (chooks != null && chooks.moveToNext()) {
-                        byte[] marshaled = chooks.getBlob(0);
-                        Parcel parcel = Parcel.obtain();
-                        parcel.unmarshall(marshaled, 0, marshaled.length);
-                        parcel.setDataPosition(0);
-                        XHook hook = XHook.CREATOR.createFromParcel(parcel);
-                        parcel.recycle();
-                        data.hooks.add(hook);
-                    }
-                } finally {
-                    if (chooks != null)
-                        chooks.close();
-                }
+                Collection<xHook> hooksCopy = XLuaQueryApi.getHooks(getContext(), true);
+                Log.i(TAG, "Hooks loaded=" + hooksCopy.size());
+                data.hooks.addAll(hooksCopy);
 
+                Log.i(TAG, "Getting Apps");
                 // Load apps
-                Cursor capps = null;
-                try {
-                    capps = getContext().getContentResolver()
-                            .query(XSecurity.getURI(), new String[]{"xlua.getApps2"}, null, null, null);
-                    while (capps != null && capps.moveToNext()) {
-                        byte[] marshaled = capps.getBlob(0);
-                        Parcel parcel = Parcel.obtain();
-                        parcel.unmarshall(marshaled, 0, marshaled.length);
-                        parcel.setDataPosition(0);
-                        XApp app = XApp.CREATOR.createFromParcel(parcel);
-                        parcel.recycle();
-                        data.apps.add(app);
-                    }
-                } finally {
-                    if (capps != null)
-                        capps.close();
-                }
+                Collection<xApp> appsCopy = XLuaQueryApi.getApps(getContext(), true);
+                Log.i(TAG, "Apps loaded=" + appsCopy.size());
+                data.apps.addAll(appsCopy);
             } catch (Throwable ex) {
                 data.collection = null;
                 data.groups.clear();
@@ -392,9 +396,9 @@ public class FragmentMain extends Fragment {
         AdapterApp.enumShow show;
         String theme;
         List<String> collection = new ArrayList<>();
-        List<XGroup> groups = new ArrayList<>();
-        List<XHook> hooks = new ArrayList<>();
-        List<XApp> apps = new ArrayList<>();
+        List<XUiGroup> groups = new ArrayList<>();
+        List<xHook> hooks = new ArrayList<>();
+        List<xApp> apps = new ArrayList<>();
         Throwable exception = null;
     }
 }

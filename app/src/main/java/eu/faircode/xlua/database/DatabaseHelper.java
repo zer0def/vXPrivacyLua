@@ -11,17 +11,84 @@ import java.util.List;
 
 import eu.faircode.xlua.XDataBase;
 import eu.faircode.xlua.XUtil;
-import eu.faircode.xlua.json.IJsonHelper;
-import eu.faircode.xlua.json.JsonHelper;
+//import eu.faircode.xlua.json.IJsonHelper;
 
-public class DatabaseHelper {
+/*public class DatabaseHelper {
     private static String TAG = "XLua.DatabaseHelper";
 
-    public static <T extends IJsonHelper>
-        boolean updateItems(
+    public static boolean deleteItem(DatabaseQuerySnake queryFilter) {
+        if(queryFilter.db == null) {
+            Log.e(TAG, "DB IS Null in Query Snake [deleteItem]");
+            return false;
+        }
+
+        return deleteItem(queryFilter.db, queryFilter);
+    }
+
+    public static boolean deleteItem(
+            XDataBase database,
+            DatabaseQuerySnake queryFilter) {
+
+        if(queryFilter.getTableName() == null) {
+            Log.e(TAG, "Failed to Delete item, Table name is NULL");
+            return false;
+        }
+
+        return deleteItem(database, queryFilter.getTableName(), queryFilter);
+    }
+
+    public static boolean deleteItem(
+            XDataBase database,
+            String tableName,
+            DatabaseQuerySnake queryFilter) {
+        try {
+            if(!database.beginTransaction()) {
+                Log.e(TAG, "[" + database.getName() + "] Failed to [beginTransaction][deleteItem]");
+                return false;
+            }
+
+            if(!database.hasTable(tableName)) {
+                Log.e(TAG, "Database [" + database.getName() + "] Is missing Table [" + tableName + "] Make sure your pre-init Table First [deleteItem]");
+                return false;
+            }
+
+            if(!database.delete(tableName, queryFilter.getSelectionArgs(), queryFilter.getSelectionCompareValues())) {
+                Log.e(TAG, "Failed to Delete Item from Database [" + database.getName() + "] From table: [" + tableName + "]");
+                return false;
+            }
+
+            database.setTransactionSuccessful();
+            return true;
+        }catch (Exception e) {
+            Log.e(TAG, "Failed to Delete Item in Database [" + database.getName() + "] in Table [" + tableName + "]\n" + e + "\n" + Log.getStackTraceString(e));
+            return false;
+        }finally {
+            database.endTransaction();
+            database.writeUnlock();
+        }
+    }
+
+
+    public static <T extends IDatabaseHelper>
+        boolean insertItems(
                 XDataBase database,
                 String tableName,
                 List<T> items) {
+
+        return insertItems(database, tableName, items, true);
+    }
+
+    public static <T extends IDatabaseHelper>
+        boolean insertItems(
+                XDataBase database,
+                String tableName,
+                List<T> items,
+                boolean prepareResult) {
+
+        if(!prepareResult) {
+            Log.e(TAG, "Database [" + database + "] Was not Prepared successfully ! With table name [" + tableName + "]");
+            return false;
+        }
 
         if(!XDataBase.isReady(database)) {
             Log.e(TAG, "Database is not Ready...");
@@ -42,7 +109,7 @@ public class DatabaseHelper {
             }
 
             for(T item : items) {
-                if(!database.insertOrUpdate(tableName, item.createContentValues()))
+                if(!database.insert(tableName, item.createContentValues()))
                     Log.e(TAG, "[" + database.getName() + "] Failed to [insertOrUpdate] Item=[[" + item + "]] in Table [" + tableName + "]");
             }
 
@@ -57,11 +124,58 @@ public class DatabaseHelper {
         }
     }
 
-    public static <T extends  IJsonHelper>
+    public static <T extends IDatabaseHelper>
         boolean updateItem(
                 XDataBase database,
                 String tableName,
+                DatabaseQuerySnake snake,
                 T item) {
+
+        return updateOrInsertItem(database, tableName, snake, item, true);
+    }
+
+    public static <T extends IDatabaseHelper>
+        boolean updateItem(
+                XDataBase database,
+                String tableName,
+                DatabaseQuerySnake snake,
+                T item,
+                boolean prepareResult) {
+
+        return updateOrInsertItem(database, tableName, snake, item, prepareResult);
+    }
+
+    public static <T extends  IDatabaseHelper>
+        boolean insertItem(
+                XDataBase database,
+                String tableName,
+                T item) {
+
+        return updateOrInsertItem(database, tableName, null, item, true);
+    }
+
+    public static <T extends  IDatabaseHelper>
+        boolean insertItem(
+                XDataBase database,
+                String tableName,
+                T item,
+                boolean prepareResult) {
+
+        return updateOrInsertItem(database, tableName, null, item, prepareResult);
+    }
+
+    public static <T extends IDatabaseHelper>
+        boolean updateOrInsertItem(
+                XDataBase database,
+                String tableName,
+                DatabaseQuerySnake query,
+                T item,
+                boolean prepareResult) {
+
+        if(!prepareResult) {
+            Log.e(TAG, "Database [" + database + "] Was not Prepared successfully ! With table name [" + tableName + "]");
+            return false;
+        }
 
         if(!XDataBase.isReady(database)) {
             Log.e(TAG, "Database is not Ready...");
@@ -75,7 +189,7 @@ public class DatabaseHelper {
         database.writeLock();
         try {
             if(!database.beginTransaction()) {
-                Log.e(TAG, "[" + database.getName() + "] Failed to [beginTransaction][updateItem]");
+                Log.e(TAG, "[" + database.getName() + "] Failed to [beginTransaction][updateOrInsertItem]");
                 return false;
             }
 
@@ -84,14 +198,26 @@ public class DatabaseHelper {
                 return false;
             }
 
-            Log.i(TAG, "[" + database.getName() + "][" + tableName + "] Inserting Database Item::" + item);
+            if(query == null) {
+                Log.i(TAG, "[" + database.getName() + "][" + tableName + "] Inserting Database Item::" + item);
 
-            if(!database.insertOrUpdate(tableName, item.createContentValues())) {
-                Log.e(TAG, "[" + database.getName() + "] Failed to [insertOrUpdate] [" + item + "] Into Table [" + tableName + "]");
-                return false;
+                if(!database.insert(tableName, item.createContentValues())) {
+                    Log.e(TAG, "[" + database.getName() + "] Failed to [insertItem] [" + item + "] Into Table [" + tableName + "]");
+                    return false;
+                }
+
+                Log.i(TAG, "Finished Inserting Item Into Table! " + item);
+            }else {
+                Log.i(TAG, "[" + database.getName() + "][" + tableName + "] Updating Database Item::" + item);
+
+                if(!database.update(tableName, item.createContentValues(), query)) {
+                    Log.e(TAG, "[" + database.getName() + "] Failed to [updateItem] [" + item + "] Into Table [" + tableName + "]");
+                    return false;
+                }
+
+                Log.i(TAG, "Finished Updating Item Into Table! " + item);
             }
 
-            Log.i(TAG, "Finished Inserting Item Into Table! " + item);
             database.setTransactionSuccessful();
             return true;
         }catch (Exception e) {
@@ -101,6 +227,17 @@ public class DatabaseHelper {
             database.endTransaction();
             database.writeUnlock();
         }
+    }
+
+    public static <T extends IJsonHelper>
+            boolean prepareTableIfMissingOrInvalidCount (
+            Context context,
+            XDataBase database,
+            String tableName,
+            HashMap<String, String> columns,
+            Class<T> typeClass) {
+
+        return prepareTableIfMissingOrInvalidCount(context, database, tableName, columns, null, false, typeClass, 0);
     }
 
     public static <T extends IJsonHelper>
@@ -124,9 +261,23 @@ public class DatabaseHelper {
             return false;
         }
 
+        if(jsonName == null || itemCheckCount < 1) {
+            if(database.hasTable(tableName)) {
+                Log.i(TAG, "Table does not Require Default Values & Exist !");
+                return false;
+            }
+
+            if(!database.createTable(columns, tableName)) {
+                Log.e(TAG, "[" + database.getName() + "] Failed to create table [" + tableName + "]");
+                return false;
+            }
+
+            return database.hasTable(tableName);
+        }
+
         if(!database.hasTable(tableName) || (itemCheckCount > 0 && database.tableEntries(tableName) < itemCheckCount))  {
             Log.w(TAG, "Table [" + tableName + "] in Database [" + database.getName() + "] Is either NULL or Not a Valid Count fixing...");
-            List<T> itms = initDatabse(context, database, tableName, columns, jsonName, stopOnFirstJson, typeClass, itemCheckCount);
+            List<T> itms = initDatabase(context, database, tableName, columns, jsonName, stopOnFirstJson, typeClass, itemCheckCount);
             //Maybe return itms ? and the caller can cache it in if needed?
             //Tho then they wont be able to tell if table is valid as if Table Exists and Entries Count is Valid then it will NOT initDatabase there for will return empty
             if(itms == null || itms.isEmpty()) {
@@ -152,8 +303,9 @@ public class DatabaseHelper {
         return true;
     }
 
+
     public static <T extends IJsonHelper>
-        List<T> initDatabse(
+        List<T> initDatabase(
                 Context context,
                 XDataBase database,
                 String tableName,
@@ -187,7 +339,7 @@ public class DatabaseHelper {
                 for(T item : JsonHelper.findJsonElementsFromAssets(
                         XUtil.getApk(context), jsonName, stopOnFirstJson, typeClass)) {
 
-                    if (!database.insertOrUpdate(tableName, item.createContentValues())) {
+                    if (!database.insert(tableName, item.createContentValues())) {
                         Log.e(TAG, "[" + database.getName() + "] Failed to insertOrUpdate [" + item + "] into [" + tableName + "] Table");
                         continue;
                     }
@@ -215,7 +367,7 @@ public class DatabaseHelper {
                         if(!found) {
                             Log.w(TAG, "[" + database.getName() + "] Table [" + tableName + "] Is Missing Entry:: " + item);
 
-                            if (!database.insertOrUpdate(tableName, item.createContentValues())) {
+                            if (!database.insert(tableName, item.createContentValues())) {
                                 Log.e(TAG, "[" + database.getName() + "] Failed to insertOrUpdate [[" + item + "]] into [" + tableName + "] Table");
                                 continue;
                             }
@@ -259,4 +411,4 @@ public class DatabaseHelper {
         Log.i(TAG, "Total Items in Database=" + list.size());
         return list;
     }
-}
+}*/

@@ -57,6 +57,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import eu.faircode.xlua.api.xlua.XHookProvider;
+import eu.faircode.xlua.api.XLuaCallApi;
+
 public class ActivityMain extends ActivityBase {
     private final static String TAG = "XLua.Main";
 
@@ -79,7 +82,7 @@ public class ActivityMain extends ActivityBase {
         super.onCreate(savedInstanceState);
 
         // Check if service is running
-        if (!XProvider.isAvailable(this)) {
+        if (!XHookProvider.isAvailable(this)) {
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.msg_no_service), Snackbar.LENGTH_INDEFINITE);
 
             final Intent intent = getPackageManager().getLaunchIntentForPackage("de.robv.android.xposed.installer");
@@ -142,8 +145,8 @@ public class ActivityMain extends ActivityBase {
         });
 
         // Initialize drawer
-        boolean notifyNew = XProvider.getSettingBoolean(this, "global", "notify_new_apps");
-        boolean restrictNew = XProvider.getSettingBoolean(this, "global", "restrict_new_apps");
+        boolean notifyNew = XLuaCallApi.getSettingBoolean(this, "notify_new_apps"); //XProvider.getSettingBoolean(this, "global", "notify_new_apps");
+        boolean restrictNew = XLuaCallApi.getSettingBoolean(this, "restrict_new_apps"); //XProvider.getSettingBoolean(this, "global", "restrict_new_apps");
         //String theme = XProvider.getSetting(this,"global", "theme");
         boolean isDark = getThemeName().equals("dark");
 
@@ -153,7 +156,8 @@ public class ActivityMain extends ActivityBase {
             drawerArray.add(new DrawerItem(this, R.string.menu_notify_new, notifyNew, new DrawerItem.IListener() {
                 @Override
                 public void onClick(DrawerItem item) {
-                    XProvider.putSettingBoolean(ActivityMain.this, "global", "notify_new_apps", item.isChecked());
+                    XLuaCallApi.putSettingBoolean(ActivityMain.this, "notify_new_apps", item.isChecked());
+                    //XProvider.putSettingBoolean(ActivityMain.this, "global", "notify_new_apps", item.isChecked());
                     drawerArray.notifyDataSetChanged();
                 }
             }));
@@ -162,7 +166,8 @@ public class ActivityMain extends ActivityBase {
             drawerArray.add(new DrawerItem(this, R.string.menu_restrict_new, restrictNew, new DrawerItem.IListener() {
                 @Override
                 public void onClick(DrawerItem item) {
-                    XProvider.putSettingBoolean(ActivityMain.this, "global", "restrict_new_apps", item.isChecked());
+                    XLuaCallApi.putSettingBoolean(ActivityMain.this, "restrict_new_apps", item.isChecked());
+                    //XProvider.putSettingBoolean(ActivityMain.this, "global", "restrict_new_apps", item.isChecked());
                     drawerArray.notifyDataSetChanged();
                 }
             }));
@@ -393,7 +398,7 @@ public class ActivityMain extends ActivityBase {
                 executor.submit(new Runnable() {
                     @Override
                     public void run() {
-                        XProvider.putSetting(ActivityMain.this, "global", "show", set.name());
+                        XLuaCallApi.putSetting(ActivityMain.this, "show", set.name());
                     }
                 });
                 return true;

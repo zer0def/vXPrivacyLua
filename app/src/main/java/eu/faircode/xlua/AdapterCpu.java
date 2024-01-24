@@ -18,13 +18,16 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import eu.faircode.xlua.cpu.XMockCpuIO;
+import eu.faircode.xlua.api.XMockCallApi;
+import eu.faircode.xlua.api.objects.xmock.cpu.MockCpu;
+import eu.faircode.xlua.api.xmock.XMockCpuProvider;
+import eu.faircode.xlua.api.xmock.xcall.PutMockCpuCommand;
 
 public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
     private static final String TAG = "XLua.ADCpu";
 
-    private List<XMockCpuIO> maps = new ArrayList<>();
-    private XMockCpuIO lastEnabled = null;
+    private List<MockCpu> maps = new ArrayList<>();
+    //private MockCpu lastEnabled = null;
     private Object lock = new Object();
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -73,9 +76,9 @@ public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
         @Override
         public void onClick(final View view) {
             Log.i(TAG, "onClick");
-            final XMockCpuIO map = maps.get(getAdapterPosition());
+            final MockCpu map = maps.get(getAdapterPosition());
             int id = view.getId();
-            String name = map.name;
+            String name = map.getName();
 
             switch (view.getId()) {
                 case R.id.itemViewCpu:
@@ -91,10 +94,10 @@ public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
         @Override
         public void onCheckedChanged(final CompoundButton cButton, boolean isChecked) {
             Log.i(TAG, "onCheckedChanged");
-            final XMockCpuIO cpu = maps.get(getAdapterPosition());
+            final MockCpu cpu = maps.get(getAdapterPosition());
             final int id = cButton.getId();
-            Log.i(TAG, "Item Checked=" + id + "==" + cpu.name);
-            boolean changed = false;
+            Log.i(TAG, "Item Checked=" + id + "==" + cpu.getName());
+            //boolean changed = false;
 
             switch (id) {
                 case R.id.cbCpuSelected:
@@ -119,8 +122,8 @@ public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
                         }
                     }*/
 
-                    prepareCheck(cButton.getContext());
-                    cpu.selected = isChecked;
+                    //prepareCheck(cButton.getContext());
+                    cpu.setSelected(isChecked);
                     //if(isChecked) lastEnabled = cpu;
                     //if(changed)
                     notifyDataSetChanged();
@@ -128,7 +131,9 @@ public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
                     executor.submit(new Runnable() {
                         @Override
                         public void run() {
-                            XMockProxyApi.callPutMockCpuMap(cButton.getContext(), cpu);
+                            Log.i(TAG, "put cpu result=" + XMockCallApi.putMockCpu(cButton.getContext(), cpu));
+                            //PutMockCpuCommand.invoke(cButton.getContext(), cpu);
+                            //XMockProxyApi.callPutMockCpuMap(cButton.getContext(), cpu);
                             //Update UI to uncheck last item
                         }
                     });
@@ -138,7 +143,8 @@ public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
         }
 
         public void prepareCheck(Context context) {
-            for(XMockCpuIO map : XMockProxyApi.queryGetMockCpuMaps(context)) {
+            //We now will do if multiple selected then randomize selection
+            /*for(MockCpu map : XMockProxyApi.queryGetMockCpuMaps(context)) {
                 if(map.selected) {
                     for(XMockCpuIO m : maps)
                         if(map.name.equals(m.name)) {
@@ -147,23 +153,20 @@ public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
                             XMockProxyApi.callPutMockCpuMap(context, m);
                         }
                 }
-            }
+            }*/
 
-            for(XMockCpuIO map : maps)
-                if(map.selected) {
-                    Log.i(TAG, "DISABLING: " + map);
-                    map.selected = false;
-                }
-
+            //for(XMockCpuIO map : maps)
+            //    if(map.selected) {
+            //        Log.i(TAG, "DISABLING: " + map);
+            //        map.selected = false;
+            //    }
         }
 
         void updateExpanded() {
-            XMockCpuIO map = maps.get(getAdapterPosition());
-            String name = map.name;
-
+            MockCpu map = maps.get(getAdapterPosition());
+            String name = map.getName();
             boolean isExpanded = expanded.containsKey(name) && expanded.get(name);
             ivExpanderCpu.setImageLevel(isExpanded ? 1 : 0);
-
             tvCpuMapContents.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         }
 
@@ -171,7 +174,7 @@ public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
 
     AdapterCpu() { setHasStableIds(true); }
 
-    void set(List<XMockCpuIO> maps_c) {
+    void set(List<MockCpu> maps_c) {
         maps.clear();
         Log.i(TAG, "Set has Init=" + maps_c.size());
         maps.addAll(maps_c);
@@ -193,12 +196,12 @@ public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.unwire();
-        XMockCpuIO cpu = maps.get(position);
-        holder.tvCpuName.setText(cpu.name);
-        holder.tvCpuModelName.setText(cpu.model);
-        holder.tvCpuManName.setText(cpu.manufacturer);
-        holder.tvCpuMapContents.setText(cpu.contents);
-        holder.cbCpuSelected.setChecked(cpu.selected);
+        MockCpu cpu = maps.get(position);
+        holder.tvCpuName.setText(cpu.getName());
+        holder.tvCpuModelName.setText(cpu.getModel());
+        holder.tvCpuManName.setText(cpu.getManufacturer());
+        holder.tvCpuMapContents.setText(cpu.getContents());
+        holder.cbCpuSelected.setChecked(cpu.getSelected());
         holder.updateExpanded();
         holder.wire();
     }

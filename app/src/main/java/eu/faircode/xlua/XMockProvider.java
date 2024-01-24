@@ -10,10 +10,10 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.faircode.xlua.cpu.XMockCpuApi;
-import eu.faircode.xlua.cpu.XMockCpuIO;
+//import eu.faircode.xlua.cpu.XMockCpuApi;
+//import eu.faircode.xlua.cpu.XMockCpuIO;
 
-public class XMockProvider {
+/*public class XMockProvider {
     private static final String TAG = "XLua.XMockProvider";
 
     private static XDataBase db = null;
@@ -213,4 +213,4 @@ public class XMockProvider {
                 XMockPropIO.Convert.toCursor(getPropsCache(context), marshall) :
                 XMockPropIO.Convert.toCursor(XMockPropApi.getMockPropsSync(context), marshall);
     }
-}
+}*/

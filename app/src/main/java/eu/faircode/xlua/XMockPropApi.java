@@ -1,20 +1,12 @@
 package eu.faircode.xlua;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.graphics.LightingColorFilter;
-import android.os.Bundle;
-import android.os.Parcel;
-import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import eu.faircode.xlua.database.DatabaseHelper;
+//import eu.faircode.xlua.database.DatabaseHelper;
 
-public class XMockPropApi {
+/*public class XMockPropApi {
     //Add TableName and Columns here ?
     //Also its possible we now can Make this into Object Instance ?
     //All sync functions will not take in the DATABASE Param as SYNC is only needed when same target DB is being used as well as UI Setting shit from DATABASE Linking to UI
@@ -37,7 +29,7 @@ public class XMockPropApi {
         if(!prepareDatabaseTable(context, xmockdb))
             return false;
 
-        return DatabaseHelper.updateItems(xmockdb, XMockProp.Table.name, props);
+        return DatabaseHelper.insertItems(xmockdb, XMockProp.Table.name, props);
     }
 
     public static boolean putMockPropSync(Context context, XMockPropIO prop) {
@@ -54,7 +46,7 @@ public class XMockPropApi {
         if(!prepareDatabaseTable(context, xmockdb))
             return false;
 
-        return DatabaseHelper.updateItem(xmockdb, XMockProp.Table.name, prop);
+        return DatabaseHelper.insertItem(xmockdb, XMockProp.Table.name, prop);
     }
 
     public static boolean prepareDatabaseTableSync(Context context) {
@@ -90,7 +82,7 @@ public class XMockPropApi {
     }
 
     public static List<XMockPropIO> getMockProps(Context context, XDataBase xmockdb) {
-        return DatabaseHelper.initDatabse(
+        return DatabaseHelper.initDatabase(
                 context,
                 xmockdb,
                 XMockProp.Table.name,
@@ -100,4 +92,4 @@ public class XMockPropApi {
                 XMockPropIO.class,
                 COUNT);
     }
-}
+}*/

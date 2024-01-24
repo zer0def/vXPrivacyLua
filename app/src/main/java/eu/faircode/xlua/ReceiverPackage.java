@@ -31,6 +31,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import de.robv.android.xposed.XposedBridge;
+import eu.faircode.xlua.api.XLuaCallApi;
+import eu.faircode.xlua.api.objects.xlua.packets.AppPacket;
+import eu.faircode.xlua.api.xlua.xcall.ClearAppCommand;
 
 public class ReceiverPackage extends BroadcastReceiver {
     private static final String TAG = "XLua.Receiver";
@@ -49,23 +52,28 @@ public class ReceiverPackage extends BroadcastReceiver {
             if (Intent.ACTION_PACKAGE_ADDED.equals(intent.getAction())) {
                 if (!replacing && !packageName.startsWith(BuildConfig.APPLICATION_ID)) {
                     // Initialize app
-                    Bundle args = new Bundle();
-                    args.putString("packageName", packageName);
-                    args.putInt("uid", uid);
-                    context.getContentResolver()
-                            .call(XSecurity.getURI(), "xlua", "clearApp", args);
-                    if (XProvider.getSettingBoolean(context, userid, "global", "restrict_new_apps"))
-                        context.getContentResolver()
-                                .call(XSecurity.getURI(), "xlua", "initApp", args);
+
+                    //Bundle args = new Bundle();
+                    //args.putString("packageName", packageName);
+                    //args.putInt("uid", uid);
+                    //context.getContentResolver()
+                    //        .call(XSecurity.getURI(), "xlua", "clearApp", args);
+                    XLuaCallApi.clearApp(context, packageName, uid);
+
+                    if (XLuaCallApi.getSettingBoolean(context, userid, "restrict_new_apps"))
+                        XLuaCallApi.initApp(context, packageName, uid);
+                        //context.getContentResolver()
+                        //        .call(XSecurity.getURI(), "xlua", "initApp", args);
+
 
                     // Notify new app
-                    if (XProvider.getSettingBoolean(context, userid, "global", "notify_new_apps")) {
+                    if (XLuaCallApi.getSettingBoolean(context, userid, "notify_new_apps")) {
                         PackageManager pm = ctx.getPackageManager();
                         Resources resources = pm.getResourcesForApplication(BuildConfig.APPLICATION_ID);
 
                         Notification.Builder builder = new Notification.Builder(ctx);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                            builder.setChannelId(XProvider.cChannelName);
+                            builder.setChannelId(XGlobalCore.cChannelName);
                         builder.setSmallIcon(android.R.drawable.ic_dialog_alert);
                         builder.setContentTitle(resources.getString(R.string.msg_review_settings));
                         builder.setContentText(pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0)));
@@ -88,18 +96,21 @@ public class ReceiverPackage extends BroadcastReceiver {
                 }
             } else if (Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(intent.getAction())) {
                 if (BuildConfig.APPLICATION_ID.equals(packageName)) {
-                    Bundle args = new Bundle();
-                    args.putInt("user", userid);
-                    context.getContentResolver()
-                            .call(XSecurity.getURI(), "xlua", "clearData", args);
-                } else {
-                    Bundle args = new Bundle();
-                    args.putString("packageName", packageName);
-                    args.putInt("uid", uid);
-                    args.putBoolean("settings", true);
-                    context.getContentResolver()
-                            .call(XSecurity.getURI(), "xlua", "clearApp", args);
+                    //Bundle args = new Bundle();
+                    //args.putInt("user", userid);
+                    //context.getContentResolver()
+                    //        .call(XSecurity.getURI(), "xlua", "clearData", args);
 
+                    XLuaCallApi.clearData(context, userid);
+                } else {
+                    //Bundle args = new Bundle();
+                    //args.putString("packageName", packageName);
+                    //args.putInt("uid", uid);
+                    //args.putBoolean("settings", true);
+                    //context.getContentResolver()
+                    //        .call(XSecurity.getURI(), "xlua", "clearApp", args);
+
+                    XLuaCallApi.clearApp(context, packageName, uid, true);
                     XUtil.cancelAsUser(ctx, "xlua_new_app", uid, userid);
                 }
             }

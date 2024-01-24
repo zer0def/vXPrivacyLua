@@ -7,12 +7,12 @@ import android.util.Log;
 
 import java.util.List;
 
-import eu.faircode.xlua.cpu.XMockCpuIO;
+//import eu.faircode.xlua.cpu.XMockCpuIO;
 
 /*
  * This is used for the Hooks within the Apps, onEnter for Hooks will use this API to Communicate, bridge for Communication
  */
-public class XMockProxyApi {
+/*public class XMockProxyApi {
     private static final String TAG = "XLua.ProxyApi";
 
     static Cursor invokeQuery(Context context, String method) { return invokeQuery(context, method, null, null); }
@@ -80,4 +80,4 @@ public class XMockProxyApi {
         return XMockPropIO.Convert.fromBundleArray(
                 invokeCall(context, "getMockProps"));
     }
-}
+}*/

@@ -17,21 +17,21 @@ import java.util.List;
 public class XposedUtil {
     private static final String TAG = "XLua.XposedUtil";
     private static Boolean isExp;
-    static boolean isExpModuleActive() {
+    public static boolean isExpModuleActive() {
         if (isExp != null) {
             return isExp;
         }
         try {
             @SuppressLint("PrivateApi") Context context = (Context) Class.forName("android.app.ActivityThread")
                     .getDeclaredMethod("currentApplication", new Class[0]).invoke(null, new Object[0]);
-            if (context == null) {
+            if (context == null)
                 return isExp = false;
-            }
+
             try {
                 Bundle call = context.getContentResolver().call(Uri.parse("content://me.weishu.exposed.CP/"), "active", null, null);
-                if (call == null) {
+                if (call == null)
                     return isExp = false;
-                }
+
                 isExp = call.getBoolean("active", false);
                 return isExp;
             } catch (Throwable th) {
@@ -42,13 +42,13 @@ public class XposedUtil {
         }
     }
 
-    static boolean isVirtualXposed() {
+    public static boolean isVirtualXposed() {
         return  !TextUtils.isEmpty(System.getProperty("vxp"))
                 || !TextUtils.isEmpty(System.getProperty("exp"))
                 || isExpModuleActive();
     }
 
-    static List<String> getExpApps(Context context) {
+    public static List<String> getExpApps(Context context) {
         try {
             Bundle call = context.getContentResolver().call(Uri.parse("content://me.weishu.exposed.CP/"), "apps", null, null);
             if (call == null) {
@@ -64,7 +64,7 @@ public class XposedUtil {
         }
     }
 
-    static Collection<ApplicationInfo> getApplications(Context context) {
+    public static Collection<ApplicationInfo> getApplications(Context context) {
         Log.i(TAG, "zer0def for TaiChi Support");
         List<String> expApps = getExpApps(context);
         PackageManager packageManager = context.getPackageManager();

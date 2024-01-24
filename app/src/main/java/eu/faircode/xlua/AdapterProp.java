@@ -1,9 +1,6 @@
 package eu.faircode.xlua;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,32 +12,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import eu.faircode.xlua.api.XMockCallApi;
+import eu.faircode.xlua.api.objects.xmock.prop.MockProp;
+import eu.faircode.xlua.api.xmock.xcall.PutMockPropsCommand;
 
 public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
     private static final String TAG = "XLua.ADProp";
 
-    private List<XMockPropIO> props = new ArrayList<>();
-    private List<XMockPropIO> props_modified = new ArrayList<>();
+    private List<MockProp> props = new ArrayList<>();
+    private List<MockProp> props_modified = new ArrayList<>();
     private Object lock = new Object();
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -72,7 +66,7 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
             tiPropMockValue = itemView.findViewById(R.id.tiPropMockValue);
         }
 
-        private void unwire() {
+        private void unWire() {
             itemView.setOnClickListener(null);
             cbEnableMock.setOnCheckedChangeListener(null);
             ivValueResetDefault.setOnClickListener(null);
@@ -89,7 +83,7 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
         @Override
         public void onClick(final View view) {
             Log.i(TAG, "onClick");
-            final XMockPropIO prop = props.get(getAdapterPosition());
+            final MockProp prop = props.get(getAdapterPosition());
             int id = view.getId();
             String name = prop.getName();
 
@@ -104,11 +98,11 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
                     updateExpanded();
                     break;
                 case R.id.ivSetDefaultValue:
-                    if(prop.mockValue != prop.defaultValue) {
-                        unwire();
-                        tiPropMockValue.setText(prop.defaultValue);
-                        Log.i(TAG, "Set Text of:" + prop.name + " => " + prop.defaultValue);
-                        prop.mockValue = prop.defaultValue;
+                    if(!prop.getValue().equals(prop.getDefaultValue())) {
+                        unWire();
+                        tiPropMockValue.setText(prop.getDefaultValue());
+                        Log.i(TAG, "Set Text of:" + prop .getName() + " => " + prop.getDefaultValue());
+                        prop.setValue(prop.getDefaultValue());
                         wire();
                         /*executor.submit(new Runnable() {
                             @Override
@@ -125,7 +119,7 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
         @Override
         public void onCheckedChanged(final CompoundButton cButton, boolean isChecked) {
             Log.i(TAG, "onCheckedChanged");
-            final XMockPropIO prop = props.get(getAdapterPosition());
+            final MockProp prop = props.get(getAdapterPosition());
             final int id = cButton.getId();
             Log.i(TAG, "Item Checked=" + id + "==" + prop.getName());
 
@@ -133,13 +127,20 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
 
             switch (id) {
                 case R.id.cbMockTheProp:
-                    prop.enabled = isChecked;
+                    prop.setEnabled(isChecked);
                     //notifyDataSetChanged();
                     //notifyDataSetChanged(); put ?
                     executor.submit(new Runnable() {
                         @Override
                         public void run() {
-                            XMockProxyApi.callPutMockProp(cButton.getContext(), prop);
+                            Log.i(TAG, "prop update result=" +
+                                    XMockCallApi.updateProp(
+                                            cButton.getContext(),
+                                            prop.getName(),
+                                            null,
+                                            prop.isEnabled()));
+                            //PutMockPropCommand.invokeUpdate(cButton.getContext(), prop.getName(), prop.isEnabled());
+                            //XMockProxyApi.callPutMockProp(cButton.getContext(), prop);
                             //XMockProvider.updateCache(props);////Might be no point given the different context
                             //No need to update our cache since when we modify the elements on this context
                             //it is ref based it will effect the element in the list
@@ -159,8 +160,8 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            XMockPropIO prop = props.get(getAdapterPosition());
-            prop.mockValue = editable.toString();
+            MockProp prop = props.get(getAdapterPosition());
+            prop.setValue(editable.toString());
             if(!props_modified.contains(prop))
                 props_modified.add(prop);
         }
@@ -176,7 +177,7 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
         }
 
         void updateExpanded() {
-            XMockPropIO prop = props.get(getAdapterPosition());
+            MockProp prop = props.get(getAdapterPosition());
             String name = prop.getName();
 
             boolean isExpanded = expanded.containsKey(name) && expanded.get(name);
@@ -192,7 +193,7 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
         setHasStableIds(true);
     }
 
-    void set(List<XMockPropIO> props_vals) {
+    void set(List<MockProp> props_vals) {
         props.clear();
         Log.i(TAG, "Set has Init=" + props.size());
         props.addAll(props_vals);
@@ -208,11 +209,20 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
                 public void run() {
                     synchronized (lock) {
                         //Snackbar.make(, view.getContext().getString("Hiiiiiiiiii"), Snackbar.LENGTH_LONG).show();
-                        final Bundle ret = XMockProxyApi.callPutMockProps(context, props_modified);
+                        //final Bundle ret = XMockProxyApi.callPutMockProps(context, props_modified);
                         //XMockProvider.updateCache(props);//Might be no point given the different context
                         //No need to update our cache since when we modify the elements on this context
                         //it is ref based it will effect the element in the list
 
+                        //Test
+                        //if(XLua.apps.isEmpty()) {
+                        //    Log.i(TAG, "XLUA APPS IS NULL");
+                        //}else {
+                        //    XMonitorApp fir = XLua.apps.get(0);
+                        //    Log.i(TAG, "GPU CLASSES COUNT= " + fir.gpuClassess.size());
+                        //}
+
+                        final Bundle ret = PutMockPropsCommand.invoke(context, props_modified);
                         props_modified.clear();
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
@@ -264,13 +274,13 @@ public class AdapterProp extends RecyclerView.Adapter<AdapterProp.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.unwire();
-        XMockPropIO prop = props.get(position);
+        holder.unWire();
+        MockProp prop = props.get(position);
 
         holder.tvPropNameLabel.setText(prop.getName());
         holder.tvDefaultValue.setText(prop.getDefaultValue());
-        holder.tiPropMockValue.setText(prop.getMockValue());
-        holder.cbEnableMock.setChecked(prop.getIsEnabled());
+        holder.tiPropMockValue.setText(prop.getValue());
+        holder.cbEnableMock.setChecked(prop.isEnabled());
 
         holder.updateExpanded();
         holder.wire();

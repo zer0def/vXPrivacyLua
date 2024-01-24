@@ -2,13 +2,13 @@ package eu.faircode.xlua;
 
 import java.util.HashMap;
 
-public class XMockFile {
+/*public class XMockFile {
     private static final String TAG = "XLua.XMockFile";
 
     public String name;
     public String contents;
 
-    protected XMockFile() { }
+    public XMockFile() { }
     public XMockFile(String name, String contents) {
         this.name = name;
         this.contents = contents;
@@ -35,4 +35,4 @@ public class XMockFile {
             put("contents", "TEXT");
         }};
     }
-}
+}*/

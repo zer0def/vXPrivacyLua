@@ -24,13 +24,16 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import eu.faircode.xlua.api.XLuaCallApi;
+
 public class ActivityBase extends AppCompatActivity {
     private String theme;
     private static final String TAG = "XLua.ActivityBase";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        theme = XProvider.getSetting(this, "global", "theme");
+        //theme = XProvider.getSetting(this, "global", "theme");
+        theme = XLuaCallApi.getTheme(this);
         setTheme("dark".equals(theme) ? R.style.AppThemeDark : R.style.AppThemeLight);
 
         super.onCreate(savedInstanceState);
@@ -44,7 +47,8 @@ public class ActivityBase extends AppCompatActivity {
     void setLightMode() { setThemeName("light"); }
     private void setThemeName(String name) {
         Log.i(TAG, "Set Theme=" + name);
-        XProvider.putSetting(this, "global", "theme", name);
+        //XProvider.putSetting(this, "global", "theme", name);
+        XLuaCallApi.putSetting(this, "theme", name);
         theme = name;
         setTheme("dark".equals(name) ? R.style.AppThemeDark : R.style.AppThemeLight);
         recreate();

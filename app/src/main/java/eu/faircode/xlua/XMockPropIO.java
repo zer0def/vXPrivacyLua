@@ -14,9 +14,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.faircode.xlua.json.IJsonHelper;
+//import eu.faircode.xlua.json.IJsonHelper;
 
-public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
+/*public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
     public XMockPropIO() { super(); }
     public XMockPropIO(Parcel in) {
         super(in);
@@ -40,17 +40,14 @@ public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
         dest.writeByte(this.enabled ? (byte) 1 : (byte) 0);
     }
 
-    String toJSON() throws JSONException {
-        return toJSONObject().toString(2);
-    }
-
-    JSONObject toJSONObject() throws JSONException {
-        JSONObject jroot = new JSONObject();
-        jroot.put("name", this.name);
-        jroot.put("mockValue", this.mockValue);
-        jroot.put("defaultValue", this.defaultValue);
-        jroot.put("enabled", this.enabled);
-        return jroot;
+    public String toJSON() throws JSONException { return toJSONObject().toString(2); }
+    public JSONObject toJSONObject() throws JSONException {
+        JSONObject jRoot = new JSONObject();
+        jRoot.put("name", this.name);
+        jRoot.put("mockValue", this.mockValue);
+        jRoot.put("defaultValue", this.defaultValue);
+        jRoot.put("enabled", this.enabled);
+        return jRoot;
     }
 
     @Override
@@ -92,24 +89,20 @@ public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
         }
     };
 
-    static class Convert {
+    public static class Convert {
         private static final String TAG = "XLua.XMockProp.Convert";
 
-        static XMockPropIO fromJSON(String json) throws JSONException {
-            return fromJSONObject(new JSONObject(json));
-        }
-
-        static XMockPropIO fromJSONObject(JSONObject jroot) throws JSONException {
+        public static XMockPropIO fromJSON(String json) throws JSONException { return fromJSONObject(new JSONObject(json)); }
+        public static XMockPropIO fromJSONObject(JSONObject jroot) throws JSONException {
             XMockPropIO mockProp = new XMockPropIO();
             mockProp.name = jroot.getString("name");
             mockProp.mockValue = jroot.getString("mockValue");
             mockProp.defaultValue = jroot.getString("defaultValue");
             mockProp.enabled = jroot.getBoolean("enabled");
-
             return mockProp;
         }
 
-        static Bundle toBundle(XMockPropIO prop) {
+        public static Bundle toBundle(XMockPropIO prop) {
             Bundle b = new Bundle();
             b.putString("name", prop.getName());
             b.putString("mockValue", prop.getMockValue());
@@ -118,7 +111,7 @@ public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
             return  b;
         }
 
-        static XMockPropIO fromBundle(Bundle bundle) {
+        public static XMockPropIO fromBundle(Bundle bundle) {
             String name = bundle.getString("name");
             String value = bundle.getString("mockValue");
             String defaultValue = bundle.getString("defaultValue");
@@ -126,7 +119,7 @@ public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
             return new XMockPropIO(name, value, defaultValue, enabled);
         }
 
-        static List<XMockPropIO> fromBundleArray(Bundle bundle) {
+        public static List<XMockPropIO> fromBundleArray(Bundle bundle) {
             String[] names = bundle.getStringArray("names");
             String[] values = bundle.getStringArray("values");
             String[] defValues = bundle.getStringArray("defaultValues");
@@ -142,7 +135,7 @@ public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
             return ps;
         }
 
-        static Bundle toBundle(List<XMockPropIO> props) {
+        public static Bundle toBundle(List<XMockPropIO> props) {
             Bundle b = new Bundle();
             String[] names = new String[props.size()];
             String[] values = new String[props.size()];
@@ -165,7 +158,7 @@ public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
             return  b;
         }
 
-        static List<XMockPropIO>  fromCursor(Cursor cursor) {
+        public static List<XMockPropIO>  fromCursor(Cursor cursor) {
             //make sure this supports json / marshall
             List<XMockPropIO> ps = new ArrayList<>();
             while (cursor != null && cursor.moveToNext()) {
@@ -181,7 +174,7 @@ public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
             return ps;
         }
 
-        static Cursor toCursor(List<XMockPropIO> props, boolean marshall) {
+        public static Cursor toCursor(List<XMockPropIO> props, boolean marshall) {
             Log.i(TAG, "toCursor");
             MatrixCursor result = new MatrixCursor(new String[]{ marshall ? "blob" : "json"});
             try {
@@ -199,4 +192,4 @@ public class XMockPropIO extends XMockProp implements Parcelable, IJsonHelper {
             return result;
         }
     }
-}
+}*/

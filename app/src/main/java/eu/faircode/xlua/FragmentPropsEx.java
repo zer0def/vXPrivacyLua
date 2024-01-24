@@ -21,11 +21,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import eu.faircode.xlua.cpu.XMockCpuIO;
+import eu.faircode.xlua.api.XMockCallApi;
+import eu.faircode.xlua.api.objects.xmock.prop.MockProp;
+import eu.faircode.xlua.api.objects.xlua.setting.xSettingConversions;
+
+
+import eu.faircode.xlua.api.XLuaCallApi;
 
 public class FragmentPropsEx extends Fragment {
     private final static String TAG = "XLua.FragmentProps";
@@ -106,10 +112,10 @@ public class FragmentPropsEx extends Fragment {
                 if (!data.theme.equals(activity.getThemeName()))
                     activity.recreate();
 
-                Collections.sort(data.props, new Comparator<XMockPropIO>() {
+                Collections.sort(data.props, new Comparator<MockProp>() {
                     @Override
-                    public int compare(XMockPropIO o1, XMockPropIO o2) {
-                        return o1.name.compareToIgnoreCase(o2.name);
+                    public int compare(MockProp o1, MockProp o2) {
+                        return o1.getName().compareToIgnoreCase(o2.getName());
                     }
                 });
 
@@ -140,14 +146,17 @@ public class FragmentPropsEx extends Fragment {
             Log.i(TAG, "Data loader started");
             PropsDataHolder data = new PropsDataHolder();
             try {
-                data.theme = XProvider.getSetting(getContext(), "global", "theme");
-                if (data.theme == null)
-                    data.theme = "light";
+                data.theme = XLuaCallApi.getTheme(getContext());
+                //data.theme = XProvider.getSetting(getContext(), "global", "theme");
+                //if (data.theme == null)
+                //    data.theme = "light";
 
                 data.props.clear();
                 Log.i(TAG, "Getting Props...");
                 //List<XMockPropIO> props = XMockProxyApi.queryGetMockPropsEx(getContext());
-                List<XMockPropIO> props = XMockProxyApi.queryGetMockProps(getContext());
+                //List<XMockPropIO> props = XMockProxyApi.queryGetMockProps(getContext());
+                Collection<MockProp> props = XMockCallApi.getMockProps(getContext());
+
                 Log.i(TAG, "Props=" + props.size());
                 data.props.addAll(props);
                 //make sure it syncs with cache if needed
@@ -164,7 +173,7 @@ public class FragmentPropsEx extends Fragment {
 
     private static class PropsDataHolder {
         String theme;
-        List<XMockPropIO> props = new ArrayList<>();
+        List<MockProp> props = new ArrayList<>();
         Throwable exception = null;
     }
 }

@@ -21,6 +21,7 @@ package eu.faircode.xlua;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +30,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.lang.reflect.Method;
+
 import de.robv.android.xposed.XposedBridge;
 
 public class VXP extends ContentProvider {
@@ -41,8 +45,12 @@ public class VXP extends ContentProvider {
             Log.i(TAG, "Call " + arg +
                     " uid=" + android.os.Process.myUid() +
                     " cuid=" + android.os.Binder.getCallingUid());
-            return XProvider.call(getContext(), arg, extras);
-        } catch (RemoteException ex) {
+
+            return XGlobalCore.vxpCall(getContext(), arg, extras, method);
+            //return XProvider.call(getContext(), arg, extras);
+            //Tbh im not sure if this will work ? but this is what Im assuming its doing ?
+        }
+        catch (Throwable ex) {
             Log.e(TAG, Log.getStackTraceString(ex));
             XposedBridge.log(ex);
             return null;
@@ -61,8 +69,15 @@ public class VXP extends ContentProvider {
             Log.i(TAG, "Query " + projection[0].split("\\.")[1] +
                     " uid=" + android.os.Process.myUid() +
                     " cuid=" + android.os.Binder.getCallingUid());
-            return XProvider.query(getContext(), projection[0].split("\\.")[1], selectionArgs);
-        } catch (RemoteException ex) {
+
+
+            String[] split = projection[0].split("\\.");
+            String method = split[0];
+            String arg = split[1];
+
+            return XGlobalCore.vxpQuery(getContext(), method, arg, selectionArgs);
+            //return XProvider.query(getContext(), projection[0].split("\\.")[1], selectionArgs);
+        } catch (Throwable ex) {
             Log.e(TAG, Log.getStackTraceString(ex));
             XposedBridge.log(ex);
             return null;

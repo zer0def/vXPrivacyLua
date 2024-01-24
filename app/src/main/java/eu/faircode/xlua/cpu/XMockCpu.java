@@ -1,18 +1,6 @@
 package eu.faircode.xlua.cpu;
 
-import android.content.Context;
-import android.os.Parcel;
-
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import eu.faircode.xlua.XUtil;
-import eu.faircode.xlua.json.JsonHelper;
-
-public class XMockCpu {
+/*public class XMockCpu {
     private static final String TAG = "XLua.XMockCpu";
 
     public String name;
@@ -74,4 +62,4 @@ public class XMockCpu {
             put("selected", "BOOLEAN");
         }};
     }
-}
+}*/

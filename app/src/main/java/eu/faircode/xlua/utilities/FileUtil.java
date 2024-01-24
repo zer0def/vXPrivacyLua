@@ -12,7 +12,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.faircode.xlua.cpu.XMockCpuIO;
 
 public class FileUtil {
     private static final String TAG = "XLua.FileUtil";

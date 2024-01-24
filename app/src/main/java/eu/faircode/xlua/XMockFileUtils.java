@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.zip.ZipFile;
 
-public class XMockFileUtils {
+/*public class XMockFileUtils {
     public static HashMap<String, String> cpuMaps = new HashMap<>();
 
 
@@ -44,7 +44,7 @@ public class XMockFileUtils {
 
     public static List<XMockFile> getFromAssets() {
 
-        /*ZipFile zipFile = null;
+        ZipFile zipFile = null;
         try {
             zipFile = new ZipFile(apk);
             ZipEntry zipEntry = zipFile.getEntry("assets/hooks.json");
@@ -99,9 +99,7 @@ public class XMockFileUtils {
                     zipFile.close();
                 } catch (IOException ignored) {
                 }
-        }*/
+        }
         return null;
     }
-
-
-}
+}*/

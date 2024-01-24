@@ -27,7 +27,7 @@ public class XSecurity {
         Log.i(TAG, "Caller=" + current_id);
 
         //Old Identity obj
-        long o_ident = Binder.clearCallingIdentity();
+        long oIdentity = Binder.clearCallingIdentity();
 
         try {
             if(current_id == Process.SYSTEM_UID) {
@@ -42,9 +42,9 @@ public class XSecurity {
                 return;
             }
 
-            String[] cpkg = pm.getPackagesForUid(current_id);
-            if(cpkg.length > 0) {
-                String name = cpkg[0];
+            String[] cPackage = pm.getPackagesForUid(current_id);
+            if(cPackage.length > 0) {
+                String name = cPackage[0];
                 String print = XUtil.getSha1FingerprintString(context, name);
 
                 Log.i(TAG, "Caller Requesting Fingerprint=" + print + "=[" + name + "]");
@@ -82,7 +82,7 @@ public class XSecurity {
             throw new SecurityException(ex);
         } finally {
             //If all Checks pass then restore the caller
-            Binder.restoreCallingIdentity(o_ident);
+            Binder.restoreCallingIdentity(oIdentity);
         }
     }
 }

@@ -20,27 +20,21 @@
 package eu.faircode.xlua;
 
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Parcel;
-import android.telephony.CellLocation;
 import android.util.Log;
 import android.view.InputDevice;
-import android.view.inputmethod.EditorInfo;
 
 import java.io.File;
 import java.io.FileDescriptor;
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,14 +43,17 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import de.robv.android.xposed.XC_MethodHook;
-import eu.faircode.xlua.cpu.XMockCpuUtils;
+import eu.faircode.xlua.api.XMockCallApi;
+import eu.faircode.xlua.utilities.MemoryUtilEx;
+import eu.faircode.xlua.utilities.MockCpuUtil;
 import eu.faircode.xlua.display.MotionRangeUtil;
 import eu.faircode.xlua.utilities.FileUtil;
 import eu.faircode.xlua.utilities.LuaLongUtil;
 import eu.faircode.xlua.utilities.MemoryUtil;
 import eu.faircode.xlua.utilities.NetworkUtil;
 import eu.faircode.xlua.utilities.ReflectUtil;
-import eu.faircode.xlua.utilities.StringUtils;
+import eu.faircode.xlua.utilities.StringUtil;
+import eu.faircode.xlua.utilities.MockUtils;
 
 public class XParam {
     private static final String TAG = "XLua.XParam";
@@ -110,16 +107,17 @@ public class XParam {
 
     @SuppressWarnings("unused")
     public String filterBuildProperty(String property) {
-        if(!StringUtils.isValidString(property))
-            return XMockUtils.NOT_BLACKLISTED;
+        if(!StringUtil.isValidString(property))
+            return MockUtils.NOT_BLACKLISTED;
 
-        if(XMockUtils.isPropVxpOrLua(property)) {
+        if(MockUtils.isPropVxpOrLua(property)) {
             Log.i(TAG, "Skipping Property avoid Stack Overflow / Recursion");
-            return XMockUtils.NOT_BLACKLISTED;
+            return MockUtils.NOT_BLACKLISTED;
         }
 
         Log.i(TAG, "Checking Property=" + property);
-        return XMockUtils.filterProperty(property, XMockProxyApi.queryGetMockProps(getApplicationContext()));
+        //return MockUtils.filterProperty(property, XMockProxyApi.queryGetMockProps(getApplicationContext()));
+        return MockUtils.filterProperty(property, XMockCallApi.getMockProps(getApplicationContext()));
     }
 
     @SuppressWarnings("unused")
@@ -182,16 +180,16 @@ public class XParam {
     public FileDescriptor createFakeMeminfoFileDescriptor(int totalGigabytes, int availableGigabytes) { return FileUtil.generateFakeFileDescriptor(MemoryUtil.generateFakeMeminfoContents(totalGigabytes, availableGigabytes)); }
 
     @SuppressWarnings("unused")
-    public void populateMemoryInfo(ActivityManager.MemoryInfo memoryInfo, int totalMemoryInGB, int availableMemoryInGB) { XMemoryUtils.populateMemoryInfo(memoryInfo, totalMemoryInGB, availableMemoryInGB); }
+    public void populateMemoryInfo(ActivityManager.MemoryInfo memoryInfo, int totalMemoryInGB, int availableMemoryInGB) { MemoryUtilEx.populateMemoryInfo(memoryInfo, totalMemoryInGB, availableMemoryInGB); }
 
     @SuppressWarnings("unused")
-    public ActivityManager.MemoryInfo getFakeMemoryInfo(int totalMemoryInGB, int availableMemoryInGB) { return XMemoryUtils.getMemory(totalMemoryInGB, availableMemoryInGB); }
+    public ActivityManager.MemoryInfo getFakeMemoryInfo(int totalMemoryInGB, int availableMemoryInGB) { return MemoryUtilEx.getMemory(totalMemoryInGB, availableMemoryInGB); }
 
     @SuppressWarnings("unused")
-    public FileDescriptor createFakeCpuinfoFileDescriptor() { return XMockCpuUtils.generateFakeFileDescriptor(XMockProxyApi.callGetSelectedMockCpuMap(getApplicationContext())); }
+    public FileDescriptor createFakeCpuinfoFileDescriptor() { return MockCpuUtil.generateFakeFileDescriptor(XMockCallApi.getSelectedMockCpu(getApplicationContext())); }
 
     @SuppressWarnings("unused")
-    public File createFakeCpuinfoFile() { return XMockCpuUtils.generateFakeFile(XMockProxyApi.callGetSelectedMockCpuMap(getApplicationContext())); }
+    public File createFakeCpuinfoFile() { return MockCpuUtil.generateFakeFile(XMockCallApi.getSelectedMockCpu(getApplicationContext())); }
 
     //
     //End of Memory/CPU Functions
@@ -418,6 +416,14 @@ public class XParam {
         }
     }
 
+    public void printStackTrace() {
+
+    }
+
+    public void printStackTraceEx() {
+
+    }
+
     //
     //END OF LONG HELPER FUNCTIONS
     //
@@ -509,7 +515,7 @@ public class XParam {
     @SuppressWarnings("unused")
     public int getSettingInt(String name, int defaultValue) {
         String setting = getSetting(name);
-        if(!StringUtils.isValidString(setting))
+        if(!StringUtil.isValidString(setting))
             return defaultValue;
 
         try {
@@ -523,7 +529,7 @@ public class XParam {
     @SuppressWarnings("unused")
     public String getSetting(String name, String defaultValue) {
         String setting = getSetting(name);
-        return StringUtils.isValidString(setting) ? setting : defaultValue;
+        return StringUtil.isValidString(setting) ? setting : defaultValue;
     }
 
     @SuppressWarnings("unused")

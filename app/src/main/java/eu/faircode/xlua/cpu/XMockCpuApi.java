@@ -6,12 +6,11 @@ import android.util.Log;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import eu.faircode.xlua.XMockProvider;
-import eu.faircode.xlua.database.DatabaseHelper;
+
 import eu.faircode.xlua.XDataBase;
 
 
-public class XMockCpuApi {
+/*public class XMockCpuApi {
     private static final String TAG = "XLua.XMockCpuApi";
     private static final int COUNT = 43;
     private static final String JSON = "cpumaps.json";
@@ -27,7 +26,7 @@ public class XMockCpuApi {
         if(!prepareDatabaseTable(context, xmockdb))
             return false;
 
-        return DatabaseHelper.updateItem(xmockdb, XMockCpu.Table.name, map);
+        return DatabaseHelper.insertItem(xmockdb, XMockCpu.Table.name, map);
     }
 
     public static XMockCpuIO getSelectedCpuMapSync(Context context) {
@@ -81,8 +80,6 @@ public class XMockCpuApi {
                 COUNT);
     }
 
-
-
     public static List<XMockCpuIO> getCpuMapsSync(Context context) {
         synchronized (XMockProvider.lock) {
             return getCpuMaps(context);
@@ -91,7 +88,7 @@ public class XMockCpuApi {
 
     public static List<XMockCpuIO> getCpuMaps(Context context) { return getCpuMaps(context, XMockProvider.getDatabase(context, true)); }
     public static List<XMockCpuIO> getCpuMaps(Context context, XDataBase xmockdb) {
-        return DatabaseHelper.initDatabse(
+        return DatabaseHelper.initDatabase(
                 context,
                 xmockdb,
                 XMockCpu.Table.name,
@@ -101,4 +98,4 @@ public class XMockCpuApi {
                 XMockCpuIO.class,
                 COUNT);
     }
-}
+}*/

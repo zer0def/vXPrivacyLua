@@ -14,9 +14,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.faircode.xlua.json.IJsonHelper;
+//import eu.faircode.xlua.json.IJsonHelper;
 
-public class XMockCpuIO extends XMockCpu implements Parcelable, IJsonHelper {
+/*public class XMockCpuIO extends XMockCpu implements Parcelable, IJsonHelper {
     public static final XMockCpuIO EmptyDefault = new XMockCpuIO("EMPTY", "EMPTY", "EMPTY", "EMPTY");
 
     public XMockCpuIO() { super(); }
@@ -209,3 +209,4 @@ public class XMockCpuIO extends XMockCpu implements Parcelable, IJsonHelper {
         }
     }
 }
+*/

@@ -19,6 +19,7 @@
 
 package eu.faircode.xlua;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -60,11 +61,11 @@ public class XUtil {
             return ai.publicSourceDir;
         }catch (Throwable ex) {
             Log.e(TAG, Log.getStackTraceString(ex));
-            return "com.";//Add in
+            return "eu.faircode.xlua";//Add in
         }
     }
 
-    static void setPermissions(String path, int mode, int uid, int gid) {
+    public static void setPermissions(String path, int mode, int uid, int gid) {
         try {
             Class<?> fileUtils = Class.forName("android.os.FileUtils");
             Method setPermissions = fileUtils
@@ -75,7 +76,7 @@ public class XUtil {
         }
     }
 
-    static int getAppId(int uid) {
+    public static int getAppId(int uid) {
         try {
             // public static final int getAppId(int uid)
             Method method = UserHandle.class.getDeclaredMethod("getAppId", int.class);
@@ -86,7 +87,7 @@ public class XUtil {
         }
     }
 
-    static int getUserId(int uid) {
+    public static int getUserId(int uid) {
         try {
             // public static final int getUserId(int uid)
             Method method = UserHandle.class.getDeclaredMethod("getUserId", int.class);
@@ -97,7 +98,7 @@ public class XUtil {
         }
     }
 
-    static int getUserUid(int userid, int appid) {
+    public static int getUserUid(int userid, int appid) {
         try {
             // public static int getUid(@UserIdInt int userId, @AppIdInt int appId)
             Method method = UserHandle.class.getDeclaredMethod("getUid", int.class, int.class);
@@ -108,7 +109,7 @@ public class XUtil {
         }
     }
 
-    static UserHandle getUserHandle(int userid) {
+    public static UserHandle getUserHandle(int userid) {
         try {
             // public UserHandle(int h)
             Constructor ctor = UserHandle.class.getConstructor(int.class);
@@ -119,7 +120,7 @@ public class XUtil {
         }
     }
 
-    static String getSha1FingerprintString(Context context, String packageName) throws Throwable {
+    public static String getSha1FingerprintString(Context context, String packageName) throws Throwable {
         byte[] bys = getSha1Fingerprint(context, packageName);
         StringBuilder sb = new StringBuilder();
         for (byte b : bys)
@@ -128,14 +129,14 @@ public class XUtil {
         return sb.toString();
     }
 
-    static byte[] getSha1Fingerprint(Context context, String packageName) throws Throwable {
+    public static byte[] getSha1Fingerprint(Context context, String packageName) throws Throwable {
         PackageManager pm = context.getPackageManager();
         PackageInfo packageInfo = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
         MessageDigest digest = MessageDigest.getInstance("SHA1");
         return digest.digest(packageInfo.signatures[0].toByteArray());
     }
 
-    static Context createContextForUser(Context context, int userid) throws Throwable {
+    public static Context createContextForUser(Context context, int userid) throws Throwable {
         if (XposedUtil.isVirtualXposed())
             return context;
 
@@ -149,7 +150,8 @@ public class XUtil {
         return (Context) c.invoke(context, "android", 0, uh);
     }
 
-    static void notifyAsUser(Context context, String tag, int id, Notification notification, int userid) throws Throwable {
+    @SuppressLint("MissingPermission")
+    public static void notifyAsUser(Context context, String tag, int id, Notification notification, int userid) throws Throwable {
         NotificationManager nm = context.getSystemService(NotificationManager.class);
 
         // Create notification channel
@@ -157,7 +159,9 @@ public class XUtil {
             PackageManager pm = context.getPackageManager();
             Resources resources = pm.getResourcesForApplication(BuildConfig.APPLICATION_ID);
             NotificationChannel channel = new NotificationChannel(
-                    XProvider.cChannelName, resources.getString(R.string.channel_privacy), NotificationManager.IMPORTANCE_HIGH);
+                    XGlobalCore.cChannelName, resources.getString(R.string.channel_privacy), NotificationManager.IMPORTANCE_HIGH);
+            /*NotificationChannel channel = new NotificationChannel(
+                    XProvider.cChannelName, resources.getString(R.string.channel_privacy), NotificationManager.IMPORTANCE_HIGH);*/
             channel.setSound(null, Notification.AUDIO_ATTRIBUTES_DEFAULT);
             nm.createNotificationChannel(channel);
         }
@@ -174,7 +178,7 @@ public class XUtil {
         Log.i(TAG, "Notified " + tag + ":" + id + " as " + userid);
     }
 
-    static void cancelAsUser(Context context, String tag, int id, int userid) throws Throwable {
+    public static void cancelAsUser(Context context, String tag, int id, int userid) throws Throwable {
         NotificationManager nm = context.getSystemService(NotificationManager.class);
 
         if (XposedUtil.isVirtualXposed()) {
@@ -196,7 +200,7 @@ public class XUtil {
         return typedValue.data;
     }
 
-    static void areYouSure(ActivityBase activity, String question, final DoubtListener listener) {
+    public static void areYouSure(ActivityBase activity, String question, final DoubtListener listener) {
         final DialogObserver observer = new DialogObserver();
         AlertDialog ad = new AlertDialog.Builder(activity)
                 .setMessage(question)
@@ -228,7 +232,7 @@ public class XUtil {
         void onSure();
     }
 
-    static class DialogObserver implements LifecycleObserver {
+    public static class DialogObserver implements LifecycleObserver {
         private LifecycleOwner owner = null;
         private Dialog dialog = null;
 

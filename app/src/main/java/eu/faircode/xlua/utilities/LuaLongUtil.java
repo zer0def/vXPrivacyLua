@@ -82,7 +82,7 @@ public class LuaLongUtil {
      * @return Returns the Long Value that the Field is Storing, if Failed then return 0
      */
     public static Long getFieldValue(Object instance, String fieldName) {
-        if (instance == null || !StringUtils.isValidString(fieldName)) {
+        if (instance == null || !StringUtil.isValidString(fieldName)) {
             Log.e(TAG, "Instance and field name must not be null or empty");
             return (long)0;
         }

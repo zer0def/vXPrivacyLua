@@ -21,11 +21,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import eu.faircode.xlua.cpu.XMockCpuIO;
+import eu.faircode.xlua.api.XLuaCallApi;
+import eu.faircode.xlua.api.XMockCallApi;
+import eu.faircode.xlua.api.objects.xmock.cpu.MockCpu;
+
 
 public class FragmentCpu extends Fragment {
     private final static String TAG = "XLua.FragmentCpu";
@@ -34,7 +38,8 @@ public class FragmentCpu extends Fragment {
     private SwipeRefreshLayout swipeRefresh;
     private AdapterCpu rvCpuAdapter;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //Log.i(TAG, "Init of DB for Cpu Maps");
         //List<XMockCpuIO> maps = XMockProxyApi.queryGetMockCpuMaps(getContext());
         //Log.i(TAG, "Init of CPU Maps has Finished: " + maps.size());
@@ -110,10 +115,10 @@ public class FragmentCpu extends Fragment {
                 if (!data.theme.equals(activity.getThemeName()))
                     activity.recreate();
 
-                Collections.sort(data.maps, new Comparator<XMockCpuIO>() {
+                Collections.sort(data.maps, new Comparator<MockCpu>() {
                     @Override
-                    public int compare(XMockCpuIO o1, XMockCpuIO o2) {
-                        return o1.name.compareToIgnoreCase(o2.name);
+                    public int compare(MockCpu o1, MockCpu o2) {
+                        return o1.getName().compareToIgnoreCase(o2.getName());
                     }
                 });
 
@@ -144,15 +149,19 @@ public class FragmentCpu extends Fragment {
             Log.i(TAG, "Data loader started");
             CpuDataHolder data = new CpuDataHolder();
             try {
-                data.theme = XProvider.getSetting(getContext(), "global", "theme");
-                if (data.theme == null)
-                    data.theme = "light";
+
+                data.theme = XLuaCallApi.getTheme(getContext());
+                //data.theme = XSettingsDatabase.getSettingValue()
+                //data.theme = XProvider.getSetting(getContext(), "global", "theme");
+                //if (data.theme == null)
+                //    data.theme = "light";
 
                 data.maps.clear();
                 Log.i(TAG, "Getting Cpu Maps...");
-                List<XMockCpuIO> props = XMockProxyApi.queryGetMockCpuMaps(getContext());
-                Log.i(TAG, "Props=" + props.size());
-                data.maps.addAll(props);
+                //List<MockCpu> props = XMockProxyApi.queryGetMockCpuMaps(getContext());
+                Collection<MockCpu> maps = XMockCallApi.getCpuMaps(getContext());
+                Log.i(TAG, "Props=" + maps.size());
+                data.maps.addAll(maps);
                 //make sure it syncs with cache if needed
             }catch (Throwable ex) {
                 data.maps.clear();
@@ -167,7 +176,7 @@ public class FragmentCpu extends Fragment {
 
     private static class CpuDataHolder {
         String theme;
-        List<XMockCpuIO> maps = new ArrayList<>();
+        List<MockCpu> maps = new ArrayList<>();
         Throwable exception = null;
     }
 }

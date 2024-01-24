@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import eu.faircode.xlua.database.DatabaseQuerySnake;
+import eu.faircode.xlua.utilities.CursorUtil;
+
 public class XDataBase {
     private static final String TAG = "XLua.Database";
 
@@ -27,11 +30,14 @@ public class XDataBase {
         this(dbname, context, true);
     }
     public XDataBase(String dbname, Context context, boolean setPerms) {
+        if(!dbname.endsWith(".db"))
+            dbname += ".db";
+
         name = dbname;
         path = getDataLocationString(context);
         dbFile = new File(path + File.separator + name);
 
-        Log.i(TAG, "DB File=" + dbFile.toString());
+        Log.i(TAG, "DB File=" + dbFile);
 
         if(setPerms)
             setPermissions(dbFile);
@@ -54,7 +60,39 @@ public class XDataBase {
         }
     }
 
-    public boolean insertOrUpdate(String tableName, ContentValues values)  {
+    public boolean delete(String tableName) { return delete(tableName, null, null); }
+    public boolean delete(String tableName, String selectionArgs, String[] compareValues) {
+        try {
+            long rows = db.delete(tableName, selectionArgs, compareValues);
+            if(rows < 0) {
+                Log.e(TAG, "Failed to delete I think ? Row count=" + rows);
+                return false;
+            }
+
+            return true;
+        }catch (Exception e) {
+            Log.e(TAG, "Failed to Delete Item from Table [" + tableName + "] from DB [" + db + "] ");
+            return false;
+        }
+    }
+
+    public boolean update(String tableName, ContentValues values, DatabaseQuerySnake queryFilter) {
+        try {
+            long rows = db.updateWithOnConflict(tableName, values, queryFilter.getSelectionArgs(), queryFilter.getSelectionCompareValues(), SQLiteDatabase.CONFLICT_REPLACE);
+            //if(rows < 0) {
+            if(rows != 1){
+                Log.e(TAG, "Failed to Update Data into Table:" + tableName);
+                return false;
+            }
+
+            return true;
+        }catch (Exception e) {
+            Log.e(TAG, "Failed to Add / Update Row in Table=" + tableName + "\n" + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean insert(String tableName, ContentValues values)  {
         try {
             long rows = db.insertWithOnConflict(tableName, null, values, SQLiteDatabase.CONFLICT_REPLACE);
             if (rows < 0) {
@@ -64,7 +102,7 @@ public class XDataBase {
 
             return true;
         }catch (Exception e) {
-            Log.e(TAG, "Failed to Add or Update Row in Table=" + tableName + "\n" + e.getMessage());
+            Log.e(TAG, "Failed to Add / Insert Row in Table=" + tableName + "\n" + e.getMessage());
             return false;
         }
     }
@@ -86,14 +124,21 @@ public class XDataBase {
     }
 
     public boolean beginTransaction() {
+        return beginTransaction(false);
+    }
+
+    public boolean beginTransaction(boolean writeLock) {
         try {
             if(!isOpen(true))
                 return false;
 
+            if(writeLock) writeLock();
+
             db.beginTransaction();
             return true;
         }catch (Exception e) {
-            Log.e(TAG, "Begin Transaction Error: " + e.getMessage());
+            if(writeLock) writeUnlock();
+            Log.e(TAG, "Begin Transaction Error: " + e + "\n" + Log.getStackTraceString(e));
             return false;
         }
     }
@@ -107,13 +152,20 @@ public class XDataBase {
     }
 
     public boolean endTransaction() {
+        return endTransaction(false, false);
+    }
+
+    public boolean endTransaction(boolean writeUnlock, boolean wasSuccessful) {
         try {
-            if(!isOpen(true))
+            if(!isOpen(false))
                 return false;
 
+            if(wasSuccessful) setTransactionSuccessful();
             db.endTransaction();
+            if(writeUnlock) writeUnlock();
             return true;
         }catch (Exception e) {
+            if(writeUnlock) writeUnlock();
             Log.e(TAG, "Failed to End Transaction: " + e.getMessage());
             return false;
         }
@@ -159,7 +211,7 @@ public class XDataBase {
         return true;
     }
 
-    public boolean createTable(HashMap<String, String> columns, String name) {
+    public boolean createTable(Map<String, String> columns, String name) {
         if(!isOpen(true))
             return false;
 
@@ -194,21 +246,27 @@ public class XDataBase {
         }
     }
 
+    public boolean tableIsEmpty(String tableName) { return tableEntries(tableName) < 1; }
+
     public int tableEntries(String tableName) {
         if(!isOpen(true))
             return -1;
+
+        if(!hasTable(tableName))
+            return 0;
 
         int count = 0;
         try {
             String query = "SELECT COUNT(*) FROM " + tableName;
             Cursor cursor = db.rawQuery(query, null);
-            if (cursor.moveToFirst()) {
+            if (cursor.moveToFirst())
                 count = cursor.getInt(0);
-            }
+
             cursor.close();
         }catch (Exception e) {
             Log.e(TAG, "Failed to get Table Item Count.. " + e.getMessage());
         }finally {
+            Log.i(TAG, " table entries in " + tableName + "  size=" + count);
             return count;
         }
     }
@@ -221,11 +279,13 @@ public class XDataBase {
             String qry = "SELECT count(*) FROM sqlite_master WHERE type='table' AND name=?";
             Cursor cursor = db.rawQuery(qry, new String[] { tableName });
             if (!cursor.moveToFirst()) {
-                cursor.close();
+                //cursor.close();
+                CursorUtil.closeCursor(cursor);
                 return false;
             }
             int count = cursor.getInt(0);
-            cursor.close();
+            //cursor.close();
+            CursorUtil.closeCursor(cursor);
             return count > 0;
         }catch (Exception e) {
             Log.e(TAG, "Failed to check for DB Table: " + e.getMessage());
@@ -290,7 +350,7 @@ public class XDataBase {
         }
     }
 
-    private static String dynamicCreateQuery(HashMap<String, String> colms, String tableName) {
+    private static String dynamicCreateQuery(Map<String, String> colms, String tableName) {
         String top = "CREATE TABLE IF NOT EXISTS " + tableName + " (";
         StringBuilder mid = new StringBuilder();
 

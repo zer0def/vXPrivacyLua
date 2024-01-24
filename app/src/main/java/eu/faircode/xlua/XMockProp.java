@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class XMockProp {
+/*public class XMockProp {
     private final static String TAG = "XLua.XMockProp";
     String name;
     String mockValue;
@@ -54,8 +54,8 @@ public class XMockProp {
         this.enabled = enabled;//default
     }
 
-    protected XMockProp() { }
-    protected XMockProp(Parcel in) {
+    public XMockProp() { }
+    public XMockProp(Parcel in) {
         this.name = in.readString();
         this.mockValue = in.readString();
         this.defaultValue = in.readString();
@@ -76,7 +76,7 @@ public class XMockProp {
         return this.getName().equals(other.getName());
     }
 
-    static class Table {
+    public static class Table {
         public static final String name = "props";
         public static final LinkedHashMap<String, String> columns = new LinkedHashMap<String, String>() {{
             put("name", "TEXT");
@@ -85,4 +85,4 @@ public class XMockProp {
             put("enabled", "BOOLEAN");//change this to INTEGER ?
         }};
     }
-}
+}*/

@@ -20,55 +20,19 @@
 package eu.faircode.xlua;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.LinkedHashMap;
 
-class XAssignment implements Parcelable {
-    XHook hook;
-    long installed = -1;
-    long used = -1;
-    boolean restricted = false;
-    String exception;
+/*class XAssignment  {
+    public XHookIO hook;
+    public long installed = -1;
+    public long used = -1;
+    public boolean restricted = false;
+    public String exception;
 
-    private XAssignment() {
-    }
-
-    XAssignment(XHook hook) {
+    public XAssignment() { }
+    public XAssignment(XHookIO hook) {
         this.hook = hook;
-    }
-
-    String toJSON() throws JSONException {
-        return toJSONObject().toString(2);
-    }
-
-    JSONObject toJSONObject() throws JSONException {
-        JSONObject jroot = new JSONObject();
-
-        jroot.put("hook", this.hook.toJSONObject());
-        jroot.put("installed", this.installed);
-        jroot.put("used", this.used);
-        jroot.put("restricted", this.restricted);
-        jroot.put("exception", this.exception);
-
-        return jroot;
-    }
-
-    static XAssignment fromJSON(String json) throws JSONException {
-        return fromJSONObject(new JSONObject(json));
-    }
-
-    static XAssignment fromJSONObject(JSONObject jroot) throws JSONException {
-        XAssignment assignment = new XAssignment();
-
-        assignment.hook = XHook.fromJSONObject(jroot.getJSONObject("hook"));
-        assignment.installed = jroot.getLong("installed");
-        assignment.used = jroot.getLong("used");
-        assignment.restricted = jroot.getBoolean("restricted");
-        assignment.exception = (jroot.has("exception") ? jroot.getString("exception") : null);
-
-        return assignment;
     }
 
     @Override
@@ -84,20 +48,6 @@ class XAssignment implements Parcelable {
         return this.hook.getId().hashCode();
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.hook, flags);
-        dest.writeLong(this.installed);
-        dest.writeLong(this.used);
-        dest.writeByte(this.restricted ? (byte) 1 : (byte) 0);
-        dest.writeString(this.exception);
-    }
-
     protected XAssignment(Parcel in) {
         this.hook = in.readParcelable(XHook.class.getClassLoader());
         this.installed = in.readLong();
@@ -106,15 +56,18 @@ class XAssignment implements Parcelable {
         this.exception = in.readString();
     }
 
-    public static final Parcelable.Creator<XAssignment> CREATOR = new Parcelable.Creator<XAssignment>() {
-        @Override
-        public XAssignment createFromParcel(Parcel source) {
-            return new XAssignment(source);
-        }
-
-        @Override
-        public XAssignment[] newArray(int size) {
-            return new XAssignment[size];
-        }
-    };
-}
+    public static class Table {
+        public static final String name = "assignment";
+        public static final LinkedHashMap<String, String> columns = new LinkedHashMap<String, String>() {{
+            put("package", "TEXT");
+            put("uid", "INTEGER");
+            put("hook", "TEXT");
+            put("installed", "INTEGER");
+            put("used", "INTEGER");
+            put("restricted", "INTEGER");
+            put("exception", "TEXT");
+            put("old", "TEXT");
+            put("new", "TEXT");
+        }};
+    }
+}*/
