@@ -3,6 +3,7 @@ package eu.faircode.xlua.api.objects.xlua.hook;
 import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

@@ -9,15 +9,18 @@ import android.os.Process;
 import android.util.Log;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import eu.faircode.xlua.database.DatabaseQuerySnake;
 import eu.faircode.xlua.utilities.CursorUtil;
+import eu.faircode.xlua.utilities.DatabasePathUtil;
+import eu.faircode.xlua.utilities.StringUtil;
 
 public class XDataBase {
-    private static final String TAG = "XLua.Database";
+    private static final String TAG = "XLua.Database.SqliteWrapper";
 
     private String path;
     private String name;
@@ -34,7 +37,7 @@ public class XDataBase {
             dbname += ".db";
 
         name = dbname;
-        path = getDataLocationString(context);
+        path = DatabasePathUtil.getDatabaseDirectory(context);
         dbFile = new File(path + File.separator + name);
 
         Log.i(TAG, "DB File=" + dbFile);
@@ -308,22 +311,29 @@ public class XDataBase {
             File dbpfile = dbFile.getParentFile();
             Log.i(TAG, "mkdirs::" + dbpfile.getPath() + " " + dbpfile.getName());
 
-            dbpfile.mkdirs();
+            if(!dbFile.exists())
+                dbpfile.mkdirs();
 
             this.open();
-
-            Log.i(TAG, "Setting File Permissions (0770) SYSTEM_UID For XLUA Directory");
-
-            // Set database file permissions
-            // Owner: rwx (system)
-            // Group: rwx (system)
-            // World: ---
-            XUtil.setPermissions(dbpfile.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
-            File[] files = dbpfile.listFiles();
-            if (files != null)
-                for (File file : files)
-                    XUtil.setPermissions(file.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
+            setPerms(dbFile);
         }
+    }
+
+    public static void setPerms(File directoryOrFile) {
+        Log.i(TAG, "Setting File Permissions (0770) SYSTEM_UID For XLUA Directory for UID: " + Process.SYSTEM_UID);
+
+        // Set database file permissions
+        // Owner: rwx (system)
+        // Group: rwx (system)
+        // World: ---
+        //Process.myUid()
+        XUtil.setPermissions(directoryOrFile.getAbsolutePath(), 0777, Process.SYSTEM_UID, Process.SYSTEM_UID);
+        File[] files = directoryOrFile.listFiles();
+        if (files != null)
+            for (File file : files)
+                XUtil.setPermissions(file.getAbsolutePath(), 0777, Process.SYSTEM_UID, Process.SYSTEM_UID);
+
+        Log.i(TAG, "Finished setting permissions for: " + directoryOrFile.getPath());
     }
 
     public static boolean isReady(XDataBase database) {
@@ -338,16 +348,6 @@ public class XDataBase {
         }
 
         return true;
-    }
-
-    public static String getDataLocationString(Context context) {
-        if (context != null && XposedUtil.isVirtualXposed()) {
-            return context.getFilesDir().getPath();
-        } else {
-            return Environment.getDataDirectory() + File.separator +
-                    "system" + File.separator +
-                    "xlua";
-        }
     }
 
     private static String dynamicCreateQuery(Map<String, String> colms, String tableName) {

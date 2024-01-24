@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.BOOTLOADER", "G1HZK00500")
+    local fake = param:getSetting("build.BASE_OS", "")
     param:setResult(fake)
     return true, ret, fake
 end

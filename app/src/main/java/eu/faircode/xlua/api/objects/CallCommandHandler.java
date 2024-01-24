@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import java.util.concurrent.Callable;
 
+import eu.faircode.xlua.BuildConfig;
 import eu.faircode.xlua.XSecurity;
 
 public abstract class CallCommandHandler {
@@ -17,7 +18,6 @@ public abstract class CallCommandHandler {
 
     public CallCommandHandler() { }
     public CallCommandHandler(String name, boolean requirePermissionCheck) {
-        Log.i("XLua.Command Constructor", " name=" + name);
         this.name = name;
         this.requiresPermissionCheck = requirePermissionCheck;
     }
@@ -25,7 +25,7 @@ public abstract class CallCommandHandler {
     public abstract Bundle handle(CallPacket rawData) throws Throwable;
 
     public void throwOnPermissionCheck(Context context) {
-        Log.i("XLua.Command Handler", " command=" + this.name);
+        if(BuildConfig.DEBUG) Log.i("XLua.Command Handler", " command=" + this.name);
         if(!requiresPermissionCheck) XSecurity.checkCaller(context);
     }
     public String getName() { return name; }

@@ -4,11 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.MODEL")
-    if fake == nil then
-        fake = "Pixel XL"
-    end
-
+    local fake = param:getSetting("build.MODEL", "Pixel XL")
     param:setResult(fake)
     return true, ret, fake
 end

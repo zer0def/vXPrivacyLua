@@ -23,6 +23,11 @@ import eu.faircode.xlua.api.objects.xlua.setting.xCategory;
 
 public class XSettingsDatabase {
     private static final String TAG = "XLua.XSettingsDatabase";
+
+    public static final String DEFAULT_THEME = "dark";
+    public static final String DEFAULT_COLLECTIONS = "Privacy,PrivacyEx";
+
+
     public static boolean putSetting(XDataBase db, SettingPacket packet) {
         boolean result =
                 packet.getValue() != null ?
@@ -113,38 +118,30 @@ public class XSettingsDatabase {
 
     public static String getSettingValue(XDataBase db, xSetting setting) { return getSettingValue(db, setting.getUser(), setting.getCategory(), setting.getName()); }
     public static String getSettingValue(XDataBase db, int userId, String category, String settingName) {
-        DatabaseQuerySnake snake =
-                DatabaseQuerySnake.create(db, xSetting.Table.name);
-
-        snake.whereColumns("user", "category", "name");
-        snake.whereColumnValues(Integer.toString(userId), category, settingName);
-
-        String onlyRet = "value";
-        Log.i(TAG, "now only setting onlyReturn=" + onlyRet);
-        snake.getOnlyReturn();
-
-        snake.onlyReturnColumn(onlyRet);
-        snake.getOnlyReturn();
-
-        xSetting setting = snake.queryGetFirstAs(xSetting.class, true);
-        if(setting == null)
-            return null;
-
-        Log.i(TAG, "got setting=" + setting);
-        Log.i(TAG, "Testing the GET");
-        String v = setting.getValue();
-        Log.i(TAG, "Finished getting the get value");
-        Log.i(TAG, "FINISHED testing the get: " + v);
-
-        return setting.getValue();
-
-        /*return DatabaseQuerySnake
-                .create(db, xSetting.Table.name)
+        String v = DatabaseQuerySnake.
+                create(db, xSetting.Table.name)
                 .whereColumns("user", "category", "name")
                 .whereColumnValues(Integer.toString(userId), category, settingName)
                 .onlyReturnColumn("value")
                 .queryGetFirstAs(xSetting.class, true)
-                .getValue();*/
+                .getValue();
+
+        if(v == null) {
+            if(settingName.equals("theme")) {
+                SettingPacket packet = new SettingPacket(userId, category, settingName);
+                packet.setValue(DEFAULT_THEME);
+                putSetting(db, packet);
+                return DEFAULT_THEME;
+            }
+            else if(settingName.equals("collection")) {
+                SettingPacket packet = new SettingPacket(userId, category, settingName);
+                packet.setValue(DEFAULT_COLLECTIONS);
+                putSetting(db, packet);
+                return DEFAULT_COLLECTIONS;
+            }
+        }
+
+        return v;
     }
 
     public static xSetting getSetting(XDataBase db, xCategory category, String settingName) { return getSetting(db, category.getUserId(), category.getName(), settingName);  }

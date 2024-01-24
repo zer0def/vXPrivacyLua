@@ -51,15 +51,6 @@ public class XGlobalCore {
 
     final static String cChannelName = "xlua";
 
-    private static XCommandService service = null;
-
-    public static void initService() {
-        if(service == null) {
-            Log.i(TAG, "SERVICE IS NULLLL!!");
-            service = new XCommandService();
-        }
-    }
-
     public static XDataBase getLuaDatabase(Context context) {
         checkDatabases(context);
         synchronized (hookLock) {
@@ -74,114 +65,67 @@ public class XGlobalCore {
         }
     }
 
-    public static void executeCall(XC_MethodHook.MethodHookParam param, String packageName) {
-        //return;
-        initService();
-        service.handeCall(param, packageName);
-    }
-
-    public static void executeQuery(XC_MethodHook.MethodHookParam param, String packageName) {
-        //return;
-        initService();
-        service.handleQuery(param, packageName);
-    }
-
-    public static Bundle vxpCall(Context context, String arg, Bundle extras, String method) throws ExecutionException, InterruptedException {
-        initService();
-        return service.directCall(context, method, arg, extras, null, null);
-    }
-
-    public static Cursor vxpQuery(Context context, String method, String arg, String[] selection) throws Exception {
-        initService();
-        return service.directQuery(context, method, arg, selection, null, null);
-    }
+    private static int att = 0;
 
     public static void checkDatabases(Context context) {
-        Log.i(TAG, "ANOTHER STUPID FUCKING LOGGER");
+        if(DebugUtil.isDebug()) Log.i(TAG, "Checking Databases!");
         try {
-            /*if(xMock_db == null) {
-                Log.i(TAG, "Init of XMOCK DB");
-                xMock_db = new XDataBase(DB_NAME_MOCK, context);
-
-                Log.i(TAG, "Locking");
-                //xMock_db.readLock();
-                int ents = xMock_db.tableEntries(MockCpu.Table.name);
-                Log.i(TAG, "ENTISSS=" + ents);
-                //xMock_db.readUnlock();
-
-                Log.i(TAG, "Coooolker");
-
-                if(xMock_db.tableEntries(MockCpu.Table.name) < 1)
-                    XMockCpuProvider.initCache(context, xMock_db);
-                //Collection<MockCpu> localMaps = XMockCpuDatabase.getCpuMaps(context, xMock_db);
-
-                Log.i(TAG, "We good");
-                Log.i(TAG, "fff");
-                if(xMock_db.tableEntries(MockProp.Table.name) < 1)
-                    XMockPropDatabase.getMockProps(context, xMock_db);
-            }else {
-                Log.i(TAG, "MOCK DB=" + xMock_db);
-            }*/
-
-            //int ents = xMock_db.tableEntries(MockCpu.Table.name);
-            //Log.i(TAG, "ENTISSS=" + ents);
-
             synchronized (mockLock) {
+                if(xMock_db != null && att < 8) {
+                    if(xMock_db.getPath().contains("xplex")) {
+                        xMock_db.close();
+                        xMock_db = null;
+                        att++;
+                    }
+                }
+
                 if(xMock_db == null) {
-                    Log.i(TAG, "Init of XMOCK DB");
+                    Log.i(TAG, "XMock Database is null, initializing... path=");
                     xMock_db = new XDataBase(DB_NAME_MOCK, context);
 
+                    Log.i(TAG, "Checking XMock Database Tables");
                     if(xMock_db.tableEntries(MockCpu.Table.name) < 1)
                         XMockCpuProvider.initCache(context, xMock_db);
                     if(xMock_db.tableEntries(MockProp.Table.name) < 1)
                         XMockPropDatabase.getMockProps(context, xMock_db);
-                }else {
-                    Log.i(TAG, "MOCK DB=" + xMock_db);
+                }else if(DebugUtil.isDebug()) {
+                    Log.i(TAG , "XMock Database is not null... db=" + xMock_db);
+
                 }
+
             }
 
-            /*if(xLua_db == null) {
-                Log.i(TAG, "Init of XLUA DB");
-                xLua_db = new XDataBase(DB_NAME_LUA, context);
-                XLuaUpdater.checkForUpdate(xLua_db);
-            }else {
-                Log.i(TAG, "LUA DB=" + xLua_db);
-
-            }*/
-
-            //XLuaUpdater.checkForUpdate(xLua_db);
-            /*if (hooks == null || hooks.isEmpty()) {
-                Log.i(TAG, "INIT OF HOOKS");
-                loadHooks(context);
-            }else {
-                Log.i(TAG, "hooks sz=" + hooks.size());
-            }*/
+            //add to String to xDatabase
             synchronized (hookLock) {
+                if(xLua_db != null && att < 8) {
+                    if(xLua_db.getPath().contains("xplex")) {
+                        xLua_db.close();
+                        xLua_db = null;
+                        hooks.clear();
+                        att++;
+                    }
+                }
+
                 if(xLua_db == null) {
-                    Log.i(TAG, "Init of XLUA DB");
+                    Log.i(TAG, "XLua Database is null, initializing... path=");
                     xLua_db = new XDataBase(DB_NAME_LUA, context);
                     XLuaUpdater.checkForUpdate(xLua_db);
-                }else {
-                    Log.i(TAG, "LUA DB=" + xLua_db);
+                }else if(DebugUtil.isDebug())
+                    Log.i(TAG , "XLua Database is not null... db=" + xLua_db);
 
-                }
 
                 if (hooks == null || hooks.isEmpty()) {
-                    Log.i(TAG, "INIT OF HOOKS");
+                    Log.i(TAG, "XLua Hook Cache is null, initializing...");
                     loadHooks(context);
-                }else {
-                    Log.i(TAG, "hooks sz=" + hooks.size());
-                    xHook oneHook = hooks.get(0);
-                    Log.i(TAG, "FIRST HOOK=" + oneHook);
-                }
+                }else if(DebugUtil.isDebug())
+                    Log.i(TAG , "XLua Hook Cache size=" + hooks.size());
             }
         }catch (Throwable e) {
-            Log.e(TAG, "Failed to check Database\n" + e + "\n" + Log.getStackTraceString(e));
+            Log.e(TAG, "Failed to check Databases\n" + e + "\n" + Log.getStackTraceString(e));
         }
     }
 
     private static void loadHooks(Context context) throws Throwable {
-        Log.i(TAG, "loading hooks....");
         Log.i(TAG, "<loadHooks>");
         hooks = new HashMap<>();
         builtIn = new HashMap<>();
@@ -258,6 +202,14 @@ public class XGlobalCore {
         List<String> groups = new ArrayList<>();
         List<String> collections = XHookProvider.getCollections(db, XUtil.getUserId(Binder.getCallingUid()));
 
+        if(DebugUtil.isDebug()) {
+            Log.i(TAG, "Returned Collections size=" + collections.size());
+            String s = "testing collections=";
+            for(String c : collections)
+                s += " " + c;
+            Log.i(TAG, s);
+        }
+
         synchronized (hookLock) {
             for (xHook hook : hooks.values())
                 if (hook.isAvailable(null, collections) && !groups.contains(hook.getGroup()))
@@ -265,7 +217,6 @@ public class XGlobalCore {
         }
 
         Log.i(TAG, "Collection size=" + collections.size() + "  groups size=" + groups.size());
-
 
         return groups;
     }

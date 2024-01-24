@@ -14,12 +14,14 @@ import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
 import eu.faircode.xlua.BuildConfig;
+import eu.faircode.xlua.DebugUtil;
 import eu.faircode.xlua.XDataBase;
 import eu.faircode.xlua.XGlobalCore;
 import eu.faircode.xlua.XUiGroup;
 import eu.faircode.xlua.api.XLuaCallApi;
 
 import eu.faircode.xlua.api.objects.xlua.hook.xHook;
+import eu.faircode.xlua.api.objects.xlua.packets.SettingPacket;
 import eu.faircode.xlua.api.xlua.xcall.GetVersionCommand;
 
 public class XHookProvider {
@@ -27,15 +29,31 @@ public class XHookProvider {
 
     public static List<String> getCollections(XDataBase db, int userId) {
         String value = XSettingsDatabase.getSettingValue(db, userId, "global", "collection");
-        if(value == null) {
-            List<String> r2 = new ArrayList<>();
-            r2.add("Privacy");//PrivacyEx ??
-            return r2;
-        }
-
-
         List<String> result = new ArrayList<>();
-        Collections.addAll(result, value.split(","));
+
+        if(DebugUtil.isDebug())
+            Log.i(TAG, "collection=" + value);
+
+        /*if(value == null) { //Should not happen , theme & collection are init default values when if null
+            result.add("Privacy");
+            result.add("PrivacyEx");
+
+            SettingPacket packet = new SettingPacket();
+            packet.setUser(userId);
+            packet.setCategory("global");
+            packet.setName("collection");
+            packet.setValue("Privacy,PrivacyEx");
+
+            XSettingsDatabase.putSetting(db, packet);
+            return result;
+        }*/
+
+        if(value.contains(",")) Collections.addAll(result, value.split(","));
+        else result.add(value);
+
+        if(DebugUtil.isDebug())
+            Log.i(TAG, "collection size=" + result.size());
+
         return result;
     }
 

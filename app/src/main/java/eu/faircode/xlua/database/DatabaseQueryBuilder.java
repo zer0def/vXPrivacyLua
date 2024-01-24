@@ -30,25 +30,14 @@ public class DatabaseQueryBuilder {
         return tableName;
     }
     public String getSelectionArgs() {
-        String selection = selectionArgsBuilder.toString();
-        //if(BuildConfig.DEBUG)
-        //    Log.i(TAG, "selection=" + selection);
-        Log.i(TAG, "selection=" + selection);
-
-
-         return selection;
-        //return selectionArgsBuilder.toString();
+         return selectionArgsBuilder.toString();
     }
 
     public String[] getSelectionCompareValues() {
         if(compareValues.isEmpty())
             return new String[] { };
 
-        String[] compValues = compareValues.toArray(new String[0]);
-        //if(BuildConfig.DEBUG)
-        //    Log.i(TAG, "selection args=" + Arrays.toString(compValues));
-        Log.i(TAG, "selection args=" + Arrays.toString(compValues));
-        return compValues;
+        return compareValues.toArray(new String[0]);
     }
 
     public DatabaseQueryBuilder() { }

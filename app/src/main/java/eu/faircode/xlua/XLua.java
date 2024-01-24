@@ -148,8 +148,8 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
-                        Log.i(TAG, "INSIDE XPOSED HOOK BEFORE CALL: " + lpparam.packageName + "  p=" + lpparam.processName);
-                        XGlobalCore.executeCall(param, lpparam.packageName);
+                        //Log.i(TAG, "INSIDE XPOSED HOOK BEFORE CALL: " + lpparam.packageName + "  p=" + lpparam.processName);
+                        XSettingBridgeStatic.handeCall(param, lpparam.packageName);
                     }
                 });
 
@@ -159,8 +159,8 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
-                        Log.i(TAG, "INSIDE XPOSED HOOK BEFORE QUERY: " + lpparam.packageName + "  p=" + lpparam.processName);
-                        XGlobalCore.executeQuery(param, lpparam.packageName);
+                        //Log.i(TAG, "INSIDE XPOSED HOOK BEFORE QUERY: " + lpparam.packageName + "  p=" + lpparam.processName);
+                        XSettingBridgeStatic.handleQuery(param, lpparam.packageName);
                     }
                 });
     }

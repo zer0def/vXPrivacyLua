@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.util.LinkedHashMap;
 
 import eu.faircode.xlua.api.objects.IJsonSerial;
+import eu.faircode.xlua.api.objects.xlua.packets.HookPacket;
 import eu.faircode.xlua.utilities.CursorUtil;
 
 public class xHook extends xHookBase implements IJsonSerial, Parcelable {
@@ -23,6 +24,16 @@ public class xHook extends xHookBase implements IJsonSerial, Parcelable {
     public xHook() { }
     public xHook(Parcel in) { fromParcel(in); }
     public xHook(HookDatabaseEntry hookDb) { fromBundle(hookDb.toBundle()); }
+
+    public HookDatabaseEntry toHookDatabase() {
+        try {
+            HookPacket packet = new HookPacket(getId(), toJSON());
+            return packet;
+        }catch (Exception e) {
+            Log.e(TAG, "Error converting xHook to Hook Packet! e=" + e + "\n" + Log.getStackTraceString(e));
+            return null;
+        }
+    }
 
     @Override
     public int describeContents() { return 0; }
@@ -199,11 +210,11 @@ public class xHook extends xHookBase implements IJsonSerial, Parcelable {
     @Override
     public Bundle toBundle() {
         Bundle b = new Bundle();
-        //b.putString("name", this.name);
+        b.putString("id", this.getId());
         try {
             b.putString("definition", toJSON());
         }catch (JSONException e) {
-            Log.e(TAG, "JsonException for Hook:\n" + e + "\n" + Log.getStackTraceString(e));
+            Log.e(TAG, "JsonException for xHook:\n" + e + "\n" + Log.getStackTraceString(e));
         }
 
         return b;

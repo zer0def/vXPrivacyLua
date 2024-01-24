@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import java.util.concurrent.Callable;
 
+import eu.faircode.xlua.BuildConfig;
 import eu.faircode.xlua.XSecurity;
 
 public abstract class QueryCommandHandler {
@@ -17,7 +18,6 @@ public abstract class QueryCommandHandler {
 
     public QueryCommandHandler() { }
     public QueryCommandHandler(String name, boolean requirePermissionCheck) {
-        Log.i("XLua.QueryCommandHandler", "NEW COMMAND QUERY =" + name);
         this.name = name;
         this.requiresPermissionCheck = requirePermissionCheck;
     }
@@ -25,7 +25,7 @@ public abstract class QueryCommandHandler {
     public abstract Cursor handle(QueryPacket commandData) throws Throwable;
 
     public void throwOnPermissionCheck(Context context) {
-        Log.i("XLua.QueryCommandHandler", "CHECKING COMMAND SECURITY name=" + name);
+        if(BuildConfig.DEBUG) Log.i("XLua.QueryCommandHandler", "CHECKING COMMAND SECURITY name=" + name);
         if(!requiresPermissionCheck) XSecurity.checkCaller(context);
     }
     public String getName() { return name; }

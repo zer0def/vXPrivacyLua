@@ -66,6 +66,9 @@ https://t.me/obbedcode
 ### Telegram Discussion Chat
 https://t.me/XPLEXCHAT
 
+### XDA Thread
+https://xdaforums.com/t/xpl-ex-xprivacylua-ex-android-privacy-manager-hooking-manager-extended.4652573/
+
 ### Discord , Nulled (ObbedCode)<br><br>
 
 Images

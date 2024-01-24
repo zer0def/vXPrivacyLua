@@ -9,10 +9,9 @@ import java.util.List;
 import eu.faircode.xlua.XDataBase;
 import eu.faircode.xlua.XGlobalCore;
 import eu.faircode.xlua.api.objects.xlua.setting.xSetting;
-import eu.faircode.xlua.api.objects.xlua.setting.xSettingConversions;
 
 import eu.faircode.xlua.XUtil;
-import eu.faircode.xlua.api.data.XAssignmentData;
+import eu.faircode.xlua.api.objects.XAssignmentDataHelper;
 import eu.faircode.xlua.api.objects.xlua.hook.Assignment;
 import eu.faircode.xlua.database.DatabaseHelperEx;
 import eu.faircode.xlua.database.DatabaseQuerySnake;
@@ -30,7 +29,7 @@ public class XAppDatabase {
         int userid = XUtil.getUserId(uid);
         List<String> collection = XHookProvider.getCollections(db, userid);
         List<String> hookIds = XGlobalCore.getHookIds(packageName, collection);
-        XAssignmentData assignmentData = new XAssignmentData(packageName, uid);
+        XAssignmentDataHelper assignmentData = new XAssignmentDataHelper(packageName, uid);
 
         try {
             if(!db.beginTransaction(true))

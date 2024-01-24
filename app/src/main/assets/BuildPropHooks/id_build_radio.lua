@@ -4,11 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.RADIO")
-    if fake == nil then
-        fake = "M8994F-2.6.36.2.20"
-    end
-
+    local fake = param:getSetting("build.RADIO", "M8994F-2.6.36.2.20")
     param:setResult(fake)
     return true, ret, fake
 end

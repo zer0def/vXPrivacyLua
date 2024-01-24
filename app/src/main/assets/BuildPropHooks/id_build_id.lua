@@ -4,11 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.ID")
-    if fake == nil then
-        fake = "OPM1.171019.011"
-    end
-
+    local fake = param:getSetting("build.ID", "OPM1.171019.011")
     param:setResult(fake)
     return true, ret, fake
 end

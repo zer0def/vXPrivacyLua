@@ -46,9 +46,8 @@ public class VXP extends ContentProvider {
                     " uid=" + android.os.Process.myUid() +
                     " cuid=" + android.os.Binder.getCallingUid());
 
-            return XGlobalCore.vxpCall(getContext(), arg, extras, method);
+            return XSettingBridgeStatic.vxpCall(getContext(), arg, extras, method);
             //return XProvider.call(getContext(), arg, extras);
-            //Tbh im not sure if this will work ? but this is what Im assuming its doing ?
         }
         catch (Throwable ex) {
             Log.e(TAG, Log.getStackTraceString(ex));
@@ -70,12 +69,11 @@ public class VXP extends ContentProvider {
                     " uid=" + android.os.Process.myUid() +
                     " cuid=" + android.os.Binder.getCallingUid());
 
-
             String[] split = projection[0].split("\\.");
             String method = split[0];
             String arg = split[1];
 
-            return XGlobalCore.vxpQuery(getContext(), method, arg, selectionArgs);
+            return XSettingBridgeStatic.vxpCursor(getContext(), arg, selectionArgs, method);
             //return XProvider.query(getContext(), projection[0].split("\\.")[1], selectionArgs);
         } catch (Throwable ex) {
             Log.e(TAG, Log.getStackTraceString(ex));

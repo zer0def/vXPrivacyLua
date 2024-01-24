@@ -1,18 +1,18 @@
-package eu.faircode.xlua.api.data;
+package eu.faircode.xlua.api.objects;
 
 import android.content.ContentValues;
 
 import eu.faircode.xlua.database.DatabaseQuerySnake;
 import eu.faircode.xlua.database.IDataDynamic;
 
-public class XGroupData implements IDataDynamic {
+public class XGroupDataHelper implements IDataDynamic {
     private final String packageName;
     private final int uid;
     private final String uidString;
 
     private DatabaseQuerySnake snake = null;
 
-    public XGroupData(String packageName, int uid) {
+    public XGroupDataHelper(String packageName, int uid) {
         this.packageName = packageName;
         this.uid = uid;
         this.uidString = Integer.toString(uid);

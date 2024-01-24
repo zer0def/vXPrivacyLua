@@ -1,4 +1,4 @@
-package eu.faircode.xlua.api.data;
+package eu.faircode.xlua.api.objects;
 
 //Or have this as the 'base' / low level packet ?
 //Stores nothing but data ..
@@ -16,14 +16,14 @@ import android.content.ContentValues;
 import eu.faircode.xlua.database.DatabaseQuerySnake;
 import eu.faircode.xlua.database.IDataDynamic;
 
-public class XAssignmentData implements IDataDynamic {
+public class XAssignmentDataHelper implements IDataDynamic {
     private String packageName;
     private int uid;
     private String uidString = null;
 
     private DatabaseQuerySnake snake = null;
 
-    public XAssignmentData(String packageName, int uid) {
+    public XAssignmentDataHelper(String packageName, int uid) {
         this.packageName = packageName;
         this.uid = uid;
         this.uidString = Integer.toString(uid);

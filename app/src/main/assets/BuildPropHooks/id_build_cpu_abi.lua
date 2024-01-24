@@ -4,11 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.CPU_ABI")
-    if fake == nil then
-        fake = "armeabi-v7a"
-    end
-
+    local fake = param:getSetting("build.CPU_ABI", "armeabi-v7a")
     param:setResult(fake)
     return true, ret, fake
 end

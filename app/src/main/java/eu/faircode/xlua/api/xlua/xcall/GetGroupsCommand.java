@@ -10,7 +10,7 @@ import eu.faircode.xlua.api.objects.CallPacket;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 public class GetGroupsCommand extends CallCommandHandler {
-    public static PutHookCommand create() { return new PutHookCommand(); };
+    public static GetGroupsCommand create() { return new GetGroupsCommand(); }
     public GetGroupsCommand() {
         name = "getGroups";
         requiresPermissionCheck = false;

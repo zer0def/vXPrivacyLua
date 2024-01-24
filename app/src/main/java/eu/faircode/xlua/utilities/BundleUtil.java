@@ -3,6 +3,7 @@ package eu.faircode.xlua.utilities;
 import android.os.Bundle;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import eu.faircode.xlua.api.objects.ISerial;
@@ -42,17 +43,37 @@ public class BundleUtil {
         return b;
     }
 
-    public static Bundle createSingleString(String keyName, String value) {
+    public static Bundle createSingleString(String keyName, String value) { return createSingleString(keyName, value, true); }
+    public static Bundle createSingleString(String keyName, String value, boolean ignoreNullValue) {
         Bundle b = new Bundle();
-        b.putString(keyName, value == null ? "NULL-VALUE" : value);
+        if(!ignoreNullValue && value == null) b.putString(keyName, "null");
+        else b.putString(keyName, value);
         return b;
     }
 
-    public static List<String> readStringList(Bundle bundle, String keyName) {
+    public static String[] readStringArray(Bundle bundle, String keyName) {
         if(bundle == null || !bundle.containsKey(keyName))
-            return new ArrayList<>();
+            return new String[] { };
 
-        return bundle.getStringArrayList(keyName);
+        return bundle.getStringArray(keyName);
+    }
+
+
+    public static List<String> readStringList(Bundle bundle, String keyName) { return readStringList(bundle, keyName, false); }
+    public static List<String> readStringList(Bundle bundle, String keyName, boolean fromArray) {
+        List<String> elements = new ArrayList<>();
+        if(bundle == null || !bundle.containsKey(keyName))
+            return elements;
+
+        if(fromArray) {
+            String[] arr = bundle.getStringArray(keyName);
+            if(arr != null) Collections.addAll(elements, arr);
+        }else {
+            List<String> copy = bundle.getStringArrayList(keyName);
+            if(copy != null) return copy;
+        }
+
+        return elements;
     }
 
     public static boolean readResultStatus(Bundle bundle) {
@@ -63,6 +84,7 @@ public class BundleUtil {
     public static String readString(Bundle bundle, String keyName) { return readString(bundle, keyName, null); }
     public static String readString(Bundle bundle, String keyName, String defaultValue) {
         if(bundle == null) return defaultValue;
+        if(!bundle.containsKey(keyName)) return defaultValue;
         return bundle.getString(keyName, defaultValue);
     }
 

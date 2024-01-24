@@ -4,11 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.HARDWARE")
-    if fake == nil then
-        fake = "qcom"
-    end
-
+    local fake = param:getSetting("build.HARDWARE", "qcom")
     param:setResult(fake)
     return true, ret, fake
 end

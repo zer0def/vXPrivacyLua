@@ -14,8 +14,8 @@ import eu.faircode.xlua.api.objects.xlua.hook.Assignment;
 import eu.faircode.xlua.api.objects.xlua.hook.xHook;
 import eu.faircode.xlua.database.DatabaseHelperEx;
 import eu.faircode.xlua.database.DatabaseQuerySnake;
-import eu.faircode.xlua.api.data.XAssignmentData;
-import eu.faircode.xlua.api.data.XGroupData;
+import eu.faircode.xlua.api.objects.XAssignmentDataHelper;
+import eu.faircode.xlua.api.objects.XGroupDataHelper;
 import eu.faircode.xlua.hooks.XReport;
 
 public class XHookDatabase {
@@ -48,8 +48,8 @@ public class XHookDatabase {
     public static boolean assignHooks(Context context, List<String> hookIds, String packageName, int uid, boolean delete, boolean kill, XDataBase db) throws Throwable {
         //Assign Hook(s) to a App (package name, uid)
         List<String> groups = new ArrayList<>();
-        XAssignmentData assignmentData = new XAssignmentData(packageName, uid);
-        XGroupData groupData = new XGroupData(packageName, uid);
+        XAssignmentDataHelper assignmentData = new XAssignmentDataHelper(packageName, uid);
+        XGroupDataHelper groupData = new XGroupDataHelper(packageName, uid);
 
         try {
             if(!db.beginTransaction(true))

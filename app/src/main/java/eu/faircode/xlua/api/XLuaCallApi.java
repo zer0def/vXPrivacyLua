@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.os.Process;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import eu.faircode.xlua.BuildConfig;
 import eu.faircode.xlua.XUtil;
 
 import eu.faircode.xlua.api.objects.xlua.packets.HookPacket;
@@ -64,7 +67,12 @@ public class XLuaCallApi {
                         full));
     }
 
-    public static List<String> getGroups(Context context) { return BundleUtil.readStringList(GetGroupsCommand.invoke(context), "groups"); }
+    public static List<String> getGroups(Context context) {
+        return BundleUtil.readStringList(
+                GetGroupsCommand.invoke(context),
+                "groups",
+                true);
+    }
 
     public static SettingPacket getSetting(Context context, Integer userId, String category, String name) {
         SettingPacket setting = new SettingPacket(userId, category, name);
@@ -80,46 +88,35 @@ public class XLuaCallApi {
     public static String getSettingValue(Context context, String name) { return getSettingValue(context,"global", name); }
     public static String getSettingValue(Context context, String category, String name) { return getSettingValue(context, XUtil.getUserId(Process.myUid()), category, name); }
     public static String getSettingValue(Context context, Integer userId, String category, String name) {
-        Log.i(TAG, "[getSettingValue] user=" + userId + "  category=" + category + "  name=" + name);
-        Bundle res = GetSettingCommand.invoke(
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "[getSettingValue] user=" + userId + "  category=" + category + "  name=" + name);
+
+        return BundleUtil.readString(GetSettingCommand.invoke(
                 context,
                 userId,
                 category,
                 name,
-                null);
+                null), "value");
+    }
 
-        if(res == null) {
-            Log.i(TAG, "RESULT IS NULL FROM =" + name);
-            return null;
+    public static List<String> getCollections(Context context) {
+        List<String> collections = new ArrayList<>();
+        String collectionValue = getSettingValue(context, "collection");
+        if(collectionValue == null || collectionValue.isEmpty()) {
+            collections.add("Privacy");
+            collections.add("PrivacyEx");
+            //Should not happen
         }
+        else if(!collectionValue.contains(",")) collections.add(collectionValue);
+        else Collections.addAll(collections, collectionValue.split(","));
 
-        if(!res.containsKey("value")) {
-            Log.i(TAG, "RESULT DOES NOT CONTAIN 'value'   =" + name);
-            return null;
-        }
-
-        Log.i(TAG, "Getting Result Value from setting=" + name);
-
-        String v = res.getString("value");
-        Log.i(TAG, "Got the Value from setting=" + name);
-        Log.i(TAG, "RESULT from setting=" + name + "  is value=" + v);
-
-        return v;
-
-        /*return BundleUtil.readString(
-                GetSettingCommand.invoke(
-                        context,
-                        userId,
-                        category,
-                        name,
-                        null), "value");*/
+        return collections;
     }
 
     public static String getTheme(Context context) {
         String theme = getSettingValue(context, "theme");
-        if(theme == null) {
-            return "dark";
-        }
+        if(theme == null)
+            theme = "dark";
 
         return theme;
     }

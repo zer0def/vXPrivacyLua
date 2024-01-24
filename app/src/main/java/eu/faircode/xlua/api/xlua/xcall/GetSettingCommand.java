@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
+import eu.faircode.xlua.BuildConfig;
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.objects.CallCommandHandler;
 import eu.faircode.xlua.api.objects.CallPacket;
@@ -28,17 +29,16 @@ public class GetSettingCommand extends CallCommandHandler {
         throwOnPermissionCheck(commandData.getContext());
         SettingPacket packet = commandData.read(SettingPacket.class);
 
-        Log.i("XLua.GetSettingCommand", "handler packet=" + packet);
+        if(BuildConfig.DEBUG)
+            Log.i("XLua.GetSettingCommand", "handler packet=" + packet);
 
         if(packet.getValue() != null && packet.getValue().equals("*")) {
-            Log.i("XLua.GetSettingCommand","Hmm we are going big here" );
             return XSettingsDatabase.getSetting(
                     commandData.getDatabase(),
                     packet.getUser(),
                     packet.getCategory(),
                     packet.getName()).toBundle();
         } else {
-            Log.i("XLua.GetSettingCommand", "Value is null is now getting value...");
             return BundleUtil.
                     createSingleString("value",
                             XSettingsDatabase.getSettingValue(

@@ -59,6 +59,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import eu.faircode.xlua.api.XLuaCallApi;
 import eu.faircode.xlua.api.XLuaQueryApi;
+import eu.faircode.xlua.api.objects.xlua.hook.HookDatabaseEntry;
+import eu.faircode.xlua.api.objects.xlua.packets.HookPacket;
+import eu.faircode.xlua.api.xlua.xcall.PutHookCommand;
 import eu.faircode.xlua.utilities.CollectionUtil;
 
 import eu.faircode.xlua.api.objects.xlua.hook.xHook;
@@ -265,63 +268,37 @@ public class FragmentMain extends Fragment {
         @Override
         public DataHolder loadInBackground() {
             Log.i(TAG, "Data loader started");
+
             DataHolder data = new DataHolder();
             try {
-                //Make Sure this is no longer needed
-                //XMockProxyApi.queryGetMockCpuMaps(getContext());
-                //XMockProxyApi.queryGetMockProps(getContext());
-
-                Log.i(TAG, "Getting theme");
-
+                Log.i(TAG, "Getting Theme");
                 data.theme = XLuaCallApi.getTheme(getContext());
-
-                Log.i(TAG, "theme=" + data.theme);
-                //data.theme = XLuaCallCommander.getSettingValue(getContext(), "theme");
-                //if (data.theme == null)
-                //    data.theme = "light";
+                Log.i(TAG, "Theme=" + data.theme);
 
                 // Define hooks
                 if (BuildConfig.DEBUG) {
-                    /*String apk = getContext().getApplicationInfo().publicSourceDir;
-                    List<XHook> hooks = XHook.readHooks(getContext(), apk);
+                    String apk = getContext().getApplicationInfo().publicSourceDir;
+                    List<xHook> hooks = xHook.readHooks(getContext(), apk);
+                    //Have one but that just takes in HookPacket / HookDatabase Entry
                     Log.i(TAG, "Loaded hooks=" + hooks.size());
-                    for (XHook hook : hooks) {
-                        Bundle args = new Bundle();
-                        args.putString("id", hook.getId());
-                        args.putString("definition", hook.toJSON());
-                        getContext().getContentResolver()
-                                .call(XSecurity.getURI(), "xlua", "putHook", args);
-                    }*/
+                    for (xHook hook : hooks) {
+                        HookDatabaseEntry entry = hook.toHookDatabase();
+                        if(entry == null)
+                            continue;
+
+                        PutHookCommand.invoke(getContext(), (HookPacket)entry);
+                    }
                 }
 
-                Log.i(TAG, "Getting Show");
-
-                //                String show = XProvider.getSetting(getContext(), "global", "show");
+                //Get Show
                 String show = XLuaCallApi.getSettingValue(getContext(), "show");
 
-                Log.i(TAG, "show=" + show);
-
-                if (show != null && show.equals("user"))
-                    data.show = AdapterApp.enumShow.user;
-                else if (show != null && show.equals("all"))
-                    data.show = AdapterApp.enumShow.all;
-                else
-                    data.show = AdapterApp.enumShow.icon;
-
-                Log.i(TAG, "Getting Collection");
+                if (show != null && show.equals("user")) data.show = AdapterApp.enumShow.user;
+                else if (show != null && show.equals("all")) data.show = AdapterApp.enumShow.all;
+                else data.show = AdapterApp.enumShow.icon;
 
                 // Get collection
-                String collection = XLuaCallApi.getSettingValue(getContext(), "collection");
-
-                Log.i(TAG, "Get Collection=" + collection);
-
-
-                if (collection == null) data.collection.add("Privacy");
-                else Collections.addAll(data.collection, collection.split(","));
-
-                //if is null then thats fine we will set it ?
-                //so why is it not setting it then ?
-
+                data.collection.addAll(XLuaCallApi.getCollections(getContext()));
 
                 Log.i(TAG, "Getting groups");
                 // Load groups
@@ -339,7 +316,7 @@ public class FragmentMain extends Fragment {
                         data.groups.add(group);
                     }
                 }else {
-                    Log.i(TAG, "groups is null");
+                    Log.i(TAG, "Groups list is null...");
                 }
 
                 final Collator collator = Collator.getInstance(Locale.getDefault());

@@ -4,11 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.PRODUCT")
-    if fake == nil then
-        fake = "marlinex"
-    end
-
+    local fake = param:getSetting("build.PRODUCT", "marlinex")
     param:setResult(fake)
     return true, ret, fake
 end

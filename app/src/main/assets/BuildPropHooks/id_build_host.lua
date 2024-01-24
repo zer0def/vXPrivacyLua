@@ -4,11 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.HOST")
-    if fake == nil then
-        fake = "wpds5.hot.corp.google.com"
-    end
-
+    local fake = param:getSetting("build.HOST", "wpds5.hot.corp.google.com")
     param:setResult(fake)
     return true, ret, fake
 end

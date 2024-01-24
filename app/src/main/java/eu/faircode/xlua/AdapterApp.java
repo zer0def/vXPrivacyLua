@@ -267,44 +267,15 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
         this.dataChanged = (this.hooks.size() != hooks.size());
         for (int i = 0; i < this.hooks.size() && !this.dataChanged; i++) {
             xHook hook = this.hooks.get(i);
-            if(hook == null) {
-                Log.i(TAG, "Hook 1 is null");
-                continue;
-            }
-
             xHook other = hooks.get(i);
-            if(other == null) {
-                Log.i(TAG, "Hook 2 is null");
+            if(hook == null || other == null || hook.getId() == null || other.getId() == null) {
+                Log.e(TAG, "Invalid Hook! index=" + i + " set function for adapter ");
                 continue;
             }
 
-            Log.i(TAG, "hook1=" + hook + "   hook2=" + other);
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "hook1=" + hook + "   hook2=" + other);
 
-            String g1 = hook.getGroup();
-            if(g1 == null) {
-                Log.i(TAG, "Group Hook 1 is null");
-                continue;
-            }
-
-            String g2 = other.getGroup();
-            if(g2 == null)  {
-                Log.i(TAG, "Group Hook 2 is null");
-                continue;
-            }
-
-            String i1 = hook.getId();
-            if(i1 == null) {
-                Log.i(TAG, "ID Hook 1 is null");
-                continue;
-            }
-
-            String i2 = other.getId();
-            if(i2 == null) {
-                Log.i(TAG, "ID Hook 2 is null");
-                continue;
-            }
-
-            //bug can be here .equals
             if (!hook.getGroup().equals(other.getGroup()) || !hook.getId().equals(other.getId()))
                 this.dataChanged = true;
         }
@@ -316,8 +287,6 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
 
         this.collection = collection;
         this.hooks = hooks;
-
-
 
         final Collator collator = Collator.getInstance(Locale.getDefault());
         collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc

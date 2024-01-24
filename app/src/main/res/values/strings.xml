@@ -53,7 +53,7 @@
     <string name="menu_show_rev" translatable="false">Reverse Engineering</string>
     <string name="menu_show_byp" translatable="false">Bypass/Hide</string>
 
-    <string name="menu_props" translatable="false">Prop Values 2.3</string>
+    <string name="menu_props" translatable="false">Prop Values 2.9</string>
     <string name="menu_dark" translatable="false">Dark Mode</string>
     <string name="menu_databse" translatable="false">Database</string>
     <string name="menu_save" translatable="false">Save</string>

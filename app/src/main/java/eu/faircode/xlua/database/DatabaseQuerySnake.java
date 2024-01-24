@@ -8,21 +8,21 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import eu.faircode.xlua.BuildConfig;
+import eu.faircode.xlua.DebugUtil;
 import eu.faircode.xlua.XDataBase;
 import eu.faircode.xlua.api.objects.IDBSerial;
+import eu.faircode.xlua.loggers.DatabaseQueryLogger;
 
 public class DatabaseQuerySnake extends DatabaseQueryBuilder {
     private static final String TAG = "XLua.DatabaseQuerySnake";
 
     private boolean canCompile = true;
-    private boolean isError = false;
     private Exception error = null;
 
     public static DatabaseQuerySnake create() { return new DatabaseQuerySnake();}
     public static DatabaseQuerySnake create(String tableName) { return new DatabaseQuerySnake(null, tableName); }
     public static DatabaseQuerySnake create(XDataBase db, String tableName) {
-        //Dont have sync locks but DO have an option that it creates the table if not exists
-        //Have this so it also accepts a lock object ? to sync with ????
         return new DatabaseQuerySnake(db, tableName);
     }
 
@@ -89,12 +89,18 @@ public class DatabaseQuerySnake extends DatabaseQueryBuilder {
         return this;
     }
 
+    public XDataBase getDatabase() { return db; }
+    public String getOrderBy() { return orderOrFieldName; }
+
     public List<String> getOnlyReturn() {
         for(String s : onlyReturn)
             Log.i(TAG, "onlyReturn=" + s);
 
         return onlyReturn;
     }
+
+    public boolean threwError() { return error != null; }
+    public Exception getError() { return error; }
 
     public Collection<String> queryAsStringList(String columnReturn, boolean cleanUpAfter) {
         if(!canCompile) return null;
@@ -144,7 +150,6 @@ public class DatabaseQuerySnake extends DatabaseQueryBuilder {
             return list;
         }catch (Exception e) {
             error = e;
-            isError = true;
             Log.e(TAG, "Failed to query Cursor as String List! From DB [" + db + "] from Table [" + tableName + "]\n" + e + "\n" + Log.getStackTraceString(e));
             return list;
         } finally {
@@ -168,7 +173,6 @@ public class DatabaseQuerySnake extends DatabaseQueryBuilder {
             }
         }catch (Exception e) {
             error = e;
-            isError = true;
             Log.e(TAG, "Failed to query Cursor as Long! From DB [" + db + "] from Table [" + tableName + "]\n" + e + "\n" + Log.getStackTraceString(e));
         }finally {
             db.readUnlock();
@@ -183,29 +187,25 @@ public class DatabaseQuerySnake extends DatabaseQueryBuilder {
         if(!canCompile) return null;
         canCompile = false;
 
-        //when this returns null it can be an issue i belive we should create a default return that;
         T item = null;
         Cursor c = null;
-
-        Log.i(TAG, "[queryGetFirstAs]  typeClass=" + typeClass.toString());
-        //Something as small we can write small objects to take parts of data
-        //ALL the object needs to do is inherit 'IDatabaseHelper' thats all
         try {
             // Create a new instance of T, we create it first to init a default so its never 'null' assuming the typeClass can be constructed ()
             item = typeClass.newInstance();
             db.readLock();
             c = query();
-
             if(c != null) {
                 if (c.moveToFirst()) {
-                    Log.i(TAG, "FOUND MY FIRST QUERY FOR ONLY");
                     item.fromCursor(c);             // Read data from cursor
                     return item;
                 }
             }
+        }
+        catch (InstantiationException ie) {
+            error = ie;
+            Log.e(TAG, "Your object is messed up via constructor not my fault...");
         }catch (Exception e) {
             error = e;
-            isError = true;
             Log.e(TAG, "Failed to query Cursor! From DB [" + db + "] from Table [" + tableName + "]\n" + e + "\n" + Log.getStackTraceString(e));
         } finally {
             db.readUnlock();
@@ -238,7 +238,6 @@ public class DatabaseQuerySnake extends DatabaseQueryBuilder {
             return items;
         }catch (Exception e) {
             error = e;
-            isError = true;
             Log.e(TAG, "Failed to query Cursor! From DB [" + db + "] from Table [" + tableName + "]\n" + e + "\n" + Log.getStackTraceString(e));
             return items;
         } finally {
@@ -261,7 +260,6 @@ public class DatabaseQuerySnake extends DatabaseQueryBuilder {
             return items;
         }catch (Exception e) {
             error = e;
-            isError = true;
             Log.e(TAG, "Failed to Query from DB [" + db + "] from Table [" + tableName + "] with Selection Args [" + selectionArgsBuilder + "]\n" + e + "\n" + Log.getStackTraceString(e));
             return items;
         }finally {
@@ -299,7 +297,6 @@ public class DatabaseQuerySnake extends DatabaseQueryBuilder {
             return items;
         }catch (Exception e) {
             error = e;
-            isError = true;
             Log.e(TAG, "Failed to Query from DB [" + db + "] from Table [" + tableName + "] with Selection Args [" + selectionArgsBuilder + "]\n" + e + "\n" + Log.getStackTraceString(e));
             return items;
         }finally {
@@ -328,7 +325,6 @@ public class DatabaseQuerySnake extends DatabaseQueryBuilder {
             return items;
         }catch (Exception e) {
             error = e;
-            isError = true;
             Log.e(TAG, "Failed to Query from DB [" + db + "] from Table [" + tableName + "] with Selection Args [" + selectionArgsBuilder + "]\n" + e + "\n" + Log.getStackTraceString(e));
             return items;
         }finally {
@@ -339,29 +335,9 @@ public class DatabaseQuerySnake extends DatabaseQueryBuilder {
     }
 
     public Cursor query() {
-        getSelectionArgs();
-        getSelectionCompareValues();
-        if(!onlyReturn.isEmpty()) {
-            Log.i(TAG, "[1] onlyReturn=" + onlyReturn.get(0));
-            Log.i(TAG, "[2] selection args=" + selectionArgsBuilder.toString());
+        if(DebugUtil.isDebug())
+            DatabaseQueryLogger.logSnakeSnapshot(this, true, true);
 
-            String[] compValues = compareValues.toArray(new String[0]);
-            Log.i(TAG, "[3] selection args=" + Arrays.toString(compValues));
-            Log.i(TAG, "[4] orderField=" + orderOrFieldName);
-            Log.i(TAG, "[5] db=" + db.getName() + " ");
-            Log.i(TAG, "[6] table=" + tableName);
-            Log.i(TAG, "[7] Table Entries Count=" + db.tableEntries(tableName));
-
-            Log.i(TAG, "[8] DB Version=" + db.getDatabase().getVersion());
-
-            Log.i(TAG, "[+] Stack=\n");
-            for(StackTraceElement e : Thread.currentThread().getStackTrace()) {
-                Log.i(TAG, "[] stack=" + e.getClassName() + "::" + e.getMethodName());
-            }
-        }
-
-        //if(!canCompile) return null;
-        //canCompile = false;
         Cursor c = null;
         try {
             String[] columns = onlyReturn.isEmpty() ? null : onlyReturn.toArray(new String[0]);
@@ -381,7 +357,6 @@ public class DatabaseQuerySnake extends DatabaseQueryBuilder {
                     orderOrFieldName);
         }catch (Exception e) {
             error = e;
-            isError = true;
             Log.e(TAG, "Failed to Query from DB [" + db + "] from Table [" + tableName + "] with Selection Args [" + selectionArgsBuilder + "]\n" + e + "\n" + Log.getStackTraceString(e));
         }
 

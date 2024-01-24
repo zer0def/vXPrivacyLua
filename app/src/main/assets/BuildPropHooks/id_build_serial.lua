@@ -4,11 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.SERIAL")
-    if fake == nil then
-        fake = "HT35W1A00476"
-    end
-
+    local fake = param:getSetting("build.SERIAL", "HT35W1A00476")
     param:setResult(fake)
     return true, ret, fake
 end
