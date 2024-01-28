@@ -1,0 +1,112 @@
+[
+  {
+    "collection": "PrivacyEx",
+    "group": "Spoof.Language",
+    "name": "Locale.getCountry",
+    "author": "OBC",
+    "className": "java.util.Locale",
+    "methodName": "getCountry",
+    "parameterTypes": [],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "luaScript": "@spoof_locale_getcountry",
+    "settings": [ "zone.country" ]
+  },
+
+  {
+    "collection": "PrivacyEx",
+    "group": "Spoof.Language",
+    "name": "Locale.getDisplayLanguage",
+    "author": "OBC",
+    "className": "java.util.Locale",
+    "methodName": "getDisplayLanguage",
+    "parameterTypes": [],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "luaScript": "@spoof_locale_getdisplaylanguage",
+    "settings": [ "zone.language" ]
+  },
+
+  {
+    "collection": "PrivacyEx",
+    "group": "Spoof.Language",
+    "name": "Locale.getDisplayName",
+    "author": "OBC",
+    "className": "java.util.Locale",
+    "methodName": "getDisplayName",
+    "parameterTypes": [],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "luaScript": "@spoof_locale_getdisplayname",
+    "settings": [ "zone.language", "zone.country" ]
+  },
+
+  {
+    "collection": "PrivacyEx",
+    "group": "Spoof.Language",
+    "name": "Locale.getISO3Country",
+    "author": "OBC",
+    "className": "java.util.Locale",
+    "methodName": "getISO3Country",
+    "parameterTypes": [],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "luaScript": "@spoof_locale_getiso3country",
+    "settings": [ "zone.isocountry" ]
+  },
+
+  {
+    "collection": "PrivacyEx",
+    "group": "Spoof.Language",
+    "name": "Locale.getISO3Language",
+    "author": "OBC",
+    "className": "java.util.Locale",
+    "methodName": "getISO3Language",
+    "parameterTypes": [],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "luaScript": "@spoof_locale_getiso3language",
+    "settings": [ "zone.isocountry" ]
+  },
+
+  /*{
+    "collection": "PrivacyEx",
+    "group": "Spoof.Language",
+    "name": "Locale.hashCode",
+    "author": "OBC",
+    "className": "java.util.Locale",
+    "methodName": "hashCode",
+    "parameterTypes": [],
+    "returnType": "int",
+    "minSdk": 4,
+    "luaScript": "@spoof_locale_hashcode"
+  },*/
+
+  {
+    "collection": "PrivacyEx",
+    "group": "Spoof.Language",
+    "name": "Locale.toLanguageTag",
+    "author": "OBC",
+    "className": "java.util.Locale",
+    "methodName": "toLanguageTag",
+    "parameterTypes": [],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "luaScript": "@spoof_locale_tolanguagetag",
+    "settings": [ "zone.langtag" ]
+  },
+
+  {
+    "collection": "PrivacyEx",
+    "group": "Spoof.Language",
+    "name": "Locale.toString",
+    "author": "OBC",
+    "className": "java.util.Locale",
+    "methodName": "toString",
+    "parameterTypes": [],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "luaScript": "@spoof_locale_tostring",
+    "settings": [ "zone.isocountry" ]
+  }
+]

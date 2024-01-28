@@ -8,6 +8,8 @@ import android.os.Environment;
 import android.os.Process;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.util.Map;
 import java.util.UUID;
@@ -18,7 +20,7 @@ import eu.faircode.xlua.database.DatabaseQuerySnake;
 import eu.faircode.xlua.utilities.CursorUtil;
 import eu.faircode.xlua.utilities.DatabasePathUtil;
 import eu.faircode.xlua.utilities.StringUtil;
-
+import eu.faircode.xlua.rootbox.xUnsafeApi;
 public class XDataBase {
     private static final String TAG = "XLua.Database.SqliteWrapper";
 
@@ -32,15 +34,45 @@ public class XDataBase {
     public XDataBase(String dbname, Context context) {
         this(dbname, context, true);
     }
+
     public XDataBase(String dbname, Context context, boolean setPerms) {
+        this(dbname, context, setPerms, false);
+    }
+
+    public XDataBase(String dbname, Context context, boolean setPerms, boolean newDir) {
         if(!dbname.endsWith(".db"))
             dbname += ".db";
 
         name = dbname;
-        path = DatabasePathUtil.getDatabaseDirectory(context);
+
+        /*if(newDir) {
+            Log.w(TAG, "Is New Dir Flag");
+            if(!DatabasePathUtil.ensureDirectoryChangeEx(context)) {
+                Log.w(TAG, "Ensured Failed");
+                path = DatabasePathUtil.getOriginalDataLocationString(context);
+            }else {
+                Log.w(TAG, "Ensured");
+                path = DatabasePathUtil.getDatabaseDirectoryEx(context).getAbsolutePath();
+            }
+         }else {
+            path = DatabasePathUtil.getOriginalDataLocationString(context);
+        }*/
+
+
+        Log.w(TAG, "Is New Dir Flag");
+        if(!DatabasePathUtil.ensureDirectoryChangeEx(context)) {
+            Log.w(TAG, "Ensured Failed");
+            path = DatabasePathUtil.getOriginalDataLocationString(context);
+        }else {
+            Log.w(TAG, "Ensured");
+            path = DatabasePathUtil.getDatabaseDirectoryEx(context).getAbsolutePath();
+        }
+
         dbFile = new File(path + File.separator + name);
 
-        Log.i(TAG, "DB File=" + dbFile);
+        xUnsafeApi.chown(dbFile.getAbsolutePath(), Process.SYSTEM_UID, Process.SYSTEM_UID);
+
+        Log.i(TAG, "DB File=" + dbFile.toString());
 
         if(setPerms)
             setPermissions(dbFile);
@@ -311,27 +343,41 @@ public class XDataBase {
             File dbpfile = dbFile.getParentFile();
             Log.i(TAG, "mkdirs::" + dbpfile.getPath() + " " + dbpfile.getName());
 
-            if(!dbFile.exists())
-                dbpfile.mkdirs();
+            dbpfile.mkdirs();
 
             this.open();
-            setPerms(dbFile);
+
+            Log.i(TAG, "Setting File Permissions (0770) SYSTEM_UID For XLUA Directory");
+
+            // Set database file permissions
+            // Owner: rwx (system)
+            // Group: rwx (system)
+            // World: ---
+            XUtil.setPermissions(dbpfile.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
+            File[] files = dbpfile.listFiles();
+            if (files != null)
+                for (File file : files)
+                    XUtil.setPermissions(file.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
         }
     }
 
     public static void setPerms(File directoryOrFile) {
+        //if(!xUnsafeApi.isSafe(directoryOrFile))
+        //    return;
+
         Log.i(TAG, "Setting File Permissions (0770) SYSTEM_UID For XLUA Directory for UID: " + Process.SYSTEM_UID);
 
+        //Class<?> fileUtils = Class.forName("android.os.FileUtils");
         // Set database file permissions
         // Owner: rwx (system)
         // Group: rwx (system)
         // World: ---
         //Process.myUid()
-        XUtil.setPermissions(directoryOrFile.getAbsolutePath(), 0777, Process.SYSTEM_UID, Process.SYSTEM_UID);
+        XUtil.setPermissions(directoryOrFile.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
         File[] files = directoryOrFile.listFiles();
         if (files != null)
             for (File file : files)
-                XUtil.setPermissions(file.getAbsolutePath(), 0777, Process.SYSTEM_UID, Process.SYSTEM_UID);
+                XUtil.setPermissions(file.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
 
         Log.i(TAG, "Finished setting permissions for: " + directoryOrFile.getPath());
     }
@@ -367,5 +413,11 @@ public class XDataBase {
         String fullQuery = top + mid + ");";
         Log.i(TAG, "query=" + fullQuery);
         return fullQuery;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getName() + " path=" + getPath() + " isOpen=" + isOpen(false);
     }
 }

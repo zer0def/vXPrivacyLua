@@ -48,10 +48,10 @@ public class XLuaUpdater {
 
         dbLock.writeLock().lock();*/
         SQLiteDatabase _db = db.getDatabase();
-        db.writeLock();
+        //db.writeLock();
 
-        int v = _db.getVersion();
-        Log.i(TAG, "DB VERSION=" + v);
+        //int v = _db.getVersion();
+        //Log.i(TAG, "DB VERSION=" + v);
 
         try {
             // Upgrade database if needed
@@ -193,11 +193,12 @@ public class XLuaUpdater {
             //return _db;
         } catch (Throwable ex) {
             Log.i(TAG, "DB EXCEPTION FUCK=" + ex + "\n" + Log.getStackTraceString(ex));
-            _db.close();
+            //_db.close();
             throw ex;
         } finally {
             //dbLock.writeLock().unlock();
-            db.writeUnlock();
+
+            //db.writeUnlock(); first lock is the bug
         }
     }
 

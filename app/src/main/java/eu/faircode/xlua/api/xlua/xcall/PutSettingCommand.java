@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
+import eu.faircode.xlua.XGlobalCore;
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.objects.CallCommandHandler;
 import eu.faircode.xlua.api.objects.CallPacket;
@@ -30,6 +31,13 @@ public class PutSettingCommand extends CallCommandHandler {
         Log.i(TAG, "[putSetting][SettingPacket=]\n" + id);
 
         boolean result = XSettingsDatabase.putSetting(commandData.getDatabase(), packet);
+
+        if(packet.getName() != null && packet.getName().equals("theme")) {
+            Log.w(TAG, "HJEY WE ARE GOING TO INVOKE A NEW INSTANCE");
+            XGlobalCore.reInitDatabase(commandData.getContext());
+            // if(packet.getValue() != null && packet.getValue().equals("dark"))
+            //    XGlobalCore.reInitDatabase(commandData.getContext());
+        }
 
         Log.i(TAG, "[putSetting][result=" + result + "]\n" + id);
 

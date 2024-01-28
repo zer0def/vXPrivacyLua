@@ -67,49 +67,70 @@ public class XGlobalCore {
 
     private static int att = 0;
 
+    public static void reInitDatabase(Context context) {
+        synchronized (mockLock) {
+            if(xMock_db != null) {
+                if(!xMock_db.getPath().contains("xplex")) {
+                    Log.w(TAG, "DOES NOT CONTAIN XPLEX");
+                    //xLua_db.writeUnlock();
+                    //xLua_db.readUnlock();
+                    xMock_db.close();
+                    xMock_db = null;
+                    //att++;
+                }
+            }
+        }
+
+        synchronized (hookLock) {
+            if(xLua_db != null) {
+                if(!xLua_db.getPath().contains("xplex")) {
+                    Log.w(TAG, "DOES NOT CONTAIN XPLEX");
+                    xLua_db.close();
+                    xLua_db = null;
+                    hooks.clear();
+                    //att++;
+                }
+            }
+        }
+
+        checkDatabases(context, true);
+    }
     public static void checkDatabases(Context context) {
+        checkDatabases(context, false);
+    }
+
+    public static void checkDatabases(Context context, boolean newDir) {
+        //XSecurity.TestFunctions();
         if(DebugUtil.isDebug()) Log.i(TAG, "Checking Databases!");
         try {
             synchronized (mockLock) {
-                if(xMock_db != null && att < 8) {
-                    if(xMock_db.getPath().contains("xplex")) {
-                        xMock_db.close();
-                        xMock_db = null;
-                        att++;
-                    }
-                }
 
                 if(xMock_db == null) {
                     Log.i(TAG, "XMock Database is null, initializing... path=");
-                    xMock_db = new XDataBase(DB_NAME_MOCK, context);
+                    xMock_db = new XDataBase(DB_NAME_MOCK, context, true, newDir);
 
                     Log.i(TAG, "Checking XMock Database Tables");
-                    if(xMock_db.tableEntries(MockCpu.Table.name) < 1)
-                        XMockCpuProvider.initCache(context, xMock_db);
-                    if(xMock_db.tableEntries(MockProp.Table.name) < 1)
-                        XMockPropDatabase.getMockProps(context, xMock_db);
+                    //if(xMock_db.tableEntries(MockCpu.Table.name) < 1)
+                    //    XMockCpuProvider.initCache(context, xMock_db);
+                    //if(xMock_db.tableEntries(MockProp.Table.name) < 1)
+                    //    XMockPropDatabase.getMockProps(context, xMock_db);
                 }else if(DebugUtil.isDebug()) {
-                    Log.i(TAG , "XMock Database is not null... db=" + xMock_db);
+                    Log.i(TAG , "XMock Database is db=" + xMock_db);
 
                 }
-
             }
 
             //add to String to xDatabase
             synchronized (hookLock) {
-                if(xLua_db != null && att < 8) {
-                    if(xLua_db.getPath().contains("xplex")) {
-                        xLua_db.close();
-                        xLua_db = null;
-                        hooks.clear();
-                        att++;
-                    }
-                }
-
                 if(xLua_db == null) {
                     Log.i(TAG, "XLua Database is null, initializing... path=");
-                    xLua_db = new XDataBase(DB_NAME_LUA, context);
-                    XLuaUpdater.checkForUpdate(xLua_db);
+                    xLua_db = new XDataBase(DB_NAME_LUA, context, true, newDir);
+                    try {
+                        if(!xLua_db.isOpen(true))
+                            XLuaUpdater.checkForUpdate(xLua_db);
+                    }catch (Exception e) {
+                        Log.e(TAG, "Failed to check for update: " + e);
+                    }
                 }else if(DebugUtil.isDebug())
                     Log.i(TAG , "XLua Database is not null... db=" + xLua_db);
 

@@ -1,0 +1,43 @@
+[
+  {
+    "collection": "PrivacyEx",
+    "group": "Spoof.TimeZone",
+    "name": "TimeZone.getDefault",
+    "author": "OBC",
+    "className": "java.util.TimeZone",
+    "methodName": "getDefault",
+    "parameterTypes": [],
+    "returnType": "java.util.TimeZone",
+    "minSdk": 4,
+    "luaScript": "@spoof_timezone_getdefault",
+    "settings": [ "zone.tzshort" ]
+  },
+
+  {
+    "collection": "PrivacyEx",
+    "group": "Spoof.TimeZone",
+    "name": "TimeZone.getID",
+    "author": "OBC",
+    "className": "java.util.TimeZone",
+    "methodName": "getID",
+    "parameterTypes": [],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "luaScript": "@spoof_timezone_getid",
+    "settings": [ "zone.displayname" ]
+  },
+
+  {
+    "collection": "PrivacyEx",
+    "group": "Spoof.TimeZone",
+    "name": "Calendar.getTimeZone",
+    "author": "OBC",
+    "className": "java.util.Calendar",
+    "methodName": "getTimeZone",
+    "parameterTypes": [],
+    "returnType": "java.util.TimeZone",
+    "minSdk": 4,
+    "luaScript": "@spoof_calendar_gettimezone",
+    "settings": [ "zone.timezoneid" ]
+  }
+]

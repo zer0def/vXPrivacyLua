@@ -2,6 +2,7 @@ package eu.faircode.xlua.utilities;
 
 import android.content.Context;
 import android.os.Environment;
+import android.os.Process;
 import android.util.Log;
 
 import java.io.File;
@@ -10,12 +11,79 @@ import java.util.UUID;
 
 import eu.faircode.xlua.XDataBase;
 import eu.faircode.xlua.XposedUtil;
+import eu.faircode.xlua.rootbox.xUnsafeApi;
 
 public class DatabasePathUtil {
     private static final String TAG = "XLua.DatabasePathUtil";
     //private static String lastKnownPath = null;
     //private static final String NEW_PATH = "/da"
     //make a function to ensure not alot of copies ? find what has all the files
+
+    public static boolean ensureDirectoryChangeEx(Context context) {
+        if (context != null && XposedUtil.isVirtualXposed())
+            return true;
+
+        Log.i(TAG, "ensureDirectoryChangeEx");
+        String originalDirectory = getOriginalDataLocationString(null);
+        Log.i(TAG, "Ensuring Directory does not exist: " + originalDirectory);
+
+        File oDir = new File(originalDirectory);
+        if(oDir.exists()) {
+            Log.i(TAG, "Found the original Directory updating... " + originalDirectory);
+            Log.i(TAG, "Do note please as the USER assure there are no 'new' dirs except for the ones made by this application!");
+
+            if (getDatabaseDirectoryEx(context) == null) {
+                    String newDir = Environment.getDataDirectory() +
+                            File.separator +
+                            "system" +
+                            File.separator +
+                            "xplex-" + UUID.randomUUID().toString();//"hjfhJKHSkjhsjj";//UUID.randomUUID().toString();
+
+                    Log.i(TAG, "New Directory! =" + newDir);
+
+                    File nDir = new File(newDir);
+
+                if (!xUnsafeApi.copyDirectoryTo(oDir, nDir, true, true)) {
+                    Log.e(TAG, "Failed to Copy over the Database Files to the new Directory! new dir=" + newDir);
+                    return false;
+                }
+            }
+
+            if (!xUnsafeApi.delete(oDir, true)) {
+                Log.w(TAG, "canRead=" + oDir.canRead() + "  canWrite=" + oDir.canWrite());
+                xUnsafeApi.setPermissionsNuke(oDir, xUnsafeApi.CHMOD_OWNER_ALL, Process.SYSTEM_UID, Process.SYSTEM_UID, true, true);
+                Log.w(TAG, "canRead=" + oDir.canRead() + "  canWrite=" + oDir.canWrite());
+                Log.w(TAG, "Odd it failed to delete the old directory but copied over the filed so when you get time delete it pls! " + originalDirectory);
+                xUnsafeApi.deleteDirectory(oDir, true);
+
+                //if(!xUnsafeApi.delete(oDir, true)) {
+                //    Log.w(TAG, "Odd it failed to delete the old directory but copied over the filed so when you get time delete it pls AGAINNNNN! " + originalDirectory);
+                //}
+            }
+        } else {
+            if (getDatabaseDirectoryEx(context) == null) {
+                String newDir = Environment.getDataDirectory() +
+                        File.separator +
+                        "system" +
+                        File.separator +
+                        "xplex-" + "hjfhJKHSkjhsjj";//UUID.randomUUID().toString();
+
+                Log.i(TAG, "New Directory! =" + newDir);
+
+                File nDir = new File(newDir);
+                xUnsafeApi.mkdirs(nDir, true);
+            }
+        }
+
+        return true;
+    }
+
+    public static File getDatabaseDirectoryEx(Context context) {
+        if (context != null && XposedUtil.isVirtualXposed())
+            return context.getFilesDir();
+
+        return xUnsafeApi.getFirstDirectoryNameLike(Environment.getDataDirectory() + File.separator + "system", "xplex-");
+    }
 
     public static String ensureDirectoryChange() {
         Log.i(TAG, "ensureDirectoryChange");
@@ -76,7 +144,7 @@ public class DatabasePathUtil {
                         }
                     }
 
-                    //XDataBase.setPerms(nDir);
+                    XDataBase.setPerms(nDir);
                     return newDir;
                 }
             }
@@ -173,6 +241,7 @@ public class DatabasePathUtil {
                     "xlua";
         }
     }
+
 
     public static String getDefaultLocationString(Context context) {
         if (context != null && XposedUtil.isVirtualXposed()) {

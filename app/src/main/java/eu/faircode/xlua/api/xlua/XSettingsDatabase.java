@@ -44,6 +44,20 @@ public class XSettingsDatabase {
         return result;
     }
 
+    public static boolean putSetting(Context context, int user, String name, String value, boolean kill, XDataBase db) throws Throwable {
+        Log.i(TAG, "[putSetting] " + name);
+
+        xSetting setting = new xSetting(user, "something", name, value);
+
+        boolean result =
+                DatabaseHelperEx.insertItem(db, xSetting.Table.name, setting);
+
+        if (!result && kill)
+            XAppProvider.forceStop(context, setting.getCategory(), setting.getUser());
+
+        return result;
+    }
+
     public static boolean putSetting(Context context, xSetting setting, boolean kill, XDataBase db) throws Throwable {
         Log.i(TAG, "[putSetting] " + setting);
 
