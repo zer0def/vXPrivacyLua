@@ -44,16 +44,21 @@ public class XSettingsDatabase {
         return result;
     }
 
-    public static boolean putSetting(Context context, int user, String name, String value, boolean kill, XDataBase db) throws Throwable {
-        Log.i(TAG, "[putSetting] " + name);
-
-        xSetting setting = new xSetting(user, "something", name, value);
-
+    public static boolean putSetting(Context context, String name, String value, boolean kill, XDataBase db) { return putSetting(context, 0, name, value, kill, db); }
+    public static boolean putSetting(Context context, int user, String name, String value, boolean kill, XDataBase db) { return putSetting(context, user, "global", name, value, kill, db); }
+    public static boolean putSetting(Context context, int user, String category, String name, String value, boolean kill, XDataBase db) {
         boolean result =
-                DatabaseHelperEx.insertItem(db, xSetting.Table.name, setting);
-
-        if (!result && kill)
-            XAppProvider.forceStop(context, setting.getCategory(), setting.getUser());
+                DatabaseHelperEx.insertItem(
+                        db,
+                        xSetting.Table.name,
+                        xSetting.create(user, category, name, value));
+        if (!result && kill) {
+            try {
+                XAppProvider.forceStop(context, category, user);
+            }catch (Throwable e) {
+                Log.e(TAG, "Failed to Kill user=" + user + "\n" + e);
+            }
+        }
 
         return result;
     }

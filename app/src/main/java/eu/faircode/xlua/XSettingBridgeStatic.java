@@ -89,11 +89,8 @@ public class XSettingBridgeStatic {
             if(DebugUtil.isDebug())
                 Log.i(TAG , "call package=" + packageName + " method=" + method + " arg=" + arg);
 
-            if(arg.equals("getVersion"))
-                param.setResult(BundleUtil.createSingleInt("version", XLua.version));
-            else
-                param.setResult(service.executeCall(context, method, arg, extras, packageName));
-
+            if(arg.equals("getVersion")) param.setResult(BundleUtil.createSingleInt("version", XLua.version));
+            else param.setResult(service.executeCall(context, method, arg, extras, packageName));
         }catch (Exception e) {
             Log.e(TAG, "Call Error: \n" + e);
         }

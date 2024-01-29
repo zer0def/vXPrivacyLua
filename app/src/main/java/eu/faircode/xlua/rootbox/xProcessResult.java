@@ -37,6 +37,7 @@ public class xProcessResult {
     public xProcessResult(InputStream resultOutput, InputStream errorOutput, int exitValue, String command) {
         if(!(resultOutput == null && errorOutput == null)) {
             outException = false;
+            this.command = command;
 
             StringBuilder inpSb = new StringBuilder();
             inpSb.append("exec[");

@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Samsung Galaxy Note 9",
+    "model": "SM-N960U",
+    "manufacturer": "Samsung",
+    "carrier": "N/A",
+    "settings": {
+      "build.BOARD": "sdm845",                  //[Aida64][System] Board
+      "build.BOOTLOADER": "N960USQU2CSI1",      //[Aida64][Android] Bootloader
+      "build.BRAND": "samsung",                 //[Aida64][System] Brand
+      "build.CODENAME": "Crown",                //[Aida64][System] Device Codename
+      "build.DEVICE": "crownqItesq",            //[Aida64][System] Device
+      "build.DISPLAY": "PPR1.180610.011.N960USQU2CSI1", //[Aida64][Android] Build ID
+      "build.FINGERPRINT": "samsung/crownqItesq/crownqItesq:9/PPR1.180610.011/N960USQU2CSI1:user/release-keys", //[Android] Fingerprint
+      "build.HARDWARE" : "qcom",                //[Aida64][System] Hardware
+      "build.HOST": "SWDH7920",                 //[com.ghuman.apps.batterynotifier][Device Info][Device] Host
+      "build.ID": "PPE1.180610.011",            //[Aida64][Android] ID
+      "build.INCREMENTAL": "N960USQU2CSI1",     //[Aida64][Android] Incremental
+      "build.MANUFACTURER": "samsung",          //[Aida64][System] Manufacturer
+      "build.MODEL": "SM-N960U",                //[Aida64][System] Model
+      "build.PRODUCT": "crownqItesq",           //[Aida64][System] Product
+      "build.RADIO": "unknown",                 //NA
+      "build.RELEASE": "9",                     //[Aida64][Android] Android Version
+      "build.SECURITY_PATCH" : "2019-09-01",    //[Aida64][Android] Android Security Patch Level
+      "build.SERIAL": "RF8K81K25RW",            //[Aida64][System] Serial
+      "build.SOC_MODEL": "Qualcomm",            //[ru.andr7e.deviceinfohw][Device Info HW][SOC] Model
+      "build.TAGS": "release-keys",             //[Aida64][Android] Tags
+      "build.TIME": "1609459200000",            //Unix Epoch Time Stamp
+      "build.TYPE": "user",                     //[Aida64][Android] Type
+      "build.USER": "dpi",                      //[ru.andr7e.deviceinfohw][Device Info HW][SYSTEM] Builder (before the '@' symbol)
+
+      "memory.total": "8",                      //8GB
+      "memory.available": "7",                  //7GB
+
+      "buid.CPU_ABI": "arm64-v8a",              //NA
+      "buid.CPU_ABI2": "",                      //NA
+
+      "cpu.processor_count": "8",
+
+      "cpu.sysname": "Linux",                   //Termux "uname -a"
+      "cpu.nodename": "localhost",              //Termux "uname -a"
+      "cpu.release": "4.9.112-16352588",        //[ru.andr7e.deviceinfohw][Device Info HW][GENERAL] Kernel (before the '#' symbol)
+      "cpu.version": "#2 SMP PREEMPT Tue Sep 3 14:02:52 KST 2019", //[ru.andr7e.deviceinfohw][Device Info HW][GENERAL] Kernel (begining '#' symbol)
+      "cpu.machine": "aarch64"                 //Termux "uname -a" or [ru.andr7e.deviceinfohw][Device Info HW][SOC] Machine
+    }
+  }
+]
+

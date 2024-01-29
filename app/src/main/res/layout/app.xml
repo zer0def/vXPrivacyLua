@@ -1,11 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="6dp"
     android:paddingBottom="6dp">
+
+    <Spinner
+        android:id="@+id/spPhoneConfig"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/btApplyPhoneConfig"
+        app:layout_constraintStart_toStartOf="@+id/cbForceStop"
+        app:layout_constraintTop_toBottomOf="@+id/cbForceStop" />
+
+    <Button
+        android:id="@+id/btApplyPhoneConfig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apply Phone Config    "
+        app:layout_constraintBottom_toBottomOf="@+id/spPhoneConfig"
+        app:layout_constraintEnd_toEndOf="@+id/cbAssigned"
+        app:layout_constraintTop_toTopOf="@+id/spPhoneConfig" />
+
+    <Spinner
+        android:id="@+id/spUniqueIdConfig"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/btApplyUniqueIdConfig"
+        app:layout_constraintStart_toStartOf="@+id/spPhoneConfig"
+        app:layout_constraintTop_toBottomOf="@+id/spPhoneConfig" />
+
+    <Button
+        android:id="@+id/btApplyUniqueIdConfig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apply Unique Config"
+        app:layout_constraintBottom_toBottomOf="@+id/spUniqueIdConfig"
+        app:layout_constraintEnd_toEndOf="@+id/btApplyPhoneConfig"
+        app:layout_constraintTop_toTopOf="@+id/spUniqueIdConfig" />
+
+
+    <Spinner
+        android:id="@+id/spCarrierConfig"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/btApplyCarrierIdConfig"
+        app:layout_constraintStart_toStartOf="@+id/spPhoneConfig"
+        app:layout_constraintTop_toBottomOf="@+id/spUniqueIdConfig" />
+
+    <Button
+        android:id="@+id/btApplyCarrierIdConfig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apply Carrier Config"
+        app:layout_constraintBottom_toBottomOf="@+id/spCarrierConfig"
+        app:layout_constraintEnd_toEndOf="@+id/btApplyUniqueIdConfig"
+        app:layout_constraintTop_toTopOf="@+id/spCarrierConfig" />
 
     <ImageView
         android:id="@+id/ivExpander"
@@ -28,6 +87,7 @@
         android:src="@mipmap/ic_launcher"
         app:layout_constraintStart_toEndOf="@id/ivExpander"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/tvLabel"
@@ -138,16 +198,15 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGroup"
-        android:layout_width="0dp"
+        android:layout_width="411dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cbForceStop" />
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/spCarrierConfig" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/grpExpanded"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:constraint_referenced_ids="cbForceStop,rvGroup" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

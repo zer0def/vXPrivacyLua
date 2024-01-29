@@ -26,7 +26,7 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_telephony_getsimstate",
-    "settings":[ "phone.simstatus" ]
+    "settings":[ "phone.simstate" ]
   },
 
   {
@@ -48,7 +48,7 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_telephony_getdatastate",
-    "settings":[ "phone.datastatus" ]
+    "settings":[ "phone.datastate" ]
   },
 
   //
@@ -94,8 +94,8 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_telephony_getdeviceid"
-    //"settings":[ "imei", "meid" ]
+    "luaScript": "@id_telephony_getdeviceid",
+    "settings":[ "value.imei", "value.meid" ]
   },
   {
     "builtin": false,
@@ -115,8 +115,8 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_telephony_getdeviceid"
-    //"settings":[ "imei", "meid" ]
+    "luaScript": "@id_telephony_getdeviceid",
+    "settings":[ "value.imei", "value.meid" ]
   },
   {
     "builtin": false,
@@ -156,7 +156,8 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_telephony_getimei"
+    "luaScript": "@id_telephony_getimei",
+    "settings":[ "value.imei" ]
   },
   {
     "builtin": false,
@@ -176,7 +177,8 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_telephony_getimei"
+    "luaScript": "@id_telephony_getimei",
+    "settings":[ "value.imei" ]
   },
 
   {
@@ -304,7 +306,29 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_telephony_subscriberid",
-    "settings":[ "phone.subscriberid" ]
+    "settings":[ "phone.mcc", "phone.mnc", "phone.msin", "phone.subscriberid" ]
+  },
+
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "ID.Telephony",
+    "name": "TelephonyManager.getPhoneType",
+    "author": "OBC",
+    "className": "android.telephony.TelephonyManager",
+    "methodName": "getPhoneType",
+    "parameterTypes": [ ],
+    "returnType": "int",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": " ",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_telephony_getphonetype",
+    "settings":[ "phone.type" ]
   },
 
   {

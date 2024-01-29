@@ -32,10 +32,14 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.DecodeFormat;
@@ -85,6 +89,8 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
     private List<xApp> filtered = new ArrayList<>();
     private Map<String, Boolean> expanded = new HashMap<>();
 
+    private ArrayAdapter<XUiConfig> spAdapterPhoneConfig;
+
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -103,6 +109,16 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
         final RecyclerView rvGroup;
         final Group grpExpanded;
 
+        final Spinner spPhoneConfig;
+        final Button btApplyPhoneConfig;
+
+
+        final Spinner spUniqueConfig;
+        final Button btApplyUniqueConfig;
+
+        final Spinner spCarrierConfig;
+        final Button btApplyCarrierCondifg;
+
         final AdapterGroup adapter;
 
         ViewHolder(View itemView) {
@@ -119,6 +135,65 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
             tvAndroid = itemView.findViewById(R.id.tvAndroid);
             cbAssigned = itemView.findViewById(R.id.cbAssigned);
             cbForceStop = itemView.findViewById(R.id.cbForceStop);
+
+            spPhoneConfig = itemView.findViewById(R.id.spPhoneConfig);
+            btApplyPhoneConfig = itemView.findViewById(R.id.btApplyPhoneConfig);
+
+            spUniqueConfig = itemView.findViewById(R.id.spUniqueIdConfig);
+            btApplyUniqueConfig = itemView.findViewById(R.id.btApplyUniqueIdConfig);
+
+            spCarrierConfig = itemView.findViewById(R.id.spCarrierConfig);
+            btApplyCarrierCondifg = itemView.findViewById(R.id.btApplyCarrierIdConfig);
+
+
+            spAdapterPhoneConfig = new ArrayAdapter<>(itemView.getContext(), android.R.layout.simple_spinner_item);
+            spAdapterPhoneConfig.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            /*XUiConfig con1 = new XUiConfig();
+            con1.name = "NONE";
+
+            XUiConfig con2 = new XUiConfig();
+            con2.name = "Cool";
+
+            List<XUiConfig> confs = new ArrayList<>();
+            confs.add(con1);
+            confs.add(con2);
+            spAdapterPhoneConfig.addAll(confs);*/
+
+            spPhoneConfig.setTag(null);
+            spPhoneConfig.setAdapter(spAdapterPhoneConfig);
+            spCarrierConfig.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Log.i(TAG, "COOOL SELECTED");
+                    updateSelection();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                    updateSelection();
+                }
+
+                private void updateSelection() {
+                    Log.i(TAG, "COOOL SELECTED2");
+
+                    XUiConfig conf = (XUiConfig) spPhoneConfig.getSelectedItem();
+                    spPhoneConfig.setTag(conf);
+
+                    /*XUiGroup selected = (XUiGroup) spGroup.getSelectedItem();
+                    String group = (selected == null ? null : selected.name);
+
+                    if (group == null ? spGroup.getTag() != null : !group.equals(spGroup.getTag())) {
+                        Log.i(TAG, "Select group=" + group);
+                        spGroup.setTag(group);
+                        rvAdapter.setGroup(group);
+                    }
+
+                    tvRestrict.setVisibility(group == null ? View.VISIBLE : View.GONE);
+                    btnRestrict.setVisibility(group == null ? View.INVISIBLE : View.VISIBLE);*/
+                }
+            });
+
 
             rvGroup = itemView.findViewById(R.id.rvGroup);
             rvGroup.setHasFixedSize(true);
@@ -249,6 +324,27 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
             ivExpander.setImageLevel(isExpanded ? 1 : 0);
             ivExpander.setVisibility(group == null ? View.VISIBLE : View.INVISIBLE);
             grpExpanded.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+            spPhoneConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+            btApplyPhoneConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+            spUniqueConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+            btApplyUniqueConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+            spCarrierConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+            btApplyCarrierCondifg.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+            /*spAdapterPhoneConfig.clear();
+            XUiConfig con1 = new XUiConfig();
+            con1.name = "NONE";
+
+            XUiConfig con2 = new XUiConfig();
+            con2.name = "Cool";
+
+            List<XUiConfig> confs = new ArrayList<>();
+            confs.add(con1);
+            confs.add(con2);
+            spAdapterPhoneConfig.addAll(confs);*/
         }
     }
 
@@ -261,6 +357,13 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
         iconSize = Math.round(height * context.getResources().getDisplayMetrics().density + 0.5f);
 
         setHasStableIds(true);
+    }
+
+    void setConfigs(List<XUiConfig> configs) {
+        if(spAdapterPhoneConfig != null) {
+            spAdapterPhoneConfig.clear();
+            spAdapterPhoneConfig.addAll(configs);
+        }
     }
 
     void set(List<String> collection, List<xHook> hooks, List<xApp> apps) {

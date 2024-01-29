@@ -11,7 +11,6 @@ import eu.faircode.xlua.database.DatabaseHelperEx;
 import eu.faircode.xlua.database.DatabaseQuerySnake;
 
 public class XMockPropDatabase {
-    private static final String TAG = "XLua.XMockPropProvider";
     private static final int COUNT = 66;
     private static final String JSON = "props.json";
 

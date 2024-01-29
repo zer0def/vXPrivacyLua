@@ -28,6 +28,7 @@ import eu.faircode.xlua.api.objects.xmock.cpu.MockCpu;
 import eu.faircode.xlua.api.objects.xmock.prop.MockProp;
 import eu.faircode.xlua.api.xmock.XMockCpuDatabase;
 import eu.faircode.xlua.api.xmock.XMockCpuProvider;
+import eu.faircode.xlua.api.xmock.XMockDatabaseHelp;
 import eu.faircode.xlua.api.xmock.XMockPropDatabase;
 import eu.faircode.xlua.database.DatabaseQuerySnake;
 import eu.faircode.xlua.api.xlua.XHookProvider;
@@ -104,19 +105,12 @@ public class XGlobalCore {
         if(DebugUtil.isDebug()) Log.i(TAG, "Checking Databases!");
         try {
             synchronized (mockLock) {
-
                 if(xMock_db == null) {
                     Log.i(TAG, "XMock Database is null, initializing... path=");
-                    xMock_db = new XDataBase(DB_NAME_MOCK, context, true, newDir);
-
-                    Log.i(TAG, "Checking XMock Database Tables");
-                    //if(xMock_db.tableEntries(MockCpu.Table.name) < 1)
-                    //    XMockCpuProvider.initCache(context, xMock_db);
-                    //if(xMock_db.tableEntries(MockProp.Table.name) < 1)
-                    //    XMockPropDatabase.getMockProps(context, xMock_db);
+                    xMock_db = new XDataBase(DB_NAME_MOCK, context, true);
+                    XMockDatabaseHelp.initDatabase(context, xMock_db);
                 }else if(DebugUtil.isDebug()) {
                     Log.i(TAG , "XMock Database is db=" + xMock_db);
-
                 }
             }
 
@@ -124,7 +118,7 @@ public class XGlobalCore {
             synchronized (hookLock) {
                 if(xLua_db == null) {
                     Log.i(TAG, "XLua Database is null, initializing... path=");
-                    xLua_db = new XDataBase(DB_NAME_LUA, context, true, newDir);
+                    xLua_db = new XDataBase(DB_NAME_LUA, context, true);
                     try {
                         if(!xLua_db.isOpen(true))
                             XLuaUpdater.checkForUpdate(xLua_db);

@@ -4,11 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-	local fake = param:getSetting("phone.voicemailid")
-	if fake == nil then
-		fake = "000000000"
-	end
-
+	local fake = param:getSetting("phone.voicemailid", "000000000")
 	param:setResult(fake)
 	return true, ret, fake
 end

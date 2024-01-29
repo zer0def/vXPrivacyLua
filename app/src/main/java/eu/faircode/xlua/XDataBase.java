@@ -35,25 +35,14 @@ public class XDataBase {
     public XDataBase(String dbname, Context context) {
         this(dbname, context, true);
     }
-
     public XDataBase(String dbname, Context context, boolean setPerms) {
-        this(dbname, context, setPerms, false);
-    }
-
-    public XDataBase(String dbname, Context context, boolean setPerms, boolean newDir) {
         if(!dbname.endsWith(".db"))
             dbname += ".db";
 
         name = dbname;
-
-        Log.w(TAG, "Is New Dir Flag");
-        if(!DatabasePathUtil.ensureDirectoryChange(context)) {
-            Log.w(TAG, "Ensured Failed");
-            path = DatabasePathUtil.getOriginalDataLocationString(context);
-        }else {
-            Log.w(TAG, "Ensured");
-            path = DatabasePathUtil.getDatabaseDirectory(context).getAbsolutePath();
-        }
+        path = !DatabasePathUtil.ensureDirectoryChange(context) ?
+                DatabasePathUtil.getOriginalDataLocationString(context) :
+                DatabasePathUtil.getDatabaseDirectory(context).getAbsolutePath();
 
         dbFile = new File(path + File.separator + name);
         xFileUtils.chown(dbFile.getAbsolutePath(), Process.SYSTEM_UID, Process.SYSTEM_UID);
@@ -129,15 +118,12 @@ public class XDataBase {
     public void writeLock() {
         dbLock.writeLock().lock();
     }
-
     public void writeUnlock() {
         dbLock.writeLock().unlock();
     }
-
     public void readLock() {
         dbLock.readLock().lock();
     }
-
     public void readUnlock() {
         dbLock.readLock().unlock();
     }
@@ -145,7 +131,6 @@ public class XDataBase {
     public boolean beginTransaction() {
         return beginTransaction(false);
     }
-
     public boolean beginTransaction(boolean writeLock) {
         try {
             if(!isOpen(true))
@@ -166,7 +151,7 @@ public class XDataBase {
         try {
             db.setTransactionSuccessful();
         }catch (Exception e) {
-            Log.e(TAG, "Failed to set Transcation Successful\n" + e.getMessage());
+            Log.e(TAG, "Failed to set Transaction Successful\n" + e.getMessage());
         }
     }
 
@@ -343,27 +328,6 @@ public class XDataBase {
                 for (File file : files)
                     XUtil.setPermissions(file.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
         }
-    }
-
-    public static void setPerms(File directoryOrFile) {
-        //if(!xUnsafeApi.isSafe(directoryOrFile))
-        //    return;
-
-        Log.i(TAG, "Setting File Permissions (0770) SYSTEM_UID For XLUA Directory for UID: " + Process.SYSTEM_UID);
-
-        //Class<?> fileUtils = Class.forName("android.os.FileUtils");
-        // Set database file permissions
-        // Owner: rwx (system)
-        // Group: rwx (system)
-        // World: ---
-        //Process.myUid()
-        XUtil.setPermissions(directoryOrFile.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
-        File[] files = directoryOrFile.listFiles();
-        if (files != null)
-            for (File file : files)
-                XUtil.setPermissions(file.getAbsolutePath(), 0770, Process.SYSTEM_UID, Process.SYSTEM_UID);
-
-        Log.i(TAG, "Finished setting permissions for: " + directoryOrFile.getPath());
     }
 
     public static boolean isReady(XDataBase database) {

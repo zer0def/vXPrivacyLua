@@ -299,7 +299,6 @@ public class xFileUtils {
         return !res.isOuterException();
     }
 
-
     public static boolean chown(String path, int ownerUid, int groupUid) {
         if(!isSafeDirectory(path)) return false;
         try {

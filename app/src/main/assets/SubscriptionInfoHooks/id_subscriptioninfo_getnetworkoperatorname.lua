@@ -4,11 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-	local fake = param:getSetting("phone.isp")
-	if fake == nil then
-		fake = "Siminn"
-	end
-
+	local fake = param:getSetting("phone.isp", "Siminn")
 	param:setResult(fake)
 	return true, ret, fake
 end

@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Generic1",
+    "settings": {
+      "network.mac": "f9:4e:77:73:31:69",
+      "value.imei": "201390905257271",
+      "value.meid": "99000038247101",
+      "network.ssid": "SpyNetwork",
+      "network.bssid": "94:d5:57:e2:2b:b0",
+      "bluetooth.id": "c1:b2:6c:cc:c5:24",
+      "phone.subscriberid": "274299842762952",
+      "phone.simserial": "59672003871946218108",
+      "value.phone_number": "su8gm6dt4wrj7ke9",
+      "ad.id": "84630630-u4ls-k487-f35f-h37afe0pomwq",
+      "gsf.id": "WQF5UZLYM38NBXS2",
+      "drm.id": "dgau6mczv8jnqx7y9hker325w4sbfttj5v6qngyu4srf32wm9hvgy46n5c"
+    }
+  }
+]

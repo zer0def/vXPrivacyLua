@@ -5,7 +5,7 @@ function after(hook, param)
 	end
 
 	local fake = 5
-	local state = param:getSetting("phone.simstatus")
+	local state = param:getSetting("phone.simstate")
 	if state ~= nil and tonumber(state) ~= nil then
 		fake = tonumber(state)
 	else

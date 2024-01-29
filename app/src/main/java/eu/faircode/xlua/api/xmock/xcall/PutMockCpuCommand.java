@@ -14,7 +14,6 @@ import eu.faircode.xlua.utilities.BundleUtil;
 
 public class PutMockCpuCommand extends CallCommandHandler {
     public static PutMockCpuCommand create() { return new PutMockCpuCommand(); };
-
     public PutMockCpuCommand() {
         name = "putMockCpu";
         requiresPermissionCheck = true;

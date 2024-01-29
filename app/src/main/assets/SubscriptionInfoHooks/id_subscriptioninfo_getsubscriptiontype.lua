@@ -4,12 +4,20 @@ function after(hook, param)
 		ret = 0
 	end
 
-	local fake = 1
+    local fakeStr = param:getSetting("phone.sim_type", "1")
+    local fake = tostring(fakeStr)
+    if fake == nil then
+        fake = 1
+    end
+
+    if fake ~= 0 and fake ~= 1 then
+        if ret == 1 then
+            fake = 0
+        end
+    end
+
 	--SUBSCRIPTION_TYPE_LOCAL_SIM = 0
 	--SUBSCRIPTION_TYPE_REMOTE_SIM = 1
-	if ret == 1 then
-		fake = 0 
-	end
 
 	--SubscriptionManager#SUBSCRIPTION_TYPE_LOCAL_SIM or SubscriptionManager#SUBSCRIPTION_TYPE_REMOTE_SIM
 	--getSubscriptionType = 

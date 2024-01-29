@@ -16,9 +16,12 @@ import java.util.LinkedHashMap;
 import eu.faircode.xlua.api.objects.IDBSerial;
 import eu.faircode.xlua.api.objects.IJsonSerial;
 import eu.faircode.xlua.api.objects.ISerial;
+import eu.faircode.xlua.api.objects.xlua.packets.SettingPacket;
 import eu.faircode.xlua.utilities.CursorUtil;
 
 public class xSetting extends xSettingBase implements ISerial, IDBSerial, IJsonSerial, Parcelable {
+    public static xSetting create(Integer user, String category, String name, String value) { return new SettingPacket(user, category, name, value); }
+
     public xSetting() { }
     public xSetting(Parcel in) { fromParcel(in); }
     public xSetting(Integer user, String category, String name) { super(user, category, name, null); }

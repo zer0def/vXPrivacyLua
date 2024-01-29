@@ -77,7 +77,7 @@ public class XCommandService {
         }
 
         if(command == null || dataBase == null || executorService == null)
-            throw new Exception("Not a valid Command");
+            throw new Exception("Not a valid Command: " + method);
 
         CallPacket packet = new CallPacket(context, arg, extras, dataBase);
         if(DebugUtil.isDebug()) Log.i(TAG, "Found Command & Database, packet=" + packet);
@@ -107,7 +107,7 @@ public class XCommandService {
         }
 
         if(command == null || dataBase == null || executorService == null)
-            throw new Exception("Not a valid Command");
+            throw new Exception("Not a valid Command: " + method);
 
         QueryPacket packet = new QueryPacket(context, arg, selection, dataBase);
         if(DebugUtil.isDebug()) Log.i(TAG, "Found Command & Database, packet=" + packet);
