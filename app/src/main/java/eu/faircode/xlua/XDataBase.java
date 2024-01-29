@@ -20,7 +20,8 @@ import eu.faircode.xlua.database.DatabaseQuerySnake;
 import eu.faircode.xlua.utilities.CursorUtil;
 import eu.faircode.xlua.utilities.DatabasePathUtil;
 import eu.faircode.xlua.utilities.StringUtil;
-import eu.faircode.xlua.rootbox.xUnsafeApi;
+import eu.faircode.xlua.rootbox.xFileUtils;
+
 public class XDataBase {
     private static final String TAG = "XLua.Database.SqliteWrapper";
 
@@ -45,35 +46,18 @@ public class XDataBase {
 
         name = dbname;
 
-        /*if(newDir) {
-            Log.w(TAG, "Is New Dir Flag");
-            if(!DatabasePathUtil.ensureDirectoryChangeEx(context)) {
-                Log.w(TAG, "Ensured Failed");
-                path = DatabasePathUtil.getOriginalDataLocationString(context);
-            }else {
-                Log.w(TAG, "Ensured");
-                path = DatabasePathUtil.getDatabaseDirectoryEx(context).getAbsolutePath();
-            }
-         }else {
-            path = DatabasePathUtil.getOriginalDataLocationString(context);
-        }*/
-
-
         Log.w(TAG, "Is New Dir Flag");
-        if(!DatabasePathUtil.ensureDirectoryChangeEx(context)) {
+        if(!DatabasePathUtil.ensureDirectoryChange(context)) {
             Log.w(TAG, "Ensured Failed");
             path = DatabasePathUtil.getOriginalDataLocationString(context);
         }else {
             Log.w(TAG, "Ensured");
-            path = DatabasePathUtil.getDatabaseDirectoryEx(context).getAbsolutePath();
+            path = DatabasePathUtil.getDatabaseDirectory(context).getAbsolutePath();
         }
 
         dbFile = new File(path + File.separator + name);
-
-        xUnsafeApi.chown(dbFile.getAbsolutePath(), Process.SYSTEM_UID, Process.SYSTEM_UID);
-
+        xFileUtils.chown(dbFile.getAbsolutePath(), Process.SYSTEM_UID, Process.SYSTEM_UID);
         Log.i(TAG, "DB File=" + dbFile.toString());
-
         if(setPerms)
             setPermissions(dbFile);
     }
