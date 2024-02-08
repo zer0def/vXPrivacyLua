@@ -11,13 +11,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import eu.faircode.xlua.api.objects.xlua.hook.xHook;
+import eu.faircode.xlua.api.objects.xmock.ConfigSetting;
 import eu.faircode.xlua.utilities.CursorUtil;
 
-/*public class MockPhoneConversions {
+public class MockConfigConversions {
     private static final String TAG = "XLua.MockPhoneConversions";
 
     public static Map<String, String> convertJsonToMap(String jsonData) {
@@ -85,8 +84,8 @@ import eu.faircode.xlua.utilities.CursorUtil;
         return settings;
     }
 
-    public static Collection<MockPhone> phoneConfigsFromCursor(Cursor cursor, boolean marshall, boolean close) {
-        Collection<MockPhone> ps = new ArrayList<>();
+    public static Collection<MockPhoneConfig> configsFromCursor(Cursor cursor, boolean marshall, boolean close) {
+        Collection<MockPhoneConfig> ps = new ArrayList<>();
         try {
             if(marshall) {
                 while (cursor != null && cursor.moveToNext()) {
@@ -94,7 +93,7 @@ import eu.faircode.xlua.utilities.CursorUtil;
                     Parcel parcel = Parcel.obtain();
                     parcel.unmarshall(marshaled, 0, marshaled.length);
                     parcel.setDataPosition(0);
-                    MockPhone config = MockPhone.CREATOR.createFromParcel(parcel);
+                    MockPhoneConfig config = MockPhoneConfig.CREATOR.createFromParcel(parcel);
                     parcel.recycle();
                     ps.add(config);
                 }
@@ -108,49 +107,13 @@ import eu.faircode.xlua.utilities.CursorUtil;
         return ps;
     }
 
-    public static Collection<MockCarrier> phoneCarriersFromCursor(Cursor cursor, boolean marshall, boolean close) {
-        Collection<MockCarrier> ps = new ArrayList<>();
-        try {
-            if(marshall) {
-                while (cursor != null && cursor.moveToNext()) {
-                    byte[] marshaled = cursor.getBlob(0);
-                    Parcel parcel = Parcel.obtain();
-                    parcel.unmarshall(marshaled, 0, marshaled.length);
-                    parcel.setDataPosition(0);
-                    MockCarrier config = MockCarrier.CREATOR.createFromParcel(parcel);
-                    parcel.recycle();
-                    ps.add(config);
-                }
-            }else {
-
-            }
-        }finally {
-            if(close) CursorUtil.closeCursor(cursor);
+    public static Collection<ConfigSetting> hashMapToListSettings(Map<String, String> settingsMap) {
+        Collection<ConfigSetting> settings = new ArrayList<>();
+        for(Map.Entry<String, String> r : settingsMap.entrySet()) {
+            ConfigSetting setting = new ConfigSetting(r.getKey(), r.getValue());
+            settings.add(setting);
         }
 
-        return ps;
+        return settings;
     }
-
-    public static Collection<MockUniqueId> phoneUniqueIdsFromCursor(Cursor cursor, boolean marshall, boolean close) {
-        Collection<MockUniqueId> ps = new ArrayList<>();
-        try {
-            if(marshall) {
-                while (cursor != null && cursor.moveToNext()) {
-                    byte[] marshaled = cursor.getBlob(0);
-                    Parcel parcel = Parcel.obtain();
-                    parcel.unmarshall(marshaled, 0, marshaled.length);
-                    parcel.setDataPosition(0);
-                    MockUniqueId config = MockUniqueId.CREATOR.createFromParcel(parcel);
-                    parcel.recycle();
-                    ps.add(config);
-                }
-            }else {
-
-            }
-        }finally {
-            if(close) CursorUtil.closeCursor(cursor);
-        }
-
-        return ps;
-    }
-}*/
+}

@@ -17,7 +17,7 @@ import eu.faircode.xlua.api.objects.IJsonSerial;
 import eu.faircode.xlua.utilities.BundleUtil;
 import eu.faircode.xlua.utilities.CursorUtil;
 
-public class MockUniqueId extends MockUniqueIdBase implements IJsonSerial, Parcelable {
+/*public class MockUniqueId extends MockUniqueIdBase implements IJsonSerial, Parcelable {
     public MockUniqueId() { }
     public MockUniqueId(Parcel p) { fromParcel(p); }
     public MockUniqueId(Bundle b) { fromBundle(b); }
@@ -112,4 +112,4 @@ public class MockUniqueId extends MockUniqueIdBase implements IJsonSerial, Parce
             put("settings", "TEXT");
         }};
     }
-}
+}*/

@@ -236,7 +236,7 @@ public class FragmentMain extends Fragment {
                 rvAdapter.setShow(data.show);
                 rvAdapter.set(data.collection, data.hooks, data.apps);
 
-                XUiConfig con1 = new XUiConfig();
+                /*XUiConfig con1 = new XUiConfig();
                 con1.name = "NONE";
 
                 XUiConfig con2 = new XUiConfig();
@@ -246,7 +246,7 @@ public class FragmentMain extends Fragment {
                 confs.add(con1);
                 confs.add(con2);
 
-                rvAdapter.setConfigs(confs);
+                rvAdapter.setConfigs(confs);*/
 
                 swipeRefresh.setRefreshing(false);
                 pbApplication.setVisibility(View.GONE);

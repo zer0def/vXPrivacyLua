@@ -11,8 +11,6 @@ import eu.faircode.xlua.XUtil;
 import eu.faircode.xlua.api.objects.ISettingsConfig;
 import eu.faircode.xlua.api.objects.xlua.packets.SettingPacket;
 import eu.faircode.xlua.api.objects.xlua.setting.xSetting;
-import eu.faircode.xlua.api.objects.xmock.phone.MockPhone;
-import eu.faircode.xlua.api.objects.xmock.phone.MockSettingBase;
 import eu.faircode.xlua.api.xlua.XSettingsDatabase;
 import eu.faircode.xlua.utilities.StringUtil;
 

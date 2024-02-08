@@ -7,7 +7,7 @@ import java.util.Map;
 
 import eu.faircode.xlua.api.objects.ISettingsConfig;
 
-public class MockCarrierBase implements ISettingsConfig {
+/*public class MockCarrierBase implements ISettingsConfig {
     public static final String JSON = "carrier.json";
     public static final int COUNT = 1;
 
@@ -52,4 +52,4 @@ public class MockCarrierBase implements ISettingsConfig {
     public String toString() {
         return name + "::" + country;
     }
-}
+}*/

@@ -35,6 +35,7 @@ import eu.faircode.xlua.api.xmock.xcall.GetMockPropsCommand;
 import eu.faircode.xlua.api.xmock.xcall.PutMockCpuCommand;
 import eu.faircode.xlua.api.xmock.xcall.PutMockPropCommand;
 import eu.faircode.xlua.api.xmock.xcall.PutMockPropsCommand;
+import eu.faircode.xlua.api.xmock.xquery.GetMockConfigsCommand;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 public class XSettingBridgeStatic {
@@ -111,6 +112,8 @@ public class XSettingBridgeStatic {
 
     public static Map<String, QueryCommandHandler> getMockQueryCommands(){
         HashMap<String, QueryCommandHandler> hs = new HashMap<>();
+        hs.put("getMockConfigs", GetMockConfigsCommand.create(false));
+        hs.put("getMockConfigs2", GetMockConfigsCommand.create(true));
         return hs;
     }
 

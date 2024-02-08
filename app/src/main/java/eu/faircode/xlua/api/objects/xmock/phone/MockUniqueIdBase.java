@@ -7,7 +7,7 @@ import java.util.Map;
 
 import eu.faircode.xlua.api.objects.ISettingsConfig;
 
-public class MockUniqueIdBase implements ISettingsConfig {
+/*public class MockUniqueIdBase implements ISettingsConfig {
     public static final String JSON = "uniqueids.json";
     public static final int COUNT = 1;
 
@@ -44,4 +44,4 @@ public class MockUniqueIdBase implements ISettingsConfig {
     public String toString() {
         return name;
     }
-}
+}*/

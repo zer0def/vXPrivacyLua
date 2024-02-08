@@ -16,9 +16,15 @@ public class XProxyContent {
     public static Bundle luaCall(Context context, String method) { return luaCall(context, method, new Bundle()); }
     public static Bundle luaCall(Context context, String method, Bundle extras) { return invokeCall(context, "xlua", method, extras); }
 
-    public static Cursor mockQuery(Context context, String method) { return invokeQuery(context, method, null, null); }
+    //public static Cursor mockQuery(Context context, String method) { return invokeQuery(context, method, null, null); }
+    //public static Cursor mockQuery(Context context, String method, String[] args_selection) { return mockQuery(context, method, args_selection, null); }
+    //public static Cursor mockQuery(Context context, String method, String[] args_selection, String selection) { return invokeQuery(context, "mock", method, args_selection, selection); }
+
+    public static Cursor mockQuery(Context context, String method) { return mockQuery(context, method, null, null); }
     public static Cursor mockQuery(Context context, String method, String[] args_selection) { return mockQuery(context, method, args_selection, null); }
     public static Cursor mockQuery(Context context, String method, String[] args_selection, String selection) { return invokeQuery(context, "mock", method, args_selection, selection); }
+
+
 
     public static Cursor luaQuery(Context context, String method) { return luaQuery(context, method, null, null); }
     public static Cursor luaQuery(Context context, String method, String[] args_selection) { return luaQuery(context, method, args_selection, null); }

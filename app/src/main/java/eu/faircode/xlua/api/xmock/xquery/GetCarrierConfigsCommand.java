@@ -9,7 +9,7 @@ import eu.faircode.xlua.api.objects.QueryPacket;
 import eu.faircode.xlua.api.xmock.XMockPhoneDatabase;
 import eu.faircode.xlua.utilities.CursorUtil;
 
-public class GetCarrierConfigsCommand extends QueryCommandHandler {
+/*public class GetCarrierConfigsCommand extends QueryCommandHandler {
     public static GetCarrierConfigsCommand create(boolean marshall) { return new GetCarrierConfigsCommand(marshall); };
 
     private boolean marshall;
@@ -34,4 +34,4 @@ public class GetCarrierConfigsCommand extends QueryCommandHandler {
                 context,
                 marshall ? "getCarrierConfigs2" : "getCarrierConfigs");
     }
-}
+}*/

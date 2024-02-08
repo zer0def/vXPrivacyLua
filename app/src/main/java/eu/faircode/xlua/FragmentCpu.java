@@ -40,6 +40,10 @@ public class FragmentCpu extends Fragment {
 
     public View onCreateView(
             @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //spConfigEdit
+
+
+
         //Log.i(TAG, "Init of DB for Cpu Maps");
         //List<XMockCpuIO> maps = XMockProxyApi.queryGetMockCpuMaps(getContext());
         //Log.i(TAG, "Init of CPU Maps has Finished: " + maps.size());

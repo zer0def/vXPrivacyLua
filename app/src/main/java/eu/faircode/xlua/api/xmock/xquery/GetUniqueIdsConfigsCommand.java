@@ -11,7 +11,7 @@ import eu.faircode.xlua.api.objects.QueryPacket;
 import eu.faircode.xlua.api.xmock.XMockPhoneDatabase;
 import eu.faircode.xlua.utilities.CursorUtil;
 
-public class GetUniqueIdsConfigsCommand extends QueryCommandHandler {
+/*public class GetUniqueIdsConfigsCommand extends QueryCommandHandler {
     public static GetUniqueIdsConfigsCommand create(boolean marshall) { return new GetUniqueIdsConfigsCommand(marshall); };
 
     private boolean marshall;
@@ -36,4 +36,4 @@ public class GetUniqueIdsConfigsCommand extends QueryCommandHandler {
                 context,
                 marshall ? "getUniqueIds2" : "getUniqueIds");
     }
-}
+}*/

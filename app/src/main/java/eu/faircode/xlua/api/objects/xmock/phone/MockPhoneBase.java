@@ -8,7 +8,7 @@ import java.util.Map;
 
 import eu.faircode.xlua.api.objects.ISettingsConfig;
 
-public class MockPhoneBase implements ISettingsConfig {
+/*public class MockPhoneBase implements ISettingsConfig {
     public static final String JSON = "phones.json";
     public static final int COUNT = 1;
 
@@ -71,4 +71,4 @@ public class MockPhoneBase implements ISettingsConfig {
     public String toString() {
         return name + "::" + model + "::" + manufacturer + "::" + carrier;
     }
-}
+}*/

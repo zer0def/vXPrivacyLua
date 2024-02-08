@@ -374,7 +374,7 @@ public class DatabaseHelperEx {
             return items;
         }
 
-
+        Log.i(TAG, "Database is read=" + db + " table=" + tableName);
         //MAKE sure it goes (writeLock, readLock) when reversed it tends to generate unpleasing results
         //read.unlock()
         //If the number of readers is now zero then the lock is made available for write lock attempts.
@@ -410,6 +410,7 @@ public class DatabaseHelperEx {
                 }
             }else {
                 items = getFromDatabase(db, tableName, typeClass);
+                info(tableName, db, TAG_initDatabase, "itemCheckCount=" + itemCheckCount + " size=" + items.size());
                 if(itemCheckCount > 0 && items.size() < itemCheckCount) {
                     error(tableName, db, TAG_initDatabase, "Size is off, table size=" + items.size() + " hardcoded size=" + itemCheckCount);
 

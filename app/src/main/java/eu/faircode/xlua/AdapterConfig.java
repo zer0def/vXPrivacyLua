@@ -1,65 +1,118 @@
 package eu.faircode.xlua;
 
-import android.content.res.Configuration;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
-import androidx.core.app.NavUtils;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class AdapterConfig extends ActivityBase {
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import eu.faircode.xlua.api.objects.xmock.ConfigSetting;
+
+public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder> {
     private static final String TAG = "XLua.AdapterConfig";
-    //private FragmentCpu fragmentCpu;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private List<ConfigSetting> settings = new ArrayList<>();
+    private Object lock = new Object();
 
-        setContentView(R.layout.cpuview);
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        //Show Fragment
-        //FragmentManager fragmentManager = getSupportFragmentManager();
-        //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        //fragmentCpu = new FragmentCpu();
+    public class ViewHolder extends RecyclerView.ViewHolder
+            implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
-        //Log.i(TAG, "Created Fragment, now replacing...");
+        final View itemView;
 
-        //fragmentTransaction.replace(R.id.content_frame_cpu, fragmentCpu);
-        //fragmentTransaction.commit();
+        final TextView tvSettingName;
+        final CheckBox cbSettingEnabled;
+        final TextInputEditText tiSettingsValue;
 
-        //Log.i(TAG, "Finished Creating Fragment/Activity");
-    }
+        private HashMap<String, Boolean> expanded = new HashMap<>();
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
+        ViewHolder(View itemView) {
+            super(itemView);
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
+            this.itemView = itemView;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.main, menu);
-        //this.menu = menu;
-        return super.onCreateOptionsMenu(menu);
-    }
+            tvSettingName = itemView.findViewById(R.id.tvSettingConfigName);
+            cbSettingEnabled = itemView.findViewById(R.id.cbEnableConfigSetting);
+            tiSettingsValue = itemView.findViewById(R.id.tiConfigSettingsValue);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(TAG, "Selected option " + item.getTitle());
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-            //break;
-            default:
-                return super.onOptionsItemSelected(item);
+            Log.i(TAG, "Created the Adapter Item");
         }
+
+        private void unWire() {
+            itemView.setOnClickListener(null);
+        }
+
+        private void wire() {
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(final View view) {
+            if(DebugUtil.isDebug())
+                Log.i(TAG, "onClick");
+        }
+
+        @Override
+        public void onCheckedChanged(final CompoundButton cButton, boolean isChecked) {
+            if(DebugUtil.isDebug())
+                Log.i(TAG, "onCheckedChanged");
+
+        }
+
+        void updateExpanded() {
+            if(DebugUtil.isDebug())
+                Log.i(TAG, "Expanding Object");
+        }
+    }
+
+    AdapterConfig() { setHasStableIds(true); }
+
+    void set(List<ConfigSetting> settings) {
+        if(DebugUtil.isDebug())
+            Log.i(TAG, "Config Settings size=" + settings.size());
+
+        this.settings.clear();
+        this.settings.addAll(settings);
+
+        if(DebugUtil.isDebug())
+            Log.i(TAG, "Config Settings internal size=" + this.settings.size());
+
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public long getItemId(int position) { return settings.get(position).hashCode(); }
+
+    @Override
+    public int getItemCount() { return settings.size(); }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.configsetting, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        Log.i(TAG, "Adapter Item Creating Internal");
+        holder.unWire();
+        ConfigSetting cSetting = settings.get(position);
+        holder.tvSettingName.setText(cSetting.getName());
+        holder.tiSettingsValue.setText(cSetting.getValue());
+        holder.updateExpanded();
+        holder.wire();
+        Log.i(TAG, "Adapter Item Created Internal");
     }
 }

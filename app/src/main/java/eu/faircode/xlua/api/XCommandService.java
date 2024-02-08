@@ -58,7 +58,6 @@ public class XCommandService {
         //we can combine all the commands :P
         //Be careful when VXP + Direct Invoke when it ATTEMPTS to set param value aka clean up param shit
 
-        final Map<String, CallCommandHandler> commands = null;
         CallCommandHandler command = null;
         XDataBase dataBase = null;
         ExecutorService executorService = null;
@@ -88,10 +87,11 @@ public class XCommandService {
     }
 
     public Cursor executeCursor(Context context, String method, String arg, String[] selection, String packageName) throws Exception {
-        final Map<String, CallCommandHandler> commands = null;
         QueryCommandHandler command = null;
         XDataBase dataBase = null;
         ExecutorService executorService = null;
+
+        Log.i(TAG, "executeCursor   method=" + method + "  arg=" + arg);
 
         switch (method) {
             case "xlua":
@@ -107,7 +107,7 @@ public class XCommandService {
         }
 
         if(command == null || dataBase == null || executorService == null)
-            throw new Exception("Not a valid Command: " + method);
+            throw new Exception("Not a valid Command: " + method + "  arg=" + arg);
 
         QueryPacket packet = new QueryPacket(context, arg, selection, dataBase);
         if(DebugUtil.isDebug()) Log.i(TAG, "Found Command & Database, packet=" + packet);

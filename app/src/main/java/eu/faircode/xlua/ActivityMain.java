@@ -247,8 +247,13 @@ public class ActivityMain extends ActivityBase {
             @Override
             public void onClick(DrawerItem item) {
                 menuCPU();
-                //menuProps();
-                //Intent intent = new Intent(ActivityMain.this, ActivityProps.class);
+            }
+        }));
+
+        drawerArray.add(new DrawerItem(this, R.string.menu_configs, new DrawerItem.IListener() {
+            @Override
+            public void onClick(DrawerItem item) {
+                menuConfig();
             }
         }));
 
@@ -418,6 +423,7 @@ public class ActivityMain extends ActivityBase {
     private void menuProps() { startActivity(new Intent(this, ActivityProps.class)); }
     private void menuDBs() { startActivity(new Intent(this, ActivityDatabase.class)); }
     private void menuCPU() { startActivity(new Intent(this, ActivityCpu.class)); }
+    private void menuConfig() { startActivity(new Intent(this, ActivityConfig.class)); }
 
 
     public void updateMenu(Menu menu) {

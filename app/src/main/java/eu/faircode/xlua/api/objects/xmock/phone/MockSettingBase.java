@@ -2,7 +2,7 @@ package eu.faircode.xlua.api.objects.xmock.phone;
 
 import androidx.annotation.NonNull;
 
-public class MockSettingBase {
+/*public class MockSettingBase {
     protected String name;
     protected String value;
 
@@ -30,4 +30,4 @@ public class MockSettingBase {
     public String toString() {
         return name + "::" + value;
     }
-}
+}*/

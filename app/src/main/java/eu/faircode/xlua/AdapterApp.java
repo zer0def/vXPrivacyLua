@@ -89,7 +89,7 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
     private List<xApp> filtered = new ArrayList<>();
     private Map<String, Boolean> expanded = new HashMap<>();
 
-    private ArrayAdapter<XUiConfig> spAdapterPhoneConfig;
+    //private ArrayAdapter<XUiConfig> spAdapterPhoneConfig;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -109,7 +109,7 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
         final RecyclerView rvGroup;
         final Group grpExpanded;
 
-        final Spinner spPhoneConfig;
+        /*final Spinner spPhoneConfig;
         final Button btApplyPhoneConfig;
 
 
@@ -117,7 +117,7 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
         final Button btApplyUniqueConfig;
 
         final Spinner spCarrierConfig;
-        final Button btApplyCarrierCondifg;
+        final Button btApplyCarrierCondifg;*/
 
         final AdapterGroup adapter;
 
@@ -136,18 +136,18 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
             cbAssigned = itemView.findViewById(R.id.cbAssigned);
             cbForceStop = itemView.findViewById(R.id.cbForceStop);
 
-            spPhoneConfig = itemView.findViewById(R.id.spPhoneConfig);
+            /*spPhoneConfig = itemView.findViewById(R.id.spPhoneConfig);
             btApplyPhoneConfig = itemView.findViewById(R.id.btApplyPhoneConfig);
 
             spUniqueConfig = itemView.findViewById(R.id.spUniqueIdConfig);
             btApplyUniqueConfig = itemView.findViewById(R.id.btApplyUniqueIdConfig);
 
             spCarrierConfig = itemView.findViewById(R.id.spCarrierConfig);
-            btApplyCarrierCondifg = itemView.findViewById(R.id.btApplyCarrierIdConfig);
+            btApplyCarrierCondifg = itemView.findViewById(R.id.btApplyCarrierIdConfig);*/
 
 
-            spAdapterPhoneConfig = new ArrayAdapter<>(itemView.getContext(), android.R.layout.simple_spinner_item);
-            spAdapterPhoneConfig.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            //spAdapterPhoneConfig = new ArrayAdapter<>(itemView.getContext(), android.R.layout.simple_spinner_item);
+            //spAdapterPhoneConfig.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             /*XUiConfig con1 = new XUiConfig();
             con1.name = "NONE";
@@ -160,7 +160,7 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
             confs.add(con2);
             spAdapterPhoneConfig.addAll(confs);*/
 
-            spPhoneConfig.setTag(null);
+            /*spPhoneConfig.setTag(null);
             spPhoneConfig.setAdapter(spAdapterPhoneConfig);
             spCarrierConfig.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -180,7 +180,7 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
                     XUiConfig conf = (XUiConfig) spPhoneConfig.getSelectedItem();
                     spPhoneConfig.setTag(conf);
 
-                    /*XUiGroup selected = (XUiGroup) spGroup.getSelectedItem();
+                    XUiGroup selected = (XUiGroup) spGroup.getSelectedItem();
                     String group = (selected == null ? null : selected.name);
 
                     if (group == null ? spGroup.getTag() != null : !group.equals(spGroup.getTag())) {
@@ -190,9 +190,9 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
                     }
 
                     tvRestrict.setVisibility(group == null ? View.VISIBLE : View.GONE);
-                    btnRestrict.setVisibility(group == null ? View.INVISIBLE : View.VISIBLE);*/
+                    btnRestrict.setVisibility(group == null ? View.INVISIBLE : View.VISIBLE);
                 }
-            });
+            });*/
 
 
             rvGroup = itemView.findViewById(R.id.rvGroup);
@@ -325,14 +325,14 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
             ivExpander.setVisibility(group == null ? View.VISIBLE : View.INVISIBLE);
             grpExpanded.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
-            spPhoneConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+            /*spPhoneConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
             btApplyPhoneConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
             spUniqueConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
             btApplyUniqueConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
             spCarrierConfig.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-            btApplyCarrierCondifg.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+            btApplyCarrierCondifg.setVisibility(isExpanded ? View.VISIBLE : View.GONE);*/
 
             /*spAdapterPhoneConfig.clear();
             XUiConfig con1 = new XUiConfig();
@@ -359,12 +359,12 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
         setHasStableIds(true);
     }
 
-    void setConfigs(List<XUiConfig> configs) {
+    /*void setConfigs(List<XUiConfig> configs) {
         if(spAdapterPhoneConfig != null) {
             spAdapterPhoneConfig.clear();
             spAdapterPhoneConfig.addAll(configs);
         }
-    }
+    }*/
 
     void set(List<String> collection, List<xHook> hooks, List<xApp> apps) {
         this.dataChanged = (this.hooks.size() != hooks.size());

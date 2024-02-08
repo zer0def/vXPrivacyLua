@@ -5,9 +5,7 @@ import android.util.Log;
 
 import eu.faircode.xlua.XDataBase;
 import eu.faircode.xlua.api.objects.xmock.cpu.MockCpu;
-import eu.faircode.xlua.api.objects.xmock.phone.MockCarrier;
-import eu.faircode.xlua.api.objects.xmock.phone.MockPhone;
-import eu.faircode.xlua.api.objects.xmock.phone.MockUniqueId;
+import eu.faircode.xlua.api.objects.xmock.phone.MockPhoneConfig;
 import eu.faircode.xlua.api.objects.xmock.prop.MockProp;
 
 public class XMockDatabaseHelp {
@@ -23,12 +21,14 @@ public class XMockDatabaseHelp {
         if(db.tableEntries(MockProp.Table.name) < 1)
             XMockPropDatabase.getMockProps(context, db);
 
+        if(db.tableEntries(MockPhoneConfig.Table.name) < 1)
+            XMockPhoneDatabase.getMockConfigs(context, db);
         //replicate , below for above
-        if(db.tableEntries(MockPhone.Table.name) < 1)
+        /*(if(db.tableEntries(MockPhone.Table.name) < 1)
             XMockPhoneDatabase.preparePhonesDatabaseTable(context, db);
         if(db.tableEntries(MockCarrier.Table.name) < 1)
             XMockPhoneDatabase.prepareCarriersDatabaseTable(context, db);
         if(db.tableEntries(MockUniqueId.Table.name) < 1)
-            XMockPhoneDatabase.prepareUniqueIDsDatabaseTable(context, db);
+            XMockPhoneDatabase.prepareUniqueIDsDatabaseTable(context, db);*/
     }
 }

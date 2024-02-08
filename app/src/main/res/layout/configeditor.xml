@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityConfig">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvConfigSettings"
+        android:layout_width="410dp"
+        android:layout_height="501dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swGlobalApps"
+        tools:layout_editor_absoluteX="1dp" />
+
+    <Button
+        android:id="@+id/btImportConfig"
+        android:layout_width="195dp"
+        android:layout_height="45dp"
+        android:text="Import"
+        app:layout_constraintEnd_toEndOf="@+id/btSaveConfig"
+        app:layout_constraintStart_toEndOf="@+id/btExportConfig"
+        app:layout_constraintTop_toBottomOf="@+id/btSaveConfig" />
+
+    <Button
+        android:id="@+id/btSaveConfig"
+        android:layout_width="195dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="11dp"
+        android:text="Save"
+        app:layout_constraintEnd_toEndOf="@+id/spConfigEdit"
+        app:layout_constraintStart_toEndOf="@+id/btApplyConfig"
+        app:layout_constraintTop_toBottomOf="@+id/spConfigEdit" />
+
+    <Button
+        android:id="@+id/btExportConfig"
+        android:layout_width="195dp"
+        android:layout_height="45dp"
+        android:text="Export"
+        app:layout_constraintEnd_toEndOf="@+id/btApplyConfig"
+        app:layout_constraintStart_toStartOf="@+id/btApplyConfig"
+        app:layout_constraintTop_toBottomOf="@+id/btApplyConfig" />
+
+    <Spinner
+        android:id="@+id/spConfigEdit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btApplyConfig"
+        android:layout_width="195dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="11dp"
+        android:text="Apply"
+        app:layout_constraintStart_toStartOf="@+id/spConfigEdit"
+        app:layout_constraintTop_toBottomOf="@+id/spConfigEdit" />
+
+    <Switch
+        android:id="@+id/swGlobalApps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Global Apps"
+        app:layout_constraintStart_toStartOf="@+id/btExportConfig"
+        app:layout_constraintTop_toBottomOf="@+id/btExportConfig" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

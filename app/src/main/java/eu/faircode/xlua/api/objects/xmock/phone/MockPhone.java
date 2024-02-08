@@ -26,7 +26,7 @@ import eu.faircode.xlua.utilities.BundleUtil;
 import eu.faircode.xlua.utilities.CollectionUtil;
 import eu.faircode.xlua.utilities.CursorUtil;
 
-public class MockPhone extends MockPhoneBase implements IJsonSerial, Parcelable {
+/*public class MockPhone extends MockPhoneBase implements IJsonSerial, Parcelable {
 
     public MockPhone() { }
     public MockPhone(Parcel in) { fromParcel(in);  }
@@ -150,4 +150,4 @@ public class MockPhone extends MockPhoneBase implements IJsonSerial, Parcelable 
             put("settings", "TEXT");
         }};
     }
-}
+}*/
