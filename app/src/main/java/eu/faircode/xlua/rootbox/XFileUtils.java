@@ -1,7 +1,6 @@
 package eu.faircode.xlua.rootbox;
 
 import android.os.Environment;
-import android.os.Process;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.util.Log;
@@ -9,9 +8,11 @@ import android.util.Log;
 import java.io.File;
 import java.lang.reflect.Method;
 
+import de.robv.android.xposed.XposedBridge;
+import eu.faircode.xlua.XposedUtil;
 import eu.faircode.xlua.utilities.DatabasePathUtil;
 
-public class xFileUtils {
+public class XFileUtils {
     private static final String TAG = "XLua.xFileUtils";
 
     public static final int CHMOD_ALL = 0x777;          //User, Groups, Owner can Read, Write, Execute
@@ -345,34 +346,34 @@ public class xFileUtils {
     }
 
     public static File getFirstDirectoryNameLike(String baseDir, String likeHas) {
-        File f = getFirstDirectoryNameLike(new File(baseDir), likeHas);
-        if(f == null)
-            return new File(DatabasePathUtil.getOriginalDataLocationString(null));
+        return getFirstDirectoryNameLike(new File(baseDir), likeHas);
+        //if(f == null)
+        //    return new File(DatabasePathUtil.getOriginalDataLocationString(null));
 
-        return f;
+        //return f;
     }
 
     public static File getFirstDirectoryNameLike(File baseDir, String likeHas) {
         try {
-            if(baseDir.isDirectory() && baseDir.exists()) {
+            if(baseDir.exists() && baseDir.isDirectory()) {
                 File[] fs = baseDir.listFiles();
                 if(fs == null || fs.length < 1) {
-                    Log.e(TAG, "Failed to find Directory like: " + likeHas + " from: " + baseDir.getAbsolutePath());
+                    DatabasePathUtil.log("Failed to find Directory like: " + likeHas + " from: " + baseDir.getAbsolutePath(), true);
                     return null;
                 }
 
                 for (File fl : fs) {
                     if (fl.isDirectory() && fl.getAbsolutePath().contains(likeHas)) {
-                        Log.i(TAG, "Found Like Directory: " + fl.getAbsolutePath());
+                        DatabasePathUtil.log("Found Like Directory: " + fl.getAbsolutePath(), false);
                         return fl;
                     }
                 }
             }
 
-            Log.e(TAG, "Failed to find Directory like: " + likeHas + " from: " + baseDir.getAbsolutePath());
+            DatabasePathUtil.log("Failed to find Directory like: " + likeHas + " from: " + baseDir.getAbsolutePath(), true);
             return  null;
         }catch (Exception e) {
-            Log.e(TAG, "Failed to enum DIRS in (" + baseDir + ") for (" + likeHas + ")");
+            DatabasePathUtil.log("Failed to enum DIRS in (" + baseDir + ") for (" + likeHas + ")", true);
             return null;
         }
     }

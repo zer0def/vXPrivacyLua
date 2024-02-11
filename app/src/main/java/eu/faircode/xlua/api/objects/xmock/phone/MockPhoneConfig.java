@@ -33,7 +33,7 @@ public class MockPhoneConfig extends MockPhoneConfigBase implements IJsonSerial,
     public ContentValues createContentValues() {
         ContentValues cv = new ContentValues();
         cv.put("name", name);
-        cv.put("settings", MockConfigConversions.convertMapToJson(settings).toString());
+        cv.put("settings", MockSettingsConversions.createSettingsString(settings));
         return cv;
     }
 
@@ -41,7 +41,7 @@ public class MockPhoneConfig extends MockPhoneConfigBase implements IJsonSerial,
     public void fromCursor(Cursor cursor) {
         if(cursor != null) {
             this.name = CursorUtil.getString(cursor, "name");
-            this.settings = MockConfigConversions.convertJsonToMap(CursorUtil.getString(cursor, "settings"));
+            this.settings = MockSettingsConversions.readSettingsFromString(CursorUtil.getString(cursor, "settings"));
         }
     }
 
@@ -52,14 +52,16 @@ public class MockPhoneConfig extends MockPhoneConfigBase implements IJsonSerial,
     public JSONObject toJSONObject() throws JSONException {
         JSONObject jRoot = new JSONObject();
         jRoot.put("name", name);
-        jRoot.put("settings", MockConfigConversions.convertMapToJson(settings).toString());
+        MockSettingsConversions.writeSettingsToJSON(jRoot, settings);
+        //jRoot.put("settings", MockConfigConversions.convertMapToJson(settings).toString());
         return jRoot;
     }
 
     @Override
     public void fromJSONObject(JSONObject obj) throws JSONException {
         this.name = obj.getString("name");
-        this.settings =  MockConfigConversions.convertJsonToMap(obj.getString("settings"));
+        //this.settings =  MockConfigConversions.convertJsonToMap(obj.getString("settings"));
+        this.settings = MockSettingsConversions.readSettingsFromJSON(obj);
     }
 
     @Override
@@ -83,7 +85,8 @@ public class MockPhoneConfig extends MockPhoneConfigBase implements IJsonSerial,
     public void fromParcel(Parcel in) {
         if(in != null) {
             this.name = in.readString();
-            this.settings = MockConfigConversions.convertJsonToMap(in.readString());
+            //this.settings = MockConfigConversions.convertJsonToMap(in.readString());
+            this.settings = MockSettingsConversions.readSettingsFromString(in.readString());
         }
     }
 
@@ -93,7 +96,8 @@ public class MockPhoneConfig extends MockPhoneConfigBase implements IJsonSerial,
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeString(MockConfigConversions.convertMapToJson(settings).toString());
+        dest.writeString(MockSettingsConversions.createSettingsString(settings));
+        //dest.writeString(MockConfigConversions.convertMapToJson(settings).toString());
     }
 
     public static final Parcelable.Creator<MockPhoneConfig> CREATOR = new Parcelable.Creator<MockPhoneConfig>() {

@@ -20,8 +20,6 @@ import java.util.concurrent.Executors;
 
 import eu.faircode.xlua.api.XMockCallApi;
 import eu.faircode.xlua.api.objects.xmock.cpu.MockCpu;
-import eu.faircode.xlua.api.xmock.XMockCpuProvider;
-import eu.faircode.xlua.api.xmock.xcall.PutMockCpuCommand;
 
 public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
     private static final String TAG = "XLua.ADCpu";
@@ -63,7 +61,7 @@ public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
             cbCpuSelected = itemView.findViewById(R.id.cbCpuSelected);
         }
 
-        private void unwire() {
+        private void unWire() {
             itemView.setOnClickListener(null);
             cbCpuSelected.setOnCheckedChangeListener(null);
         }
@@ -195,7 +193,7 @@ public class AdapterCpu extends RecyclerView.Adapter<AdapterCpu.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.unwire();
+        holder.unWire();
         MockCpu cpu = maps.get(position);
         holder.tvCpuName.setText(cpu.getName());
         holder.tvCpuModelName.setText(cpu.getModel());

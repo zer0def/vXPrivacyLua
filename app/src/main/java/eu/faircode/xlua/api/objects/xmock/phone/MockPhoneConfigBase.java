@@ -1,5 +1,7 @@
 package eu.faircode.xlua.api.objects.xmock.phone;
 
+import androidx.annotation.NonNull;
+
 import java.util.Map;
 
 public class MockPhoneConfigBase {
@@ -24,5 +26,11 @@ public class MockPhoneConfigBase {
     public MockPhoneConfigBase setSettings(Map<String, String> settings) {
         if(settings != null) this.settings = settings;
         return this;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }

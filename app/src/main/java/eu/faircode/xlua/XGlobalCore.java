@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import eu.faircode.xlua.api.XCommandService;
 import eu.faircode.xlua.api.objects.xlua.hook.xHook;
 import eu.faircode.xlua.api.objects.xmock.cpu.MockCpu;
@@ -120,16 +121,19 @@ public class XGlobalCore {
                     Log.i(TAG, "XLua Database is null, initializing... path=");
                     xLua_db = new XDataBase(DB_NAME_LUA, context, true);
                     try {
-                        if(!xLua_db.isOpen(true))
-                            XLuaUpdater.checkForUpdate(xLua_db);
+                        XLuaUpdater.checkForUpdate(xLua_db);
                     }catch (Exception e) {
                         Log.e(TAG, "Failed to check for update: " + e);
+                        XposedBridge.log("Failed to check for update: " + e);
                     }
                 }else if(DebugUtil.isDebug())
                     Log.i(TAG , "XLua Database is not null... db=" + xLua_db);
 
 
                 if (hooks == null || hooks.isEmpty()) {
+                    if(!xLua_db.isOpen(true))
+                        return;
+                    XposedBridge.log("XLua Hook Cache is null, initializing...");
                     Log.i(TAG, "XLua Hook Cache is null, initializing...");
                     loadHooks(context);
                 }else if(DebugUtil.isDebug())

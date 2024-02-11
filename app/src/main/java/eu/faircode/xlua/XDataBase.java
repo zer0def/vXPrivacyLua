@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
 import android.os.Process;
 import android.util.Log;
 
@@ -12,15 +11,13 @@ import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import de.robv.android.xposed.XposedBridge;
 import eu.faircode.xlua.database.DatabaseQuerySnake;
 import eu.faircode.xlua.utilities.CursorUtil;
 import eu.faircode.xlua.utilities.DatabasePathUtil;
-import eu.faircode.xlua.utilities.StringUtil;
-import eu.faircode.xlua.rootbox.xFileUtils;
+import eu.faircode.xlua.rootbox.XFileUtils;
 
 public class XDataBase {
     private static final String TAG = "XLua.Database.SqliteWrapper";
@@ -45,8 +42,8 @@ public class XDataBase {
                 DatabasePathUtil.getDatabaseDirectory(context).getAbsolutePath();
 
         dbFile = new File(path + File.separator + name);
-        xFileUtils.chown(dbFile.getAbsolutePath(), Process.SYSTEM_UID, Process.SYSTEM_UID);
-        Log.i(TAG, "DB File=" + dbFile.toString());
+        DatabasePathUtil.log("db created=" + dbFile.getAbsolutePath(), false);
+        //XFileUtils.chown(dbFile.getAbsolutePath(), Process.SYSTEM_UID, Process.SYSTEM_UID);
         if(setPerms)
             setPermissions(dbFile);
     }

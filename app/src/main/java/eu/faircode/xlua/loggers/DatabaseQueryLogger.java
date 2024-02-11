@@ -33,7 +33,7 @@ public class DatabaseQueryLogger {
         XDataBase db = snake.getDatabase();
         log.append("[5] db=");
         log.append(db);
-        if(db != null){
+        if(db != null && db.getDatabase() != null){
             log.append("DB Version=");
             log.append(db.getDatabase().getVersion());
         }

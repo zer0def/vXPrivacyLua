@@ -10,13 +10,21 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.robv.android.xposed.XposedBridge;
 import eu.faircode.xlua.XDataBase;
+import eu.faircode.xlua.XposedUtil;
 import eu.faircode.xlua.api.objects.xlua.hook.xHook;
 
 public class XLuaUpdater {
     private static final String  TAG = "XLua.XLuaUpdater";
 
     public static void checkForUpdate(XDataBase db) throws Throwable {
+        if(db == null || !db.isOpen(true)) {
+            Log.e(TAG, "Failed to open Database!");
+            XposedBridge.log("Failed to checkFor Update for Database");
+            return;
+        }
+
         // Build database file
        /* File dbFile;
         if (XposedUtil.isVirtualXposed())

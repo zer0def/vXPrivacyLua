@@ -47,6 +47,11 @@ public class FragmentConfig extends Fragment {
     public View onCreateView(
             @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        //Create adapter objects
+        //Fill adapter object then with sub objects ?
+        //Select thing, then get all settings then to adapter objects
+        //then clear n fill
+
         if(DebugUtil.isDebug())
             Log.i(TAG, "FragmentConfig.onCreateView Enter");
 
@@ -78,6 +83,16 @@ public class FragmentConfig extends Fragment {
             private void updateSelection() {
                 MockPhoneConfig selected = (MockPhoneConfig) spConfigSelection.getSelectedItem();
                 String configName = (selected == null ? null : selected.getName());
+
+                if (configName == null ? spConfigSelection.getTag() != null : !configName.equals(spConfigSelection.getTag())) {
+                    Log.i(TAG, "Select group=" + configName);
+                    spConfigSelection.setTag(configName);
+                    //rvAdapter.setGroup(group);
+                    //rvConfigAdapter.set
+
+
+
+                }
 
                 Log.i(TAG, "CONFIG SELECTED=" + configName);
             }
@@ -159,12 +174,15 @@ public class FragmentConfig extends Fragment {
 
                 Log.i(TAG, "onLoad Data mapping...");
 
-                spConfigs.clear();
-                spConfigs.addAll(data.configs);
+                if(data.configs != null) {
+                    Log.i(TAG, "Config size=" + data.configs.size());
+                    spConfigs.clear();
+                    spConfigs.addAll(data.configs);
+                }
 
                 //DataLoader settings is not needed as it will be resolved here
-                MockPhoneConfig config = (MockPhoneConfig) spConfigSelection.getSelectedItem();
-                Log.i(TAG, "Config selected=" + config.getName());
+                //MockPhoneConfig config = (MockPhoneConfig) spConfigSelection.getSelectedItem();
+                //Log.i(TAG, "Config selected=" + config.getName());
 
 
                 //rvCpuAdapter.set(data.maps);

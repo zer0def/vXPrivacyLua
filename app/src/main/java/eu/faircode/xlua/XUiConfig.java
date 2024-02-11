@@ -2,6 +2,7 @@ package eu.faircode.xlua;
 
 public class XUiConfig {
     public String name;
+    public String title = "kekek";
 
     @Override
     public String toString() {
