@@ -56,7 +56,8 @@
     <string name="menu_props" translatable="false">Prop Values 2.5</string>
     <string name="menu_configs" translatable="false">Config Editor</string>
     <string name="menu_dark" translatable="false">Dark Mode</string>
-    <string name="menu_databse" translatable="false">Database</string>
+    <string name="menu_debug_logs" translatable="false">Debug Logs</string>
+    <string name="menu_database" translatable="false">Database</string>
     <string name="menu_save" translatable="false">Save</string>
     <string name="menu_cpumaps" translatable="false">CPU Maps</string>
 

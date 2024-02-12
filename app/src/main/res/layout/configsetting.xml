@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemViewConfig"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ivSettingConfigExpander"
@@ -19,10 +19,11 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tiConfigSettingsValue"
-        android:layout_width="378dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="376dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSettingConfigName" />
 

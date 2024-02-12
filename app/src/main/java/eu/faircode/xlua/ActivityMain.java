@@ -257,6 +257,22 @@ public class ActivityMain extends ActivityBase {
             }
         }));
 
+
+        drawerArray.add(new DrawerItem(this, R.string.menu_debug_logs, isDark, new DrawerItem.IListener() {
+            @Override
+            public void onClick(DrawerItem item) {
+                DebugUtil.setForceDebug(item.isChecked());
+                drawerArray.notifyDataSetChanged();//do we need this ?
+                //Hmm do note this is local context to the NON ROOT Hook on Settings :P
+                //Context may differ ?
+                //Hmm for now ignore it, the UI components at least can use this check
+                //We CAN send through the packet Debug Flag ?
+                //If different from last then replace else continue executing the Hook
+                //Actually we do need to make this a setting for the DATABASE since it will reset after restart
+                //Also default should be on (incase startup fails)
+            }
+        }));
+
         drawerList.setAdapter(drawerArray);
 
         checkFirstRun();

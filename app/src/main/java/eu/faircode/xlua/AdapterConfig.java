@@ -1,11 +1,13 @@
 package eu.faircode.xlua;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +21,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import eu.faircode.xlua.api.objects.xmock.ConfigSetting;
+import eu.faircode.xlua.api.objects.xmock.cpu.MockCpu;
 
 public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder> {
     private static final String TAG = "XLua.AdapterConfig";
@@ -36,6 +39,7 @@ public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder
         final TextView tvSettingName;
         final CheckBox cbSettingEnabled;
         final TextInputEditText tiSettingsValue;
+        final ImageView ivExpanderSettings;
 
         private HashMap<String, Boolean> expanded = new HashMap<>();
 
@@ -44,6 +48,7 @@ public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder
 
             this.itemView = itemView;
 
+            ivExpanderSettings = itemView.findViewById(R.id.ivSettingConfigExpander);
             tvSettingName = itemView.findViewById(R.id.tvSettingConfigName);
             cbSettingEnabled = itemView.findViewById(R.id.cbEnableConfigSetting);
             tiSettingsValue = itemView.findViewById(R.id.tiConfigSettingsValue);
@@ -59,10 +64,25 @@ public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder
             itemView.setOnClickListener(this);
         }
 
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(final View view) {
+            int id = view.getId();
             if(DebugUtil.isDebug())
-                Log.i(TAG, "onClick");
+                Log.i(TAG, "onClick id=" + id);
+
+            final ConfigSetting setting = settings.get(getAdapterPosition());
+            String name = setting.getName();
+
+            switch (id) {
+                case R.id.itemViewConfig:
+                    if(!expanded.containsKey(name))
+                        expanded.put(name, false);
+
+                    expanded.put(name, Boolean.FALSE.equals(expanded.get(name)));
+                    updateExpanded();
+                    break;
+            }
         }
 
         @Override
@@ -75,15 +95,20 @@ public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder
         void updateExpanded() {
             if(DebugUtil.isDebug())
                 Log.i(TAG, "Expanding Object");
+
+            ConfigSetting setting = settings.get(getAdapterPosition());
+            String name = setting.getName();
+            boolean isExpanded = expanded.containsKey(name) && Boolean.TRUE.equals(expanded.get(name));
+
+            ivExpanderSettings.setImageLevel(isExpanded ? 1 : 0);
+            tiSettingsValue.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         }
     }
 
     AdapterConfig() { setHasStableIds(true); }
 
+    @SuppressLint("NotifyDataSetChanged")
     void set(List<ConfigSetting> settings) {
-        if(DebugUtil.isDebug())
-            Log.i(TAG, "Config Settings size=" + settings.size());
-
         this.settings.clear();
         this.settings.addAll(settings);
 
@@ -111,6 +136,7 @@ public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder
         ConfigSetting cSetting = settings.get(position);
         holder.tvSettingName.setText(cSetting.getName());
         holder.tiSettingsValue.setText(cSetting.getValue());
+        holder.cbSettingEnabled.setChecked(true);
         holder.updateExpanded();
         holder.wire();
         Log.i(TAG, "Adapter Item Created Internal");

@@ -38,23 +38,14 @@ public class FragmentConfig extends Fragment {
     private final static String TAG = "XLua.FragmentConfig";
 
     private AdapterConfig rvConfigAdapter;
-
-    //private List<MockPhoneConfig> configs = new ArrayList<>();
     private Spinner spConfigSelection;
-
     private ArrayAdapter<MockPhoneConfig> spConfigs;
 
     public View onCreateView(
             @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        //Create adapter objects
-        //Fill adapter object then with sub objects ?
-        //Select thing, then get all settings then to adapter objects
-        //then clear n fill
-
         if(DebugUtil.isDebug())
             Log.i(TAG, "FragmentConfig.onCreateView Enter");
-
 
         final View main = inflater.inflate(R.layout.configeditor, container, false);
         Log.i(TAG, "MAIN View Created for Fragment Config");
@@ -83,23 +74,29 @@ public class FragmentConfig extends Fragment {
             private void updateSelection() {
                 MockPhoneConfig selected = (MockPhoneConfig) spConfigSelection.getSelectedItem();
                 String configName = (selected == null ? null : selected.getName());
+                Log.i(TAG, "CONFIG SELECTED=" + configName);
+
 
                 if (configName == null ? spConfigSelection.getTag() != null : !configName.equals(spConfigSelection.getTag())) {
-                    Log.i(TAG, "Select group=" + configName);
                     spConfigSelection.setTag(configName);
-                    //rvAdapter.setGroup(group);
-                    //rvConfigAdapter.set
-
-
-
                 }
 
-                Log.i(TAG, "CONFIG SELECTED=" + configName);
+                if(selected != null) {
+                    List<ConfigSetting> settings = new ArrayList<>(MockConfigConversions.hashMapToListSettings(selected.getSettings()));
+                    if(DebugUtil.isDebug())
+                        Log.i(TAG, "SELECTED SETTINGS COUNT=" + settings.size());
+
+                    rvConfigAdapter.set(settings);
+                }
+
+                Log.i(TAG, "END CONFIG SELECTED=" + configName);
             }
         });
 
 
-        Log.i(TAG, "Created Configs Drop Down, Getting Rotate View For Config Settings, Fragment Config");
+        if(DebugUtil.isDebug())
+            Log.i(TAG, "Created Configs Drop Down, Getting Rotate View For Config Settings, Fragment Config");
+
         RecyclerView rvSettings = main.findViewById(R.id.rvConfigSettings);
         rvSettings.setVisibility(View.VISIBLE);
         rvSettings.setHasFixedSize(false);
@@ -110,24 +107,22 @@ public class FragmentConfig extends Fragment {
             }
         };
 
-        Log.i(TAG, "Created Layout Settings for Config Settings, Fragment Config");
+        if(DebugUtil.isDebug())
+            Log.i(TAG, "Created Layout Settings for Config Settings, Fragment Config");
 
         llm.setAutoMeasureEnabled(true);
         rvSettings.setLayoutManager(llm);
         rvConfigAdapter = new AdapterConfig();
         rvSettings.setAdapter(rvConfigAdapter);
 
-        Log.i(TAG, "Created the Layout for Config Settings, Fragment Config");
-
         if(DebugUtil.isDebug())
-            Log.i(TAG, "FragmentConfig.onCreateView Leave");
+            Log.i(TAG, "Created the Layout for Config Settings, Fragment Config, leaving now...");
 
         return main;
     }
 
     @Override
     public void onResume() {
-        Log.i(TAG, "Starting on RESUME");
         super.onResume();
         loadData();
     }
@@ -165,29 +160,49 @@ public class FragmentConfig extends Fragment {
 
                 Log.i(TAG, "Created some activity");
 
-                Collections.sort(data.settings, new Comparator<ConfigSetting>() {
-                    @Override
-                    public int compare(ConfigSetting o1, ConfigSetting o2) {
-                        return o1.getName().compareToIgnoreCase(o2.getName());
-                    }
-                });
+                //MockPhoneConfig selected = (MockPhoneConfig) spConfigSelection.getSelectedItem();
+                /*MockPhoneConfig selected = (MockPhoneConfig) spConfigSelection.getSelectedItem();
+                if(selected != null) {
+                    List<ConfigSetting> settings = new ArrayList<>(MockConfigConversions.hashMapToListSettings(selected.getSettings()));
+                    Collections.sort(settings, new Comparator<ConfigSetting>() {
+                        @Override
+                        public int compare(ConfigSetting o1, ConfigSetting o2) {
+                            return o1.getName().compareToIgnoreCase(o2.getName());
+                        }
+                    });
+
+                    rvConfigAdapter.set(settings);
+                    //this can be an issue
+                    //we can remove the background loader
+                    //to being we should not be cross threading modifying these elements
+                    //Should happen only on this one single thread so no need for background updater
+                    //Remember background updater is for the OTHER component (Pro cam)
+                    //We still need to load in at least the configs :P
+                    //Tho we can import export so make sure those invoke a update
+
+                }*/
+
 
                 Log.i(TAG, "onLoad Data mapping...");
 
                 if(data.configs != null) {
-                    Log.i(TAG, "Config size=" + data.configs.size());
-                    spConfigs.clear();
-                    spConfigs.addAll(data.configs);
+                    if(spConfigs.getCount() < 1) {
+                        spConfigs.clear();
+                        spConfigs.addAll(data.configs);
+                        return;
+                    }
+
+                    for(int i = 0; i < spConfigs.getCount(); i++) {
+                        MockPhoneConfig confA = spConfigs.getItem(i);
+                        for(MockPhoneConfig confB : data.configs) {
+                            if(confB.equals(confA) && confB.getSettings().size() != confA.getSettings().size()) {
+                                spConfigs.clear();
+                                spConfigs.addAll(data.configs);
+                                return;
+                            }
+                        }
+                    }
                 }
-
-                //DataLoader settings is not needed as it will be resolved here
-                //MockPhoneConfig config = (MockPhoneConfig) spConfigSelection.getSelectedItem();
-                //Log.i(TAG, "Config selected=" + config.getName());
-
-
-                //rvCpuAdapter.set(data.maps);
-                //swipeRefresh.setRefreshing(false);
-                //pbCpu.setVisibility(View.GONE);
             }else {
                 Log.e(TAG, Log.getStackTraceString(data.exception));
                 Snackbar.make(getView(), data.exception.toString(), Snackbar.LENGTH_LONG).show();
@@ -214,7 +229,6 @@ public class FragmentConfig extends Fragment {
             SettingDataHolder data = new SettingDataHolder();
             try {
                 data.theme = XLuaCallApi.getTheme(getContext());
-                data.settings.clear();
                 data.configs.clear();
 
                 Log.i(TAG, "Getting Phone Configs...");
@@ -222,17 +236,12 @@ public class FragmentConfig extends Fragment {
                 Log.i(TAG, "Config size=" + configs.size());
                 data.configs.addAll(configs);
 
-                Map<String, String> settingsMap = configs.get(0).getSettings();
-                Log.i(TAG, "Config Settings size=" + settingsMap.size());
-                List<ConfigSetting> settings = new ArrayList<>(MockConfigConversions.hashMapToListSettings(settingsMap));
-                data.settings.addAll(settings);
             }catch (Throwable ex) {
-                data.settings.clear();
                 data.exception = ex;
                 Log.e(TAG, ex.getMessage());
             }
 
-            Log.i(TAG, "DataLoader Configs size=" + data.configs.size() + " Settings size=" + data.settings.size());
+            Log.i(TAG, "DataLoader Configs size=" + data.configs.size());
             return data;
         }
     }
@@ -240,7 +249,6 @@ public class FragmentConfig extends Fragment {
     private static class SettingDataHolder {
         String theme;
         List<MockPhoneConfig> configs = new ArrayList<>();
-        List<ConfigSetting> settings = new ArrayList<>();
         Throwable exception = null;
     }
 }
