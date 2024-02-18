@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemViewSetting"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:contentPadding="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clSettingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivBtSaveSettingReset"
+                android:layout_width="?android:attr/listPreferredItemHeightSmall"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/ic_remix_a_b"
+                app:layout_constraintStart_toEndOf="@+id/ivBtSaveSettingSetting"
+                app:layout_constraintTop_toBottomOf="@+id/spSettingRandomizerSpinner" />
+
+            <CheckBox
+                android:id="@+id/cbSettingEnabled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                app:layout_constraintBottom_toTopOf="@+id/tvSettingsSettingFullName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvSettingNameLabel"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/tvSettingsSettingFullName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:ellipsize="start"
+                android:focusable="false"
+                android:singleLine="true"
+                android:text="unique.setting.name"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                app:layout_constraintEnd_toEndOf="@+id/cbSettingEnabled"
+                app:layout_constraintStart_toStartOf="@+id/tvSettingNameLabel"
+                app:layout_constraintTop_toBottomOf="@+id/tvSettingNameLabel" />
+
+            <ImageView
+                android:id="@+id/ivBtDeleteSetting"
+                android:layout_width="?android:attr/listPreferredItemHeightSmall"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/ic_remix_delete_bin_2_line"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBtSaveSettingSetting"
+                app:layout_constraintStart_toStartOf="@+id/tiSettingsSettingValue"
+                app:layout_constraintTop_toTopOf="@+id/ivBtSaveSettingSetting" />
+
+            <ImageView
+                android:id="@+id/ivBtRandomSettingValue"
+                android:layout_width="?android:attr/listPreferredItemHeightSmall"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/ic_remix_dice_fill"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBtSaveSettingReset"
+                app:layout_constraintStart_toEndOf="@+id/ivBtSaveSettingReset"
+                app:layout_constraintTop_toTopOf="@+id/ivBtSaveSettingReset" />
+
+            <ImageView
+                android:id="@+id/ivBtSaveSettingSetting"
+                android:layout_width="?android:attr/listPreferredItemHeightSmall"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/ic_remix_save_3_fill"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBtSaveSettingReset"
+                app:layout_constraintStart_toEndOf="@+id/ivBtDeleteSetting"
+                app:layout_constraintTop_toTopOf="@+id/ivBtSaveSettingReset" />
+
+            <Spinner
+                android:id="@+id/spSettingRandomizerSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="@+id/tiSettingsSettingValue"
+
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tiSettingsSettingValue"
+                app:layout_constraintTop_toBottomOf="@+id/tiSettingsSettingValue" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiSettingsSettingValue"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSettingsSettingDescription" />
+
+            <TextView
+                android:id="@+id/tvSettingsSettingDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:lines="4"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="Some Setting Description goes here, this text is a test to see how it wold appear on the UI if it was very long Description"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSettingsSettingFullName" />
+
+            <TextView
+                android:id="@+id/tvSettingNameLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="12dp"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:lines="1"
+                android:text="Cool Setting"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                app:layout_constraintEnd_toStartOf="@+id/cbSettingEnabled"
+                app:layout_constraintStart_toEndOf="@+id/ivExpanderSettingsSetting"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivExpanderSettingsSetting"
+                android:layout_width="30dp"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="?attr/expander"
+                app:layout_constraintBottom_toBottomOf="@+id/tvSettingNameLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvSettingNameLabel" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

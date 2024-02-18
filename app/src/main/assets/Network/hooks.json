@@ -3,6 +3,114 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
+    "group": "List.Wifi",
+    "name": "WifiManager.getScanResults",
+    "author": "OBC",
+    "className": "android.net.wifi.WifiManager",
+    "methodName": "getScanResults",
+    "parameterTypes": [ ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "Get a list of Available Wifi Networks",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@list_wifimanager_getscanresults",
+    "settings":[ "network.allowed.list" ]
+  },
+
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "List.Wifi",
+    "name": "WifiManager.getConfiguredNetworks",
+    "author": "OBC",
+    "className": "android.net.wifi.WifiManager",
+    "methodName": "getConfiguredNetworks",
+    "parameterTypes": [ ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "maxSdk": 29,
+    "version": 1,
+    "description": "Get a list of Saved Wifi Networks",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@list_wifimanager_getconfigurednetworks",
+    "settings":[ "network.allowed.list" ]
+  },
+
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "List.Wifi",
+    "name": "WifiManager.getDhcpInfo",
+    "author": "OBC",
+    "className": "android.net.wifi.WifiManager",
+    "methodName": "getDhcpInfo",
+    "parameterTypes": [ ],
+    "returnType": "android.net.DhcpInfo",
+    "minSdk": 1,
+    "maxSdk": 31,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_wifimanager_getdhcpinfo"
+  },
+
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "ID.Network",
+    "name": "LinkProperties.getDnsServers",
+    "author": "OBC",
+    "className": " android.net.LinkProperties",
+    "methodName": "getDnsServers",
+    "parameterTypes": [ ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "Returns all the InetAddress for DNS servers on this link. ",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@generic_empty_list"
+  },
+
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "ID.Network",
+    "name": "LinkProperties.getDomains",
+    "author": "OBC",
+    "className": " android.net.LinkProperties",
+    "methodName": "getDomains",
+    "parameterTypes": [ ],
+    "returnType": "java.lang.String",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "Get the DNS domains search path set for this link.",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_linkproperties_getdomains"
+  },
+
+
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
     "group": "ID.Network",
     "name": "InetAddress.getHostAddress",
     "author": "OBC",
@@ -19,9 +127,8 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_inetaddress_host",
-    "settings":[ "net.host_address" ]
+    "settings":[ "network.host.address" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -41,9 +148,8 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_inetaddress_host",
-    "settings":[ "net.host_address" ]
+    "settings":[ "network.host.address" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -62,9 +168,9 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_fakestr_one"
+    "luaScript": "@id_inetaddress_host",
+    "settings":[ "network.host.address" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -83,9 +189,9 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_fakestr_one"
+    "luaScript": "@id_inetaddress_host",
+    "settings":[ "network.host.address" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -104,9 +210,9 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_fakestr_one"
+    "luaScript": "@id_inetaddress_host",
+    "settings":[ "network.host.address" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -125,7 +231,8 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_fakestr_one"
+    "luaScript": "@id_inetaddress_host",
+    "settings":[ "network.host.address" ]
   },
 
   //id_inetaddress_getaddress
@@ -147,9 +254,9 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_inetaddress_getaddress"
+    "luaScript": "@id_inetaddress_getaddress",
+    "settings":[ "network.host.address" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -169,9 +276,8 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_inetaddress_host",
-    "settings":[ "net.host_address" ]
+    "settings":[ "network.host.address" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -191,9 +297,8 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_inetaddress_name",
-    "settings":[ "net.host_name" ]
+    "settings":[ "network.host.name" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -213,9 +318,8 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_inetaddress_name",
-    "settings":[ "net.host_name" ]
+    "settings":[ "network.host.name" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -235,9 +339,8 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_inetaddress_name",
-    "settings":[ "net.host_name" ]
+    "settings":[ "network.host.name" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -257,9 +360,8 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_inetaddress_name",
-    "settings":[ "net.host_name" ]
+    "settings":[ "network.host.name" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -279,10 +381,8 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_inetaddress_name",
-    "settings":[ "net.host_address" ]
+    "settings":[ "network.host.name" ]
   },
-
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -301,10 +401,9 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_fakestr_one"
-    //lets create a better fake
+    "luaScript": "@id_inetaddress_name",
+    "settings":[ "network.host.name" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -323,10 +422,9 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_fakestr_one"
-    //lets create a better fake
+    "luaScript": "@id_inetaddress_name",
+    "settings":[ "network.host.name" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -347,7 +445,6 @@
     "notify":false,
     "luaScript": "@id_wifiinfo_getipaddress"
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -368,7 +465,6 @@
     "notify":false,
     "luaScript": "@id_wifiinfo_getipaddress_2"
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -388,6 +484,6 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_inetaddress_host",
-    "settings":[ "net.host_address" ]
+    "settings":[ "network.host.address" ]
   }
 ]

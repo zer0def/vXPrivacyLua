@@ -159,7 +159,7 @@ public class XUtil {
             PackageManager pm = context.getPackageManager();
             Resources resources = pm.getResourcesForApplication(BuildConfig.APPLICATION_ID);
             NotificationChannel channel = new NotificationChannel(
-                    XGlobalCore.cChannelName, resources.getString(R.string.channel_privacy), NotificationManager.IMPORTANCE_HIGH);
+                    XGlobals.cChannelName, resources.getString(R.string.channel_privacy), NotificationManager.IMPORTANCE_HIGH);
             /*NotificationChannel channel = new NotificationChannel(
                     XProvider.cChannelName, resources.getString(R.string.channel_privacy), NotificationManager.IMPORTANCE_HIGH);*/
             channel.setSound(null, Notification.AUDIO_ATTRIBUTES_DEFAULT);
@@ -198,8 +198,11 @@ public class XUtil {
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(attr, typedValue, true);
         return typedValue.data;
+        //boolean found = theme.resolveAttribute(attr, typedValue, true);
+        //return found ? typedValue.data : 0;  // Fallback to default color or handle error
     }
 
+    //Hmm we have this
     public static void areYouSure(ActivityBase activity, String question, final DoubtListener listener) {
         final DialogObserver observer = new DialogObserver();
         AlertDialog ad = new AlertDialog.Builder(activity)

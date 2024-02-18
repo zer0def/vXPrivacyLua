@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.HOST", "wpds5.hot.corp.google.com")
+    local fake = param:getSetting("android.build.host", "ido-X3999A")
     param:setResult(fake)
     return true, ret, fake
 end

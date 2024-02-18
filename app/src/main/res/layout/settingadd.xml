@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/etAddSettingSettingName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"/>
+
+    <EditText
+        android:id="@+id/etAddSettingSettingValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etAddSettingSettingName"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="0dp"
+        android:hint="Value"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <EditText
+        android:id="@+id/etAddSettingSettingDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etAddSettingSettingValue"
+        android:layout_marginTop="-3dp"
+        android:hint="Description"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <CheckBox
+        android:id="@+id/cbAddSettingSettingAddCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etAddSettingSettingDescription"
+        android:checked="true"
+        android:text="Create Setting" />
+
+    <CheckBox
+        android:id="@+id/cbAddSettingDefaultSettingAddCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cbAddSettingSettingAddCheck"
+        android:checked="true"
+        android:text="Create Default Map Setting" />
+
+</RelativeLayout >

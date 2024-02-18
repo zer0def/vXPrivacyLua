@@ -4,10 +4,10 @@ function after(hook, param)
 		return false
 	end
 
-	local fake = param:getSetting("value.phone_number")
-	if fake == nil then 
-		fake = "1111111111"
-	end
+    local fake = param:getSetting("unique.gsm.phone.number")
+    if fake == nil then
+        fake = param:getSetting("value.phone_number", "6666666666")
+    end
 
 	--log("Fake [line1Number] ... ");
 	param:setResult(fake)

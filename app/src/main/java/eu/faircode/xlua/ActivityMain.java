@@ -42,6 +42,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -57,8 +58,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import eu.faircode.xlua.api.xlua.XHookProvider;
-import eu.faircode.xlua.api.XLuaCallApi;
+import eu.faircode.xlua.api.standard.UserIdentityPacket;
+import eu.faircode.xlua.api.xlua.provider.XLuaHookProvider;
+import eu.faircode.xlua.api.xlua.XLuaCall;
+import eu.faircode.xlua.utilities.PrefUtil;
 
 public class ActivityMain extends ActivityBase {
     private final static String TAG = "XLua.Main";
@@ -82,7 +85,7 @@ public class ActivityMain extends ActivityBase {
         super.onCreate(savedInstanceState);
 
         // Check if service is running
-        if (!XHookProvider.isAvailable(this)) {
+        if (!XLuaHookProvider.isAvailable(this)) {
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.msg_no_service), Snackbar.LENGTH_INDEFINITE);
 
             final Intent intent = getPackageManager().getLaunchIntentForPackage("de.robv.android.xposed.installer");
@@ -145,10 +148,12 @@ public class ActivityMain extends ActivityBase {
         });
 
         // Initialize drawer
-        boolean notifyNew = XLuaCallApi.getSettingBoolean(this, "notify_new_apps"); //XProvider.getSettingBoolean(this, "global", "notify_new_apps");
-        boolean restrictNew = XLuaCallApi.getSettingBoolean(this, "restrict_new_apps"); //XProvider.getSettingBoolean(this, "global", "restrict_new_apps");
+        boolean notifyNew = XLuaCall.getSettingBoolean(this, "notify_new_apps"); //XProvider.getSettingBoolean(this, "global", "notify_new_apps");
+        boolean restrictNew = XLuaCall.getSettingBoolean(this, "restrict_new_apps"); //XProvider.getSettingBoolean(this, "global", "restrict_new_apps");
         //String theme = XProvider.getSetting(this,"global", "theme");
+
         boolean isDark = getThemeName().equals("dark");
+        boolean isVerbose = getDebugState();
 
         final ArrayAdapterDrawer drawerArray = new ArrayAdapterDrawer(ActivityMain.this, R.layout.draweritem);
 
@@ -156,7 +161,7 @@ public class ActivityMain extends ActivityBase {
             drawerArray.add(new DrawerItem(this, R.string.menu_notify_new, notifyNew, new DrawerItem.IListener() {
                 @Override
                 public void onClick(DrawerItem item) {
-                    XLuaCallApi.putSettingBoolean(ActivityMain.this, "notify_new_apps", item.isChecked());
+                    XLuaCall.putSettingBoolean(ActivityMain.this, "notify_new_apps", item.isChecked());
                     //XProvider.putSettingBoolean(ActivityMain.this, "global", "notify_new_apps", item.isChecked());
                     drawerArray.notifyDataSetChanged();
                 }
@@ -166,7 +171,7 @@ public class ActivityMain extends ActivityBase {
             drawerArray.add(new DrawerItem(this, R.string.menu_restrict_new, restrictNew, new DrawerItem.IListener() {
                 @Override
                 public void onClick(DrawerItem item) {
-                    XLuaCallApi.putSettingBoolean(ActivityMain.this, "restrict_new_apps", item.isChecked());
+                    XLuaCall.putSettingBoolean(ActivityMain.this, "restrict_new_apps", item.isChecked());
                     //XProvider.putSettingBoolean(ActivityMain.this, "global", "restrict_new_apps", item.isChecked());
                     drawerArray.notifyDataSetChanged();
                 }
@@ -192,7 +197,7 @@ public class ActivityMain extends ActivityBase {
         drawerArray.add(new DrawerItem(this, R.string.menu_readme, new DrawerItem.IListener() {
             @Override
             public void onClick(DrawerItem item) {
-                Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/M66B/XPrivacyLua"));
+                Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/0bbedCode/XPL-EX"));
                 if (browse.resolveActivity(getPackageManager()) == null)
                     Snackbar.make(findViewById(android.R.id.content), getString(R.string.msg_no_browser), Snackbar.LENGTH_LONG).show();
                 else
@@ -203,7 +208,7 @@ public class ActivityMain extends ActivityBase {
         drawerArray.add(new DrawerItem(this, R.string.menu_faq, new DrawerItem.IListener() {
             @Override
             public void onClick(DrawerItem item) {
-                Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/M66B/XPrivacyLua/blob/master/FAQ.md"));
+                Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/0bbedCode/XPL-EX/blob/master/FAQ.md"));
                 if (browse.resolveActivity(getPackageManager()) == null)
                     Snackbar.make(findViewById(android.R.id.content), getString(R.string.msg_no_browser), Snackbar.LENGTH_LONG).show();
                 else
@@ -211,7 +216,7 @@ public class ActivityMain extends ActivityBase {
             }
         }));
 
-        drawerArray.add(new DrawerItem(this, R.string.menu_donate, new DrawerItem.IListener() {
+        /*drawerArray.add(new DrawerItem(this, R.string.menu_donate, new DrawerItem.IListener() {
             @Override
             public void onClick(DrawerItem item) {
                 Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("https://lua.xprivacy.eu/"));
@@ -219,6 +224,13 @@ public class ActivityMain extends ActivityBase {
                     Snackbar.make(findViewById(android.R.id.content), getString(R.string.msg_no_browser), Snackbar.LENGTH_LONG).show();
                 else
                     startActivity(browse);
+            }
+        }));*/
+
+        drawerArray.add(new DrawerItem(this, R.string.menu_whats_new_button, new DrawerItem.IListener() {
+            @Override
+            public void onClick(DrawerItem item) {
+                whatsNew();
             }
         }));
 
@@ -235,11 +247,19 @@ public class ActivityMain extends ActivityBase {
             }
         }));
 
+        drawerArray.add(new DrawerItem(this, R.string.menu_debug_logs, isVerbose, new DrawerItem.IListener() {
+            @Override
+            public void onClick(DrawerItem item) {
+                setDebugState(item.isCheckable());
+                drawerArray.notifyDataSetChanged();//fix context issues
+            }
+        }));
+
+
         drawerArray.add(new DrawerItem(this, R.string.menu_props, new DrawerItem.IListener() {
             @Override
             public void onClick(DrawerItem item) {
                 menuProps();
-                //Intent intent = new Intent(ActivityMain.this, ActivityProps.class);
             }
         }));
 
@@ -257,25 +277,32 @@ public class ActivityMain extends ActivityBase {
             }
         }));
 
-
-        drawerArray.add(new DrawerItem(this, R.string.menu_debug_logs, isDark, new DrawerItem.IListener() {
+        drawerArray.add(new DrawerItem(this, R.string.menu_settings, new DrawerItem.IListener() {
             @Override
             public void onClick(DrawerItem item) {
-                DebugUtil.setForceDebug(item.isChecked());
-                drawerArray.notifyDataSetChanged();//do we need this ?
-                //Hmm do note this is local context to the NON ROOT Hook on Settings :P
-                //Context may differ ?
-                //Hmm for now ignore it, the UI components at least can use this check
-                //We CAN send through the packet Debug Flag ?
-                //If different from last then replace else continue executing the Hook
-                //Actually we do need to make this a setting for the DATABASE since it will reset after restart
-                //Also default should be on (incase startup fails)
+                menuSettings();
             }
         }));
 
         drawerList.setAdapter(drawerArray);
+        //whatsNew
 
         checkFirstRun();
+    }
+
+    public void setDebugState(boolean enabled) {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        prefs.edit().putBoolean("verbosedebug", enabled).apply();
+    }
+
+    public boolean getDebugState() {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(!prefs.contains("verbosedebug")) {
+            prefs.edit().putBoolean("verbosedebug", true).apply();
+            return true;
+        }
+
+        return prefs.getBoolean("verbosedebug", true);
     }
 
     @Override
@@ -292,7 +319,7 @@ public class ActivityMain extends ActivityBase {
         setIntent(intent);
 
         if (this.menu != null)
-            updateMenu(this.menu);//maybe we dont need out mnu
+            updateMenu(this.menu);
     }
 
     @Override
@@ -323,10 +350,7 @@ public class ActivityMain extends ActivityBase {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        //for top menu add function fuck whatdgkjshdflkhsdkjfh
         Log.i(TAG, "Prepare options");
-
-        // Search
         MenuItem menuSearch = menu.findItem(R.id.menu_search);
         final SearchView searchView = (SearchView) menuSearch.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -419,7 +443,7 @@ public class ActivityMain extends ActivityBase {
                 executor.submit(new Runnable() {
                     @Override
                     public void run() {
-                        XLuaCallApi.putSetting(ActivityMain.this, "show", set.name());
+                        XLuaCall.putSetting(ActivityMain.this, "show", set.name());
                     }
                 });
                 return true;
@@ -436,10 +460,16 @@ public class ActivityMain extends ActivityBase {
     private void menuHelp() {
         startActivity(new Intent(this, ActivityHelp.class));
     }
-    private void menuProps() { startActivity(new Intent(this, ActivityProps.class)); }
+    private void menuProps() { startActivity(new Intent(this, ActivityProperties.class)); }
     private void menuDBs() { startActivity(new Intent(this, ActivityDatabase.class)); }
     private void menuCPU() { startActivity(new Intent(this, ActivityCpu.class)); }
     private void menuConfig() { startActivity(new Intent(this, ActivityConfig.class)); }
+    private void menuSettings() {
+        Intent settingIntent = new Intent(this, ActivitySettings.class);
+        settingIntent.putExtra("packageName", UserIdentityPacket.GLOBAL_NAMESPACE);
+        startActivity(settingIntent);
+        //startActivity(new Intent(this, ActivitySettings.class));
+    }
 
 
     public void updateMenu(Menu menu) {
@@ -454,6 +484,22 @@ public class ActivityMain extends ActivityBase {
                 searchView.setQuery(pkg, true);
             }
         }
+    }
+
+    public void whatsNew() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.thankyou, null, false);
+        TextView tvLicence = view.findViewById(R.id.tvThankYouObbed);
+        tvLicence.setMovementMethod(LinkMovementMethod.getInstance());
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        tvLicence.setText(Html.fromHtml(getString(R.string.whats_new, year)));
+        firstRunDialog = new AlertDialog.Builder(this)
+                .setView(view).setCancelable(false)
+                .setPositiveButton(R.string.option_thanks, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { Toast.makeText(getApplicationContext(), "ObedCode Says good luck", Toast.LENGTH_SHORT).show(); }
+                }).create();
+        firstRunDialog.show();
     }
 
     public void checkFirstRun() {
@@ -496,6 +542,11 @@ public class ActivityMain extends ActivityBase {
             firstRunDialog.show();
 
             observer.startObserving(this, firstRunDialog);
+        }
+
+        if(!PrefUtil.getPreferenceBoolean(this, "welcome", false, true)) {
+            PrefUtil.setPreferenceBoolean(this, "welcome", true);
+            whatsNew();
         }
     }
 

@@ -24,11 +24,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.Process;
 import android.os.SystemClock;
 import android.util.Log;
@@ -36,31 +34,16 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.LuaError;
-import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Prototype;
 import org.luaj.vm2.Varargs;
-import org.luaj.vm2.compiler.LuaC;
-import org.luaj.vm2.lib.DebugLib;
-import org.luaj.vm2.lib.OneArgFunction;
-import org.luaj.vm2.lib.VarArgFunction;
-import org.luaj.vm2.lib.jse.CoerceJavaToLua;
-import org.luaj.vm2.lib.jse.JsePlatform;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -68,51 +51,25 @@ import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import eu.faircode.xlua.api.properties.MockPropConversions;
+import eu.faircode.xlua.api.xlua.XLuaCall;
+import eu.faircode.xlua.api.xmock.XMockQuery;
 import eu.faircode.xlua.hooks.XHookUtil;
 
 //package eu.faircode.xlua;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Process;
-import android.os.SystemClock;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaError;
-import org.luaj.vm2.Prototype;
-import org.luaj.vm2.Varargs;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Member;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.WeakHashMap;
 
-import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import eu.faircode.xlua.api.XLuaCallApi;
-import eu.faircode.xlua.api.XLuaQueryApi;
+import eu.faircode.xlua.api.xlua.XLuaQuery;
 import eu.faircode.xlua.hooks.LuaHookWrapper;
 import eu.faircode.xlua.hooks.LuaScriptHolder;
-import eu.faircode.xlua.hooks.XHookUtil;
 import eu.faircode.xlua.hooks.XReporter;
 import eu.faircode.xlua.hooks.XResolved;
+import eu.faircode.xlua.randomizers.GlobalRandoms;
+import eu.faircode.xlua.randomizers.IRandomizer;
 import eu.faircode.xlua.utilities.BundleUtil;
 
-import eu.faircode.xlua.api.objects.xlua.hook.xHook;
+import eu.faircode.xlua.api.hook.XLuaHook;
 
 public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
     private static final String TAG = "XLua.XCoreStartup";
@@ -148,8 +105,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
-                        //Log.i(TAG, "INSIDE XPOSED HOOK BEFORE CALL: " + lpparam.packageName + "  p=" + lpparam.processName);
-                        XSettingBridgeStatic.handeCall(param, lpparam.packageName);
+                        XCommandBridgeStatic.handeCall(param, lpparam.packageName);
                     }
                 });
 
@@ -159,8 +115,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
-                        //Log.i(TAG, "INSIDE XPOSED HOOK BEFORE QUERY: " + lpparam.packageName + "  p=" + lpparam.processName);
-                        XSettingBridgeStatic.handleQuery(param, lpparam.packageName);
+                        XCommandBridgeStatic.handleQuery(param, lpparam.packageName);
                     }
                 });
     }
@@ -278,6 +233,8 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 });
     }
 
+    public static final HashMap<String, String> keys = new HashMap<>();
+
     public void hookPackage(final XC_LoadPackage.LoadPackageParam lpparam, int uid, final Context context) throws Throwable {
 
         //
@@ -290,20 +247,61 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
         //i hope ?
 
         String pName = lpparam.packageName;
-        Collection<xHook> hooks =
-                XLuaQueryApi.getAssignments(context, pName, uid, true);
 
-        Log.i(TAG, "pkg=" + lpparam.packageName + " uid=" + uid + " hooks=" + hooks.size());
+        //Since we are calling let us just check caller hash
+        //For functions like this just check caller hash
+        //boolean protectCommunication = XLuaCall.getSettingBoolean(context, 1337, "protect", Integer.toString(pName.hashCode()));
+        //if(protectCommunication) { }
 
-        final Map<String, String> settings = XLuaQueryApi.getGlobalSettings(context, uid);
-        settings.putAll(XLuaQueryApi.getSettings(context, lpparam.packageName, uid));
+        //We can make it so if a key returns from the DB
+        //Again we as the caller were authed already
+        //if returns from the DB then there is a protect flag and that is the key
+        //simply unchecking and re-checking will reset the key
+        //On System side we can init keys in cache
+        //in order for the UI to do as needed we will keep cache on this context updated
+        //we can also each load get keys
 
-        Log.i(TAG,"pkg [" + lpparam.packageName + "] settings=" + settings.size());
+        final String key = UUID.randomUUID().toString();
+        Log.i(TAG, "Key created! pkg=" + pName + " key=" + key);
+        keys.put(pName, key);
+
+        Collection<XLuaHook> hooks =
+                XLuaQuery.getAssignments(context, pName, uid, true);
+
+        Log.i(TAG, "pkg=" + pName + " uid=" + uid + " hooks=" + hooks.size());
+
+        final Map<String, String> settings = XLuaQuery.getGlobalSettings(context, uid);
+        settings.putAll(XLuaQuery.getSettings(context, uid, pName, true));
+
+        List<IRandomizer> randomizers = GlobalRandoms.getRandomizers();
+        for(Map.Entry<String, String> s : settings.entrySet()) {
+            if(s.getValue().equalsIgnoreCase("%random%") || s.getValue().equalsIgnoreCase("%randomize%")) {
+                for(IRandomizer r : randomizers) {
+                    if(r.isSetting(s.getKey())) {
+                        String nv = r.generateString();
+                        settings.put(s.getKey(), nv);
+                        break;
+                    }
+                }
+            }
+        }
+
+        //why global settings ? I suspect if null still use ?
+        //nvm global is good, as in defined for all, then ovveride if need with the putAll
+        //can be 0 globals to how ever many
+
+        //final Map<String, Integer> propSettings = MockPropConversions.toMap(XMockQuery.getModifiedProperties(context));
+        //propSettings.putAll(MockPropConversions.toMap(XMockQuery.getModifiedProperties(context, uid, pName)));
+        final Map<String, Integer> propSettings = MockPropConversions.toMap(XMockQuery.getModifiedProperties(context, uid, pName));
+        final Map<String, String> propMaps = XMockQuery.getMockPropMapsMap(context, true, settings, false);
+        //we can also lazy load it ?
+
+        Log.i(TAG,"pkg [" + pName + "] settings=" + settings.size() + " properties=" + propSettings.size() + " prop maps=" + propMaps.size());
 
         Map<LuaScriptHolder, Prototype> scriptPrototype = new HashMap<>();
         PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 
-        for(final xHook hook : hooks) {
+        for(final XLuaHook hook : hooks) {
             try {
                 //SDK Check min & max
                 if(!hook.isAvailable(pInfo.versionCode))
@@ -325,7 +323,16 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                             long run = SystemClock.elapsedRealtime();
 
                             //Init lua runtime / Hook
-                            LuaHookWrapper luaField = LuaHookWrapper.createField(context, hook, settings, compiledScript, field);
+                            LuaHookWrapper luaField = LuaHookWrapper.createField(
+                                    context,
+                                    hook,
+                                    settings,
+                                    propSettings,
+                                    propMaps,
+                                    compiledScript,
+                                    field,
+                                    key);
+
                             if(!luaField.isValid()) {
                                 Log.w(TAG, "Skipping over Field: " + field.getName() + " because its not a AFTER function...");
                                 continue;
@@ -343,8 +350,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                     if(member != null) {
                         target.throwIfMismatchReturn(member);
 
-                        XC_MethodHook.Unhook k = XposedBridge.hookMethod(member, new XC_MethodHook() {
-
+                        XposedBridge.hookMethod(member, new XC_MethodHook() {
                             //within here set key
                             private final WeakHashMap<Thread, Globals> threadGlobals = new WeakHashMap<>();
                             //private final String SecretKey
@@ -369,13 +375,29 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                                     synchronized (threadGlobals) {
                                         Thread thread = Thread.currentThread();
                                         if (!threadGlobals.containsKey(thread))
-                                            threadGlobals.put(thread, XHookUtil.getGlobals(context, hook, settings));
+                                            threadGlobals.put(thread, XHookUtil.getGlobals(
+                                                    context,
+                                                    hook,
+                                                    settings,
+                                                    propSettings,
+                                                    propMaps,
+                                                    key));
 
                                         Globals globals = threadGlobals.get(thread);
 
                                         // Initialize Lua runtime
                                         luaMember = LuaHookWrapper
-                                                .createMember(context, hook, settings, compiledScript, function, param, globals);
+                                                .createMember(
+                                                        context,
+                                                        hook,
+                                                        settings,
+                                                        propSettings,
+                                                        propMaps,
+                                                        compiledScript,
+                                                        function,
+                                                        param,
+                                                        globals,
+                                                        key);
 
                                         if(!luaMember.isValid())
                                             return;
@@ -390,6 +412,8 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                                 }
                             }
                         });
+                    }else {
+                        Log.e(TAG, "Member NULL: hook=" + hook.getName() + " id=" + hook.getId());
                     }
                 }
                 // Report install

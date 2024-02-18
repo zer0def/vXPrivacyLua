@@ -5,14 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +16,7 @@ import java.util.concurrent.Executors;
 
 public class AdapterDatabase extends RecyclerView.Adapter<AdapterDatabase.ViewHolder> {
     private static final String TAG = "XLua.ADDatabase";
-    private List<XDataBase> dbs = new ArrayList<>();
+    private List<XDatabase> dbs = new ArrayList<>();
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -46,7 +41,7 @@ public class AdapterDatabase extends RecyclerView.Adapter<AdapterDatabase.ViewHo
 
         public void onClick(View view) {
             Log.i(TAG, "onClick");
-            final XDataBase prop = dbs.get(getAdapterPosition());
+            final XDatabase prop = dbs.get(getAdapterPosition());
             int id = view.getId();
             String name = prop.getName();
 
@@ -62,7 +57,7 @@ public class AdapterDatabase extends RecyclerView.Adapter<AdapterDatabase.ViewHo
 
     AdapterDatabase() { setHasStableIds(true); }
 
-    void set(List<XDataBase> db_vals) {
+    void set(List<XDatabase> db_vals) {
         dbs.clear();
         Log.i(TAG, "Set has Init=" + dbs.size());
         dbs.addAll(db_vals);
@@ -83,7 +78,7 @@ public class AdapterDatabase extends RecyclerView.Adapter<AdapterDatabase.ViewHo
 
     @Override
     public void onBindViewHolder(final AdapterDatabase.ViewHolder holder, int position) {
-        XDataBase db = dbs.get(position);
+        XDatabase db = dbs.get(position);
 
         holder.tvDatabaseName.setText(db.getName());
         holder.tvDatabasePath.setText(db.getPath());

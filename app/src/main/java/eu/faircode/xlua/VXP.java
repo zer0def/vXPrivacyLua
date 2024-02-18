@@ -21,17 +21,13 @@ package eu.faircode.xlua;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XposedBridge;
 
@@ -46,7 +42,7 @@ public class VXP extends ContentProvider {
                     " uid=" + android.os.Process.myUid() +
                     " cuid=" + android.os.Binder.getCallingUid());
 
-            return XSettingBridgeStatic.vxpCall(getContext(), arg, extras, method);
+            return XCommandBridgeStatic.vxpCall(getContext(), arg, extras, method);
             //return XProvider.call(getContext(), arg, extras);
         }
         catch (Throwable ex) {
@@ -73,7 +69,7 @@ public class VXP extends ContentProvider {
             String method = split[0];
             String arg = split[1];
 
-            return XSettingBridgeStatic.vxpCursor(getContext(), arg, selectionArgs, method);
+            return XCommandBridgeStatic.vxpQuery(getContext(), arg, selectionArgs, method);
             //return XProvider.query(getContext(), projection[0].split("\\.")[1], selectionArgs);
         } catch (Throwable ex) {
             Log.e(TAG, Log.getStackTraceString(ex));

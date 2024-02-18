@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.INCREMENTAL", "N960USQU2CSI1")
+    local fake = param:getSetting("android.build.incremental", "eng.ido.20231003.173955")
     param:setResult(fake)
     return true, ret, fake
 end

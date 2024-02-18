@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.FINGERPRINT", "google/angler/angler:8.1.0/OPM1.171019.011/4448085:user/release-keys")
+    local fake = param:getSetting("android.build.fingerprint", "OnePlus/yaap_guacamoles/guacamoles:13/TQ3A.230805.001/ido10031738:user/release-keys")
     param:setResult(fake)
     return true, ret, fake
 end

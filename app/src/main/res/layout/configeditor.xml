@@ -6,69 +6,212 @@
     android:layout_height="match_parent"
     tools:context=".ActivityConfig">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvConfigSettings"
-        android:layout_width="410dp"
-        android:layout_height="501dp"
-        app:layout_constraintTop_toBottomOf="@+id/swGlobalApps"
-        tools:layout_editor_absoluteX="1dp" />
+    <!-- Above is Match to Parent, below is 0dp and bottom to bottom of parent -->
+    <!-- Also check if 411dp needs to be hardcoded -->
+    <!-- android:paddingBottom="?attr/actionBarSize" -->
+    <!-- https://stackoverflow.com/questions/32742724/recyclerview-is-cutting-off-the-last-item -->
+    <!-- For this view or future bind buttons for rotated view  -->
 
-    <Button
-        android:id="@+id/btImportConfig"
-        android:layout_width="195dp"
-        android:layout_height="45dp"
-        android:text="Import"
-        app:layout_constraintEnd_toEndOf="@+id/btSaveConfig"
-        app:layout_constraintStart_toEndOf="@+id/btExportConfig"
-        app:layout_constraintTop_toBottomOf="@+id/btSaveConfig" />
 
-    <Button
-        android:id="@+id/btSaveConfig"
-        android:layout_width="195dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="11dp"
-        android:text="Save"
-        app:layout_constraintEnd_toEndOf="@+id/spConfigEdit"
-        app:layout_constraintStart_toEndOf="@+id/btApplyConfig"
-        app:layout_constraintTop_toBottomOf="@+id/spConfigEdit" />
-
-    <Button
-        android:id="@+id/btExportConfig"
-        android:layout_width="195dp"
-        android:layout_height="45dp"
-        android:text="Export"
-        app:layout_constraintEnd_toEndOf="@+id/btApplyConfig"
-        app:layout_constraintStart_toStartOf="@+id/btApplyConfig"
-        app:layout_constraintTop_toBottomOf="@+id/btApplyConfig" />
-
-    <Spinner
-        android:id="@+id/spConfigEdit"
-        android:layout_width="0dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvAppInfoConfigs"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="10dp">
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/app_info_layout_configs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvConfigsPackageFull"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:clickable="false"
+                android:ellipsize="start"
+                android:focusable="false"
+                android:singleLine="true"
+                android:text="android"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                app:layout_constraintStart_toEndOf="@+id/tvConfigsPackageUid"
+                app:layout_constraintTop_toTopOf="@+id/tvConfigsPackageUid" />
+
+            <TextView
+                android:id="@+id/tvConfigsPackageUid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:lines="1"
+                android:text="10000"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                app:layout_constraintStart_toStartOf="@+id/tvConfigsPackageName"
+                app:layout_constraintTop_toBottomOf="@+id/tvConfigsPackageName" />
+
+            <TextView
+                android:id="@+id/tvConfigsPackageName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="15dp"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:lines="1"
+                android:text="Android"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivConfigsAppIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivConfigsAppIcon"
+                android:layout_width="?android:attr/listPreferredItemHeightSmall"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/spConfigEdit"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="5dp"
+                android:padding="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivConfigsAppIcon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <!-- SwipeRefreshLayout -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshConfigs"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:padding="12dp"
+        android:layout_marginBottom="10dp"
+        android:elevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/cvAppInfoConfigs">
 
-    <Button
-        android:id="@+id/btApplyConfig"
-        android:layout_width="195dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="11dp"
-        android:text="Apply"
-        app:layout_constraintStart_toStartOf="@+id/spConfigEdit"
-        app:layout_constraintTop_toBottomOf="@+id/spConfigEdit" />
+        <!-- CardView containing RecyclerView -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvConfigSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp"
+            app:contentPadding="5dp">
 
-    <Switch
-        android:id="@+id/swGlobalApps"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clConfigSettingsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp">
+
+                <ProgressBar
+                    android:id="@+id/pbConfigs"
+                    style="@style/Base.Widget.AppCompat.ProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/rvConfigSettings" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvConfigSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="true"
+                    android:overScrollMode="never"
+                    android:paddingBottom="16dp"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:scrollbars="vertical"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/flActionConfigOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Global Apps"
-        app:layout_constraintStart_toStartOf="@+id/btExportConfig"
-        app:layout_constraintTop_toBottomOf="@+id/btExportConfig" />
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_remix_fire_fill" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/flActionConfigApply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/flActionConfigOptions"
+        app:layout_constraintEnd_toEndOf="@+id/flActionConfigOptions"
+        app:layout_constraintStart_toStartOf="@+id/flActionConfigOptions"
+        app:srcCompat="@drawable/ic_remix_a_b" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/flActionConfigSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/flActionConfigApply"
+        app:layout_constraintEnd_toEndOf="@+id/flActionConfigApply"
+        app:layout_constraintStart_toStartOf="@+id/flActionConfigApply"
+        app:srcCompat="@drawable/ic_remix_save_fill" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/flActionConfigImport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/flActionConfigSave"
+        app:layout_constraintEnd_toEndOf="@+id/flActionConfigSave"
+        app:layout_constraintStart_toStartOf="@+id/flActionConfigSave"
+        app:srcCompat="@drawable/ic_remix_arrow_down_line" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/flActionConfigExport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/flActionConfigImport"
+        app:layout_constraintEnd_toEndOf="@+id/flActionConfigImport"
+        app:layout_constraintStart_toStartOf="@+id/flActionConfigImport"
+        app:srcCompat="@drawable/ic_remix_arrow_up_line" />
 </androidx.constraintlayout.widget.ConstraintLayout>

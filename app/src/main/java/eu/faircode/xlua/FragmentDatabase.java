@@ -23,7 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.faircode.xlua.api.XLuaCallApi;
+import eu.faircode.xlua.api.xlua.XLuaCall;
 
 public class FragmentDatabase extends Fragment {
     private static final String TAG = "XLua.FragmentDatabase";
@@ -127,7 +127,7 @@ public class FragmentDatabase extends Fragment {
             Log.i(TAG, "Data loader started");
             DBsDataHolder data = new DBsDataHolder();
             try {
-                data.theme = XLuaCallApi.getSettingValue(getContext(), "theme");
+                data.theme = XLuaCall.getSettingValue(getContext(), "theme");
                 //data.theme = XProvider.getSetting(getContext(), "global", "theme");
                 if (data.theme == null)
                     data.theme = "light";
@@ -150,7 +150,7 @@ public class FragmentDatabase extends Fragment {
 
     private static class DBsDataHolder {
         String theme;
-        List<XDataBase> dbs = new ArrayList<>();
+        List<XDatabase> dbs = new ArrayList<>();
         Throwable exception = null;
     }
 }

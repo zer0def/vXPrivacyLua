@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = "00:00:00:00:00:00"
+    local fake = param:getSetting("unique.bluetooth.address", "00:00:00:00:00:00")
     param:setResult(fake)
     return true, ret, fake
 end

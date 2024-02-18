@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.BOARD", "goldfish")
+    local fake = param:getSetting("cpu.platform.name", "msmnile")
     param:setResult(fake)
     return true, ret, fake
 end

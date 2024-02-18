@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.DEVICE", "zerofltexx")
+    local fake = param:getSetting("device.nick.name", "OnePlus7ProNR")
     param:setResult(fake)
     return true, ret, fake
 end

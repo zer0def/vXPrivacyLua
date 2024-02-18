@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.BASE_OS", "")
+    local fake = param:getSetting("android.build.base.os", "")
     param:setResult(fake)
     return true, ret, fake
 end

@@ -15,6 +15,11 @@ public class RandomStringGenerator {
     }
 
     // Generate a random string with numbers and letters
+    public static String generateRandomAlphanumericString(int length) {
+        String characters = NUMBERS + UPPER_LETTERS + LOWER_LETTERS;
+        return generateRandomString(characters, length);
+    }
+
     public static String generateRandomAlphanumericString(int length, String letters) {
         String characters = NUMBERS + letters;
         return generateRandomString(characters, length);

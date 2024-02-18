@@ -57,15 +57,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import eu.faircode.xlua.api.XLuaCallApi;
-import eu.faircode.xlua.api.XLuaQueryApi;
-import eu.faircode.xlua.api.objects.xlua.hook.HookDatabaseEntry;
-import eu.faircode.xlua.api.objects.xlua.packets.HookPacket;
-import eu.faircode.xlua.api.xlua.xcall.PutHookCommand;
+import eu.faircode.xlua.api.xlua.XLuaCall;
+import eu.faircode.xlua.api.xlua.XLuaQuery;
+import eu.faircode.xlua.api.hook.HookDatabaseEntry;
+import eu.faircode.xlua.api.hook.LuaHookPacket;
+import eu.faircode.xlua.api.xlua.call.PutHookCommand;
 import eu.faircode.xlua.utilities.CollectionUtil;
 
-import eu.faircode.xlua.api.objects.xlua.hook.xHook;
-import eu.faircode.xlua.api.objects.xlua.app.xApp;
+import eu.faircode.xlua.api.hook.XLuaHook;
+import eu.faircode.xlua.api.app.XLuaApp;
 
 
 public class FragmentMain extends Fragment {
@@ -284,38 +284,38 @@ public class FragmentMain extends Fragment {
             DataHolder data = new DataHolder();
             try {
                 Log.i(TAG, "Getting Theme");
-                data.theme = XLuaCallApi.getTheme(getContext());
+                data.theme = XLuaCall.getTheme(getContext());
                 Log.i(TAG, "Theme=" + data.theme);
 
                 // Define hooks
                 if (BuildConfig.DEBUG) {
                     String apk = getContext().getApplicationInfo().publicSourceDir;
-                    List<xHook> hooks = xHook.readHooks(getContext(), apk);
+                    List<XLuaHook> hooks = XLuaHook.readHooks(getContext(), apk);
                     //Have one but that just takes in HookPacket / HookDatabase Entry
                     Log.i(TAG, "Loaded hooks=" + hooks.size());
-                    for (xHook hook : hooks) {
+                    for (XLuaHook hook : hooks) {
                         HookDatabaseEntry entry = hook.toHookDatabase();
                         if(entry == null)
                             continue;
 
-                        PutHookCommand.invoke(getContext(), (HookPacket)entry);
+                        PutHookCommand.invoke(getContext(), (LuaHookPacket)entry);
                     }
                 }
 
                 //Get Show
-                String show = XLuaCallApi.getSettingValue(getContext(), "show");
+                String show = XLuaCall.getSettingValue(getContext(), "show");
 
                 if (show != null && show.equals("user")) data.show = AdapterApp.enumShow.user;
                 else if (show != null && show.equals("all")) data.show = AdapterApp.enumShow.all;
                 else data.show = AdapterApp.enumShow.icon;
 
                 // Get collection
-                data.collection.addAll(XLuaCallApi.getCollections(getContext()));
+                data.collection.addAll(XLuaCall.getCollections(getContext()));
 
                 Log.i(TAG, "Getting groups");
                 // Load groups
                 Resources res = getContext().getResources();
-                List<String> groupsCopy = XLuaCallApi.getGroups(getContext());
+                List<String> groupsCopy = XLuaCall.getGroups(getContext());
                 if(CollectionUtil.isValid(groupsCopy)) {
                     Log.i(TAG, " groups=" + groupsCopy.size());
                     for(String name : groupsCopy) {
@@ -347,13 +347,13 @@ public class FragmentMain extends Fragment {
 
                 Log.i(TAG, "Getting Hooks");
                 // Load hooks
-                Collection<xHook> hooksCopy = XLuaQueryApi.getHooks(getContext(), true);
+                Collection<XLuaHook> hooksCopy = XLuaQuery.getHooks(getContext(), true);
                 Log.i(TAG, "Hooks loaded=" + hooksCopy.size());
                 data.hooks.addAll(hooksCopy);
 
                 Log.i(TAG, "Getting Apps");
                 // Load apps
-                Collection<xApp> appsCopy = XLuaQueryApi.getApps(getContext(), true);
+                Collection<XLuaApp> appsCopy = XLuaQuery.getApps(getContext(), true);
                 Log.i(TAG, "Apps loaded=" + appsCopy.size());
                 data.apps.addAll(appsCopy);
             } catch (Throwable ex) {
@@ -386,8 +386,8 @@ public class FragmentMain extends Fragment {
         String theme;
         List<String> collection = new ArrayList<>();
         List<XUiGroup> groups = new ArrayList<>();
-        List<xHook> hooks = new ArrayList<>();
-        List<xApp> apps = new ArrayList<>();
+        List<XLuaHook> hooks = new ArrayList<>();
+        List<XLuaApp> apps = new ArrayList<>();
         Throwable exception = null;
     }
 }

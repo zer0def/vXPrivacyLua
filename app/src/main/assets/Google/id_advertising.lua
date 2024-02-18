@@ -4,7 +4,8 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("google.advertisingid")
+    --local fake = param:getSetting("google.advertisingid")
+    local fake = param:getSetting("ad.id")
     if fake == nil then 
     	local i, digit
     	fake = ""

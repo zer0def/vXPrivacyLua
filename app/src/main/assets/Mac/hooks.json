@@ -18,9 +18,8 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_wifiinfo_getmacaddress",
-    "settings":[ "net.mac" ]
+    "settings":[ "unique.network.mac.address" ]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -40,6 +39,6 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_networkinterface_gethardwareaddress",
-    "settings":[ "net.mac" ]
+    "settings":[ "unique.network.mac.address" ]
   }
 ]

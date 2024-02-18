@@ -4,7 +4,7 @@ function after(hook, param)
 	    return false
 	end
 
-	local fake = param:getSetting("zone.displayname", "Greenwich Mean Time")
+	local fake = param:getSettingReMap("zone.timezone.display.name", "zone.displayname", "Greenwich Mean Time")
 	param:setResult(fake)
 	return true, res, fake
 end

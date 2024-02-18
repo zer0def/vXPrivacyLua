@@ -4,7 +4,7 @@ function after(hook, param)
 	    return false
 	end
 
-	local fake = param:getSetting("zone.timezoneid", "Atlantic/Reykjavik")
+	local fake = param:getSettingReMap("zone.timezone.id", "zone.timezoneid", "Atlantic/Reykjavik")
 	param:setResult(fake)
 	return true, res, fake
 end

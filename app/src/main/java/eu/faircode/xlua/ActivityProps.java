@@ -43,12 +43,12 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ActivityProps extends ActivityBase {
+/*public class ActivityProps extends ActivityBase {
     private static final String TAG = "XLua.Props";
     private FragmentPropsEx fragmentProps;
     private Menu menu;
 
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    //private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +61,14 @@ public class ActivityProps extends ActivityBase {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentProps = new FragmentPropsEx();
 
-        Log.i(TAG, "Created Fragment, now replacing...");
+        if(DebugUtil.isDebug())
+            Log.i(TAG, "Created Fragment, now replacing...");
 
         fragmentTransaction.replace(R.id.content_frame_props, fragmentProps);
         fragmentTransaction.commit();
 
-        Log.i(TAG, "Finished Creating Fragment/Activity");
+        if(DebugUtil.isDebug())
+            Log.i(TAG, "Finished Creating Fragment/Activity");
     }
 
     @Override
@@ -103,4 +105,4 @@ public class ActivityProps extends ActivityBase {
                 return super.onOptionsItemSelected(item);
         }
     }
-}
+}*/

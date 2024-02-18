@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-	local fake = param:getSetting("phone.isp", "Siminn")
+	local fake = param:getSettingReMap("gsm.network.carrier", "phone.isp", "Siminn")
 	param:setResult(fake)
 	return true, ret, fake
 end

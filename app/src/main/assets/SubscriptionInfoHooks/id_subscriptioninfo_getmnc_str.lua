@@ -5,7 +5,7 @@ function after(hook, param)
 	end
 
 	local mnc = "299"
-	local fake = param:getSetting("phone.mnc")
+	local fake = param:getSetting("gsm.operator.mnc")
 	if fake ~= nil and tonumber(fake) ~= nil then
 		mnc = fake
 	end

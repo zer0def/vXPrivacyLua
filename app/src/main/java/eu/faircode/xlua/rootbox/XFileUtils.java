@@ -8,8 +8,6 @@ import android.util.Log;
 import java.io.File;
 import java.lang.reflect.Method;
 
-import de.robv.android.xposed.XposedBridge;
-import eu.faircode.xlua.XposedUtil;
 import eu.faircode.xlua.utilities.DatabasePathUtil;
 
 public class XFileUtils {
@@ -90,7 +88,7 @@ public class XFileUtils {
 
         try {
             Log.i(TAG, "Copying File (from) " + aFrom.getAbsolutePath() + " (to) " + bTo.getAbsolutePath() + " (setPerms)=" + setPermissions);
-            Method cpTo = xReflectUtils.getMethodFor("android.os.FileUtils", "copy", File.class, File.class);
+            Method cpTo = XReflectUtils.getMethodFor("android.os.FileUtils", "copy", File.class, File.class);
             if(cpTo == null) {
                 Log.e(TAG, "Failed to get reflect [copy]");
                 return -2;
@@ -270,13 +268,13 @@ public class XFileUtils {
 
     public static boolean shredEXEC(String path, boolean recursive) {
         if(!isSafeDirectory(path)) return false;
-        xProcessResult res = xProcessResult.exec(xFileCommands.getShredCommand(path, recursive));
+        XProcessResult res = XProcessResult.exec(XFileCommands.getShredCommand(path, recursive));
         return new File(path).exists();
     }
 
     public static boolean rmEXEC(String path, boolean recursive) {
         if(!isSafeDirectory(path)) return false;
-        xProcessResult res = xProcessResult.exec(xFileCommands.getRMCommand(path, recursive));
+        XProcessResult res = XProcessResult.exec(XFileCommands.getRMCommand(path, recursive));
         return new File(path).exists();
     }
 
@@ -296,7 +294,7 @@ public class XFileUtils {
         //if ownerUid >= 0 ?
         //if(ownerUid >= 0 || groupUid >= 0) {
         //}
-        xProcessResult res = xProcessResult.exec(xFileCommands.getChownCommand(path, ownerUid, groupUid, recursive));
+        XProcessResult res = XProcessResult.exec(XFileCommands.getChownCommand(path, ownerUid, groupUid, recursive));
         return !res.isOuterException();
     }
 
@@ -313,7 +311,7 @@ public class XFileUtils {
 
     public static boolean chmodEXEC(String path, int mode, boolean recursive) {
         if(!isSafeDirectory(path)) return false;
-        xProcessResult res = xProcessResult.exec(xFileCommands.getChmodCommand(path, mode, recursive));
+        XProcessResult res = XProcessResult.exec(XFileCommands.getChmodCommand(path, mode, recursive));
         return !res.isOuterException();
     }
 

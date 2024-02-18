@@ -29,8 +29,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import eu.faircode.xlua.BuildConfig;
-import eu.faircode.xlua.api.objects.xlua.hook.xHook;
-import eu.faircode.xlua.api.objects.xlua.hook.xHookAssets;
+import eu.faircode.xlua.api.hook.XLuaHook;
+import eu.faircode.xlua.api.hook.XLuaHookAssets;
 import eu.faircode.xlua.utilities.ReflectUtil;
 
 public class XHookUtil {
@@ -63,7 +63,7 @@ public class XHookUtil {
         return new XResolved(cls, methodName, paramTypes, returnType);
     }*/
 
-    public static XResolved resolveTargetHook(Context context, xHook hook) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+    public static XResolved resolveTargetHook(Context context, XLuaHook hook) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
         Class<?> cls = Class.forName(hook.getResolvedClassName(), false, context.getClassLoader());
         String methodName = hook.getMethodName();
 
@@ -113,7 +113,12 @@ public class XHookUtil {
         }
     }*/
 
-    public static Prototype compileScript(Map<LuaScriptHolder, Prototype> prototypes, xHook hook) {
+    public static Prototype compileScript(Map<LuaScriptHolder, Prototype> prototypes, XLuaHook hook) {
+        if(hook == null) {
+            Log.e(TAG, "Hook is null not compiling...");
+            return null;
+        }
+
         try {
             LuaScriptHolder sh = new LuaScriptHolder(hook.getLuaScript());
             if (prototypes.containsKey(sh))
@@ -126,7 +131,7 @@ public class XHookUtil {
                 return compiledScript;
             }
         }catch (Exception e) {
-            Log.e(TAG, "Error compiling Script: " + e);
+            Log.e(TAG, "Error compiling Script: s=" + hook.getName() + " script=" + " e=" + e);
             return null;
         }
     }
@@ -145,7 +150,13 @@ public class XHookUtil {
         return new LuaLocals(globals);
     }*/
 
-    public static Globals getGlobals(Context context, xHook hook, Map<String, String> settings) {
+    public static Globals getGlobals(
+            Context context,
+            XLuaHook hook,
+            Map<String, String> settings,
+            Map<String, Integer> propSettings,
+            Map<String, String> propMaps,
+            String key) {
         //Log.i(TAG, "Grabbing Globals <getGlobals>");
         Globals globals = JsePlatform.standardGlobals();
         // base, bit32, coroutine, io, math, os, package, string, table, luajava
@@ -153,16 +164,17 @@ public class XHookUtil {
         if (BuildConfig.DEBUG)
             globals.load(new DebugLib());
 
+        //This will create the logger and hook instance
         globals.set("log", new LuaLog(context.getPackageName(), context.getApplicationInfo().uid, hook.getId()));
-        globals.set("hook", new LuaHook(context, settings));
+        globals.set("hook", new LuaHook(context, settings, propSettings, propMaps, key));
 
         return new LuaLocals(globals);
     }
 
-    public static ArrayList<xHook> readHooksEx(Context context, String apk)  throws IOException, JSONException {
+    public static ArrayList<XLuaHook> readHooksEx(Context context, String apk)  throws IOException, JSONException {
         Log.i(TAG, "Reading all Hooks in JSON");
         ZipFile zipFile = null;
-        ArrayList<xHook> hooks_all = new ArrayList<>();
+        ArrayList<XLuaHook> hooks_all = new ArrayList<>();
         try {
             zipFile = new ZipFile(apk);
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -170,7 +182,7 @@ public class XHookUtil {
                 ZipEntry entry = entries.nextElement();
                 if (entry.getName().startsWith("assets/") && entry.getName().endsWith("hooks.json")) {
                     Log.i(TAG, "Found entry for [hooks.json] => " + entry);
-                    ArrayList<xHook> read_hooks = readHooksFromEntry(entry, zipFile);
+                    ArrayList<XLuaHook> read_hooks = readHooksFromEntry(entry, zipFile);
                     if(!read_hooks.isEmpty()) {
                         hooks_all.addAll(read_hooks);
                     }
@@ -187,9 +199,9 @@ public class XHookUtil {
         return hooks_all;
     }
 
-    public static ArrayList<xHook> readHooksFromEntry(ZipEntry entry, ZipFile zipFile) {
+    public static ArrayList<XLuaHook> readHooksFromEntry(ZipEntry entry, ZipFile zipFile) {
         Log.i(TAG, "Parsing hooks from: " + entry);
-        ArrayList<xHook> hooks = new ArrayList<>();
+        ArrayList<XLuaHook> hooks = new ArrayList<>();
 
         String entryName = entry.getName();
         String entryPath = entryName.substring(0, entryName.length() - 11);
@@ -206,7 +218,7 @@ public class XHookUtil {
             for(int i = 0; i < jArray.length(); i++) {
                 //Hook hook = new Hook();
                 //hook.fromJSONObject(jarray.getJSONObject(i));
-                xHookAssets hookAsset = new xHookAssets();
+                XLuaHookAssets hookAsset = new XLuaHookAssets();
                 hookAsset.fromJSONObject(jArray.getJSONObject(i));
 
 
@@ -222,7 +234,7 @@ public class XHookUtil {
 
                     hookAsset.setLuaScript(luaContents);
                 }
-                hooks.add((xHook)hookAsset);
+                hooks.add((XLuaHook)hookAsset);
             }
 
         }catch (Exception e) {

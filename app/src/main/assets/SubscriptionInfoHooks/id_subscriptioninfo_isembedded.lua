@@ -4,10 +4,11 @@ function after(hook, param)
 		return false
 	end
 
-	local fake = false
-	if ret == false then
-		fake = true
-	end
+    local fakeString = param:getSetting("gsm.setting.network.esim.bool", "false")
+    local fake = false
+    if fakeString == "true" then
+        fake = true
+    end
 
 	param:setResult(fake)
 	return true, tostring(ret), tostring(fake)

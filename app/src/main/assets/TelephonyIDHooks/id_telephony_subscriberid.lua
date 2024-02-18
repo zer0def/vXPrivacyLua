@@ -5,23 +5,23 @@ function after(hook, param)
 		return false
 	end
 
-	local setting = param:getSetting("phone.subscriberid")
-	if setting ~= nil then
-        param:setResult(setting)
-        return true, ret, setting
-	end
+    --274 + 299
+    local fake = 572
+    local fakeString = param:getSetting("gsm.operator.id")
+    local fakeNumber = tonumber(fakeString)
+    if fakeNumber ~= nil then
+        fake = fakeNumber
+    else
+        local mcc = param:getSettingReMap("gsm.operator.mcc", "phone.mcc", "274")
+        local mnc = param:getSettingReMap("gsm.operator.mnc", "phone.mnc", "299")
+        local mccNumber = tonumber(mcc)
+        local mncNumber = tonumber(mnc)
 
-	local mcc = param:getSetting("phone.mcc", "274")
-	local mnc = param:getSetting("phone.mnc", "299")
-	--next line is 9 chars MSIN
-	local msin = param:getSetting("phone.msin", "842762952")
-	--Returns the unique subscriber ID, for example, the IMSI for a GSM phone.
-	if tonumber(mcc) ~= nil and tonumber(mnc) ~= nil and tonumber(msin) ~= nil then
-        --local fake = param:getSetting("phone.subscriberid", "000000000")
-        local fake = mcc .. mnc .. msin
-        param:setResult(fake)
-        return true, ret, fake
-	end
+        if mccNumber ~= nil and mncNumber ~= nil then
+            fake = mccNumber + mncNumber
+        end
+    end
 
-	return false
+    param:setResult(fake)
+	return true, tostring(ret), tostring(fake)
 end

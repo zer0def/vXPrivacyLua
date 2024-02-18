@@ -4,7 +4,7 @@ function after(hook, param)
 		ret = 0
 	end
 
-    local fakeStr = param:getSetting("phone.sim_type", "1")
+    local fakeStr = param:getSetting("gsm.sim.type", "1")
     local fake = tostring(fakeStr)
     if fake == nil then
         fake = 1

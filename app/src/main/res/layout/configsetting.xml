@@ -7,6 +7,40 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/ivBtRandomConfigSettingValue"
+        android:layout_width="?android:attr/listPreferredItemHeightSmall"
+        android:layout_height="?android:attr/listPreferredItemHeightSmall"
+        android:alpha="0.5"
+        android:clickable="false"
+        android:focusable="false"
+        android:src="@drawable/ic_remix_dice_fill"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tiConfigSettingsValue"
+        app:layout_constraintTop_toTopOf="@+id/spConfigRandomSelection" />
+
+    <TextView
+        android:id="@+id/tvConfigSettingDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:clickable="false"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:lines="4"
+        android:maxLines="4"
+        android:singleLine="false"
+        android:text="Some Setting Description goes here, this text is a test to see how it wold appear on the UI if it was very long Description"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSettingConfigName" />
+
+    <ImageView
         android:id="@+id/ivSettingConfigExpander"
         android:layout_width="30dp"
         android:layout_height="?android:attr/listPreferredItemHeightSmall"
@@ -19,13 +53,14 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tiConfigSettingsValue"
-        android:layout_width="376dp"
+        android:layout_width="match_parent"
         android:layout_height="79dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSettingConfigName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvConfigSettingDescription" />
 
     <TextView
         android:id="@+id/tvSettingConfigName"
@@ -52,4 +87,12 @@
         android:textAppearance="@android:style/TextAppearance.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spConfigRandomSelection"
+        android:layout_width="wrap_content"
+        android:layout_height="49dp"
+        app:layout_constraintEnd_toStartOf="@+id/ivBtRandomConfigSettingValue"
+        app:layout_constraintTop_toBottomOf="@+id/tiConfigSettingsValue" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,12 +19,18 @@
 
 package eu.faircode.xlua;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import eu.faircode.xlua.api.XLuaCallApi;
+import eu.faircode.xlua.api.XResult;
+import eu.faircode.xlua.api.xlua.XLuaCall;
 
 public class ActivityBase extends AppCompatActivity {
     private String theme;
@@ -32,10 +38,8 @@ public class ActivityBase extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //theme = XProvider.getSetting(this, "global", "theme");
-        theme = XLuaCallApi.getTheme(this);
+        theme = XLuaCall.getTheme(this);
         setTheme("dark".equals(theme) ? R.style.AppThemeDark : R.style.AppThemeLight);
-
         super.onCreate(savedInstanceState);
     }
 
@@ -45,12 +49,23 @@ public class ActivityBase extends AppCompatActivity {
 
     void setDarkMode() { setThemeName("dark"); }
     void setLightMode() { setThemeName("light"); }
-    private void setThemeName(String name) {
+    private void setThemeName(final String name) {
+        final Context context = this;
+
         Log.i(TAG, "Set Theme=" + name);
-        //XProvider.putSetting(this, "global", "theme", name);
-        XLuaCallApi.putSetting(this, "theme", name);
-        theme = name;
-        setTheme("dark".equals(name) ? R.style.AppThemeDark : R.style.AppThemeLight);
-        recreate();
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            final XResult ret = XLuaCall.putSetting(context, "theme", name);
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void run() {
+                Toast.makeText(context, ret.getResultMessage(), Toast.LENGTH_SHORT).show();
+                if(ret.succeeded()) {
+                    theme = name;
+                    setTheme("dark".equals(name) ? R.style.AppThemeDark : R.style.AppThemeLight);
+                    recreate();
+                }
+            }
+        });
     }
 }

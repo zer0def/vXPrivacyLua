@@ -44,16 +44,17 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
 
-import eu.faircode.xlua.api.objects.xlua.hook.Assignment;
-import eu.faircode.xlua.api.objects.xlua.hook.xHook;
+import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
+import eu.faircode.xlua.api.hook.XLuaHook;
 
-import eu.faircode.xlua.api.objects.xlua.app.xApp;
+import eu.faircode.xlua.api.app.XLuaApp;
+import eu.faircode.xlua.utilities.SettingUtil;
 
 
 public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> {
     private static final String TAG = "XLua.Group";
 
-    private xApp app;
+    private XLuaApp app;
     private List<Group> groups = new ArrayList<>();
 
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -94,7 +95,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
             switch (view.getId()) {
                 case R.id.ivException:
                     StringBuilder sb = new StringBuilder();
-                    for (Assignment assignment : app.getAssignments(group.name))
+                    for (LuaAssignment assignment : app.getAssignments(group.name))
                         if (assignment.getHook().getGroup().equals(group.name))
                             if (assignment.getException() != null) {
                                 sb.append("<b>");
@@ -139,11 +140,11 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
         setHasStableIds(true);
     }
 
-    void set(xApp app, List<xHook> hooks, Context context) {
+    void set(XLuaApp app, List<XLuaHook> hooks, Context context) {
         this.app = app;
 
         Map<String, Group> map = new HashMap<>();
-        for (xHook hook : hooks) {
+        for (XLuaHook hook : hooks) {
             Group group;
             if (map.containsKey(hook.getGroup()))
                 group = map.get(hook.getGroup());
@@ -162,7 +163,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
         }
 
         for (String groupId : map.keySet()) {
-            for (Assignment assignment : app.getAssignments())
+            for (LuaAssignment assignment : app.getAssignments())
                 if (assignment.getHook().getGroup().equals(groupId)) {
                     Group group = map.get(groupId);
                     if (assignment.getException() != null)
@@ -221,7 +222,8 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
         holder.tvUsed.setVisibility(group.lastUsed() < 0 ? View.GONE : View.VISIBLE);
         holder.tvUsed.setText(DateUtils.formatDateTime(context, group.lastUsed(),
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_ABBREV_ALL));
-        holder.tvGroup.setText(group.title);
+        //holder.tvGroup.setText(group.title);
+        holder.tvGroup.setText(SettingUtil.cleanSettingName(group.title));
         holder.cbAssigned.setChecked(group.hasAssigned());
         holder.cbAssigned.setButtonTintList(ColorStateList.valueOf(resources.getColor(
                 group.allAssigned() ? R.color.colorAccent : android.R.color.darker_gray, null)));
@@ -238,7 +240,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
         int optional = 0;
         long used = -1;
         int assigned = 0;
-        List<xHook> hooks = new ArrayList<>();
+        List<XLuaHook> hooks = new ArrayList<>();
 
         Group() {
         }

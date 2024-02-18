@@ -2,30 +2,32 @@
 Hooking + Privacy Framework For Android 6.0 +
 
 
+![evangelion kw-23-03-2024-0001](https://github.com/0bbedCode/XPL-EX/assets/114315756/6181c2a8-adc6-4d5a-b81c-cbf3f768c709)
 
-XPL-EX (Long & Boring)
+
+XPL-EX
 ------------
 
-XPL-EX is an Android application designed to enhance complete app privacy. It is an extension of "XPrivacy-Lua" by "M66B." This application is entirely open-source, free from advertisements, analytics, and does not require any financial contribution. It's a fully free solution with a strict policy of no logs and no server connections. Currently, XPL-EX is in the early beta stage of this fork. Its primary function is to safeguard your device information, ensuring that other installed applications cannot access it beyond necessary limits. The app employs various hooks to target methods that retrieve data, whether through outdated, deprecated, or new techniques, it will be hooked.
-
-In today's world, the sale and misuse of personal data have become commonplace, often leading to resigned acceptance of constant surveillance. However, XPL-EX challenges this norm, offering a pathway to complete privacy and a way to evade the intrusive eyes of 'Big Brother.' This app is the first installment in a series of upcoming documents aimed at achieving a secure and completely private device. Adherence to specific standards can place users beyond the reach of major surveillance agencies. This multi-part project will be freely accessible, thoroughly documented, and open to the global community. 
-
-I am getting old my self , I slowly show, but for the future generations or just for those who fear this will be for them.
-
-Intercepting apps at the API level of your device can effectively obscure the type of device on which they are running. To achieve this, it's crucial to address both Native and Java components. Native hooking is a feature set to be introduced to XPL-EX, which currently supports Java through the 'XPOSED' Framework for hooking purposes.
-
-The concept is straightforward: to apps, your device appears as something entirely different. For example, an app might perceive your device as a "Samsung Galaxy from Iceland with a SIM carrier named 'LeetPrivacy,' boasting 400 GB of RAM, a 90-core CPU, an Android ID of 0000000000000000, and an IMEI of 000." In reality, however, it could be a "Google Pixel from America with a Verizon SIM, 8 GB of RAM, and an 8-core CPU." Extreme examples like the "400 GB of RAM" are used to illustrate the point, although they might make the device more conspicuous.
-
-The overarching aim is to limit the information apps can access or gather about our devices, even those allowed through our firewall.
-
-Additionally, there are emerging techniques like "keystroke dynamics" used to identify individuals based on their typing patterns. While not widely adopted or entirely accurate, they are still utilized. It's important to note that nearly every app, especially those from major social media platforms like TikTok, Facebook, and Instagram, records data on your phone.
+To understand it easily, XPL-EX is an application that conceals other applications from accessing any information about your device, whether the data is unique or generic. This project was originally forked from M66B's work, although, at this point, very few parts of the original code remain. Most of what exists now has been modified or added by me (over 40,000 lines modified/added). I further developed this app not just to fulfill a childhood dream but also to challenge the companies that trade our data, aiming to inspire hope for our future privacy. I seek no financial gain, only privacy for future generations.<br><br>
+<div align="center">We will prevail. Lets give a big F*ck you to the companies and show the power of XPL-EX!!! </div>
+<br><br>
 
 
-XPL-EX (Simple)
+
+XPL-EX is a hooking framework designed for privacy, arguably the best privacy-focused Xposed application for Android. It offers numerous hooks, significantly more than its competitors, and it is entirely open-source and free. No internet connection is required, no background analytics, no logging to servers – nothing! Just pure Java Android native UI, no authentication, all free and open-source.
+
+This framework targets any selected application, masking your real data by feeding the targeted apps fabricated information. For example, if an app detected your device had 8 GB of RAM, with the memory options applied in XPL-EX, it could now detect 900 GB of RAM (or whatever you select). If your device is a Samsung, you can choose device name/manufacturer options to masquerade as an iPhone or Pixel – the possibilities are vast. While the applications won't fully believe they're interacting with an iPhone, given the JVM environment, it illustrates the app's potential.
+
+We live in a world where applications consistently collect and sell user data. Ironically, some apps that offer similar functionalities to XPL-EX come with built-in data analytics and provide significantly fewer options. Some even require payment for features that XPL-EX offers for free, making alternative options less appealing.
+
+Beyond privacy, this app serves various other purposes, allowing you to manipulate target applications if you know how to write LUA (the scripts executed within the hooks use LUA). XPL-EX is more than just a privacy tool; it's a comprehensive hooking framework that allows users to define hooks dynamically within the app.
+
+As of now (March 26, 2024), XPL-EX only supports Java hooks, not native hooks. However, since most data requests are served through Java APIs, native APIs are less crucial (even with JNI, the execution still transitions through Java, where XPL-EX can intercept). In the future, XPL-EX plans to support native hooking, aiming to be an all-in-one hooking solution and the best application for protecting privacy from other apps.
+
+<br><br>
+Me
 ------------
-XPL-EX Paired with the Pro Companion app, it delivers an app that can dynamically define Xposed Hooks without having to compile a whole APK. Hooking apps at runtime will allow you to modify your target app in ways such as translating in-app text to different languages.
-Bypassing features, disabling popups, or providing privacy. The requirements are the Xposed Framework and Android 6.0 or higher. Root is not a requirement unless the Xposed Framework you choose requires it.
-This app will only protect you from apps at runtime getting your device information, from device IDs to screen resolution. The goal of this app is to provide complete in-app privacy control for any and all apps.
+I'm not a professional outside work environments. Away from professional settings, I pursue what pleases me, in the manner I choose, and at my convenience. My focus isn't on maintaining a professional facade; instead, I wish to showcase my art, my work, and my passion. My identity as an individual is secondary to what I create and contribute. I aim to enlighten and inspire, to demystify the seemingly incomprehensible, and to share knowledge. I am committed to learning whatever is necessary, hoping others will also pursue learning and achieve anything they aspire to. My journey has included reverse engineering, obfuscation, malware development, app development, Android game modding, among other skills. Time is the one commodity you cannot buy, sell, reverse, or trade. You can only spend it—so spend it on what your heart desires, and you will lead a fulfilling life.<br>Ps yes top half was refined with CHAT GPT ikik again im not professional :)<br><br><div align="center"> <3 Much love from ObbedCode </div> <br>
 
 In App
 ------------
@@ -34,6 +36,9 @@ In App
 <img src="https://github.com/0bbedCode/XPL-EX/assets/114315756/a160a7c1-b4ce-4c89-8989-ce96fca7a474" width="311" height="640">
 <img src="https://github.com/0bbedCode/XPL-EX/assets/114315756/d51e9c78-6efb-48f2-876a-ef5c69e48fd6" width="311" height="640">
 <img src="https://github.com/0bbedCode/XPL-EX/assets/114315756/25b82519-309f-4b0e-9d12-87091ec699d6" width="311" height="640">
+<img src="https://github.com/0bbedCode/XPL-EX/assets/114315756/e68d1ed2-3878-4a2e-bfb0-9b23de1bae76" width="311" height="640">
+<img src="https://github.com/0bbedCode/XPL-EX/assets/114315756/002e12b3-ab4d-4a4b-944b-9dff9fc84c76" width="311" height="640">
+<img src="https://github.com/0bbedCode/XPL-EX/assets/114315756/b830af03-f143-44eb-a30d-7aa7df24004b" width="311" height="640">
 
 
 To Come
@@ -71,9 +76,6 @@ https://xdaforums.com/t/xpl-ex-xprivacylua-ex-android-privacy-manager-hooking-ma
 
 ### Discord , Nulled (ObbedCode)<br><br>
 
-Images
-------------
-
 ## XPL-EX Development Roadmap
 
 ### Completed Features
@@ -88,18 +90,21 @@ Images
 - [X] Updated LUA Core (Note: Current version does not support BIG INT still...)
 - [X] Enhanced and Optimized Hooks for Android 14 and or Just Enhanced
 - [X] Dark Mode Feature in Main Application
+- [X] Added Settings UI
+- [X] Added ALOT more Properties
+- [X] Added Config UI 
 
 ### Planned Enhancements
 - [ ] Add new Text to different languages (Tanslation)
 - [ ] Class Finder to Identify Classes Inheriting Specific Interfaces (e.g., `javax.microedition.khronos.opengles.GL10`)
 - [ ] Protection Against Inner Process Communication
 - [ ] Adding Icons and Refining Text & Names for CPUs
-- [ ] Updating and Fixing LUA Code for More Hooks
+- [X] Updating and Fixing LUA Code for More Hooks
 - [ ] Secure Communication between Hook and XPL-EX
-- [ ] Code Cleanup (Focus on UI Development)
+- [X] Code Cleanup (Focus on UI Development)
 - [ ] Hook Native APIs
 - [ ] Target Native APIs (e.g., `__system_property_get`, `popen`, `fopen`, `open`, `exec`) for Enhanced Privacy
-- [ ] Additional API Functions for LUA Scripts
+- [X] Additional API Functions for LUA Scripts
 - [ ] Integration of 'M66B's "XPrivacyLua-Pro Companion App" Features into Main App "XPL-EX"
 - [ ] UI for Modifying/Mocking Specific Device Sensors
 - [ ] Built-in Pre-defined Hooks for Reverse Engineering, Logging, Bypassing/Hiding, and Disabling Ad Libraries in Apps
@@ -145,20 +150,36 @@ Installation
 
 LSPosed: please make sure that any app you want to restrict is [in the 'scope'](https://github.com/LSPosed/LSPosed/wiki/How-to-use-it#install--activate-modules) of LSposed.
 
-Certificate fingerprints:
 
-* MD5: N/A
-* SHA1: N/A
-* SHA256: N/A
+
 
 Frequently Asked Questions
 --------------------------
 
-See [here](https://github.com/M66B/XPrivacyLua/blob/master/FAQ.md) for a list of often asked questions. (XPrivacy-Lua)
+See [here](https://github.com/0bbedCode/XPL-EX/blob/master/FAQ.md) for a list of often asked questions. (XPrivacy-Lua)
 
 
-Donate ;)
+Donate
 ------------
+
+<br>Me (ObbedCode)<br><br>
+BTC:<br>
+bc1q9daenk4sdfcxnqxducrxy69zfyruf6un5wytge
+<br><br>
+XMR:<br>
+489AB9gBxvKDbF1cJXXpFnWZ7ZPKsp6JWdZrxaytS4ceZV53fQ1Wj9nWBAotYEWGwPZByJyySmwPD1q8F1g7Pags6gHcKHa
+<br><br>
+ETH:<br>
+0x4282Bc864B29Dbd62B9A9960A71e8343eDA44707
+<br><br>
+LTC:<br>
+ltc1qlhlnfspn6j8v5s9xxp297zq2m3vhlk9dlrrvvk
+<br><br>
+BCH<br>
+bitcoincash:qz5scaha4gyh92pjw5z5uhuy33sm2rdh5v0tpw2ggm
+<br><br>
+
+<br> M66B
 
 https://lua.xprivacy.eu/<br>
 https://github.com/M66B/XPrivacyLua
@@ -187,6 +208,19 @@ This app alone is not enough to "hide" you more so combine it with a Complex Sec
 
 Once again do not let anything through that firewall not even on that list (AdAway, VPN, Webview) sure but the rest dont even let those through the great wall
 Ps its not poor security having root if the user isnt the user to get click jacked or tricked into installing fake modules... dont be dumb<br><br>
+
+<br><br>Songs I like:<br>
+
+[Until the End](https://www.youtube.com/watch?v=mvZJAmA5ct0)<br>
+[Hell on Earth](https://www.youtube.com/watch?v=B1EOkFeD3Ho)<br>
+[Ill](https://www.youtube.com/watch?v=ZgEH6lUYy-E)<br>
+[Sonne](https://www.youtube.com/watch?v=StZcUAPRRac)<br>
+[Vanished](https://www.youtube.com/watch?v=6e6Hj7MwWaI)<br>
+[Sleep Mode](https://www.youtube.com/watch?v=sl2Z1qGOUhY)<br>
+[Morning Dew](https://www.youtube.com/watch?v=f8FrZUF7xF0)<br>
+[Aint Heard About you](https://www.youtube.com/watch?v=G7_v_WetRAI)<br>
+[F*cking your Culture](https://www.youtube.com/watch?v=nZgIFDnJfTA)<br>
+[The Call of Ktulu](https://www.youtube.com/watch?v=3vSH9pMzHm0)<br>
 
 Cool Band
 

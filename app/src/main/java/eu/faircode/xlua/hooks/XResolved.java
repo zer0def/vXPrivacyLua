@@ -46,7 +46,8 @@ public class XResolved {
         try {
             return getMember();
         }catch (NoSuchMethodException e) {
-            Log.e(TAG, "Failed to resolve Method! " + e + "\n" + Log.getStackTraceString(e));
+            String c = clazz != null ? clazz.getName() : " null ";
+            Log.e(TAG, "Failed to resolve Method! " + " class=" + c  + " method=" + methodName + " e=\n" + e + "\n" + Log.getStackTraceString(e));
             return null;
         }
     }

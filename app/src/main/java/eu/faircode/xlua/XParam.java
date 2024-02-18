@@ -20,10 +20,12 @@
 package eu.faircode.xlua;
 
 import android.app.ActivityManager;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.net.Uri;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -38,12 +40,19 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import de.robv.android.xposed.XC_MethodHook;
-import eu.faircode.xlua.api.XMockCallApi;
+import eu.faircode.xlua.api.properties.MockPropSetting;
+import eu.faircode.xlua.api.xmock.XMockCall;
+import eu.faircode.xlua.interceptors.shell.ShellInterceptionResult;
+import eu.faircode.xlua.interceptors.UserContextMaps;
+import eu.faircode.xlua.interceptors.ShellIntercept;
+import eu.faircode.xlua.utilities.ListFilterUtil;
+import eu.faircode.xlua.utilities.CollectionUtil;
+import eu.faircode.xlua.utilities.CursorUtil;
 import eu.faircode.xlua.utilities.MemoryUtilEx;
 import eu.faircode.xlua.utilities.MockCpuUtil;
 import eu.faircode.xlua.display.MotionRangeUtil;
@@ -51,6 +60,7 @@ import eu.faircode.xlua.utilities.FileUtil;
 import eu.faircode.xlua.utilities.LuaLongUtil;
 import eu.faircode.xlua.utilities.MemoryUtil;
 import eu.faircode.xlua.utilities.NetworkUtil;
+import eu.faircode.xlua.utilities.RandomStringGenerator;
 import eu.faircode.xlua.utilities.ReflectUtil;
 import eu.faircode.xlua.utilities.StringUtil;
 import eu.faircode.xlua.utilities.MockUtils;
@@ -64,27 +74,40 @@ public class XParam {
     private final Class<?>[] paramTypes;
     private final Class<?> returnType;
     private final Map<String, String> settings;
+    private final Map<String, Integer> propSettings;
+    private final Map<String, String> propMaps;
+    private final String key;
 
     private static final Map<Object, Map<String, Object>> nv = new WeakHashMap<>();
+    private UserContextMaps getUserMaps() { return new UserContextMaps(this.settings, this.propMaps, this.propSettings); }
 
     // Field param
     public XParam(
             Context context,
             Field field,
-            Map<String, String> settings) {
+            Map<String, String> settings,
+            Map<String, Integer> propSettings,
+            Map<String, String> propMaps,
+            String key) {
         this.context = context;
         this.field = field;
         this.param = null;
         this.paramTypes = null;
         this.returnType = field.getType();
         this.settings = settings;
+        this.propSettings = propSettings;
+        this.propMaps = propMaps;
+        this.key = key;
     }
 
     // Method param
     public XParam(
             Context context,
             XC_MethodHook.MethodHookParam param,
-            Map<String, String> settings) {
+            Map<String, String> settings,
+            Map<String, Integer> propSettings,
+            Map<String, String> propMaps,
+            String key) {
         this.context = context;
         this.field = null;
         this.param = param;
@@ -96,6 +119,9 @@ public class XParam {
             this.returnType = ((Method) param.method).getReturnType();
         }
         this.settings = settings;
+        this.propSettings = propSettings;
+        this.propMaps = propMaps;
+        this.key = key;
     }
 
     //
@@ -107,17 +133,29 @@ public class XParam {
 
     @SuppressWarnings("unused")
     public String filterBuildProperty(String property) {
-        if(!StringUtil.isValidString(property))
+        if(property == null || MockUtils.isPropVxpOrLua(property))
             return MockUtils.NOT_BLACKLISTED;
 
-        if(MockUtils.isPropVxpOrLua(property)) {
-            Log.i(TAG, "Skipping Property avoid Stack Overflow / Recursion");
-            return MockUtils.NOT_BLACKLISTED;
+        if(DebugUtil.isDebug())
+            Log.i(TAG, "Filtering Property=" + property + " prop maps=" + propMaps.size() + " settings size=" + settings.size());
+
+        Integer code = propSettings.get(property);
+        if(code != null) {
+            if(code == MockPropSetting.PROP_HIDE)
+                return null;//return MockUtils.HIDE_PROPERTY;
+            if(code == MockPropSetting.PROP_SKIP)
+                return MockUtils.NOT_BLACKLISTED;
         }
 
-        Log.i(TAG, "Checking Property=" + property);
-        //return MockUtils.filterProperty(property, XMockProxyApi.queryGetMockProps(getApplicationContext()));
-        return MockUtils.filterProperty(property, XMockCallApi.getMockProps(getApplicationContext()));
+        if(propMaps != null && !propMaps.isEmpty()) {
+            String settingName = propMaps.get(property);
+            if(settingName != null) {
+                if(settings.containsKey(settingName))
+                    return getSetting(settingName, null);
+            }
+        }
+
+        return MockUtils.NOT_BLACKLISTED;
     }
 
     @SuppressWarnings("unused")
@@ -134,14 +172,13 @@ public class XParam {
         switch (setting) {
             case "android_id":
                 if(set.equals("android_id")) {
-                    String fake = getSetting("value.android_id", "0000000000000000");
-                    setResult(fake);
+                    setResult(getSettingReMap("unique.android.id", "value.android_id", "0000000000000000"));
                     return true;
                 }
                 break;
             case "bluetooth_name":
                 if(set.equals("bluetooth_name")) {
-                    setResult("00:00:00:00:00:00");
+                    setResult(getSettingReMap("unique.bluetooth.address", "bluetooth.id", "00:00:00:00:00:00"));
                     return true;
                 }
                 break;
@@ -169,6 +206,25 @@ public class XParam {
     @SuppressWarnings("unused")
     public List<String> filterFileStringList(List<String> files) { return FileUtil.filterList(files); }
 
+
+    //
+    //Shell Intercept
+    //
+
+    @SuppressWarnings("unused")
+    public ShellInterceptionResult interceptCommand(String command) { return ShellIntercept.intercept(ShellInterceptionResult.create(command, getUserMaps())); }
+
+    @SuppressWarnings("unused")
+    public ShellInterceptionResult interceptCommandArray(String[] commands) { return ShellIntercept.intercept(ShellInterceptionResult.create(commands, getUserMaps())); }
+
+    @SuppressWarnings("unused")
+    public ShellInterceptionResult interceptCommandList(List<String> commands) { return ShellIntercept.intercept(ShellInterceptionResult.create(commands, getUserMaps())); }
+
+    //
+    //End of Shell Intercept
+    //
+
+
     //
     //Start of Memory/CPU Functions
     //
@@ -186,13 +242,32 @@ public class XParam {
     public ActivityManager.MemoryInfo getFakeMemoryInfo(int totalMemoryInGB, int availableMemoryInGB) { return MemoryUtilEx.getMemory(totalMemoryInGB, availableMemoryInGB); }
 
     @SuppressWarnings("unused")
-    public FileDescriptor createFakeCpuinfoFileDescriptor() { return MockCpuUtil.generateFakeFileDescriptor(XMockCallApi.getSelectedMockCpu(getApplicationContext())); }
+    public FileDescriptor createFakeCpuinfoFileDescriptor() { return MockCpuUtil.generateFakeFileDescriptor(XMockCall.getSelectedMockCpu(getApplicationContext())); }
 
     @SuppressWarnings("unused")
-    public File createFakeCpuinfoFile() { return MockCpuUtil.generateFakeFile(XMockCallApi.getSelectedMockCpu(getApplicationContext())); }
+    public File createFakeCpuinfoFile() { return MockCpuUtil.generateFakeFile(XMockCall.getSelectedMockCpu(getApplicationContext())); }
 
     //
     //End of Memory/CPU Functions
+    //
+
+    //
+    //Start of Bluetooth Functions
+    //
+
+    @SuppressWarnings("unused")
+    public static Set<BluetoothDevice> filterSavedBluetoothDevices(Set<BluetoothDevice> devices, List<String> allowList) { return ListFilterUtil.filterSavedBluetoothDevices(devices, allowList); }
+
+    @SuppressWarnings("unused")
+    public static List<ScanResult> filterWifiScanResults(List<ScanResult> results, List<String> allowList) { return ListFilterUtil.filterWifiScanResults(results, allowList); }
+
+    @SuppressWarnings("unused")
+    public static List<WifiConfiguration> filterSavedWifiNetworks(List<WifiConfiguration> results, List<String> allowList) { return ListFilterUtil.filterSavedWifiNetworks(results, allowList); }
+
+
+
+    //
+    //End of Bluetooth Functions
     //
 
     //
@@ -217,19 +292,7 @@ public class XParam {
     public String generateRandomString(int min, int max) { return generateRandomString(ThreadLocalRandom.current().nextInt(min, max + 1)); }
 
     @SuppressWarnings("unused")
-    public String generateRandomString(int length) {
-        String characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuilder stringBuilder = new StringBuilder(length);
-
-        for (int i = 0; i < length; i++) {
-            int index = random.nextInt(characters.length());
-            char randomChar = characters.charAt(index);
-            stringBuilder.append(randomChar);
-        }
-
-        return stringBuilder.toString();
-    }
+    public String generateRandomString(int length) { return RandomStringGenerator.generateRandomAlphanumericString(length); }
 
     @SuppressWarnings("unused")
     public byte[] getIpAddressBytes(String ipAddress) { return NetworkUtil.stringIpAddressToBytes(ipAddress); }
@@ -258,6 +321,7 @@ public class XParam {
     public String[] extractSelectionArgs() {
         String[] sel = null;
         if(paramTypes[2].getName().equals(Bundle.class.getName())){
+            //ContentResolver.query26
             Bundle bundle = (Bundle) getArgument(2);
             if(bundle != null) {
                 sel = bundle.getStringArray("android:query-arg-sql-selection-args");
@@ -292,8 +356,11 @@ public class XParam {
                         return false;
 
                     for(String arg : args) {
+                        Log.d(TAG, "matrix=" + arg);
                         if(arg.equals("android_id")) {
-                            setResult(new MatrixCursor(ret.getColumnNames()));
+                            String newId = getSetting("unique.gsf.id", "FMZIYEVGXZDCENRO");
+                            Log.d(TAG, "GSF new=" + newId);//" column modify=" + modify)
+                            setResult(CursorUtil.copyKeyValue(ret, "android_id", newId));
                             return true;
                         }
                     }
@@ -319,24 +386,16 @@ public class XParam {
     }
 
     @SuppressWarnings("unused")
-    public int getUid() {
-        return this.context.getApplicationInfo().uid;
-    }
+    public int getUid() { return this.context.getApplicationInfo().uid; }
 
     @SuppressWarnings("unused")
-    public Object getScope() {
-        return this.param;
-    }
+    public Object getScope() { return this.param; }
 
     @SuppressWarnings("unused")
-    public int getSDKCode() {
-        return Build.VERSION.SDK_INT;
-    }
+    public int getSDKCode() { return Build.VERSION.SDK_INT; }
 
     @SuppressWarnings("unused")
-    public void printFileContents(String filePath) {
-        FileUtil.printContents(filePath);
-    }
+    public void printFileContents(String filePath) { FileUtil.printContents(filePath); }
 
     //
     //Start of REFLECT Functions
@@ -366,16 +425,50 @@ public class XParam {
     @SuppressWarnings("unused")
     public Class<?> getClassType(String className) { return ReflectUtil.getClassType(className); }
 
+
+    // local fake = luajava.newInstance('java.util.ArrayList')
+
+
+    @SuppressWarnings("unused")
+    public static int getContainerSize(Object o) { return CollectionUtil.getSize(o); }
+
+
     @SuppressWarnings("unused")
     public Object createReflectArray(String className, int size) { return ReflectUtil.createArray(className, size); }
 
     @SuppressWarnings("unused")
     public Object createReflectArray(Class<?> classType, int size) { return ReflectUtil.createArray(classType, size); }
 
+    @SuppressWarnings("unused")
+    public String joinArray(String[] array) { return StringUtil.joinDelimiter(" ", array); }
+
+    @SuppressWarnings("unused")
+    public String joinList(List<String> list) { return StringUtil.joinDelimiter(" ", list); }
+
+    @SuppressWarnings("unused")
+    public byte[] stringToUTF8Bytes(String s) { return StringUtil.getUTF8Bytes(s); }
+
+    @SuppressWarnings("unused")
+    public String bytesToUTF8String(byte[] bs) { return StringUtil.getUTF8String(bs); }
+
+    @SuppressWarnings("unused")
+    public byte[] stringToRawBytes(String s) { return StringUtil.stringToRawBytes(s); }
+
+    @SuppressWarnings("unused")
+    public String rawBytesToHexString(byte[] bs) { return StringUtil.rawBytesToHex(bs); }
+
+    @SuppressWarnings("unused")
+    public String bytesToSHA256Hash(byte[] bs) { return StringUtil.getBytesSHA256Hash(bs); }
+
+    @SuppressWarnings("unused")
+    public List<String> stringToList(String s, String del) { return StringUtil.stringToList(s, del); }
+
+    @SuppressWarnings("unused")
+    public boolean listHasString(List<String> lst, String s) { return StringUtil.listHasString(lst, s);  }
+
     //
     //End of REFLECT Functions
     //
-
 
     //
     //START OF LONG HELPER FUNCTIONS
@@ -489,6 +582,32 @@ public class XParam {
     @SuppressWarnings("unused")
     public void setResultByteArray(Byte[] result) throws Throwable { setResult(result); }
 
+    public void setResultBytes(byte[] result) throws Throwable {
+        if(result == null) {
+            Log.e(TAG, "Set Bytes is NULL ??? fix");
+            return;
+        }
+
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Setting as Bytes...");
+            Log.i(TAG, "Bytes Set " + this.getPackageName() + ":" + this.getUid() +
+                    " result size=" + result.length + " return=" + this.returnType);
+        }
+
+        try {
+            Object res2 = coerceValue(this.returnType, result);
+            Log.w(TAG, "Res2 = " + res2 + " clas=" + res2.getClass().getName());
+        }catch (Exception e) { Log.e(TAG, "Failed to read ccv e=" + e); }
+
+        try {
+            boolean boxTyp = !boxType(this.returnType).isInstance(result);
+            Log.w(TAG, "Is bytes shit box type ? " + boxTyp);
+        }catch (Exception e) { Log.e(TAG, "Failed to read is box type e=" + e); }
+
+        if (this.field == null) this.param.setResult(result);
+        else this.field.set(null, result);
+    }
+
     @SuppressWarnings("unused")
     public void setResult(Object result) throws Throwable {
         //Do Note they have support if you pass a LONG String
@@ -496,6 +615,7 @@ public class XParam {
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Set " + this.getPackageName() + ":" + this.getUid() +
                     " result=" + result + " return=" + this.returnType);
+
         if (result != null && !(result instanceof Throwable) && this.returnType != null) {
             result = coerceValue(this.returnType, result);
             if (!boxType(this.returnType).isInstance(result))
@@ -527,16 +647,35 @@ public class XParam {
     }
 
     @SuppressWarnings("unused")
+    public String getSettingReMap(String name, String oldName) {
+        return getSettingReMap(name, oldName, null);
+    }
+
+    @SuppressWarnings("unused")
+    public String getSettingReMap(String name, String oldName, String defaultValue) {
+        String setting = getSetting(name);
+        if(setting == null && StringUtil.isValidString(oldName)) {
+            Log.w(TAG, "setting[" + name + "] was null trying old setting name [" + oldName + "]");
+            setting = getSetting(oldName);
+        }
+
+        if(setting == null)
+            return defaultValue;
+        else
+            return setting;
+    }
+
+    @SuppressWarnings("unused")
     public String getSetting(String name, String defaultValue) {
         String setting = getSetting(name);
-        return StringUtil.isValidString(setting) ? setting : defaultValue;
+        return setting == null ? defaultValue : setting;
     }
 
     @SuppressWarnings("unused")
     public String getSetting(String name) {
         synchronized (this.settings) {
             String value = (this.settings.containsKey(name) ? this.settings.get(name) : null);
-            Log.i(TAG, "Get setting " + this.getPackageName() + ":" + this.getUid() + " " + name + "=" + value);
+            //Log.i(TAG, "Get setting " + this.getPackageName() + ":" + this.getUid() + " " + name + "=" + value);
             return value;
         }
     }
@@ -554,7 +693,7 @@ public class XParam {
     @SuppressWarnings("unused")
     public Object getValue(String name, Object scope) {
         Object value = getValueInternal(name, scope);
-        Log.i(TAG, "Get value " + this.getPackageName() + ":" + this.getUid() + " " + name + "=" + value + " @" + scope);
+        //Log.i(TAG, "Get value " + this.getPackageName() + ":" + this.getUid() + " " + name + "=" + value + " @" + scope);
         return value;
     }
 
@@ -602,10 +741,14 @@ public class XParam {
     } else if (Double.class.equals(value.getClass())) {
         if (float.class.equals(type))
             return (float) (double) value;
-    } else if (value instanceof String && int.class.equals(type))
+    } else if (value instanceof String && int.class.equals(type)) {
+            Log.i(TAG, "IS String or Int class");
             return Integer.parseInt((String) value);
-        else if (value instanceof String && long.class.equals(type))
+        }
+        else if (value instanceof String && long.class.equals(type)) {
+            Log.i(TAG, "IS String or Long class");
             return Long.parseLong((String) value);
+        }
         else if (value instanceof String && float.class.equals(type))
             return Float.parseFloat((String) value);
         else if (value instanceof String && double.class.equals(type))

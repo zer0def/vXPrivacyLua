@@ -1,5 +1,4 @@
 [
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -21,8 +20,6 @@
     "luaScript": "@spoof_meminfo_one",
     "settings":["memory.total", "memory.available"]
   },
-
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -44,7 +41,6 @@
     "luaScript": "@spoof_activitymanager_getmemoryinfo",
     "settings":["memory.total", "memory.available"]
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -66,7 +62,6 @@
     "luaScript": "@spoof_memoryinfo_writetoparcel",
     "settings":["memory.total", "memory.available"]
   },
-
   {
     "collection": "PrivacyEx",
     "group": "Spoof.Memory",
@@ -87,7 +82,6 @@
     "luaScript": "@spoof_runtime_maxmemory",
     "settings":["memory.total"]
   },
-
   {
     "collection": "PrivacyEx",
     "group": "Spoof.Memory",

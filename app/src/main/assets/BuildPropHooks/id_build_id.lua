@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.ID", "OPM1.171019.011")
+    local fake = param:getSetting("android.build.id", "TQ3A.230805.001")
     param:setResult(fake)
     return true, ret, fake
 end

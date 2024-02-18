@@ -4,7 +4,7 @@ function after(hook, param)
 	    return false
 	end
 
-	local fake = param:getSetting("zone.langtag", "is-IS")
+	local fake = param:getSetting("zone.language.tag", "is-IS")
 	param:setResult(fake)
 	return true, res, fake
 end

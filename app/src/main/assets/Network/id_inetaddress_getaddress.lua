@@ -4,7 +4,7 @@ function after(hook, param)
         return false
     end
 
-    local setting = param:getSetting("net.host_address", "12.7.0.0.1");
+    local setting = param:getSetting("network.host.address", "12.7.0.0.1");
     local fake = param:getIpAddressBytes(setting)
     param:setResultByteArray(fake)
     return true

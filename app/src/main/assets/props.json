@@ -401,7 +401,24 @@
     "mockValue": " ",
     "defaultValue": " ",
     "enabled": true
+  },
+  {
+    "name": "http.agent",
+    "mockValue": "Mozilla/5.0 (iPhone; CPU iPhone OS 10_9_8; like Mac OS X) AppleWebKit/603.13 (KHTML, like Gecko)  Chrome/50.0.3404.328 Mobile Safari/533.1",
+    "defaultValue": "Mozilla/5.0 (iPhone; CPU iPhone OS 10_9_8; like Mac OS X) AppleWebKit/603.13 (KHTML, like Gecko)  Chrome/50.0.3404.328 Mobile Safari/533.1",
+    "enabled": true
+  },
+
+  {
+    "name": "user-agent",
+    "mockValue": "Mozilla/5.0 (iPhone; CPU iPhone OS 10_9_8; like Mac OS X) AppleWebKit/603.13 (KHTML, like Gecko)  Chrome/50.0.3404.328 Mobile Safari/533.1",
+    "defaultValue": "Mozilla/5.0 (iPhone; CPU iPhone OS 10_9_8; like Mac OS X) AppleWebKit/603.13 (KHTML, like Gecko)  Chrome/50.0.3404.328 Mobile Safari/533.1",
+    "enabled": true
   }
-
-
 ]
+
+//New
+//ToDo remove old ensure checks (dont have too)
+//
+//69 Total elements
+//

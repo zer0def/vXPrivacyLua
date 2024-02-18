@@ -5,13 +5,13 @@ function after(hook, param)
 		return true
 	end
 
-	local fake = "274299"
+	local fake = param:getSetting("gsm.operator.id")
 	--local setting = param:getSetting("MMC,MNC")
-	local mmc = param:getSetting("phone.mmc")
-	local mnc = param:getSetting("phone.mnc")
+	local mcc = param:getSettingReMap("gsm.operator.mcc", "phone.mmc")
+	local mnc = param:getSettingReMap("gsm.operator.mnc", "phone.mnc")
 	if mmc ~= nil and mnc ~= nil then
-		if tonumber(mmc) ~= nil and tonumber(mnc) ~= nil then
-			fake = mmc .. mnc
+		if tonumber(mcc) ~= nil and tonumber(mnc) ~= nil then
+			fake = mcc .. mnc
 		end
 		--local index = string.find(setting, ",", 1, true)
 		--if index ~= nil then

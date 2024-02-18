@@ -9,10 +9,21 @@
     <color name="lightColorDrawerBackground">#EEE</color>
     <color name="lightColorSystem">#20B10000</color>
 
+    <color name="lightColorTextOne">#99000000</color>
+    <color name="lightColorTextDivider">#99000000</color>
+    <color name="lightColorSettingSaved">#EEE</color>
+    <color name="lightColorDividerBack">#D8CBCB</color>
+
+
     <!-- Dark theme -->
     <color name="darkColorDrawerScrim">#997F7F7F</color>
     <color name="darkColorDrawerBackground">#222</color>
     <color name="darkColorSystem">#40B10000</color>
+
+    <color name="darkColorTextOne">#EEE</color>
+    <color name="darkColorTextDivider">#CCC6C6</color>
+    <color name="darkColorSettingSaved">#00447b</color>
+    <color name="darkColorDividerBack">#277F7F7F</color>
 
     <!-- Primokorn -->
     <color name="_primaryColor">#1c8adb</color>

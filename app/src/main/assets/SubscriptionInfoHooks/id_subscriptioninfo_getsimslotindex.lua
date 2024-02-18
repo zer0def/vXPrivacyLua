@@ -4,7 +4,8 @@ function after(hook, param)
 		return false
 	end
 
-	local fake = -1
+	local settingValue = param:getSetting("gsm.index.sim.slot", "1")
+	local fake = tonumber(settingValue)
 	param:setResult(fake)
-	return true, tostring(ret), tostring(fake)
+	return true, tostring(ret), settingValue
 end

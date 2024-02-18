@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.HARDWARE", "qcom")
+    local fake = param:getSetting("cpu.hardware.name", "qcom")
     param:setResult(fake)
     return true, ret, fake
 end

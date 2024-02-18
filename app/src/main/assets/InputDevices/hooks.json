@@ -1,7 +1,4 @@
 [
-
-  //getDescriptor,
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -9,7 +6,7 @@
     "name": "InputDevice.getVendorId",
     "author": "OBC",
     "className": "android.view.InputDevice",
-    "methodName": " getVendorId",
+    "methodName": "getVendorId",
     "parameterTypes": [ ],
     "returnType": "int",
     "minSdk": 4,
@@ -22,50 +19,6 @@
     "notify":false,
     "luaScript": "@generic_zero_value"
   },
-
-  {
-    "builtin": false,
-    "collection": "PrivacyEx",
-    "group": "ID.InputDevice",
-    "name": "InputDevice.getProductId",
-    "author": "OBC",
-    "className": "android.view.InputDevice",
-    "methodName": " getProductId",
-    "parameterTypes": [ ],
-    "returnType": "int",
-    "minSdk": 4,
-    "maxSdk": 999,
-    "version": 1,
-    "description": "",
-    "enabled":true,
-    "optional":true,
-    "usage":true,
-    "notify":false,
-    "luaScript": "@generic_zero_value"
-  },
-
-
-  /*{
-    "builtin": false,
-    "collection": "PrivacyEx",
-    "group": "ID.InputDevice",
-    "name": "InputDevice.getKeyboardLanguageTag",
-    "author": "OBC",
-    "className": "android.view.InputDevice",
-    "methodName": "getKeyboardLanguageTag",
-    "parameterTypes": [ ],
-    "returnType": "java.lang.String",
-    "minSdk": 4,
-    "maxSdk": 999,
-    "version": 1,
-    "description": "",
-    "enabled":true,
-    "optional":true,
-    "usage":true,
-    "notify":false,
-    "luaScript": "@id_fakestr_one"
-  },*/
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -86,7 +39,6 @@
     "notify":false,
     "luaScript": "@id_inputdevice_descriptor"
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -107,7 +59,6 @@
     "notify":false,
     "luaScript": "@id_inputdevice_name"
   },
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -127,26 +78,5 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_inputdevice_descriptor"
-  },
-
-  /*{
-    "builtin": false,
-    "collection": "Hide",
-    "group": "Hide.Emulator",
-    "name": "InputDevice.isVirtual",
-    "author": "OBC",
-    "className": "android.view.InputDevice",
-    "methodName": "isVirtual",
-    "parameterTypes": [ ],
-    "returnType": "boolean",
-    "minSdk": 4,
-    "maxSdk": 999,
-    "version": 1,
-    "description": "",
-    "enabled":true,
-    "optional":true,
-    "usage":true,
-    "notify":false,
-    "luaScript": "@spoof_networkinterface_getname"
-  }*/
+  }
 ]

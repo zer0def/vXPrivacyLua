@@ -4,7 +4,7 @@ function after(hook, param)
         return false
     end
 
-    local fake = param:getSetting("location.hardware_model_name", param:generateRandomString(20, 60))
+    local fake = param:getSetting("hardware.gps.model.name", param:generateRandomString(20, 60))
     log("Fake GPS Man: " .. fake)
     param:setResult(fake)
     return true, res, fake

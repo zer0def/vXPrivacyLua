@@ -9,10 +9,10 @@ function after(hook, param)
 	local fake
 
 	if typ == 1 then 
-		fake = param:getSetting("value.imei")
+		fake = param:getSettingReMap("unique.gsm.imei", "value.imei")
 		log("GSM [IMEI]")
 	elseif typ == 2 then
-		fake = param:getSetting("value.meid")
+		fake = param:getSettingReMap("unique.gsm.meid", "value.meid")
 		log("CDMA [MEID]")
 	end
 

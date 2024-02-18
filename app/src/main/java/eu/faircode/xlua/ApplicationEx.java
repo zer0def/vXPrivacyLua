@@ -26,16 +26,10 @@ import android.util.Log;
 public class ApplicationEx extends Application {
     private static final String TAG = "XLua.App";
 
-    private static volatile Context context;
-
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Create version=" + BuildConfig.VERSION_NAME);
-        ApplicationEx.context = getApplicationContext();
-    }
-
-    public static Context getAppContext() {
-        return ApplicationEx.context;
+        Log.w(TAG, "SHA1 Fingerprint For [" + XCommandBridgeStatic.PRO_PACKAGE + "] package equals=[" + XSecurity.getProFingerPrint(getApplicationContext()) + "]");
     }
 }

@@ -24,6 +24,19 @@ public class ReflectUtil {
     private static final String GL_PATTEN = ".*\\.GL\\d{2}$";
     private static final String GLES_PATTERN = ".*\\.GLES\\d{2}$";
 
+
+    public static String logStack() {
+        StringBuilder sb = new StringBuilder();
+        for(StackTraceElement e : new Exception().getStackTrace()) {
+            sb.append(e.getClassName());
+            sb.append("::");
+            sb.append(e.getMethodName());
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
     public static boolean extendsGpuClass(Class<?> clazz) {
         Class<?> superClass = clazz.getSuperclass();
         if(superClass == null)

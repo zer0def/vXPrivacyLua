@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.TIME")
+    local fake = param:getSetting("android.build.date.utc")
     if fake == nil then
         --fake = "1609459200000"
         fake = "0"

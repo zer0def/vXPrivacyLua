@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemViewPropGroup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvPropertySettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="3dp"
+        app:contentPadding="5dp"
+
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clPropertiesPropLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp">
+
+            <TextView
+                android:id="@+id/tvGroupPropertiesSettingFullName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:ellipsize="start"
+                android:focusable="false"
+                android:singleLine="true"
+                android:text="unique.setting.name"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                app:layout_constraintEnd_toEndOf="@+id/tvSettingName"
+                app:layout_constraintStart_toStartOf="@+id/tvSettingName"
+                app:layout_constraintTop_toBottomOf="@+id/tvSettingName" />
+
+            <ImageView
+                android:id="@+id/ivBtRandomSettingValueFromProperties"
+                android:layout_width="?android:attr/listPreferredItemHeightSmall"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/ic_remix_dice_fill"
+                app:layout_constraintBottom_toBottomOf="@+id/spSettingRandomizerSpinnerProperties"
+                app:layout_constraintEnd_toEndOf="@+id/tiSettingValueFromProperties"
+                app:layout_constraintTop_toTopOf="@+id/spSettingRandomizerSpinnerProperties" />
+
+            <Spinner
+                android:id="@+id/spSettingRandomizerSpinnerProperties"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/ivBtRandomSettingValueFromProperties"
+                app:layout_constraintTop_toBottomOf="@+id/tiSettingValueFromProperties" />
+
+            <ImageView
+                android:id="@+id/ivBtSaveSettingFromProperties"
+                android:layout_width="?android:attr/listPreferredItemHeightSmall"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/ic_remix_save_3_fill"
+                app:layout_constraintBottom_toBottomOf="@+id/spSettingRandomizerSpinnerProperties"
+                app:layout_constraintStart_toEndOf="@+id/ivBtDeleteSettingFromProperties"
+                app:layout_constraintTop_toTopOf="@+id/spSettingRandomizerSpinnerProperties" />
+
+            <ImageView
+                android:id="@+id/ivBtDeleteSettingFromProperties"
+                android:layout_width="?android:attr/listPreferredItemHeightSmall"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/ic_remix_delete_bin_2_line"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBtSaveSettingFromProperties"
+                app:layout_constraintStart_toStartOf="@+id/tiSettingValueFromProperties"
+                app:layout_constraintTop_toTopOf="@+id/ivBtSaveSettingFromProperties" />
+
+            <TextView
+                android:id="@+id/tvSettingDescriptionFromProperties"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:lines="4"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="Some Setting Description goes here, this text is a test to see how it wold appear on the UI if it was very long Description"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvGroupPropertiesSettingFullName" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvGroupProperties"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spSettingRandomizerSpinnerProperties" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiSettingValueFromProperties"
+                android:layout_width="0dp"
+                android:layout_height="91dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSettingDescriptionFromProperties" />
+
+            <TextView
+                android:id="@+id/tvSettingName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:lines="1"
+                android:text="android.model"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivSettingDropDown"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivSettingDropDown"
+                android:layout_width="30dp"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:layout_marginStart="5dp"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="?attr/expander"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

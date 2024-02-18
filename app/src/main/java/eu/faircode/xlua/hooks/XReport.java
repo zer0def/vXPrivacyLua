@@ -3,16 +3,19 @@ package eu.faircode.xlua.hooks;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import eu.faircode.xlua.XDataBase;
+import java.util.List;
+
+import eu.faircode.xlua.XDatabase;
 import eu.faircode.xlua.XUtil;
-import eu.faircode.xlua.api.objects.IDBSerial;
-import eu.faircode.xlua.api.objects.xlua.hook.GroupDatabaseEntry;
-import eu.faircode.xlua.api.objects.xlua.hook.xHook;
-import eu.faircode.xlua.database.DatabaseQuerySnake;
-import eu.faircode.xlua.api.xlua.XSettingsDatabase;
+import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
+import eu.faircode.xlua.api.standard.interfaces.IDBSerial;
+import eu.faircode.xlua.api.hook.group.XLuaGroup;
+import eu.faircode.xlua.api.hook.XLuaHook;
+import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
 
 public class XReport implements IDBSerial {
     public String hookId;
@@ -44,36 +47,35 @@ public class XReport implements IDBSerial {
         hookId = b.getString("hook");
         packageName = b.getString("packageName");
         uid = b.getInt("uid");
+        userid = XUtil.getUserId(uid);
         event = b.getString("event");
         time = b.getLong("time");
         data = b.getBundle("data");
+        restricted = data.getInt("restricted", 0);
     }
 
-    public GroupDatabaseEntry createGroupObject(xHook hook, long used) { return new GroupDatabaseEntry(packageName, uid, hook.getGroup(), used); }
+    public XLuaGroup createGroupObject(XLuaHook hook, long used) { return new XLuaGroup(packageName, uid, hook.getGroup(), used); }
 
     public int getRestricted() {
-        if(restricted == null)
-            restricted = data.getInt("restricted", 0);
-
+        if(restricted == null) restricted = data.getInt("restricted", 0);
         return restricted;
     }
 
     public int getUserId() {
-        if(userid == null)
-            userid = XUtil.getUserId(uid);
-
+        if(userid == null) userid = XUtil.getUserId(uid);
         return userid;
     }
 
-    public boolean getNotify(XDataBase db) {
-        if(notify == null)
-            notify = Boolean.parseBoolean(XSettingsDatabase.getSettingValue(db, getUserId(), packageName, "notify"));
+    public boolean getNotify(XDatabase db) {
+        if(notify == null)//This is where error can arrive , context is null and context is used and abused alot :P
+            notify = LuaSettingsDatabase.getSettingBoolean(null, db, "notify", getUserId(), packageName);
 
+        //Log.i("XLua.XReport", "XXR use=true,  (pkg=" + packageName + " userId=" + getUserId() + " uid=" + uid + " notify=" + notify + " )");
         return notify;
     }
 
-    public DatabaseQuerySnake generateQuery() {
-        return DatabaseQuerySnake.create()
+    public SqlQuerySnake generateQuery() {
+        return SqlQuerySnake.create()
                 .whereColumns("package", "uid", "hook")
                 .whereColumnValues(packageName, Integer.toString(uid), hookId);
     }
@@ -104,7 +106,7 @@ public class XReport implements IDBSerial {
             cv.put("installed", time);
         else if(event.equals("use")) {
             cv.put("used", time);
-            cv.put("restricted", data.getInt("restricted", 0));
+            cv.put("restricted", restricted);
         }
 
         if (data.containsKey("exception"))
@@ -118,7 +120,14 @@ public class XReport implements IDBSerial {
     }
 
     @Override
-    public void fromCursor(Cursor cursor) {
+    public List<ContentValues> createContentValuesList() { return null; }
 
-    }
+    @Override
+    public void fromContentValuesList(List<ContentValues> contentValues) { }
+
+    @Override
+    public void fromContentValues(ContentValues contentValue) { }
+
+    @Override
+    public void fromCursor(Cursor cursor) { }
 }

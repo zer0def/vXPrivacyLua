@@ -17,7 +17,7 @@ function after(hook, param)
 		return false
 	end
 
-	log("Filtered Property::[" .. prop .. "] => " .. filtered)
+	--log("Filtered Property::[" .. prop .. "] => " .. filtered)
 	param:setResult(filtered)
 	return true
 end

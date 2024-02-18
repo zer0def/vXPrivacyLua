@@ -8,6 +8,12 @@
     <attr name="colorDrawerScrim" format="reference" />
     <attr name="colorDrawerBackground" format="reference" />
 
+    <attr name="colorTextOne" format="reference" />
+    <attr name="colorSettingSaved" format="reference" />
+    <attr name="colorTextDivider" format="reference" />
+    <attr name="colorDividerBack" format="reference" />
+
+
     <style name="AppThemeLight" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowDisablePreview">true</item>
 
@@ -16,6 +22,12 @@
         <item name="hookInstalled">@drawable/ic_done_black_24dp</item>
         <item name="appPersistent">@drawable/ic_settings_backup_restore_black_24dp</item>
         <item name="appSettings">@drawable/ic_settings_black_24dp</item>
+
+        <item name="colorSettingSaved">@color/lightColorSettingSaved</item>
+        <item name="colorTextOne">@color/lightColorTextOne</item>
+        <item name="colorTextDivider">@color/lightColorTextDivider</item>
+        <item name="colorDividerBack">@color/lightColorDividerBack</item>
+
 
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -38,6 +50,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="colorSettingSaved">@color/darkColorSettingSaved</item>
+        <item name="colorTextOne">@color/darkColorTextOne</item>
+        <item name="colorTextDivider">@color/darkColorTextDivider</item>
+        <item name="colorDividerBack">@color/darkColorDividerBack</item>
+
 
         <item name="colorSystem">@color/darkColorSystem</item>
         <item name="colorDrawerScrim">@color/darkColorDrawerScrim</item>

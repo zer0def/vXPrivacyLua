@@ -12,12 +12,13 @@
     "minSdk": 4,
     "maxSdk": 999,
     "version": 1,
-    "description": "DRM manager will return fake uniqe device ID",
+    "description": "DRM manager will return fake unique device ID",
     "enabled":true,
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_drm"
+    "luaScript": "@id_drm",
+    "settings":[ "unique.drm.id" ]
   },
 
   {
@@ -70,7 +71,7 @@
     "author": "OBC",
     "className": "android.content.ContentResolver",
     "methodName": "query",
-    "parameterTypes": [ "android.net.Uri", "java.lang.String", "android.os.Bundle", "android.os.CancellationSignal" ],
+    "parameterTypes": [ "android.net.Uri", "[Ljava.lang.String;", "android.os.Bundle", "android.os.CancellationSignal" ],
     "returnType": "android.database.Cursor",
     "minSdk": 4,
     "maxSdk": 999,

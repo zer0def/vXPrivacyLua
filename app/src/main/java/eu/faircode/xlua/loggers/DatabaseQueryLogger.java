@@ -1,14 +1,15 @@
 package eu.faircode.xlua.loggers;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.List;
 
-import eu.faircode.xlua.XDataBase;
-import eu.faircode.xlua.database.DatabaseQuerySnake;
+import eu.faircode.xlua.XDatabase;
+import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
 
 public class DatabaseQueryLogger {
-    public static void logSnakeSnapshot(DatabaseQuerySnake snake, boolean logStack, boolean logTableEntries) {
+    public static void logSnakeSnapshot(SqlQuerySnake snake, boolean logStack, boolean logTableEntries) {
         String TAG = "XLua.DatabaseQuerySnake.Log";
         StringBuilder log = new StringBuilder();
 
@@ -30,7 +31,7 @@ public class DatabaseQueryLogger {
         log.append(snake.getOrderBy());
         log.append("\n");
 
-        XDataBase db = snake.getDatabase();
+        XDatabase db = snake.getDatabase();
         log.append("[5] db=");
         log.append(db);
         if(db != null && db.getDatabase() != null){
@@ -48,9 +49,17 @@ public class DatabaseQueryLogger {
 
         log.append("\n");
 
+        log.append("[7] OnlyReturn=");
+        List<String> els = snake.getOnlyReturn();
+        if(els != null) {
+            log.append(TextUtils.join(" , ", els));
+        }
+
+        log.append("\n");
+
         //Binder.getCallingUid();
         if(logStack) {
-            log.append("[7] Stack=\n");
+            log.append("[8] Stack=\n");
             for(StackTraceElement e : Thread.currentThread().getStackTrace()) {
                 log.append(e.getClassName());
                 log.append("::");

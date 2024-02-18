@@ -4,9 +4,9 @@ function after(hook, param)
 	    return false
 	end
 
-    local fake = param:getSetting("zone.tzshort", "GMT+0")
+    local fake = param:getSettingReMap("zone.timezone", "zone.tzshort", "GMT+0")
     local tzcl = luajava.bindClass("java.util.TimeZone")
     local tz = tzcl:getTimeZone(fake)
 	param:setResult(tz)
-	return true, res, fake
+	return true, "I dunno", fake
 end

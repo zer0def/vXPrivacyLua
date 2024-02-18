@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.MODEL", "Pixel XL")
+    local fake = param:getSetting("device.model", "GM1920")
     param:setResult(fake)
     return true, ret, fake
 end

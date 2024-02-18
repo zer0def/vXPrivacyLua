@@ -84,7 +84,7 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_processor_count",
-    "settings": [ "cpu.processor_count" ]
+    "settings": [ "cpu.processor.count" ]
   },
 
   {
@@ -105,6 +105,7 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_uname"
+    "luaScript": "@id_uname",
+    "settings": [ "android.kernel.name", "android.kernel.node.name", "android.kernel.release", "android.kernel.version", "cpu.arch" ]
   }
 ]

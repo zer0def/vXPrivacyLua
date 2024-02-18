@@ -1,5 +1,28 @@
 [
 
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "List.Bluetooth",
+    "name": "BluetoothAdapter.getBondedDevices",
+    "author": "OBC",
+    "className": "android.bluetooth.BluetoothAdapter",
+    "methodName": "getBondedDevices",
+    "parameterTypes": [ ],
+    "returnType": "java.util.Set",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "Filter Allowed to Show Paired Bluetooth Devices",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@list_bluetoothadapter_getbondeddevices",
+    "settings":[ "bluetooth.allowed.bonded.list" ]
+  },
+
+
   //getBluetoothAddress
   {
     "builtin": false,

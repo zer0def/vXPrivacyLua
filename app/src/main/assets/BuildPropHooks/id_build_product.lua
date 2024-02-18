@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.PRODUCT", "marlinex")
+    local fake = param:getSetting("android.build.codename", "yaap_guacamoles")
     param:setResult(fake)
     return true, ret, fake
 end

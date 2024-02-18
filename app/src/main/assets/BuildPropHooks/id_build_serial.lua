@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.SERIAL", "HT35W1A00476")
+    local fake = param:getSetting("unique.serial.no", "unknown")
     param:setResult(fake)
     return true, ret, fake
 end

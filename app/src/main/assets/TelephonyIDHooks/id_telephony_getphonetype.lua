@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-	local fakeStr = param:getSetting("phone.type", "2")
+	local fakeStr = param:getSettingReMap("gsm.phone.type", "phone.type", "2")
 	--PHONE_TYPE_CDMA=2
 	--PHONE_TYPE_GSM=1
 	--PHONE_TYPE_NONE=0

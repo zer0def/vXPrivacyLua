@@ -40,6 +40,6 @@
     "usage":true,
     "notify":false,
     "luaScript": "@id_locationmanager_getgnsshardwaremodelname",
-    "settings": ["location.hardware_model_name"]
+    "settings": ["hardware.gps.model.name"]
   }
 ]

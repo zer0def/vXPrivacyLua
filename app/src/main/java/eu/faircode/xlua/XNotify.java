@@ -10,7 +10,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.util.Log;
 
-import eu.faircode.xlua.api.objects.xlua.hook.xHook;
+import eu.faircode.xlua.api.hook.XLuaHook;
 import eu.faircode.xlua.hooks.XReport;
 
 public class XNotify {
@@ -40,7 +40,7 @@ public class XNotify {
             if (main != null) {
                 int flags = (Build.VERSION.SDK_INT > Build.VERSION_CODES.R ? 0x04000000 : 0);
                 main.putExtra(ActivityMain.EXTRA_SEARCH_PACKAGE, report.packageName);
-                PendingIntent pi = PendingIntent.getActivity(context, report.uid, main, flags);
+                @SuppressLint("WrongConstant") PendingIntent pi = PendingIntent.getActivity(context, report.uid, main, flags);
                 builder.setContentIntent(pi);
             }
 
@@ -55,7 +55,7 @@ public class XNotify {
     @SuppressLint("MissingPermission")
     public static Notification.Builder buildUsageNotification(
             Context context,
-            xHook hook,
+            XLuaHook hook,
             XReport report,
             PackageManager pm,
             Resources resources) {
@@ -85,7 +85,7 @@ public class XNotify {
             if (main != null) {
                 int flags = (Build.VERSION.SDK_INT > Build.VERSION_CODES.R ? 0x04000000 : 0);
                 main.putExtra(ActivityMain.EXTRA_SEARCH_PACKAGE, report.packageName);
-                PendingIntent pi = PendingIntent.getActivity(context, report.uid, main, flags);
+                @SuppressLint("WrongConstant") PendingIntent pi = PendingIntent.getActivity(context, report.uid, main, flags);
                 builder.setContentIntent(pi);
             }
 

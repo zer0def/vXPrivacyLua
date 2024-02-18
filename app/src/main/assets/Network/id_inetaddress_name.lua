@@ -4,7 +4,7 @@ function after(hook, param)
         return false
     end
 
-    local fake = param:getSetting("net.host_name", "Google.com")
+    local fake = param:getSetting("network.host.name", "Google.com")
     param:setResult(fake)
     return true, res, fake
 end

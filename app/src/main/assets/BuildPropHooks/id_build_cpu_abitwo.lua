@@ -4,7 +4,7 @@ function after(hook, param)
 		return false
 	end
 
-    local fake = param:getSetting("build.CPU_ABI2", "armeabi")
+    local fake = param:getSetting("cpu.abi", "")
     param:setResult(fake)
     return true, ret, fake
 end

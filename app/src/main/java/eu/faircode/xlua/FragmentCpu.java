@@ -21,51 +21,47 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
-import eu.faircode.xlua.api.XLuaCallApi;
-import eu.faircode.xlua.api.XMockCallApi;
-import eu.faircode.xlua.api.objects.xmock.cpu.MockCpu;
+import eu.faircode.xlua.api.xlua.XLuaCall;
+import eu.faircode.xlua.api.xmock.XMockCall;
+import eu.faircode.xlua.api.cpu.MockCpu;
 
 
 public class FragmentCpu extends Fragment {
     private final static String TAG = "XLua.FragmentCpu";
 
-    private ProgressBar pbCpu;
+    private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefresh;
     private AdapterCpu rvCpuAdapter;
 
     public View onCreateView(
             @NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //spConfigEdit
-
-
-
-        //Log.i(TAG, "Init of DB for Cpu Maps");
-        //List<XMockCpuIO> maps = XMockProxyApi.queryGetMockCpuMaps(getContext());
-        //Log.i(TAG, "Init of CPU Maps has Finished: " + maps.size());
-
         Log.i(TAG, "FragmentCpu.onCreateView Enter");
         final View main = inflater.inflate(R.layout.cpurecyclerview, container, false);
+        initRefresh(main);
+        initRecyclerView(main);
+        return main;
+    }
 
-        pbCpu =  main.findViewById(R.id.pbCpu);
-
-        int colorAccent = XUtil.resolveColor(getContext(), R.attr.colorAccent);
-        swipeRefresh = main.findViewById(R.id.swipeRefreshCpu);
+    private void initRefresh(final View view) {
+        progressBar = view.findViewById(R.id.pbCpu);
+        int colorAccent = XUtil.resolveColor(Objects.requireNonNull(getContext()), R.attr.colorAccent);
+        swipeRefresh = view.findViewById(R.id.swipeRefreshCpu);
         swipeRefresh.setColorSchemeColors(colorAccent, colorAccent, colorAccent);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                loadData();
-            }
+            public void onRefresh() { loadData(); }
         });
+    }
 
-        RecyclerView rvCpu = main.findViewById(R.id.rvCpu);
-        rvCpu.setVisibility(View.VISIBLE);
-        rvCpu.setHasFixedSize(false);
+    private void initRecyclerView(final View view) {
+        RecyclerView rvCpus = view.findViewById(R.id.rvCpu);
+        rvCpus.setVisibility(View.VISIBLE);
+        rvCpus.setHasFixedSize(false);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity()) {
             @Override
             public boolean onRequestChildFocus(RecyclerView parent, RecyclerView.State state, View child, View focused) {
@@ -74,17 +70,9 @@ public class FragmentCpu extends Fragment {
         };
 
         llm.setAutoMeasureEnabled(true);
-        rvCpu.setLayoutManager(llm);
+        rvCpus.setLayoutManager(llm);
         rvCpuAdapter = new AdapterCpu();
-        rvCpu.setAdapter(rvCpuAdapter);
-
-        Log.i(TAG, "FragmentCpu.onCreateView Leave");
-        return main;
-    }
-
-    public void saveModifiedProperties(Context context) {
-        Log.i(TAG, "Save / Updating properties");
-        //rvCpuAdapter.updateFromModified(context);
+        rvCpus.setAdapter(rvCpuAdapter);
     }
 
     @Override
@@ -101,15 +89,12 @@ public class FragmentCpu extends Fragment {
     private void loadData() {
         Log.i(TAG, "Starting data loader");
         LoaderManager manager = getActivity().getSupportLoaderManager();
-        //ActivityMain loader data ?
         manager.restartLoader(ActivityMain.LOADER_DATA, new Bundle(), dataLoaderCallbacks).forceLoad();
     }
 
     LoaderManager.LoaderCallbacks dataLoaderCallbacks = new LoaderManager.LoaderCallbacks<CpuDataHolder>() {
         @Override
-        public Loader<CpuDataHolder> onCreateLoader(int id, Bundle args) {
-            return new CpuDataLoader(getContext());
-        }
+        public Loader<CpuDataHolder> onCreateLoader(int id, Bundle args) { return new CpuDataLoader(getContext()); }
 
         @Override
         public void onLoadFinished(Loader<CpuDataHolder> loader, CpuDataHolder data) {
@@ -128,7 +113,7 @@ public class FragmentCpu extends Fragment {
 
                 rvCpuAdapter.set(data.maps);
                 swipeRefresh.setRefreshing(false);
-                pbCpu.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
             }else {
                 Log.e(TAG, Log.getStackTraceString(data.exception));
                 Snackbar.make(getView(), data.exception.toString(), Snackbar.LENGTH_LONG).show();
@@ -136,9 +121,7 @@ public class FragmentCpu extends Fragment {
         }
 
         @Override
-        public void onLoaderReset(Loader<CpuDataHolder> loader) {
-            // Do nothing
-        }
+        public void onLoaderReset(Loader<CpuDataHolder> loader) { }
     };
 
     private static class CpuDataLoader extends AsyncTaskLoader<CpuDataHolder> {
@@ -153,20 +136,10 @@ public class FragmentCpu extends Fragment {
             Log.i(TAG, "Data loader started");
             CpuDataHolder data = new CpuDataHolder();
             try {
-
-                data.theme = XLuaCallApi.getTheme(getContext());
-                //data.theme = XSettingsDatabase.getSettingValue()
-                //data.theme = XProvider.getSetting(getContext(), "global", "theme");
-                //if (data.theme == null)
-                //    data.theme = "light";
-
-                data.maps.clear();
+                data.theme = XLuaCall.getTheme(getContext());
                 Log.i(TAG, "Getting Cpu Maps...");
-                //List<MockCpu> props = XMockProxyApi.queryGetMockCpuMaps(getContext());
-                Collection<MockCpu> maps = XMockCallApi.getCpuMaps(getContext());
-                Log.i(TAG, "Props=" + maps.size());
-                data.maps.addAll(maps);
-                //make sure it syncs with cache if needed
+                data.maps.addAll(XMockCall.getCpuMaps(getContext()));
+                Log.i(TAG, "cpu maps size=" + data.maps.size());
             }catch (Throwable ex) {
                 data.maps.clear();
                 data.exception = ex;
