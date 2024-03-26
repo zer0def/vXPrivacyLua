@@ -219,7 +219,7 @@ public class ActivityMain extends ActivityBase {
         drawerArray.add(new DrawerItem(this, R.string.menu_donate, new DrawerItem.IListener() {
             @Override
             public void onClick(DrawerItem item) {
-                Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/0bbedCode/XPL-EX/blob/dev/README.md#donate"));
+                Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/0bbedCode/XPL-EX/?tab=readme-ov-file#donate"));
                 if (browse.resolveActivity(getPackageManager()) == null)
                     Snackbar.make(findViewById(android.R.id.content), getString(R.string.msg_no_browser), Snackbar.LENGTH_LONG).show();
                 else
