@@ -13,18 +13,12 @@ function before(hook, param)
 	end
 
 	log("(commands) joined to (command) value=" .. command)
-	local result = param:interceptCommandArray(arg)
-	if result == nil then
-	    log("Command Interception returned NULL. arg=" .. command)
+	local comRes = param:interceptCommandArray(arg)
+	if comRes == nil then
+	    log("Command Interception returned NULL. Looks clean arg=" .. command)
 	    return false
 	end
 
-	if result:isMalicious() then
-		log("Found Malicious Command. arg=" .. command)
-	    param:setResult(result:getEchoProcess())
-        return true, result:getOriginalValue(), result:getNewValue()
-	end
-
-    log("Command seems fine :> command=" .. command)
-    return false
+    log("Command was intercepted command=" .. command)
+    return true, command, comRes
 end

@@ -21,6 +21,11 @@ public class ShellUtils {
 
     public static Process echo(String command) {
         try {
+            if(command == null) {
+                Log.e(TAG, "Command passed to the echo was null filling in...");
+                command = "Hello";
+            }
+
             String[] cmdline = { "sh", "-c", "echo " + command};
             return Runtime.getRuntime().exec(cmdline);
         }catch (Exception e) {

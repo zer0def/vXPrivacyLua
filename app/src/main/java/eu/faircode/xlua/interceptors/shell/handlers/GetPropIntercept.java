@@ -127,14 +127,14 @@ public class GetPropIntercept extends CommandInterceptor implements ICommandInte
             if(propName == null || TextUtils.isEmpty(propName))
                 continue;
 
-            if(sb.length() > 0)
-                sb.append("]\r\n");
+            //if(sb.length() > 0)
+            //    sb.append("\r\n");
 
             String settName = mappedProperty.getValue();
             Integer code = maps.getPropertySetting(propName);
             if(code != null) if(code == MockPropSetting.PROP_SKIP || code == MockPropSetting.PROP_HIDE) continue;
             if(!show(code, propName)) continue;
-            sb.append("[").append(propName).append("]: [").append(maps.getSetting(settName, ""));
+            sb.append("[").append(propName).append("]: [").append(maps.getSetting(settName, "")).append("]\r\n");
             //Ends with 0D 0A
         }
 

@@ -40,7 +40,7 @@
     <string name="menu_whats_new_button" translatable="false">Whats New!</string>
 
     <string name="whats_new" translatable="false">
-        Whats new in 1.4.2 Update XPL-EX (ObbedCode) Beta (v1)
+        Whats new in 1.4.2 Update XPL-EX (ObbedCode) Beta (v1) TEST v2
         <![CDATA[<br><br>]]> !!!Warning this is BETA it WILL have Bugs but over time code will be cleaned and things will be fixed!!!
         <![CDATA[<br><br>]]> Privacy will never be lost I wont stop til each app is FULLY black boxed.
         <![CDATA[<br>]]>This is my Art, Quality over Quantity so be patience pls and thanks to all who are patient!.
@@ -61,6 +61,10 @@
         <![CDATA[<br><br>]]> VDInfos. Grabbing your own Device info cool dev
         <![CDATA[<br>]]><![CDATA[<a href="https://xdaforums.com/t/app-v1-10-vd-infos-package-com-vitaodoidao-vdinfos.4097379/">VDInfos</a>]]>
 
+        <![CDATA[<br><br>]]> 1.4.2.2 Changes
+        <![CDATA[<br>]]> [+] Fixed the 411dpi Hardcoded Hook Groups Recycler View Bug
+        <![CDATA[<br>]]> [+] Fixed the Shell Interception Bug
+        <![CDATA[<br><br>]]> [+] Added (uname) to the list of commands to Intercept shell
 
         <![CDATA[<br><br>]]> [+] Modified over 40k lines of code (Re-Programmed whole core)
         <![CDATA[<br>]]> [+] Fixed the XPL-EX Folder Detection!

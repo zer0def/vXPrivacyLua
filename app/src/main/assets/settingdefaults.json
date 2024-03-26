@@ -211,6 +211,7 @@
   { "name": "intercept.shell.meminfo.bool", "description": "Should Shell Interceptor Intercept (/proc/meminfo) file", "value": "true" },
   { "name": "intercept.shell.getprop.bool", "description": "Should Shell Interceptor Intercept (getprop) command", "value": "true" },
   { "name": "intercept.shell.su.bool", "description": "Should Shell Interceptor Intercept (SU) command", "value": "true" },
+  { "name": "intercept.shell.uname.bool", "description": "Should Shell Interceptor Intercept (uname) command", "value": "true" },
 
 
   //User Default Values

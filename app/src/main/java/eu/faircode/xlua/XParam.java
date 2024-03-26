@@ -212,13 +212,67 @@ public class XParam {
     //
 
     @SuppressWarnings("unused")
-    public ShellInterceptionResult interceptCommand(String command) { return ShellIntercept.intercept(ShellInterceptionResult.create(command, getUserMaps())); }
+    public String interceptCommand(String command) {
+        //We would accept args and even do some of this in LUAJ but LUAJ LOVES and I mean LOVES to Gas light us
+        //Its one thing for me as the programmer to make a mistake another thing when LUAJ just lies to me and wont work
+        if(command != null) {
+            try {
+                ShellInterceptionResult res = ShellIntercept.intercept(ShellInterceptionResult.create(command, getUserMaps()));
+                if(res != null && res.isMalicious()) {
+                    if(res.getNewValue() != null) {
+                        Log.w(TAG, "Command Intercepted: " + command);
+                        Log.w(TAG, "Replacing Command with: " + res.getNewValue());
+                        setResult(res.getEchoProcess());
+                        return res.getNewValue();
+                    }
+                }
+            }catch (Throwable e) {
+                Log.e(TAG, "Failed to intercept e=" + e);
+            }
+        } return null;
+    }
 
     @SuppressWarnings("unused")
-    public ShellInterceptionResult interceptCommandArray(String[] commands) { return ShellIntercept.intercept(ShellInterceptionResult.create(commands, getUserMaps())); }
+    public String interceptCommandArray(String[] commands) {
+        if(commands != null) {
+            try {
+                ShellInterceptionResult res = ShellIntercept.intercept(ShellInterceptionResult.create(commands, getUserMaps()));
+                if(res != null && res.isMalicious()) {
+                    if(res.getNewValue() != null) {
+                        Log.w(TAG, "Command Intercepted: " + joinArray(commands));
+                        Log.w(TAG, "Replacing Command with: " + res.getNewValue());
+                        setResult(res.getEchoProcess());
+                        return res.getNewValue();
+                    }else {
+                        Log.e(TAG, "[getNewValue] is NULL!");
+                    }
+                }
+            }catch (Throwable e) {
+                Log.e(TAG, "Failed to intercept e=" + e);
+            }
+        } return null;
+    }
 
     @SuppressWarnings("unused")
-    public ShellInterceptionResult interceptCommandList(List<String> commands) { return ShellIntercept.intercept(ShellInterceptionResult.create(commands, getUserMaps())); }
+    public String interceptCommandList(List<String> commands) {
+        if(commands != null) {
+            try {
+                ShellInterceptionResult res = ShellIntercept.intercept(ShellInterceptionResult.create(commands, getUserMaps()));
+                if(res != null && res.isMalicious()) {
+                    if(res.getNewValue() != null) {
+                        Log.w(TAG, "Command Intercepted: " + joinList(commands));
+                        Log.w(TAG, "Replacing Command with: " + res.getNewValue());
+                        setResult(res.getEchoProcess());
+                        return res.getNewValue();
+                    }else {
+                        Log.e(TAG, "[getNewValue] is NULL!");
+                    }
+                }
+            }catch (Throwable e) {
+                Log.e(TAG, "Failed to intercept e=" + e);
+            }
+        } return null;
+    }
 
     //
     //End of Shell Intercept

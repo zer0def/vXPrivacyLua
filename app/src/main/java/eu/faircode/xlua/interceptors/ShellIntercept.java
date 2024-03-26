@@ -10,6 +10,7 @@ import eu.faircode.xlua.interceptors.shell.handlers.GetPropIntercept;
 import eu.faircode.xlua.interceptors.shell.ShellInterceptionResult;
 import eu.faircode.xlua.interceptors.shell.handlers.MemInfoIntercept;
 import eu.faircode.xlua.interceptors.shell.handlers.SuIntercept;
+import eu.faircode.xlua.interceptors.shell.handlers.UnameIntercept;
 
 public class ShellIntercept {
     private static final String TAG = "XLua.ShellIntercept";
@@ -21,8 +22,10 @@ public class ShellIntercept {
                 Log.i(TAG, "Checking command: " + results.getOriginalValue());
                 for(CommandInterceptor interceptor : getInterceptors()) {
                     if(interceptor.containsCommand(results.getOriginalValue())) {
-                        if(interceptor.interceptCommand(results))
+                        if(interceptor.interceptCommand(results)) {
+                            Log.w(TAG, "Malicious command! " + results.getOriginalValue());
                             return results;
+                        }
                     }
                 }
             }
@@ -38,6 +41,7 @@ public class ShellIntercept {
             interceptors.add(new GetPropIntercept());
             interceptors.add(new MemInfoIntercept());
             interceptors.add(new SuIntercept());
+            interceptors.add(new UnameIntercept());
         }
 
         return interceptors;

@@ -72,8 +72,13 @@ public class ShellInterceptionResult {
         return this._cleanedValue;
     }
 
+    @SuppressWarnings("unused")
     public Process getEchoProcess() { return ShellUtils.echo(this.getNewValue()); }
+
+    @SuppressWarnings("unused")
     public ProcessBuilder getEchoProcessBuilder() { return ShellUtils.getEchoProcessBuilder(this.getNewValue()); }
+
+    @SuppressWarnings("unused")
     public void setEchoForProcessBuilder(ProcessBuilder pb) {
         String[] cmdline = { "sh", "-c", "echo " + this.getNewValue() };
         pb.command(cmdline);

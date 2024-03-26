@@ -19,18 +19,12 @@ function before(hook, param)
 	end
 
     log("ProcessBuilder.start() (commands) joined into (command) =" .. command)
-	local result = param:interceptCommandList(commands)
-	if result == nil then
-	    log("Result from (" .. command .. ") returned NULL ...")
+	local comRes = param:interceptCommandList(commands)
+	if comRes == nil then
+	    log("Result from (" .. command .. ") returned NULL. Command looks clean!")
 	    return false
 	end
 
-	if result:isMalicious() then
-	    log("Found Malicious Command. arg=" .. command)
-	    param:setResult(result:getEchoProcess())
-        return true, result:getOriginalValue(), result:getNewValue()
-	end
-
-	log("Command (" .. command .. ") looks clean!")
-    return false
+	log("Command (" .. command .. ") was intercepted !")
+    return true, command, comRes
 end

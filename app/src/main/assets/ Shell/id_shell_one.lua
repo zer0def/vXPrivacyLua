@@ -7,17 +7,12 @@ function before(hook, param)
 	end
 
     log("Runtime.exec(" .. arg .. ")")
-	local result = param:interceptCommand(arg)
-	if result == nil then
-        log("Command Interception returned NULL. arg=" .. arg)
+	local comRes = param:interceptCommand(arg)
+	if comRes == nil then
+        log("Command Interception returned NULL. Command is Clean! arg=" .. arg)
 		return false
 	end
 
-	if result:isMalicious() then
-	    log("Found Malicious command. arg=" .. arg)
-	    param:setResult(result:getEchoProcess())
-	    return true, result:getOriginalValue(), result:getNewValue()
-	end
-	log("Command is clean! arg=" .. arg)
-	return false
+    log("Command was intercepted=" .. arg .. " !!")
+	return true, arg, comRes
 end
