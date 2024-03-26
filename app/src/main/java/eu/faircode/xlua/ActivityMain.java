@@ -216,16 +216,16 @@ public class ActivityMain extends ActivityBase {
             }
         }));
 
-        /*drawerArray.add(new DrawerItem(this, R.string.menu_donate, new DrawerItem.IListener() {
+        drawerArray.add(new DrawerItem(this, R.string.menu_donate, new DrawerItem.IListener() {
             @Override
             public void onClick(DrawerItem item) {
-                Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("https://lua.xprivacy.eu/"));
+                Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/0bbedCode/XPL-EX/blob/dev/README.md#donate"));
                 if (browse.resolveActivity(getPackageManager()) == null)
                     Snackbar.make(findViewById(android.R.id.content), getString(R.string.msg_no_browser), Snackbar.LENGTH_LONG).show();
                 else
                     startActivity(browse);
             }
-        }));*/
+        }));
 
         drawerArray.add(new DrawerItem(this, R.string.menu_whats_new_button, new DrawerItem.IListener() {
             @Override
