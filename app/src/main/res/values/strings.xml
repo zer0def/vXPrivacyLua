@@ -64,9 +64,10 @@
         <![CDATA[<br><br>]]> 1.4.2.2 Changes
         <![CDATA[<br>]]> [+] Fixed the 411dpi Hardcoded Hook Groups Recycler View Bug
         <![CDATA[<br>]]> [+] Fixed the Shell Interception Bug
-        <![CDATA[<br><br>]]> [+] Added (uname) to the list of commands to Intercept shell
+        <![CDATA[<br>]]> [+] Added (uname) to the list of commands to Intercept shell
 
-        <![CDATA[<br><br>]]> [+] Modified over 40k lines of code (Re-Programmed whole core)
+        <![CDATA[<br><br>]]> 1.4.2.1 Changes
+        <![CDATA[<br>]]> [+] Modified over 40k lines of code (Re-Programmed whole core)
         <![CDATA[<br>]]> [+] Fixed the XPL-EX Folder Detection!
         <![CDATA[<br>]]> [+] Re-Programmed the Properties system (linked properties to settings)
         <![CDATA[<br>]]> [+] Added some of the Pro Features within the Main Application
