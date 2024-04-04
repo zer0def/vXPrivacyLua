@@ -112,11 +112,12 @@
     "settings":[]
   },
 
+  //Thanks VDs correct name
   {
     "builtin": false,
     "collection": "PrivacyEx",
     "group": "Spoof.Battery",
-    "name": "BatteryManager.getIntProperty",
+    "name": "BatteryManager.getLongProperty",
     "author": "OBC",
     "className": "android.os.BatteryManager",
     "methodName": "getLongProperty",
