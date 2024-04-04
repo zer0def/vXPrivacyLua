@@ -8,7 +8,6 @@ function before(hook, param)
         return false
     end
 
-
     if string.match(f, "cpuinfo$") then 
         local m = param:getArgument(1)
         if m ~= nil then 
@@ -28,7 +27,7 @@ function before(hook, param)
             return false
         end
 
-        log("Setting Paramter to Point to Path: " .. path)
+        log("Setting Parameter to Point to Path: " .. path)
         param:setArgumentString(0, path)
         return true
     end

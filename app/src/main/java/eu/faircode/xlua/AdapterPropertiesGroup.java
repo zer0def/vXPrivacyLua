@@ -55,7 +55,6 @@ public class AdapterPropertiesGroup extends RecyclerView.Adapter<AdapterProperti
 
     private final HashMap<LuaSettingExtended, String> modified = new HashMap<>();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-
     private final Object lock = new Object();
 
     private boolean dataChanged = false;

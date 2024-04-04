@@ -5,7 +5,7 @@ function after(hook, param)
 	end
 
     --local fake = param:getSetting("google.advertisingid")
-    local fake = param:getSetting("ad.id")
+    local fake = param:getSettingRemap("unique.google.advertising.id", "ad.id")
     if fake == nil then 
     	local i, digit
     	fake = ""

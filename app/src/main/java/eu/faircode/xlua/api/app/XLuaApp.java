@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +23,12 @@ import eu.faircode.xlua.api.standard.interfaces.ISerial;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
 
 public class XLuaApp extends XLuaAppBase implements ISerial, IDBSerial, IJsonSerial, Parcelable {
+    public static XLuaApp create(Bundle b) { return new XLuaApp(b); }
+
+    private static final String TAG = "XLua.XLuaApp";
+
     public XLuaApp() { }
+    public XLuaApp(Bundle b) { fromBundle(b); }
     public XLuaApp(Parcel in) { fromParcel(in); }
 
     @Override
@@ -42,10 +50,26 @@ public class XLuaApp extends XLuaAppBase implements ISerial, IDBSerial, IJsonSer
     public void fromCursor(Cursor cursor) { }
 
     @Override
-    public Bundle toBundle() { return null; }
+    public Bundle toBundle() {
+        Bundle b = new Bundle();
+        Log.i(TAG, "To Got bundle spoofing: " + this.packageName + this.toString());
+        try { b.putString("app", toJSON());
+        }catch (Exception e) {
+            Log.e(TAG, "[toBundle] to JSON Error App: " + this.packageName + " e=" + e + " stack=\n" + Log.getStackTraceString(e));
+            b.putString("app", "{ }");
+        } return b;
+    }
 
     @Override
-    public void fromBundle(Bundle bundle) { }
+    public void fromBundle(Bundle bundle) {
+        Log.i(TAG, "From Bundle...");
+        String dataBlob = bundle.getString("app");
+        Log.i(TAG, "Blob: " + dataBlob);
+        try { fromJSONObject(new JSONObject(dataBlob));
+        }catch (Exception e) {
+            Log.e(TAG, "[fromBundle] from JSON Error App: " + this.packageName + " e=" + e + " stack=\n" + Log.getStackTraceString(e));
+        }
+    }
 
     @Override
     public void fromParcel(Parcel in) {
@@ -116,6 +140,12 @@ public class XLuaApp extends XLuaAppBase implements ISerial, IDBSerial, IJsonSer
             assignment.fromJSONObject((JSONObject) jAssignment.get(i));
             this.assignments.add(assignment);
         }
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.packageName;
     }
 
     public static final Parcelable.Creator<XLuaApp> CREATOR = new Parcelable.Creator<XLuaApp>() {

@@ -1,5 +1,6 @@
 package eu.faircode.xlua.hooks;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -19,23 +20,31 @@ public class XResolved {
     public final Class<?> returnType;
 
     public void throwIfMismatchReturn(Member member) throws Throwable {
-        throwIfMismatchReturn(((Method)member).getReturnType());
+        if(isConstructor()) return;
+        try {
+            throwIfMismatchReturn(((Method)member).getReturnType());
+        }catch (ClassCastException e) {
+            Log.e(TAG, "Type is Constructor Moving on.... e=" + e);
+        }
     }
 
     public void throwIfMismatchReturn(Class<?> compareType) throws Throwable {
         if(!isConstructor() && !returnTypeIsValid(compareType))
-            throw new Throwable("Invalid return type " + compareType + " got " + returnType);
+            throw new Throwable("Invalid return type " + compareType + " got needed: " + returnType);
     }
 
     public boolean returnTypeIsValid(Class<?> compareType) {
-        if(returnType == null && compareType == null)
+        if(ReflectUtil.isReturnTypeNullOrVoid(compareType) && ReflectUtil.isReturnTypeNullOrVoid(returnType))
             return true;
+
+        if(ReflectUtil.isReturnTypeNullOrVoid(compareType) || ReflectUtil.isReturnTypeNullOrVoid(returnType))
+            return false;
 
         return compareType.isAssignableFrom(returnType);
     }
 
     public boolean isConstructor() {
-        return methodName == null;
+        return methodName == null || TextUtils.isEmpty(methodName);
     }
 
     public boolean isField() {

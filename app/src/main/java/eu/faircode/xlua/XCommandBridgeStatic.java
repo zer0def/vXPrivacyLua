@@ -15,6 +15,7 @@ import eu.faircode.xlua.api.xlua.XLuaDatabase;
 import eu.faircode.xlua.api.xlua.call.AssignHooksCommand;
 import eu.faircode.xlua.api.xlua.call.ClearAppCommand;
 import eu.faircode.xlua.api.xlua.call.ClearDataCommand;
+import eu.faircode.xlua.api.xlua.call.GetAppCommand;
 import eu.faircode.xlua.api.xlua.call.GetGroupsCommand;
 import eu.faircode.xlua.api.xlua.call.GetSettingCommand;
 import eu.faircode.xlua.api.xlua.call.GetVersionCommand;
@@ -71,7 +72,8 @@ public class XCommandBridgeStatic {
                 .registerQuery(GetLogCommand.class)
                 //Mock Settings that link to XLUA DB
                 .registerQuery(GetMockSettingsCommand.class, true)
-                .registerCall(PutMockSettingCommand.class);
+                .registerCall(PutMockSettingCommand.class)
+                .registerCall(GetAppCommand.class);
 
         mockCommandService
                 .registerCall(GetMockCpuCommand.class)

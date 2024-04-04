@@ -32,6 +32,7 @@ import eu.faircode.xlua.BuildConfig;
 import eu.faircode.xlua.api.hook.XLuaHook;
 import eu.faircode.xlua.api.hook.XLuaHookAssets;
 import eu.faircode.xlua.utilities.ReflectUtil;
+import eu.faircode.xlua.utilities.StringUtil;
 
 public class XHookUtil {
     private static final String TAG = "XLua.XHookUtil";
@@ -78,7 +79,12 @@ public class XHookUtil {
         }
 
         Class<?>[] paramTypes = XHookUtil.getParameterTypes(hook.getParameterTypes(), context);
-        Class<?> returnType = ReflectUtil.resolveClass(hook.getReturnType(), context.getClassLoader());
+        //Class<?> returnType = ReflectUtil.resolveClass(hook.getReturnType(), context.getClassLoader());
+        //final Class<?> returnType = (hook.getReturnType() == null ? null :
+        //        ReflectUtil.resolveClass(hook.getReturnType(), context.getClassLoader()));
+
+        final Class<?> returnType = !StringUtil.isValidString(hook.getReturnType())
+                ? null : ReflectUtil.resolveClass(hook.getReturnType(), context.getClassLoader());
 
         return new XResolved(cls, methodName, paramTypes, returnType);
     }

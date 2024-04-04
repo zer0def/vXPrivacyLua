@@ -11,7 +11,7 @@ import eu.faircode.xlua.api.xlua.database.LuaAppDatabase;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 public class ClearDataCommand extends CallCommandHandler {
-    public static ClearDataCommand create() { return new ClearDataCommand(); };
+    @SuppressWarnings("unused")
     public ClearDataCommand() {
         name = "clearData";
         requiresPermissionCheck = true;

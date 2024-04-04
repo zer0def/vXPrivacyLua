@@ -39,7 +39,30 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_advertising"
+    "luaScript": "@id_advertising",
+    "settings":[ "unique.google.advertising.id" ]
+  },
+
+  {
+    "builtin": false,
+    "collection": "PrivacyEx",
+    "group": "ID.Google",
+    "name": "SettingsSecure.getString/advertising_id",
+    "author": "OBC",
+    "className": "android.provider.Settings$Secure",
+    "methodName": "getString",
+    "parameterTypes": [ "android.content.ContentResolver", "java.lang.String"],
+    "returnType": "java.lang.String",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_advertising_settings",
+    "settings":[ "unique.google.advertising.id" ]
   },
 
   {
@@ -60,7 +83,8 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_gsf"
+    "luaScript": "@id_gsf",
+    "settings":[ "unique.gsf.id" ]
   },
 
   {
@@ -81,7 +105,8 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_gsf"
+    "luaScript": "@id_gsf",
+    "settings":[ "unique.gsf.id" ]
   },
 
   {
@@ -102,6 +127,7 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_gsf"
+    "luaScript": "@id_gsf",
+    "settings":[ "unique.gsf.id" ]
   }
 ]

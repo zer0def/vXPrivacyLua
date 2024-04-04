@@ -7,6 +7,7 @@ import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLES31;
 import android.opengl.GLES32;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.lang.reflect.Array;
@@ -65,42 +66,47 @@ public class ReflectUtil {
                 clazz.isAssignableFrom(GLES11.class);*/
     }
 
+    public static boolean isReturnTypeNullOrVoid(Class<?> clss) {
+        return clss == null || clss == void.class || clss == Void.TYPE;
+    }
+
     public static Class<?> resolveClass(String name, ClassLoader loader) throws ClassNotFoundException {
-        if ("boolean".equals(name))
+        //make this better as well as the type resolving better for everything clean up Hook classes now when tommrow
+        if ("boolean".equalsIgnoreCase(name) || "bool".equalsIgnoreCase(name))
             return boolean.class;
-        else if ("byte".equals(name))
+        else if ("byte".equalsIgnoreCase(name))
             return byte.class;
-        else if ("char".equals(name))
+        else if ("char".equalsIgnoreCase(name))
             return char.class;
-        else if ("short".equals(name))
+        else if ("short".equalsIgnoreCase(name))
             return short.class;
-        else if ("int".equals(name))
+        else if ("int".equalsIgnoreCase(name) || "integer".equalsIgnoreCase(name))
             return int.class;
-        else if ("long".equals(name))
+        else if ("long".equalsIgnoreCase(name))
             return long.class;
-        else if ("float".equals(name))
+        else if ("float".equalsIgnoreCase(name))
             return float.class;
-        else if ("double".equals(name))
+        else if ("double".equalsIgnoreCase(name))
             return double.class;
 
-        else if ("boolean[]".equals(name))
+        else if ("boolean[]".equalsIgnoreCase(name))
             return boolean[].class;
-        else if ("byte[]".equals(name))
+        else if ("byte[]".equalsIgnoreCase(name))
             return byte[].class;
-        else if ("char[]".equals(name))
+        else if ("char[]".equalsIgnoreCase(name))
             return char[].class;
-        else if ("short[]".equals(name))
+        else if ("short[]".equalsIgnoreCase(name))
             return short[].class;
-        else if ("int[]".equals(name))
+        else if ("int[]".equalsIgnoreCase(name))
             return int[].class;
-        else if ("long[]".equals(name))
+        else if ("long[]".equalsIgnoreCase(name))
             return long[].class;
-        else if ("float[]".equals(name))
+        else if ("float[]".equalsIgnoreCase(name))
             return float[].class;
-        else if ("double[]".equals(name))
+        else if ("double[]".equalsIgnoreCase(name))
             return double[].class;
 
-        else if ("void".equals(name))
+        else if ("void".equalsIgnoreCase(name))
             return Void.TYPE;
 
         else
@@ -142,12 +148,16 @@ public class ReflectUtil {
     }
 
     public static Member resolveMember(Class<?> cls, String name, Class<?>[] params) throws NoSuchMethodException {
+        if(cls == null)
+            throw new NoSuchMethodException("Class is NULL for the Method...");
+
         boolean exists = false;
         try {
             Class<?> c = cls;
-            while (c != null && !c.equals(Object.class))
+            //hmm ?
+            while (!c.equals(Object.class))
                 try {
-                    if (name == null)
+                    if (name == null || TextUtils.isEmpty(name))
                         return c.getDeclaredConstructor(params);
                     else
                         return c.getDeclaredMethod(name, params);

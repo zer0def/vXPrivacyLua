@@ -26,7 +26,7 @@ public class ViewFloatingAction extends Fragment {
     protected boolean isActionOpen = false;
     protected boolean isMainHidden = false;
 
-    protected AppGeneric application = AppGeneric.DEFAULT;
+    public AppGeneric application = AppGeneric.DEFAULT;
 
     protected RecyclerView rvList = null;
 

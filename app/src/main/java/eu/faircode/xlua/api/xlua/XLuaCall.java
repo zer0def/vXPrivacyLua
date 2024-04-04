@@ -6,13 +6,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import eu.faircode.xlua.AppGeneric;
 import eu.faircode.xlua.api.XResult;
+import eu.faircode.xlua.api.app.AppPacket;
+import eu.faircode.xlua.api.app.XLuaApp;
 import eu.faircode.xlua.api.hook.LuaHookPacket;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
 import eu.faircode.xlua.api.standard.UserIdentityPacket;
 import eu.faircode.xlua.api.xlua.call.AssignHooksCommand;
 import eu.faircode.xlua.api.xlua.call.ClearAppCommand;
 import eu.faircode.xlua.api.xlua.call.ClearDataCommand;
+import eu.faircode.xlua.api.xlua.call.GetAppCommand;
 import eu.faircode.xlua.api.xlua.call.GetGroupsCommand;
 import eu.faircode.xlua.api.xlua.call.GetSettingCommand;
 import eu.faircode.xlua.api.xlua.call.GetVersionCommand;
@@ -43,6 +47,15 @@ public class XLuaCall {
     public static XResult clearApp(Context context, Integer user, String packageName, Boolean kill, Boolean deleteFullData) { return XResult.from(ClearAppCommand.invoke(context, LuaSimplePacket.create(user, packageName, kill, LuaSimplePacket.getCodeForFullData(deleteFullData)))); }
     public static XResult clearApp(Context context, LuaSimplePacket packet) { return XResult.from(ClearAppCommand.invoke(context, packet)); }
 
+    public static XLuaApp getApp(Context context, AppGeneric application) { return  getApp(context, AppPacket.create(application)); }
+    public static XLuaApp getApp(Context context, AppGeneric application, Boolean initForceStop) { return getApp(context, AppPacket.create(application, initForceStop)); }
+    public static XLuaApp getApp(Context context, AppGeneric application, Boolean initForceStop, Boolean initSettings) { return getApp(context, AppPacket.create(application, initForceStop, initSettings)); }
+
+    public static XLuaApp getApp(Context context, String packageName) { return getApp(context, AppPacket.create(packageName)); }
+    public static XLuaApp getApp(Context context, String packageName, Boolean initForceStop) { return getApp(context, AppPacket.create(packageName, initForceStop)); }
+    public static XLuaApp getApp(Context context, String packageName, Boolean initForceStop, Boolean initSettings) { return getApp(context, AppPacket.create(packageName, initForceStop, initSettings)); }
+    public static XLuaApp getApp(Context context, Integer userId, String packageName, Boolean initForceStop, Boolean initSettings) { return getApp(context, AppPacket.create(userId, packageName, initForceStop, initSettings)); }
+    public static XLuaApp getApp(Context context, AppPacket packet) { return XLuaApp.create(GetAppCommand.invoke(context, packet)); }
 
     public static List<String> getGroups(Context context) {
         return BundleUtil.readStringList(

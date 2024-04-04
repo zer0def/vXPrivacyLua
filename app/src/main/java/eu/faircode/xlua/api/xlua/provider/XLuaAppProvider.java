@@ -23,10 +23,10 @@ import eu.faircode.xlua.api.XResult;
 
 import eu.faircode.xlua.XUtil;
 import eu.faircode.xlua.XposedUtil;
+import eu.faircode.xlua.api.app.AppPacket;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignmentWriter;
 import eu.faircode.xlua.api.settings.LuaSetting;
-import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
 import eu.faircode.xlua.api.standard.UserIdentityPacket;
 import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
 import eu.faircode.xlua.api.app.XLuaApp;
@@ -69,6 +69,66 @@ public class XLuaAppProvider {
             XResult.logError(TAG, res, "Failed to kill [forceStopPackageAsUser] user=" + userid + "pkg=" + packageName + " er=" + e);
             return false;
         }
+    }
+
+
+    public static XLuaApp getApp(Context context, XDatabase db, AppPacket packet) { return getApp(context, db, XUtil.getUserId(packet.getUser()), packet.getCategory(), packet.isInitForceStop(), packet.isInitSettings()); }
+    public static XLuaApp getApp(Context context, XDatabase db, int userId, String packageName, boolean initForceStop, boolean initSettings) {
+        long identity = Binder.clearCallingIdentity();
+        try {
+            Context contextForUser = XUtil.createContextForUser(context, userId);
+            PackageManager pm = contextForUser.getPackageManager();
+
+            Log.i(TAG, "getApp for Package=" + packageName);
+
+            for (ApplicationInfo ai : XposedUtil.getApplications(contextForUser))
+                if (ai.packageName.equalsIgnoreCase(packageName)) {
+                    try {
+                        Log.i(TAG, "Found package for GetApp: " + packageName);
+
+
+                        int enabledSetting = pm.getApplicationEnabledSetting(ai.packageName);
+                        boolean enabled = (ai.enabled &&
+                                (enabledSetting == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT ||
+                                        enabledSetting == PackageManager.COMPONENT_ENABLED_STATE_ENABLED));
+                        boolean persistent = ((ai.flags & ApplicationInfo.FLAG_PERSISTENT) != 0 ||
+                                "android".equals(ai.packageName));
+                        boolean system = ((ai.flags &
+                                (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0);
+
+                        Log.i(TAG, "Created the app shit almost.. " + packageName);
+                        XLuaApp app = new XLuaApp();
+                        app.setUid(ai.uid);
+                        app.setPackageName(ai.packageName);
+                        app.setIcon(ai.icon);
+                        app.setLabel((String) pm.getApplicationLabel(ai));
+                        app.setEnabled(enabled);
+                        app.setPersistent(persistent);
+                        app.setSystem(system);
+                        app.setForceStop((!persistent && !system));
+                        app.setAssignments(new ArrayList<LuaAssignment>());
+
+                        Log.i(TAG, "Created XLuaApp Object pkg=" + packageName + " o=" + app);
+
+                        final HashMap<String, XLuaApp> apps = new HashMap<>();
+                        apps.put(app.getPackageName(), app);
+                        if(initForceStop) initAppForceToStop(apps, db, userId);
+                        if(initSettings) initAppDatabaseSettings(context, db, apps, userId);
+
+
+                        Log.i(TAG, "Settings=" + app.getAssignments().size());
+                        return app;
+                    } catch (Throwable ex) {
+                        Log.e(TAG, ex + "\n" + Log.getStackTraceString(ex));
+                    }
+                }else {
+                    //Log.w(TAG, "Not Pkg=" + ai.packageName);
+                }
+        }catch (Throwable e) {
+            Log.e(TAG, "Failed to get App: pkg=" + packageName + " uid=" + userId + " e=" + e + "\n" + Log.getStackTraceString(e));
+        }finally {
+            Binder.restoreCallingIdentity(identity);
+        } return new XLuaApp();
     }
 
     public static Map<String, XLuaApp> getApps(Context context, XDatabase db, int userId, boolean initForceToStop, boolean initSettings) {
@@ -147,8 +207,11 @@ public class XLuaAppProvider {
                 String pkg = c.getString(0);
                 if (apps.containsKey(pkg)) {
                     XLuaApp app = apps.get(pkg);
-                    if(app != null)
+                    if(app != null) {
                         app.setForceStop(Boolean.parseBoolean(c.getString(1)));
+                        if(apps.size() == 1)
+                            return;
+                    }
                 } else
                     Log.i(TAG, "Package " + pkg + " not found (force stop)");
             }
@@ -202,6 +265,12 @@ public class XLuaAppProvider {
                         assignment.setException(c.getString(colException));
                         app.addAssignment(assignment);
                     }
+
+                    if(apps.size() == 1) {
+                        Log.i(TAG, "Returning from Init Setting sfrom app as it is one");
+                        return;
+                    }
+
                 } else
                     Log.i(TAG, "Package " + pkg + " not found");
             }

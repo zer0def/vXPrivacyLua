@@ -168,20 +168,26 @@ public class XParam {
             return false;
 
         String set = (String)arg;
+        Log.d(TAG, "[xlog] Settings$Secure=> " + set);
 
         switch (setting) {
             case "android_id":
-                if(set.equals("android_id")) {
+                if(set.equalsIgnoreCase("android_id")) {
                     setResult(getSettingReMap("unique.android.id", "value.android_id", "0000000000000000"));
                     return true;
                 }
                 break;
             case "bluetooth_name":
-                if(set.equals("bluetooth_name")) {
+                if(set.equalsIgnoreCase("bluetooth_name")) {
                     setResult(getSettingReMap("unique.bluetooth.address", "bluetooth.id", "00:00:00:00:00:00"));
                     return true;
                 }
                 break;
+            case "advertising_id":
+                if(set.equalsIgnoreCase(setting)) {
+                    setResult(getSettingReMap("unique.google.advertising.id", "ad.id", "84630630-u4ls-k487-f35f-h37afe0pomwq"));
+                    return true;
+                }
         }
 
         return false;
@@ -494,10 +500,10 @@ public class XParam {
     public Object createReflectArray(Class<?> classType, int size) { return ReflectUtil.createArray(classType, size); }
 
     @SuppressWarnings("unused")
-    public String joinArray(String[] array) { return StringUtil.joinDelimiter(" ", array); }
+    public String joinArray(String[] array) { return array == null ? "" : StringUtil.joinDelimiter(" ", array); }
 
     @SuppressWarnings("unused")
-    public String joinList(List<String> list) { return StringUtil.joinDelimiter(" ", list); }
+    public String joinList(List<String> list) { return  list == null ? "" : StringUtil.joinDelimiter(" ", list); }
 
     @SuppressWarnings("unused")
     public byte[] stringToUTF8Bytes(String s) { return StringUtil.getUTF8Bytes(s); }
