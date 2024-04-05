@@ -21,7 +21,7 @@ public class XLuaHookBase {
         return XHookUtil.readHooksEx(apk);
     }
     private final static String TAG = "XLua.XHook";
-    //we can jsut do a key exchange system
+    //we can just do a key exchange system
 
     protected Boolean builtin = false;
     protected String collection;
