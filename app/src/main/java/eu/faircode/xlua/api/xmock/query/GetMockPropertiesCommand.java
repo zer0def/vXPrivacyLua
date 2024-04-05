@@ -26,7 +26,6 @@ public class GetMockPropertiesCommand extends QueryCommandHandler {
     public Cursor handle(QueryPacket commandData) throws Throwable {
         MockPropPacket packet = commandData.readFullPacketFrom(MockPropPacket.class, MockPropPacket.USER_QUERY_PACKET_ONE);
         if(packet == null) return null;
-
         packet.resolveUserID();
         return CursorUtil.toMatrixCursor(
                 MockPropProvider.getSettingsForPackage(
@@ -34,7 +33,6 @@ public class GetMockPropertiesCommand extends QueryCommandHandler {
     }
 
     public static Cursor invoke(Context context, boolean marshall, MockPropPacket packet) {
-        Log.i("XLua.GetMockProperties", " invoke packet=" + packet + " marshall=" + marshall);
         return XProxyContent.mockQuery(
                 context,
                 marshall ? "getModifiedProperties2" : "getModifiedProperties",

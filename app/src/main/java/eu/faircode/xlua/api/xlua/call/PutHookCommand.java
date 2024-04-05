@@ -19,7 +19,7 @@ public class PutHookCommand extends CallCommandHandler {
 
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
-        LuaHookPacket packet = commandData.readFullPackFrom(LuaHookPacket.class);
+        LuaHookPacket packet = commandData.readExtrasAs(LuaHookPacket.class);
         if(packet == null) return XResult.fromInvalidPacket(name, LuaHookPacket.class).toBundle();
         return XLuaHookProvider.putHook(
                 commandData.getContext(),

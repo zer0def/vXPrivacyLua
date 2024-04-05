@@ -39,7 +39,7 @@
   { "settingName": "java.vm.name", "propNames": [ "java.vm.name", "java.runtime.name" ] },
 
   //Android Kernel Settings
-  { "settingName": "android.kernel.name", "propNames": [ "os.name" ] },
+  { "settingName": "android.kernel.sys.name", "propNames": [ "os.name" ] },
   { "settingName": "android.kernel.version", "propNames": [ "os.version" ] },
 
 
@@ -145,11 +145,6 @@
   { "settingName": "google.client.id.base.name", "propNames": [ "ro.com.google.clientidbase.ax", "ro.com.google.clientidbase.ms", "ro.com.google.clientidbase.tx", "ro.com.google.clientidbase.vs" ] },
   { "settingName": "google.gms.version", "propNames": [ "ro.com.google.gmsversion" ] },
   //ro.frp.pst
-
-
-
-  { "settingName": "google.client.id.base", "description": "Some base property (dosnt seem to be ID) (android-vf-de)", "value": "android-vf-de" },
-  { "name": "google.client.id.base.name", "description": "Some base property (dosnt seem to be ID) (android-xiaomi-rvo3)", "value": "android-xiaomi-rvo3" },
 
 
   //User Agent Properties

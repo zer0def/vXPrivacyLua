@@ -18,7 +18,7 @@ import eu.faircode.xlua.hooks.XHookUtil;
 
 public class XLuaHookBase {
     public static ArrayList<XLuaHook> readHooks(Context context, String apk) throws IOException, JSONException {
-        return XHookUtil.readHooksEx(context, apk);
+        return XHookUtil.readHooksEx(apk);
     }
     private final static String TAG = "XLua.XHook";
     //we can jsut do a key exchange system

@@ -50,6 +50,7 @@ import eu.faircode.xlua.api.xmock.XMockCall;
 import eu.faircode.xlua.interceptors.shell.ShellInterceptionResult;
 import eu.faircode.xlua.interceptors.UserContextMaps;
 import eu.faircode.xlua.interceptors.ShellIntercept;
+import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.utilities.ListFilterUtil;
 import eu.faircode.xlua.utilities.CollectionUtil;
 import eu.faircode.xlua.utilities.CursorUtil;
@@ -147,6 +148,7 @@ public class XParam {
                 return MockUtils.NOT_BLACKLISTED;
         }
 
+        //add force options now
         if(propMaps != null && !propMaps.isEmpty()) {
             String settingName = propMaps.get(property);
             if(settingName != null) {
@@ -172,13 +174,13 @@ public class XParam {
 
         switch (setting) {
             case "android_id":
-                if(set.equalsIgnoreCase("android_id")) {
+                if(set.equalsIgnoreCase(setting)) {
                     setResult(getSettingReMap("unique.android.id", "value.android_id", "0000000000000000"));
                     return true;
                 }
                 break;
             case "bluetooth_name":
-                if(set.equalsIgnoreCase("bluetooth_name")) {
+                if(set.equalsIgnoreCase(setting)) {
                     setResult(getSettingReMap("unique.bluetooth.address", "bluetooth.id", "00:00:00:00:00:00"));
                     return true;
                 }
@@ -284,6 +286,8 @@ public class XParam {
     //End of Shell Intercept
     //
 
+    @SuppressWarnings("unused")
+    public int getFileDescriptorId(FileDescriptor fs) { return FileUtil.getDescriptorNumber(fs);  }
 
     //
     //Start of Memory/CPU Functions
@@ -418,9 +422,14 @@ public class XParam {
                     for(String arg : args) {
                         Log.d(TAG, "matrix=" + arg);
                         if(arg.equals("android_id")) {
-                            String newId = getSetting("unique.gsf.id", "FMZIYEVGXZDCENRO");
+                            String newId = getSetting("unique.gsf.id");
+                            if(newId == null)
+                                return false;
+
                             Log.d(TAG, "GSF new=" + newId);//" column modify=" + modify)
-                            setResult(CursorUtil.copyKeyValue(ret, "android_id", newId));
+                            Cursor cc = CursorUtil.copyKeyValue(ret, "android_id", newId);
+                            Log.d(TAG, "GSF Matrix Cursor Column Count=" + cc.getColumnCount());
+                            setResult(cc);
                             return true;
                         }
                     }
@@ -486,12 +495,12 @@ public class XParam {
     public Class<?> getClassType(String className) { return ReflectUtil.getClassType(className); }
 
 
-    // local fake = luajava.newInstance('java.util.ArrayList')
 
+    @SuppressWarnings("unused")
+    public static boolean isNumericString(String s) { return StringUtil.isNumeric(s); }
 
     @SuppressWarnings("unused")
     public static int getContainerSize(Object o) { return CollectionUtil.getSize(o); }
-
 
     @SuppressWarnings("unused")
     public Object createReflectArray(String className, int size) { return ReflectUtil.createArray(className, size); }
@@ -553,29 +562,13 @@ public class XParam {
     public String bundleGetLong(Bundle bundle, String key) { return LuaLongUtil.bundleGetLong(bundle, key); }
 
     @SuppressWarnings("unused")
-    public void setResultToLong(String long_value) throws Throwable {
-        try {
-            setResult(Long.parseLong(long_value));
-        }catch (Exception e) { Log.e(TAG, "Failed to set Result as Long, make sure its a NUMERIC Value: " + e); }
-    }
+    public void setResultToLong(String long_value) throws Throwable { try { setResult(Long.parseLong(long_value)); }catch (Exception e) { XLog.e("Failed to set result to Long Value. Make sure its a valid Number.", e); } }
 
     @SuppressWarnings("unused")
-    public String getResultLong() throws Throwable {
-        try {
-            return Long.toString((long)getResult());
-        }catch (Exception e) {
-            Log.e(TAG, "Failed Get Result as Long String:\n" + e + "\n" + Log.getStackTraceString(e));
-            return "0";
-        }
-    }
+    public void setResultToLongInt(String long_int) throws Throwable { try { setResult(Integer.parseInt(long_int)); }catch (Exception e) {  XLog.e("Failed to set result to Long Int Value. Make sure its a valid Number.", e); } }
 
-    public void printStackTrace() {
-
-    }
-
-    public void printStackTraceEx() {
-
-    }
+    @SuppressWarnings("unused")
+    public String getResultLong() throws Throwable { try { return Long.toString((long)getResult()); }catch (Exception e) { XLog.e("Failed Get Result as Long String", e); return "0"; } }
 
     //
     //END OF LONG HELPER FUNCTIONS
@@ -583,16 +576,13 @@ public class XParam {
 
     @SuppressWarnings("unused")
     public Object getThis() {
-        if (this.field == null)
-            return this.param.thisObject;
-        else
-            return null;
+        if (this.field == null) return this.param.thisObject;
+        else return null;
     }
 
     @SuppressWarnings("unused")
     public Object getArgument(int index) {
-        if (index < 0 || index >= this.paramTypes.length)
-            throw new ArrayIndexOutOfBoundsException("Argument #" + index);
+        if (index < 0 || index >= this.paramTypes.length) throw new ArrayIndexOutOfBoundsException("Argument #" + index);
         return this.param.args[index];
     }
 

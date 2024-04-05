@@ -584,6 +584,7 @@ public class DatabaseHelp {
             return items;
         }
 
+        jsonName = StringUtil.trimEnsureEnd(jsonName, ".json");
         boolean hasJsonLinked = StringUtil.isValidString(jsonName);
         db.readLock();
 

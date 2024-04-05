@@ -31,12 +31,14 @@ import eu.faircode.xlua.api.xlua.query.GetSettingsCommand;
 import eu.faircode.xlua.api.xmock.XMockDatabase;
 import eu.faircode.xlua.api.xmock.call.GetMockCpuCommand;
 import eu.faircode.xlua.api.xmock.call.GetMockCpusCommand;
+import eu.faircode.xlua.api.xmock.call.GetRandomUserAgentCommand;
 import eu.faircode.xlua.api.xmock.call.KillAppCommand;
 import eu.faircode.xlua.api.xmock.call.PutGroupStateCommand;
 import eu.faircode.xlua.api.xmock.call.PutMockConfigCommand;
 import eu.faircode.xlua.api.xmock.call.PutMockCpuCommand;
 import eu.faircode.xlua.api.xmock.call.PutMockPropCommand;
 import eu.faircode.xlua.api.xmock.call.PutMockSettingCommand;
+import eu.faircode.xlua.api.xmock.query.GetMockAgentsCommand;
 import eu.faircode.xlua.api.xmock.query.GetMockConfigsCommand;
 import eu.faircode.xlua.api.xmock.query.GetMockPropMapsCommand;
 import eu.faircode.xlua.api.xmock.query.GetMockPropertiesCommand;
@@ -85,7 +87,9 @@ public class XCommandBridgeStatic {
                 .registerCall(PutMockPropCommand.class)
                 .registerQuery(GetMockConfigsCommand.class, true)
                 .registerQuery(GetMockPropertiesCommand.class, true)
-                .registerQuery(GetMockPropMapsCommand.class, true);
+                .registerQuery(GetMockPropMapsCommand.class, true)
+                .registerQuery(GetMockAgentsCommand.class, true)
+                .registerCall(GetRandomUserAgentCommand.class);
     }
 
     public static Bundle vxpCall(Context context, String arg, Bundle extras, String method)  {

@@ -270,7 +270,6 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
                     case R.id.ivSettings:
                         Intent settingIntent = new Intent(view.getContext(), ActivitySettings.class);
                         //Intent settingIntent = new Intent(view.getContext(), ActivityAppControl.class);
-
                         settingIntent.putExtra("packageName", app.getPackageName());
                         view.getContext().startActivity(settingIntent);
                         return true;

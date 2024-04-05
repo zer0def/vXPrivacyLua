@@ -10,12 +10,62 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
 
 public class StringUtil {
     private static final String TAG = "XLua.StringUtil";
 
     public static final String BUILD_PROP_ENDING = "\r\n";//(0D 0A) or  \u000D\u000A
     public static final List<Character> ESCAPE_CHARS = Arrays.asList('\n', '\t', '\b', '\f', '\r', '\"', '\0');
+
+    public static String trimEnsureEnd(String s, String endsIn) {
+        if(s == null || s.isEmpty()) return s;
+        s = s.trim();
+        if(!s.endsWith(endsIn)) s = s + endsIn;
+        return s;
+    }
+
+    public static boolean isNumeric(String s) {
+        if(s == null || TextUtils.isEmpty(s)) return false;
+        for(int i = 0; i < s.length(); i++) {
+            if(!Character.isDigit(s.charAt(i))) return false;
+        }
+
+        return true;
+    }
+
+    public static String trimEx(String s, String trimPrefix, boolean ensureTrimmed) {
+        if(s == null || s.isEmpty()) return s;
+        s = s.trim();
+        if(!s.contains(trimPrefix)) return s;
+
+        if(ensureTrimmed) {
+            while (s.startsWith(trimPrefix)) {
+                s = s.substring(1);
+                s = s.trim();
+            }
+            while (s.endsWith(trimPrefix)) {
+                s = s.substring(0, s.length() - 1);
+                s = s.trim();
+            }
+        }else {
+            if(s.startsWith(trimPrefix)) s = s.substring(1);
+            if(s.endsWith(trimPrefix)) s = s.substring(0, s.length() - 1);
+        }
+
+        return s;
+    }
+
+    public static String getLastString(String s) { return getLastString(s, ".", null); }
+    public static String getLastString(String s, String delimiter) { return getLastString(s, delimiter, null); }
+    public static String getLastString(String s, String delimiter, String defaultValue) {
+        s = trimEx(s, delimiter, true);
+        if(delimiter == null || delimiter.isEmpty()) return defaultValue != null ? defaultValue : s;
+        if(s == null || s.isEmpty()) return defaultValue;
+        if(!s.contains(delimiter)) return s;
+        String[] sp = s.split(Pattern.quote(delimiter));
+        return sp.length > 0 ? sp[sp.length - 1] : defaultValue;
+    }
 
     public static boolean listHasString(List<String> lst, String s) {
         if(lst == null || lst.isEmpty() || s == null || s.isEmpty()) return false;
@@ -28,6 +78,7 @@ public class StringUtil {
     }
 
     public static List<String> stringToList(String s, String del) {
+        //Check this function incase ....
         if(s == null || s.isEmpty()) return new ArrayList<>();
         if(del == null || del.isEmpty()) del = ",";
         if(del.equals(".")) del = "\\.";

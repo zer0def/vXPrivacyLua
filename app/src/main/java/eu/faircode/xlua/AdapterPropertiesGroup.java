@@ -41,8 +41,8 @@ import eu.faircode.xlua.api.properties.MockPropGroupHolder;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
 import eu.faircode.xlua.api.xlua.XLuaCall;
-import eu.faircode.xlua.randomizers.GlobalRandoms;
-import eu.faircode.xlua.randomizers.IRandomizer;
+import eu.faircode.xlua.random.GlobalRandoms;
+import eu.faircode.xlua.random.IRandomizer;
 import eu.faircode.xlua.utilities.SettingUtil;
 import eu.faircode.xlua.utilities.ViewUtil;
 

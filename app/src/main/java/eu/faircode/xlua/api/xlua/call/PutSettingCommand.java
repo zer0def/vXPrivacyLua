@@ -19,7 +19,7 @@ public class PutSettingCommand extends CallCommandHandler {
 
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
-        LuaSettingPacket packet = commandData.readFullPackFrom(LuaSettingPacket.class);
+        LuaSettingPacket packet = commandData.readExtrasAs(LuaSettingPacket.class);
         packet.resolveUserID();
         Log.i("XLua.PutSettingCommand", " packet=" + packet);
         return LuaSettingsDatabase.putSetting(

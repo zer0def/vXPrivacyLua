@@ -9,8 +9,10 @@ import eu.faircode.xlua.api.configs.MockConfigPacket;
 import eu.faircode.xlua.api.cpu.MockCpu;
 import eu.faircode.xlua.api.cpu.MockCpuConversions;
 import eu.faircode.xlua.api.properties.MockPropPacket;
+import eu.faircode.xlua.api.useragent.MockUserAgent;
 import eu.faircode.xlua.api.xmock.call.GetMockCpuCommand;
 import eu.faircode.xlua.api.xmock.call.GetMockCpusCommand;
+import eu.faircode.xlua.api.xmock.call.GetRandomUserAgentCommand;
 import eu.faircode.xlua.api.xmock.call.PutMockConfigCommand;
 import eu.faircode.xlua.api.xmock.call.PutMockCpuCommand;
 import eu.faircode.xlua.api.xmock.call.PutMockPropCommand;
@@ -39,4 +41,7 @@ public class XMockCall {
     public static Collection<MockCpu> getCpuMaps(Context context) { return MockCpuConversions.fromBundleArray(GetMockCpusCommand.invoke(context)); }
     public static MockCpu getSelectedMockCpu(Context context) { return MockCpuConversions.fromBundle(GetMockCpuCommand.invoke(context)); }
     public static XResult putMockCpu(Context context, MockCpu mockCpu) { return XResult.from(PutMockCpuCommand.invoke(context, mockCpu)); }
+
+    public static MockUserAgent getRandomUserAgent(Context context) { return new MockUserAgent(GetRandomUserAgentCommand.invoke(context, MockUserAgent.GET_UA_ALL)); }
+    public static MockUserAgent getRandomUserAgent(Context context, String device) { return new MockUserAgent(GetRandomUserAgentCommand.invoke(context, device)); }
 }

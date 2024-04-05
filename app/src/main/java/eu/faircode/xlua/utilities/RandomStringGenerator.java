@@ -8,6 +8,14 @@ public class RandomStringGenerator {
     public static final String NUMBERS = "0123456789";
     public static final String UPPER_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public static final String LOWER_LETTERS = "abcdefghijklmnopqrstuvwxyz";
+    public static final String HEX_CHARS = "0123456789ABCDEF";
+
+    public static String generateRandomHexString(int length) {
+        StringBuilder result = new StringBuilder(length);
+        Random random = new Random();
+        for (int i = 0; i < length; i++) result.append(HEX_CHARS.charAt(random.nextInt(HEX_CHARS.length())));
+        return result.toString();
+    }
 
     // Generate a random string with only numbers
     public static String generateRandomNumberString(int length) {

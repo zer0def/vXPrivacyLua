@@ -52,7 +52,6 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import eu.faircode.xlua.api.properties.MockPropConversions;
-import eu.faircode.xlua.api.xlua.XLuaCall;
 import eu.faircode.xlua.api.xmock.XMockQuery;
 import eu.faircode.xlua.hooks.XHookUtil;
 
@@ -65,8 +64,9 @@ import eu.faircode.xlua.hooks.LuaHookWrapper;
 import eu.faircode.xlua.hooks.LuaScriptHolder;
 import eu.faircode.xlua.hooks.XReporter;
 import eu.faircode.xlua.hooks.XResolved;
-import eu.faircode.xlua.randomizers.GlobalRandoms;
-import eu.faircode.xlua.randomizers.IRandomizer;
+import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.random.GlobalRandoms;
+import eu.faircode.xlua.random.IRandomizer;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 import eu.faircode.xlua.api.hook.XLuaHook;
@@ -348,7 +348,11 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 }else {
                     final Member member = target.tryGetMember();
                     if(member != null) {
-                        target.throwIfMismatchReturn(member);
+                        //target.throwIfMismatchReturn(member);
+                        if(target.hasMismatchReturn(member)) {
+                            XLog.e("Invalid Return Type for Hook: " + hook.getId());
+                            continue;
+                        }
 
                         XposedBridge.hookMethod(member, new XC_MethodHook() {
                             //within here set key

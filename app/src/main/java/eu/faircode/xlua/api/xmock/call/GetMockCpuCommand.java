@@ -11,7 +11,7 @@ import eu.faircode.xlua.api.xmock.provider.XMockCpuProvider;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 public class GetMockCpuCommand extends CallCommandHandler {
-    public static GetMockCpuCommand create() { return new GetMockCpuCommand(); };
+    @SuppressWarnings("unused")
     public GetMockCpuCommand() {
         name = "getMockCpu";
         requiresPermissionCheck = false;
@@ -19,7 +19,7 @@ public class GetMockCpuCommand extends CallCommandHandler {
 
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
-        MockCpu packet = commandData.readFullPackFrom(MockCpu.class);
+        MockCpu packet = commandData.readExtrasAs(MockCpu.class);
         if(packet.getName() == null) {
             return BundleUtil.createFromISerial(
                     XMockCpuProvider.getSelectedCpuMap(

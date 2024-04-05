@@ -102,10 +102,6 @@ public class XReporter {
             sb.append(')');
         }
         sb.append("\n");
-
-        Log.i(TAG, "done writing method...");
-
-
         // Report use error
         //Bundle data = new Bundle();
         //data.putString("function", function);
@@ -141,8 +137,6 @@ public class XReporter {
             }
 
             pushReport(context, hook.getId(), funName, "use", data);
-        }else {
-            Log.w(TAG, "Big Bad Warning we didnt make the report... fun=" + funName);
         }
     }
 

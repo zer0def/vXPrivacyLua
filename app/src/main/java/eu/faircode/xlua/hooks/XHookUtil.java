@@ -31,6 +31,7 @@ import java.util.zip.ZipFile;
 import eu.faircode.xlua.BuildConfig;
 import eu.faircode.xlua.api.hook.XLuaHook;
 import eu.faircode.xlua.api.hook.XLuaHookAssets;
+import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.utilities.ReflectUtil;
 import eu.faircode.xlua.utilities.StringUtil;
 
@@ -166,7 +167,6 @@ public class XHookUtil {
         //Log.i(TAG, "Grabbing Globals <getGlobals>");
         Globals globals = JsePlatform.standardGlobals();
         // base, bit32, coroutine, io, math, os, package, string, table, luajava
-
         if (BuildConfig.DEBUG)
             globals.load(new DebugLib());
 
@@ -177,17 +177,18 @@ public class XHookUtil {
         return new LuaLocals(globals);
     }
 
-    public static ArrayList<XLuaHook> readHooksEx(Context context, String apk)  throws IOException, JSONException {
-        Log.i(TAG, "Reading all Hooks in JSON");
+    public static ArrayList<XLuaHook> readHooksEx(String apk) {
+        XLog.i("Reading all Hooks in JSON...");
         ZipFile zipFile = null;
         ArrayList<XLuaHook> hooks_all = new ArrayList<>();
         try {
             zipFile = new ZipFile(apk);
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 if (entry.getName().startsWith("assets/") && entry.getName().endsWith("hooks.json")) {
-                    Log.i(TAG, "Found entry for [hooks.json] => " + entry);
+                    XLog.i("Found Entry for [hooks.json]: " + entry.getName());
                     ArrayList<XLuaHook> read_hooks = readHooksFromEntry(entry, zipFile);
                     if(!read_hooks.isEmpty()) {
                         hooks_all.addAll(read_hooks);
@@ -195,7 +196,7 @@ public class XHookUtil {
                 }
             }
         }catch (Exception e){
-            Log.e(TAG, "Failed to read Hooks! " + e);
+            XLog.e("Failed to read Hooks.", e);
         } finally {
             if (zipFile != null)
                 try { zipFile.close();
@@ -226,7 +227,6 @@ public class XHookUtil {
                 //hook.fromJSONObject(jarray.getJSONObject(i));
                 XLuaHookAssets hookAsset = new XLuaHookAssets();
                 hookAsset.fromJSONObject(jArray.getJSONObject(i));
-
 
                 //XHookIO.Convert.fromJSONObject(jarray.getJSONObject(i));
                 if (hookAsset.getLuaScript().startsWith("@")) {
@@ -329,8 +329,9 @@ public class XHookUtil {
         String entryLua = path + "/" + scriptName;
         //String entryLua = path + "/" + hook.luaScript.substring(1) + ".lua";
         //Log.i(TAG, "Finding LUA Entry::" + entryLua);
+        XLog.i("Searching for LUA Script in: " + entryLua + " path=" + path + " script name=" + scriptName);
         ZipEntry luaEntry = zipFile.getEntry(entryLua);
-        if (luaEntry == null && path != "assets") {
+        if (luaEntry == null && !path.equals("assets")) {
             return getLuaScript(zipFile, "assets", scriptName);
             //throw new IllegalArgumentException(scriptName + " not found for " + hook.getId());
         }
@@ -340,7 +341,8 @@ public class XHookUtil {
                 lis = zipFile.getInputStream(luaEntry);
                 return new Scanner(lis).useDelimiter("\\A").next();
             } catch (Exception e) {
-                Log.e(TAG, "Failed to Grab Script: " + entryLua);
+                XLog.e("Failed to find LUA Script: " + entryLua, e);
+                //Log.e(TAG, "Failed to Grab Script: " + entryLua);
             }finally {
                 if (lis != null)
                     try {

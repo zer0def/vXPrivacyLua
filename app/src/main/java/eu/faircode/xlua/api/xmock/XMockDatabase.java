@@ -9,9 +9,10 @@ import eu.faircode.xlua.XGlobals;
 import eu.faircode.xlua.api.configs.MockConfigDatabase;
 import eu.faircode.xlua.api.properties.MockPropDatabase;
 import eu.faircode.xlua.api.standard.interfaces.IInitDatabase;
+import eu.faircode.xlua.api.useragent.MockUserAgentDatabaseManager;
 import eu.faircode.xlua.api.xmock.database.XMockCpuDatabase;
+import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.utilities.CollectionUtil;
-import eu.faircode.xlua.utilities.DatabasePathUtil;
 
 public class XMockDatabase implements IInitDatabase {
     private XDatabase db;
@@ -22,6 +23,7 @@ public class XMockDatabase implements IInitDatabase {
     private boolean check_2 = false;
     private boolean check_3 = false;
     private boolean check_4 = false;
+    private boolean check_5 = false;
 
     private final Object lock = new Object();
 
@@ -49,7 +51,7 @@ public class XMockDatabase implements IInitDatabase {
 
             if(db == null) {
                 db = new XDatabase(XGlobals.DB_NAME_MOCK, context, setPerms);
-                DatabasePathUtil.log("Created XMOCK DB =>" + db, false);
+                XLog.i(true, "Created XMOCK DB: " + db);
                 reset(false);
                 if(!db.isOpen(true))
                     return false;
@@ -60,9 +62,16 @@ public class XMockDatabase implements IInitDatabase {
                 if(!check_2) check_2 = XMockCpuDatabase.forceDatabaseCheck(context, db);
                 if(!check_3) check_3 = CollectionUtil.isValid(MockPropDatabase.forceCheckMapsDatabase(context, db));
                 if(!check_4) check_4 = MockPropDatabase.ensurePropSettingsDatabase(context, db);
+                if(!check_5) check_5 = MockUserAgentDatabaseManager.forceDatabaseCheck(context, db);
+                XLog.i(true, new StringBuilder()
+                        .append("\t[1] Config Table Check=").append(check_1).append("\n")
+                        .append("\t[2] Cpu Table Check=").append(check_2).append("\n")
+                        .append("\t[3] Prop Maps Table Check=").append(check_3).append("\n")
+                        .append("\t[4] Prop Settings Table Check=").append(check_4).append("\n")
+                        .append("\t[5] User Agent Table Check=").append(check_5)
+                        .toString());
 
-                DatabasePathUtil.log("Config Check=" + check_1 + " Cpu Config Check=" + check_2 + " properties=" + check_3 + " prop settings = " + check_4, false);
-                init = check_1 && check_2 && check_3 && check_4;
+                init = check_1 && check_2 && check_3 && check_4 && check_5;
             }
 
             return init;
@@ -81,6 +90,7 @@ public class XMockDatabase implements IInitDatabase {
         check_2 = false;
         check_3 = false;
         check_4 = false;
+        check_5 = false;
     }
 
     @NonNull

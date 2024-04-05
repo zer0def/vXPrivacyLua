@@ -102,7 +102,7 @@ public class FragmentAppControl  extends ViewFloatingAction {
                     activity.recreate();
 
 
-                Log.i(TAG, "Hook size=" + data.hooks.size());
+                Log.i(TAG, "Hook size=" + data.hooks.size() + " groups=" + data.groups.size() + " app=" + data.app.getPackageName());
                 rvAdapter.set(data.app, data.hooks, getContext());
                 //data.hooks.
 
@@ -229,9 +229,10 @@ public class FragmentAppControl  extends ViewFloatingAction {
                 Log.i(TAG, "Getting Hooks");
                 // Load hooks
                 Collection<XLuaHook> hooksCopy = XLuaQuery.getHooks(getContext(), true);
-                Log.i(TAG, "Hooks loaded=" + hooksCopy.size());
+                Log.i(TAG, "Hooks loaded=" + hooksCopy.size() + " groups size=" + data.groups.size());
                 data.hooks.addAll(hooksCopy);
                 data.app = XLuaCall.getApp(getContext(), application, true, true);
+                Log.i(TAG, "XLuaApp=" + data.app.getPackageName() + " assignments=" + data.app.getAssignments().size());
             } catch (Throwable ex) {
                 data.collection = null;
                 data.groups.clear();

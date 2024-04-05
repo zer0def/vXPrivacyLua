@@ -9,9 +9,45 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+
+import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
 
 public class CollectionUtil {
     private static final String TAG = "XLua.CollectionUtil";
+
+    public static <T> T getRandomElement(Collection<T> items) { return getRandomElement(items, null, false); }
+    public static <T> T getRandomElement(Collection<T> items, T defaultItem) { return getRandomElement(items, defaultItem, false); }
+    public static <T> T getRandomElement(Collection<T> items, T defaultItem, boolean forceClearAfter) {
+        if(items == null || items.isEmpty()) return defaultItem;
+        T e = getRandomElement(new ArrayList<>(items), defaultItem, forceClearAfter);
+        if(forceClearAfter) items.clear();
+        return e;
+    }
+
+    public static <T> T getRandomElement(List<T> items) { return getRandomElement(items, null, false); }
+    public static <T> T getRandomElement(List<T> items, T defaultItem) { return getRandomElement(items, defaultItem, false); }
+    public static <T> T getRandomElement(List<T> items, T defaultItem, boolean forceClearAfter) {
+        if(items == null || items.isEmpty()) return defaultItem;
+        if(items.size() == 1) return items.get(0);
+        T e = items.get(ThreadLocalRandom.current().nextInt(0, items.size()));
+        if(forceClearAfter) items.clear();
+        return e;
+    }
+
+    public static boolean isAllTrue(List<Boolean> results) {
+        if(results == null || results.isEmpty()) return false;
+        for(int i = 0; i < results.size(); i++)
+            if(!results.get(i)) return false;
+        return true;
+    }
+
+    public static boolean isAllTrue(boolean[] results) {
+        if(results == null || results.length < 1) return false;
+        for(int i = 0; i < results.length; i++)
+            if(!results[i]) return false;
+        return true;
+    }
 
     public static boolean isEmptyValuesOrInvalid(Collection<String> collection) {
         if(!isValid(collection))

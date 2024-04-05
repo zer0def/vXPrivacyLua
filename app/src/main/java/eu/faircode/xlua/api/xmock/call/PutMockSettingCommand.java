@@ -19,7 +19,7 @@ public class PutMockSettingCommand extends CallCommandHandler {
 
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
-        LuaSettingPacket packet = commandData.readFullPackFrom(LuaSettingPacket.class);
+        LuaSettingPacket packet = commandData.readExtrasAs(LuaSettingPacket.class);
         if(packet == null)
             return XResult.create().setMethodName("putMockSetting").setFailed("Setting Packet is NULL").toBundle();
 

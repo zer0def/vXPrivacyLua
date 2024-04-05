@@ -7,6 +7,7 @@ import android.util.Log;
 import eu.faircode.xlua.XDatabase;
 import eu.faircode.xlua.api.standard.interfaces.IBridgePacketContext;
 import eu.faircode.xlua.api.standard.interfaces.ISerial;
+import eu.faircode.xlua.utilities.BundleUtil;
 
 public class CallPacket extends BridgePacket implements IBridgePacketContext {
     private static final String TAG = "XLua.CallPacket";
@@ -20,8 +21,17 @@ public class CallPacket extends BridgePacket implements IBridgePacketContext {
         this.extras = extras;
     }
 
+    public String getExtraString(String key) { return BundleUtil.readString(this.extras, key, null); }
+    public String getExtraString(String key, String defaultValue) { return BundleUtil.readString(this.extras, key, defaultValue); }
+
+    public Integer getExtraInt(String key) { return BundleUtil.readInteger(this.extras, key, null); }
+    public Integer getExtraInt(String key, Integer defaultValue) { return BundleUtil.readInteger(this.extras, key, defaultValue); }
+
+    public Boolean getExtraBool(String key) { return BundleUtil.readBoolean(this.extras, key, null); }
+    public Boolean getExtraBool(String key, Boolean defaultValue) { return BundleUtil.readBoolean(this.extras, key, defaultValue); }
+
     public Bundle getExtras() { return extras; }
-    public <T extends ISerial> T readFullPackFrom(Class<T> clazz) {
+    public <T extends ISerial> T readExtrasAs(Class<T> clazz) {
         try {
             T inst = clazz.newInstance();
             inst.fromBundle(extras);

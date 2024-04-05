@@ -23,7 +23,7 @@ public class GetSettingCommand extends CallCommandHandler {
 
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
-        LuaSettingPacket packet = commandData.readFullPackFrom(LuaSettingPacket.class);
+        LuaSettingPacket packet = commandData.readExtrasAs(LuaSettingPacket.class);
         packet.resolveUserID();
 
         if(BuildConfig.DEBUG)

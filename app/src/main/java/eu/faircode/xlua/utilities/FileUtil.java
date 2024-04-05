@@ -9,12 +9,36 @@ import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.spi.FileSystemProvider;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.faircode.xlua.logger.XLog;
 
 
 public class FileUtil {
     private static final String TAG = "XLua.FileUtil";
+
+    public static int getDescriptorNumber(FileDescriptor fd) {
+        try {
+            Method intMethod = fd.getClass().getDeclaredMethod("getInt$");
+            int fId = (int) intMethod.invoke(fd);
+            return fId;
+            //res = Integer.toString(fId);
+        } catch (Throwable e) {
+            XLog.e("Failed to get File Descriptor Path.", e);
+            return 0;
+        }
+    }
 
     //       String[] ss = new String[] {"fpc1020", "fpc_fpc1020", "fpc1020", "fpc_fpc1020", "fpc1020", "fp_fpc1020", "fpc1020", "fpc,fpc1020", "fpc1020", "fp_fpc1155", "fpc1145", "fpc1145","fpc1145_device", "fingerprint_fpc", "goodix_fp",  "goodix_fp", "0.goodix_fp", "fpc1145",  "0.fpc1145", "fpc1020",  "fingerprint", "silead_fp", "0.silead_fp", "cdfinger_fp",  "silead_fp", "goodix_fp", "goodix_fingerprint", "cdfinger_fp", "cdfinger_fingerprint", "goodix_fp", "goodix,fingerprint", "fpc1020","fingerprint_fpc", "goodix_fp","fingerprint_goodix", "qbt1000","qbt2000",  "elan",  "elan","elan_elan_fp", "esfp0", "egistec_fp" };
     public static boolean isDeviceDriver(String filePath) {

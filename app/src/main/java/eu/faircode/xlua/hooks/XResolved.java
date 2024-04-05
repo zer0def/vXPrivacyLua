@@ -9,11 +9,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 
+import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.utilities.ReflectUtil;
 
 public class XResolved {
-    private static final String TAG = "XLua.XResolved";
-
+    //private static final String TAG = "XLua.XResolved";
     public final Class<?> clazz;
     public final String methodName;
     public final Class<?>[] paramTypes;
@@ -21,16 +21,29 @@ public class XResolved {
 
     public void throwIfMismatchReturn(Member member) throws Throwable {
         if(isConstructor()) return;
-        try {
-            throwIfMismatchReturn(((Method)member).getReturnType());
-        }catch (ClassCastException e) {
-            Log.e(TAG, "Type is Constructor Moving on.... e=" + e);
-        }
+        throwIfMismatchReturn(((Method)member).getReturnType());
     }
 
     public void throwIfMismatchReturn(Class<?> compareType) throws Throwable {
         if(!isConstructor() && !returnTypeIsValid(compareType))
             throw new Throwable("Invalid return type " + compareType + " got needed: " + returnType);
+    }
+
+    public boolean hasMismatchReturn(Member member) throws Throwable {
+        if(isConstructor()) return false;
+        try {
+            return hasMismatchReturn(((Method)member).getReturnType());
+        }catch (Exception e) {
+            XLog.e("Failed to check Type if MisMatch...", e);
+            return true;
+        }
+    }
+
+    public boolean hasMismatchReturn(Class<?> compareType) throws Throwable {
+        if(!isConstructor() && !returnTypeIsValid(compareType)) {
+            XLog.e("Invalid return type " + compareType + " got needed: " + returnType);
+            return true;
+        } return false;
     }
 
     public boolean returnTypeIsValid(Class<?> compareType) {
@@ -46,7 +59,6 @@ public class XResolved {
     public boolean isConstructor() {
         return methodName == null || TextUtils.isEmpty(methodName);
     }
-
     public boolean isField() {
         return XHookUtil.isField(methodName);
     }
@@ -55,8 +67,7 @@ public class XResolved {
         try {
             return getMember();
         }catch (NoSuchMethodException e) {
-            String c = clazz != null ? clazz.getName() : " null ";
-            Log.e(TAG, "Failed to resolve Method! " + " class=" + c  + " method=" + methodName + " e=\n" + e + "\n" + Log.getStackTraceString(e));
+            XLog.e("Failed to resolve Member: " + this , e, true);
             return null;
         }
     }
@@ -69,7 +80,7 @@ public class XResolved {
         try {
             return getField(setAccessible);
         }catch (NoSuchFieldException e) {
-            Log.e(TAG, "Failed to resolve Field! " + e + "\n" + Log.getStackTraceString(e));
+            XLog.e("Failed to Resolve Filed: " + this, e, true);
             return null;
         }
     }
@@ -91,16 +102,26 @@ public class XResolved {
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
-        b.append("class=");
-        b.append(clazz.toString());
-        if(!isField()) {
+        if(clazz != null) {
+            b.append("class=");
+            b.append(clazz.getName());
+        }
+
+        if(methodName != null) {
             b.append(" member=");
             b.append(isConstructor() ? "constructor" : methodName);
+        }
 
+        if(returnType != null) {
+            b.append(" return=");
+            b.append(returnType.getName());
+        }
+
+        if(!isField()) {
             if(paramTypes != null) {
                 int ln = paramTypes.length;
                 if(ln > 0) {
-                    b.append(" params=(");
+                    b.append("\nparams=(");
                     int nd = ln - 1;
                     for(int i = 0; i < ln; i++) {
                         b.append(paramTypes[i].getName());
@@ -112,11 +133,6 @@ public class XResolved {
                     }
                 }
             }
-        }
-
-        if(returnType != null) {
-            b.append(" return=");
-            b.append(returnType.getName());
         }
 
         return b.toString();

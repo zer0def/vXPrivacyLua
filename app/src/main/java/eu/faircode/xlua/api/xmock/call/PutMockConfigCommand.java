@@ -19,7 +19,7 @@ public class PutMockConfigCommand extends CallCommandHandler {
 
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
-        MockConfigPacket packet = commandData.readFullPackFrom(MockConfigPacket.class);
+        MockConfigPacket packet = commandData.readExtrasAs(MockConfigPacket.class);
         if(packet == null) return XResult.create().setMethodName("putMockConfig").setFailed("Mock Config Packet is NULL!").toBundle();
 
         packet.ensureCode(MockConfigPacket.CODE_APPLY_CONFIG);

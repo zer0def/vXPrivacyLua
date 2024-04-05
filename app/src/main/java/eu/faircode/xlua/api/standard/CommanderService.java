@@ -114,6 +114,7 @@ public class CommanderService {
             Method mGetContext = param.thisObject.getClass().getMethod("getContext");
             Context context = (Context) mGetContext.invoke(param.thisObject);
 
+            //coool.string
             String[] split = projection[0].split("\\.");
             String commandPrefix = split[0];   //Also known as 'method'
             String method = split[1];           //sub method being invoked like "getSetting" also known as 'arg'

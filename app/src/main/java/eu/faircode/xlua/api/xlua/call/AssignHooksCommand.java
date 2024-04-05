@@ -20,7 +20,7 @@ public class AssignHooksCommand extends CallCommandHandler {
 
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
-        LuaAssignmentPacket packet = commandData.readFullPackFrom(LuaAssignmentPacket.class);
+        LuaAssignmentPacket packet = commandData.readExtrasAs(LuaAssignmentPacket.class);
         if(packet == null) return XResult.fromInvalidPacket(name, LuaSimplePacket.class).toBundle();
         return XLuaHookDatabase.assignHooks(
                 commandData.getContext(),

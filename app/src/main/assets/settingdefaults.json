@@ -97,13 +97,16 @@
   { "name": "hardware.gps.model.name", "description": "Returns the model name (including vendor and hardware/software version)", "value": "dunno" },
 
   //Bluetooth Default Setting Values
+  { "name": "bluetooth.state", "description": "Is Bluetooth On Disabled ??", "value": "10" },
+  { "name": "bluetooth.allow.discovery.bool", "description": "Allow to Start Discovery or Connect to Any Device etc", "value": "false" },
   { "name": "bluetooth.name", "description": "Bluetooth Name Starter", "value": "Android" },
   { "name": "bluetooth.soc", "description": "Bluetooh SOC", "value": "cherokee" },
   { "name": "bluetooth.allowed.bonded.list", "description": "List seperated with a comma (,) of ALLOWED (SAVED/PAIRED/BONDED) Bluetooth Devices that the app can see. Use Device name or Bluetooth MAC", "value": "*" },
 
   //Unique Identifiers Default Values
   { "name": "unique.serial.no", "description": "Android Build Serial", "value": "840er743" },
-  { "name": "unique.gsm.subscription.id", "description": "Subscription ID for Service", "value": "93939251723998531487" },
+  //old subid: 93939251723998531487
+  { "name": "unique.gsm.subscription.id", "description": "Subscription ID for Service", "value": "274299888888765" },
   { "name": "unique.gsm.imei", "description": "IMEI Number for GSM Devices", "value": "743893156789320" },
   { "name": "unique.gsm.meid", "description": "MEID Number for CDMA Devices", "value": "743893156789320" },
   { "name": "unique.gsm.icc.id", "description": "First two digits are always 89, SIM Unique ID", "value": "891004234814455936F" },
@@ -116,7 +119,7 @@
   { "name": "unique.android.id", "description": "Android ID", "value": "0329184861423674" },
   { "name": "unique.drm.id", "description": "DRM ID", "value": "slvwoputzjflhwfozqjqtloqpxudqrrxtirqjgxtzairmaftdxruhmflneex" },
   { "name": "unique.gsf.id", "description": "Google Services Framework ID", "value": "FMZIYEVGXZDCENRO" },
-  { "name": "unique.google.game.id", "description": "Google Games Game User ID thing", "value": "FFP3" },
+  //{ "name": "unique.google.game.id", "description": "Google Games Game User ID thing", "value": "FFP3" },
   { "name": "unique.network.ssid", "description": "Wifi SSID", "value": "Starbucks Free-Wifi" },
   { "name": "unique.netd.secret.key", "description": "stable_secret contains RFC 7217 secret key which should never be leaked", "value": "90f8:f587:2bb7:db9b:e5:306a:67d7:a155" },
   { "name": "unique.gsm.operator.msin", "description": "Mobile Subscription Identification Number (MSIN) is a 10-digit unique numeric code ", "value": "1234567890" },

@@ -18,9 +18,7 @@ public class BundleUtil {
 
     public static Boolean readBoolean(Bundle b, String keyName) { return readBoolean(b, keyName, null); }
     public static Boolean readBoolean(Bundle b, String keyName,  Boolean defaultValue) {
-        if(!b.containsKey(keyName))
-            return defaultValue;
-
+        if(b == null || !b.containsKey(keyName)) return defaultValue;
         return b.getBoolean(keyName);
     }
 
@@ -118,7 +116,6 @@ public class BundleUtil {
             res = String.valueOf(bundle.get("result"));
         }
 
-
         if(res == null || res.isEmpty()) {
             sb.append("Action Executed but returned NULL (assume it went well :P )");
         }else {
@@ -145,17 +142,15 @@ public class BundleUtil {
 
     public static String readString(Bundle bundle, String keyName) { return readString(bundle, keyName, null); }
     public static String readString(Bundle bundle, String keyName, String defaultValue) {
-        if(bundle == null) return defaultValue;
-        if(!bundle.containsKey(keyName)) return defaultValue;
+        if(bundle == null || !bundle.containsKey(keyName)) return defaultValue;
         return bundle.getString(keyName, defaultValue);
     }
 
+    //get rid of this -5 constraint
     public static int readInteger(Bundle bundle, String keyName) { return readInteger(bundle, keyName, -5); }
-    public static int readInteger(Bundle bundle, String keyName, int defaultValue) {
-        if(bundle == null) return defaultValue;
-        if(!bundle.containsKey(keyName))
-            return defaultValue;
-
+    public static int readInteger(Bundle bundle, String keyName, Integer defaultValue) {
+        if(bundle == null || !bundle.containsKey(keyName)) return defaultValue;
+        if(defaultValue == null) return bundle.getInt(keyName);
         return bundle.getInt(keyName, defaultValue);
     }
 

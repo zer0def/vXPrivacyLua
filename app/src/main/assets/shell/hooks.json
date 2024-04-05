@@ -1,0 +1,159 @@
+//https://stackoverflow.com/questions/26722040/replacement-for-system-property-get-in-android-l-ndk
+//https://stackoverflow.com/questions/9885812/want-to-run-script-file-using-system-call-in-android-ndk
+//https://github.com/mikereidis/spirit2_free/issues/8
+
+[
+  {
+    //exec(String command)
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "Intercept.Shell",
+    "name": "Intercept.Runtime.exec(command)",
+    "author": "OBC",
+    "className": "java.lang.Runtime",
+    "methodName": "exec",
+    "parameterTypes": [ "java.lang.String" ],
+    "returnType": "java.lang.Process",
+    "minSdk": 0,
+    "maxSdk": 999,
+    "version": 0,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_shell_one"
+  },
+
+  {
+    // exec(String command, String[] envp)
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "Intercept.Shell",
+    "name": "Intercept.Runtime.exec(command, envp)",
+    "author": "OBC",
+    "className": "java.lang.Runtime",
+    "methodName": "exec",
+    "parameterTypes": [ "java.lang.String", "[Ljava.lang.String;" ],
+    "returnType": "java.lang.Process",
+    "minSdk": 0,
+    "maxSdk": 999,
+    "version": 0,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_shell_one"
+  },
+
+  {
+    //exec(String command, String[] envp, File dir)
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "Intercept.Shell",
+    "name": "Intercept.Runtime.exec(command, envp, dir)",
+    "author": "OBC",
+    "className": "java.lang.Runtime",
+    "methodName": "exec",
+    "parameterTypes": [ "java.lang.String", "[Ljava.lang.String;", "java.io.File" ],
+    "returnType": "java.lang.Process",
+    "minSdk": 0,
+    "maxSdk": 999,
+    "version": 0,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_shell_one"
+  },
+
+  {
+    //exec(String[] cmdarray)
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "Intercept.Shell",
+    "name": "Intercept.Runtime.exec(commands)",
+    "author": "OBC",
+    "className": "java.lang.Runtime",
+    "methodName": "exec",
+    "parameterTypes": [ "[Ljava.lang.String;" ],
+    "returnType": "java.lang.Process",
+    "minSdk": 0,
+    "maxSdk": 999,
+    "version": 0,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_shell_two"
+  },
+
+  {
+    //exec(String[] cmdarray, String[] envp)
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "Intercept.Shell",
+    "name": "Intercept.Runtime.exec(commands, envp)",
+    "author": "OBC",
+    "className": "java.lang.Runtime",
+    "methodName": "exec",
+    "parameterTypes": [ "[Ljava.lang.String;", "[Ljava.lang.String;" ],
+    "returnType": "java.lang.Process",
+    "minSdk": 0,
+    "maxSdk": 999,
+    "version": 0,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_shell_two"
+  },
+
+  {
+    //exec(String[] cmdarray, String[] envp, File dir)
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "Intercept.Shell",
+    "name": "Intercept.Runtime.exec(commands, envp, dir)",
+    "author": "OBC",
+    "className": "java.lang.Runtime",
+    "methodName": "exec",
+    "parameterTypes": [ "[Ljava.lang.String;", "[Ljava.lang.String;", "java.io.File" ],
+    "returnType": "java.lang.Process",
+    "minSdk": 0,
+    "maxSdk": 999,
+    "version": 0,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_shell_two"
+  },
+
+  {
+    //ProcessBuilder.start()
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "Intercept.Shell",
+    "name": "Intercept.ProcessBuilder.start",
+    "author": "OBC",
+    "className": "java.lang.ProcessBuilder",
+    "methodName": "start",
+    "parameterTypes": [ ],
+    "returnType": "java.lang.Process",
+    "minSdk": 0,
+    "maxSdk": 999,
+    "version": 0,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_shell_three"
+  }
+]

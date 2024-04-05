@@ -38,11 +38,15 @@ import eu.faircode.xlua.api.XResult;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.api.standard.interfaces.IDividerKind;
 import eu.faircode.xlua.api.standard.interfaces.ISettingUpdate;
+import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.random.IRandomizerManager;
+import eu.faircode.xlua.random.elements.DataUserAgentElement;
+import eu.faircode.xlua.random.elements.IManagedSpinnerElement;
 import eu.faircode.xlua.ui.dialogs.SettingDeleteDialog;
-import eu.faircode.xlua.randomizers.GlobalRandoms;
-import eu.faircode.xlua.randomizers.IRandomizer;
-import eu.faircode.xlua.randomizers.elements.DataNullElement;
-import eu.faircode.xlua.randomizers.elements.ISpinnerElement;
+import eu.faircode.xlua.random.GlobalRandoms;
+import eu.faircode.xlua.random.IRandomizer;
+import eu.faircode.xlua.random.elements.DataNullElement;
+import eu.faircode.xlua.random.elements.ISpinnerElement;
 import eu.faircode.xlua.ui.AlertMessage;
 import eu.faircode.xlua.ui.SettingsQue;
 import eu.faircode.xlua.utilities.SettingUtil;
@@ -211,7 +215,7 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
                     updateExpanded();
                     break;
                 case R.id.ivBtRandomSettingValue:
-                    setting.randomizeValue();
+                    setting.randomizeValue(view.getContext());
                     SettingUtil.initCardViewColor(view.getContext(), tvSettingName, cvSetting, setting);
                     break;
                 case R.id.ivBtSaveSettingSetting:
@@ -295,12 +299,11 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
         private void updateSelection() {
             IRandomizer selected = (IRandomizer) spRandomSelector.getSelectedItem();
             String name = selected.getName();
-            if(DebugUtil.isDebug())
-                Log.i(TAG, "Selected Randomizer=" + name);
-
             try {
-                if (name == null ? spRandomSelector.getTag() != null : !name.equals(spRandomSelector.getTag()))
+                if (name == null ? spRandomSelector.getTag() != null : !name.equals(spRandomSelector.getTag())) {
+                    XLog.i("Selected Randomizer Drop Down spinner Modified. randomizer=" + name);
                     spRandomSelector.setTag(name);
+                }
 
                 LuaSettingExtended setting = filtered.get(getAdapterPosition());
                 if(setting == null)
@@ -313,16 +316,19 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
                         if(selected instanceof ISpinnerElement) {
                             ISpinnerElement element = (ISpinnerElement) selected;
                             if(!element.getName().equals(DataNullElement.EMPTY_ELEMENT.getName())) {
-                                setting.setModifiedValue(element.getValue(), true);
+                                if(selected instanceof IManagedSpinnerElement) {
+                                    IManagedSpinnerElement managedElement = (IManagedSpinnerElement)element;
+                                    setting.setModifiedValue(managedElement.generateString(spRandomSelector.getContext()), true);
+                                }else
+                                    setting.setModifiedValue(element.getValue(), true);
+
                                 SettingUtil.initCardViewColor(spRandomSelector.getContext(), tvSettingName, cvSetting, setting);
                                 return;
                             }
                         } return;
                     }
                 } setting.bindRandomizer(selected);
-            }catch (Exception e) {
-                Log.e(TAG, "Failed to Init Randomizer Drop Down! e=" + e);
-            }
+            }catch (Exception e) { XLog.e("Failed to Init Randomizer Drop Down Spinner.", e); }
         }
     }
 
@@ -374,7 +380,7 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
         int randomized = 0;
         for(LuaSettingExtended e : filtered) {
             if(e.getRandomizer() != null && e.isEnabled()) {
-                e.randomizeValue();
+                e.randomizeValue(context);
                 randomized++;
             }
         }

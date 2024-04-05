@@ -1,6 +1,7 @@
 package eu.faircode.xlua.api.settings;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -19,8 +20,9 @@ import org.json.JSONObject;
 import java.util.List;
 
 import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
-import eu.faircode.xlua.randomizers.IRandomizer;
-import eu.faircode.xlua.randomizers.elements.ISpinnerElement;
+import eu.faircode.xlua.random.IRandomizer;
+import eu.faircode.xlua.random.IRandomizerManager;
+import eu.faircode.xlua.random.elements.ISpinnerElement;
 import eu.faircode.xlua.utilities.SettingUtil;
 import eu.faircode.xlua.utilities.StringUtil;
 
@@ -124,10 +126,19 @@ public class LuaSettingExtended extends LuaSettingDefault implements IJsonSerial
         return !this.value.equals(this.modifiedValue);
     }
 
-    public void randomizeValue() {
+    public void randomizeValue() { randomizeValue(null); }
+    public void randomizeValue(Context context) {
         if(this.randomizer != null) {
-            String v = this.randomizer.generateString();
-            setModifiedValue(v, true);
+            if(context != null && this.randomizer instanceof IRandomizerManager) {
+                IRandomizerManager manager = (IRandomizerManager) this.randomizer;
+                if(!manager.hasNaNSelected()) {
+                    String v = manager.generateString(context);
+                    setModifiedValue(v, true);
+                }
+            }else {
+                String v = this.randomizer.generateString();
+                setModifiedValue(v, true);
+            }
         }
     }
 

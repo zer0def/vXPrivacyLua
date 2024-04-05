@@ -22,7 +22,7 @@ public class PutMockPropCommand extends CallCommandHandler {
 
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
-        MockPropPacket packet = commandData.readFullPackFrom(MockPropPacket.class);
+        MockPropPacket packet = commandData.readExtrasAs(MockPropPacket.class);
         if(packet == null) return XResult.fromInvalidPacket(name, MockPropPacket.class).toBundle();
 
         packet.resolveUserID();

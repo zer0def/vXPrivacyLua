@@ -17,8 +17,8 @@ import eu.faircode.xlua.api.xlua.query.GetAppsCommand;
 import eu.faircode.xlua.api.xlua.query.GetAssignedHooksCommand;
 import eu.faircode.xlua.api.xlua.query.GetHooksCommand;
 import eu.faircode.xlua.api.xlua.query.GetSettingsCommand;
-import eu.faircode.xlua.randomizers.GlobalRandoms;
-import eu.faircode.xlua.randomizers.IRandomizer;
+import eu.faircode.xlua.random.GlobalRandoms;
+import eu.faircode.xlua.random.IRandomizer;
 import eu.faircode.xlua.utilities.CursorUtil;
 
 public class XLuaQuery {

@@ -21,6 +21,8 @@ import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
 import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
 import eu.faircode.xlua.api.standard.UserIdentityPacket;
+import eu.faircode.xlua.api.useragent.MockUserAgent;
+import eu.faircode.xlua.api.xmock.query.GetMockAgentsCommand;
 import eu.faircode.xlua.api.xmock.query.GetMockConfigsCommand;
 import eu.faircode.xlua.api.xmock.query.GetMockPropMapsCommand;
 import eu.faircode.xlua.api.xmock.query.GetMockPropertiesCommand;
@@ -30,6 +32,9 @@ import eu.faircode.xlua.utilities.CursorUtil;
 public class XMockQuery {
     private static final String TAG = "XLua.XMockQuery";
 
+
+    public static Collection<MockUserAgent> getUserAgents(Context context, String device) { return CursorUtil.readCursorAs(GetMockAgentsCommand.invoke(context, device, true), true, MockUserAgent.class); }
+    public static Collection<MockUserAgent> getUserAgents(Context context, String device, boolean marshall) { return CursorUtil.readCursorAs(GetMockAgentsCommand.invoke(context, device, marshall), marshall, MockUserAgent.class); }
 
     public static Map<String, String> getMockPropMapsMap(Context context) { return getMockPropMapsMap(context, true, null, true); }
     public static Map<String, String> getMockPropMapsMap(Context context, boolean marshall) { return  getMockPropMapsMap(context, marshall, null, true); }

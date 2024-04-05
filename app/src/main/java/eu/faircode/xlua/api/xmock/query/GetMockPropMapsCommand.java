@@ -23,7 +23,6 @@ public class GetMockPropMapsCommand extends QueryCommandHandler {
 
     @Override
     public Cursor handle(QueryPacket commandData) throws Throwable {
-        Log.i("XLua.GetMockPropMapsCommand", "[getMockPropMaps2]");
         return CursorUtil.toMatrixCursor(
                 MockPropProvider.getMockPropMaps(
                         commandData.getContext(),
