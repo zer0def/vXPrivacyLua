@@ -366,7 +366,7 @@
     "builtin": true,
     "collection": "PrivacyEx",
     "group": "ID.Network",
-    "name": "InetAddress.getHostName",
+    "name": "LinkProperties.getHostName",
     "author": "OBC",
     "className": "android.net.LinkProperties",
     "methodName": "getHostName",
