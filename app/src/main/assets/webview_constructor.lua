@@ -32,7 +32,17 @@ function after(h, param)
     if settings == nil then
         return false
     else
+        --public static Globals getGlobals
+        --DebugLib = 	void callHook(LuaThread.State s, LuaValue type, LuaValue arg)
         local ua = 'Mozilla/5.0 (Linux; U; Android; en-us) AppleWebKit/999+ (KHTML, like Gecko) Safari/999.9'
+
+
+        --hook is a Global var declared
+        --(1) arg is the class
+        --(2) arg is the method
+        --(3) arg is the Function that will be invoked like a call back
+        --(4) arg is the Value the fake arg to hand it
+        --LuaHook.java is where it gets handed off to
         hook(settings, 'setUserAgentString', setUserAgentString, ua)
         settings:setUserAgentString('dummy')
         return true
