@@ -19,22 +19,22 @@ import java.util.List;
 import eu.faircode.xlua.AdapterConfig;
 import eu.faircode.xlua.api.configs.MockConfig;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
+import eu.faircode.xlua.logger.XLog;
 
 public class FileDialogUtil {
     private static final String TAG = "XLua.FileDialogUtil";
 
-    public static MockConfig readPhoneConfig(Context context, Uri selectedFileUri) {
+    public static MockConfig readConfig(Context context, Uri selectedFileUri) {
         String contents = readAllFile(context, selectedFileUri);
         try {
             MockConfig config = new MockConfig();
             config.fromJSONObject(new JSONObject(contents));
             return config;
-        }catch (JSONException ex) {
-            Log.e(TAG, "Failed to read phone config: " + ex);
+        }catch (JSONException e) {
+            XLog.e("Failed to read config", e, true);
             return null;
         }
     }
-
 
     public static String readAllFile(Context context, Uri selectedFileUri) {
         StringBuilder sb = new StringBuilder();
@@ -45,7 +45,7 @@ public class FileDialogUtil {
                 sb.append(line).append('\n');
 
         } catch (IOException e) {
-            Log.e(TAG, "Error reading file: " + selectedFileUri.getPath() + " e=" + e);
+            XLog.e("Error Reading File: " + selectedFileUri.getPath(), e, true);
         }
 
         return sb.toString();
@@ -69,15 +69,19 @@ public class FileDialogUtil {
                     mockConfig.setName(fName);
                     mockConfig.setSettings(settings);
 
-                    byte[] bys = mockConfig.toJSON().getBytes();;
-                    assert out != null;
+                    byte[] bys = mockConfig.toJSON().getBytes();
+                    if(out == null) {
+                        XLog.e("Out stream is NULL...", new Throwable(), true);
+                        return false;
+                    }
+
                     out.write(bys);
-                    Log.i(TAG, "Config File written successfully: " + fName);
+                    XLog.i("Config File written successfully: " + fName);
                     return true;
                 } catch (IOException e) {
-                    Log.e(TAG, "Error writing to config file: " + fName + "\n" + e);
+                    XLog.e("Error writing to config file: " + fName, e, true);
                 }catch (JSONException e) {
-                    Log.e(TAG, "Failed to Read Data from Config=" + fName);
+                    XLog.e("Failed to Read Data from Config: " + fName, e, true);
                 }
             }
         }

@@ -6,10 +6,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import eu.faircode.xlua.AppGeneric;
-import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
-import eu.faircode.xlua.api.standard.interfaces.IPacket;
-import eu.faircode.xlua.utilities.BundleUtil;
-import eu.faircode.xlua.utilities.StringUtil;
 
 public class MockPropPacket extends MockPropSetting {
     public static final int CODE_DELETE_PROP_MAP = 0x1;
@@ -30,6 +26,9 @@ public class MockPropPacket extends MockPropSetting {
     public static MockPropPacket create(String propertyName, String settingName, Integer value) { return new MockPropPacket(null, null, propertyName, settingName, value, null); }
     public static MockPropPacket create(String propertyName, String settingName, Integer value, Integer code) { return new MockPropPacket(null, null, propertyName, settingName, value, code); }
     public static MockPropPacket create(Integer user, String category, String propertyName, String settingName, Integer value, Integer code) { return new MockPropPacket(user, category, propertyName, settingName, value, code); }
+
+    public static MockPropPacket create(AppGeneric application, String propertyName, String settingName, Integer value, Integer code) { return new MockPropPacket(application.getUid(), application.getPackageName(), propertyName, settingName, value, code); }
+
 
     public static MockPropPacket createQueryRequest(AppGeneric application, boolean onlyGetModified) { return createQueryRequest(application.getUid(), application.getPackageName(), onlyGetModified); }
     public static MockPropPacket createQueryRequest(int user, String category, boolean onlyGetModified) {
@@ -80,4 +79,6 @@ public class MockPropPacket extends MockPropSetting {
                 .append(" code=")
                 .append(code).toString();
     }
+
+    public static int getPacketCodeForSetting(int code, boolean delete) { return delete ? MockPropPacket.CODE_DELETE_PROP_MAP_AND_SETTING : code == MockPropPacket.PROP_NULL ? MockPropPacket.CODE_DELETE_PROP_SETTING : MockPropPacket.CODE_INSERT_UPDATE_PROP_SETTING; }
 }

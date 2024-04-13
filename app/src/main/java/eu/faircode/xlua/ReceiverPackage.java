@@ -31,7 +31,7 @@ import android.os.Build;
 import android.util.Log;
 
 import de.robv.android.xposed.XposedBridge;
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
 import eu.faircode.xlua.api.xlua.XLuaCall;
 
 public class ReceiverPackage extends BroadcastReceiver {

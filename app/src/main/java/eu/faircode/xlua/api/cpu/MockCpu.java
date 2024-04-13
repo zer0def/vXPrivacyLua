@@ -14,9 +14,9 @@ import org.json.JSONObject;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import eu.faircode.xlua.api.standard.interfaces.IDBSerial;
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
-import eu.faircode.xlua.api.standard.interfaces.ISerial;
+import eu.faircode.xlua.api.xstandard.interfaces.IDBSerial;
+import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
+import eu.faircode.xlua.api.xstandard.interfaces.ISerial;
 import eu.faircode.xlua.utilities.BundleUtil;
 import eu.faircode.xlua.utilities.ContentValuesUtil;
 import eu.faircode.xlua.utilities.CursorUtil;

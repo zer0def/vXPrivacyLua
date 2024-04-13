@@ -10,7 +10,8 @@ import java.util.List;
 
 import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
 import eu.faircode.xlua.api.hook.assignment.XLuaAssignmentBase;
-import eu.faircode.xlua.api.standard.interfaces.IListener;
+import eu.faircode.xlua.api.xstandard.interfaces.IListener;
+import eu.faircode.xlua.logger.XLog;
 
 public class XLuaAppBase {
     protected String packageName;

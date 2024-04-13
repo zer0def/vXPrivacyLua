@@ -44,7 +44,7 @@
     "usage":true,
     "notify":false,
     "luaScript": "@spoof_powermanager_ispowersavemode",
-    "settings":[]
+    "settings":[ "battery.is.power.save.mode.bool" ]
   },
 
   {
@@ -66,7 +66,7 @@
     "usage":true,
     "notify":false,
     "luaScript": "@spoof_batterymanager_computechargetimeremaining",
-    "settings":[]
+    "settings":["battery.charge.time.remaining"]
   },
 
   {
@@ -88,7 +88,7 @@
     "usage":true,
     "notify":false,
     "luaScript": "@spoof_batterymanager_ischarging",
-    "settings":[]
+    "settings":["battery.is.charging.bool"]
   },
 
   {
@@ -110,7 +110,7 @@
     "usage":true,
     "notify":false,
     "luaScript": "@spoof_batterymanager_get",
-    "settings":[]
+    "settings":["battery.percentage.left"]
   },
 
   //Thanks VDs correct name
@@ -133,7 +133,7 @@
     "usage":true,
     "notify":false,
     "luaScript": "@spoof_batterymanager_get",
-    "settings":[]
+    "settings":["battery.percentage.left"]
   },
 
   //java/src/org/chromium/device/battery/BatteryMonitorImpl.java
@@ -156,7 +156,6 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@spoof_chrom_batterymonitorimp_null",
-    "settings":[]
+    "luaScript": "@spoof_chrom_batterymonitorimp_null"
   }
 ]

@@ -5,6 +5,9 @@ function after(hook, param)
 	end
 
     local fake = param:getSetting("android.build.host", "ido-X3999A")
+    if fake == nil then
+        return false
+    end
     param:setResult(fake)
     return true, ret, fake
 end

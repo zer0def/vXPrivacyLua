@@ -30,6 +30,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/ivDeleteConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:padding="6dp"
+                android:src="@drawable/ic_remix_delete_bin_2_fill"
+                app:layout_constraintBottom_toBottomOf="@+id/spConfigEdit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvConfigsPackageUid" />
+
             <TextView
                 android:id="@+id/tvConfigsPackageFull"
                 android:layout_width="0dp"
@@ -89,8 +103,7 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="5dp"
                 android:padding="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toStartOf="@+id/ivDeleteConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivConfigsAppIcon" />
 
@@ -122,6 +135,7 @@
             app:cardCornerRadius="20dp"
             app:cardElevation="3dp"
             app:contentPadding="5dp">
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clConfigSettingsLayout"
@@ -192,7 +206,7 @@
         app:srcCompat="@drawable/ic_remix_save_fill" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/flActionConfigImport"
+        android:id="@+id/flActionConfigDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -201,6 +215,18 @@
         app:layout_constraintBottom_toTopOf="@+id/flActionConfigSave"
         app:layout_constraintEnd_toEndOf="@+id/flActionConfigSave"
         app:layout_constraintStart_toStartOf="@+id/flActionConfigSave"
+        app:srcCompat="@drawable/ic_remix_delete_bin_2_fill" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/flActionConfigImport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/flActionConfigDelete"
+        app:layout_constraintEnd_toEndOf="@+id/flActionConfigDelete"
+        app:layout_constraintStart_toStartOf="@+id/flActionConfigDelete"
         app:srcCompat="@drawable/ic_remix_arrow_down_line" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

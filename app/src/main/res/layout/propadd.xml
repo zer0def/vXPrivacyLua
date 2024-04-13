@@ -10,7 +10,7 @@
         android:id="@+id/etPropSettingAddName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Property Name"/>
+        android:hint="@string/menu_add_property_name"/>
 
     <EditText
         android:id="@+id/etPropSettingAddSettingName"
@@ -19,7 +19,7 @@
         android:layout_below="@+id/etPropSettingAddName"
         android:layout_alignParentStart="true"
         android:layout_marginTop="0dp"
-        android:hint="Setting Name"
+        android:hint="@string/menu_add_property_setting_name"
         tools:layout_editor_absoluteX="16dp" />
 
 </RelativeLayout>

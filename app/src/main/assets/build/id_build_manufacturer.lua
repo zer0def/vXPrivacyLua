@@ -5,6 +5,9 @@ function after(hook, param)
 	end
 
     local fake = param:getSetting("device.manufacturer", "OnePlus")
+    if fake == nil then
+        return false
+    end
     param:setResult(fake)
     return true, ret, fake
 end

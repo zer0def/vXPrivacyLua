@@ -23,13 +23,17 @@ public class LuaHook extends VarArgFunction {
     private Map<String, Integer> propSettings;
     private Map<String, String> propMaps;
     private String key;
+    private boolean useDefault;
+    private String packageName;
 
-    LuaHook(Context context, Map<String, String> settings, Map<String, Integer> propSettings, Map<String, String> propMaps, String key) {
+    LuaHook(Context context, Map<String, String> settings, Map<String, Integer> propSettings, Map<String, String> propMaps, String key, boolean useDefault, String packageName) {
         this.context = context;
         this.settings = settings;
         this.propSettings = propSettings;
         this.propMaps = propMaps;
         this.key = key;
+        this.useDefault = useDefault;
+        this.packageName = packageName;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class LuaHook extends VarArgFunction {
                 //Log.i(TAG, "Dynamic invoke " + param.method);
                 List<LuaValue> values = new ArrayList<>();
                 values.add(LuaValue.valueOf(when));
-                values.add(CoerceJavaToLua.coerce(new XParam(context, param, settings, propSettings, propMaps, key)));
+                values.add(CoerceJavaToLua.coerce(new XParam(context, param, settings, propSettings, propMaps, key, useDefault, packageName)));
                 for (int i = 0; i < xargs.size(); i++)
                     values.add(xargs.get(i));
                 fun.invoke(values.toArray(new LuaValue[0]));

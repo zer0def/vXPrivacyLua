@@ -18,6 +18,7 @@ import eu.faircode.xlua.AppGeneric;
 import eu.faircode.xlua.R;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
+import eu.faircode.xlua.ui.interfaces.ISettingTransaction;
 import eu.faircode.xlua.utilities.StringUtil;
 
 public class SettingDeleteDialog extends AppCompatDialogFragment {
@@ -25,6 +26,8 @@ public class SettingDeleteDialog extends AppCompatDialogFragment {
 
     private LuaSettingExtended setting;
     private AppGeneric application;
+    private final int position;
+    private ISettingTransaction iCallback;
 
     private ISettingDialogListener listener;
 
@@ -32,14 +35,16 @@ public class SettingDeleteDialog extends AppCompatDialogFragment {
     private CheckBox cbDeleteDefaultMap;
     private CheckBox getCbDeleteSettingForceKill;
 
-
-    public SettingDeleteDialog(LuaSettingExtended setting, AppGeneric app) {
+    public SettingDeleteDialog(LuaSettingExtended setting, AppGeneric app) { this(setting, app, -1); }
+    public SettingDeleteDialog(LuaSettingExtended setting, AppGeneric app, int position) {
         setSetting(setting);
         setApplication(app);
+        this.position = position;
     }
 
     public void setApplication(AppGeneric application) { if(application != null) this.application = application; }
     public void setSetting(LuaSettingExtended setting) { if(setting != null) this.setting = setting; }
+    public void setCallback(ISettingTransaction transactionCallback) { this.iCallback = transactionCallback; }
 
     @NonNull
     @Override
@@ -74,7 +79,8 @@ public class SettingDeleteDialog extends AppCompatDialogFragment {
                         LuaSettingPacket packet = setting.createPacket(LuaSettingPacket.getCodeForDeletion(deleteSetting, deleteDefault), forceKill);
                         packet.identificationFromApplication(application);
                         Log.i(TAG, "Delete packet=" + packet);
-                        listener.pushSettingPacket(packet);
+                        if(iCallback == null) listener.pushSettingPacket(packet);
+                        else listener.pushSettingPacket(packet, setting, position, iCallback);
                     }
                 });
 

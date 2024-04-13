@@ -6,12 +6,9 @@ function after(hook, param)
 
     local fake = param:getSetting("android.build.date.utc")
     if fake == nil then
-        --fake = "1609459200000"
-        fake = "0"
+        return false
     end
 
-    log("Spoofing Build.TIME => 0")
     param:setResultToLong(fake)
-    --param:setResult(fake)
-    return true
+    return true, tostring(ret), fake
 end

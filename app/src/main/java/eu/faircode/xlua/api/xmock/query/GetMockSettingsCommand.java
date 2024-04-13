@@ -5,10 +5,10 @@ import android.database.Cursor;
 
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
-import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
-import eu.faircode.xlua.api.standard.QueryCommandHandler;
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
-import eu.faircode.xlua.api.standard.command.QueryPacket;
+import eu.faircode.xlua.api.xmock.database.LuaSettingsManager;
+import eu.faircode.xlua.api.xstandard.QueryCommandHandler;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.command.QueryPacket;
 import eu.faircode.xlua.utilities.CursorUtil;
 
 public class GetMockSettingsCommand extends QueryCommandHandler {
@@ -24,21 +24,19 @@ public class GetMockSettingsCommand extends QueryCommandHandler {
     @Override
     public Cursor handle(QueryPacket commandData) throws Throwable {
         LuaSettingPacket packet = commandData.readFullPacketFrom(LuaSettingPacket.class, UserIdentityPacket.USER_QUERY_PACKET_ONE);
-        if(packet == null)
-            return null;
-
+        if(packet == null) return null;
         packet.resolveUserID();
         packet.ensureCode(LuaSettingPacket.CODE_GET_MODIFIED);
         switch (packet.getCode()) {
             case LuaSettingPacket.CODE_GET_ALL:
-                return CursorUtil.toMatrixCursor(LuaSettingsDatabase.getAllSettings(
-                        commandData.getContext(), commandData.getDatabase(), packet), marshall, 0);
-            case LuaSettingPacket.CODE_GET_MODIFIED:
-                return CursorUtil.toMatrixCursor(LuaSettingsDatabase.getSettings(
+                return CursorUtil.toMatrixCursor(LuaSettingsManager.getAllSettings(
+                        commandData.getContext(),
                         commandData.getDatabase(), packet), marshall, 0);
-        }
-
-        return null;
+            case LuaSettingPacket.CODE_GET_MODIFIED:
+                return CursorUtil.toMatrixCursor(LuaSettingsManager.getSettings(
+                        commandData.getDatabase(),
+                        packet), marshall, 0);
+        } return null;
     }
 
     public static Cursor invoke(Context context, boolean marshall, LuaSettingPacket packet) {

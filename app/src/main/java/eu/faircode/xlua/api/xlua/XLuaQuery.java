@@ -12,7 +12,7 @@ import eu.faircode.xlua.api.app.XLuaApp;
 import eu.faircode.xlua.api.app.XLuaAppConversions;
 import eu.faircode.xlua.api.hook.XLuaHook;
 import eu.faircode.xlua.api.hook.XLuaHookConversions;
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
 import eu.faircode.xlua.api.xlua.query.GetAppsCommand;
 import eu.faircode.xlua.api.xlua.query.GetAssignedHooksCommand;
 import eu.faircode.xlua.api.xlua.query.GetHooksCommand;

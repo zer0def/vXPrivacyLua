@@ -1,0 +1,15 @@
+[
+  {
+    "collection": "PrivacyEx",
+    "group": "Read.Account",
+    "name": "Account.createFromParcel",
+    "author": "M66B",
+    "className": "android.accounts.Account",
+    "methodName": "CREATOR:createFromParcel",
+    "parameterTypes": ["android.os.Parcel"],
+    "returnType": "android.accounts.Account",
+    "minSdk": 5,
+    "luaScript": "@account_createfromparcel",
+    "settings": ["value.email"]
+  }
+]

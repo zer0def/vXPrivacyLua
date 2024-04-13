@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import eu.faircode.xlua.AppGeneric;
-import eu.faircode.xlua.api.standard.interfaces.IPacket;
-import eu.faircode.xlua.api.standard.interfaces.IUserPacket;
 
 public class LuaSettingPacket extends LuaSettingExtended  {
     public static LuaSettingPacket create(LuaSetting setting) { return new LuaSettingPacket(setting); }
@@ -103,11 +101,15 @@ public class LuaSettingPacket extends LuaSettingExtended  {
     }
 
     public boolean isGetValue() { return isCode(CODE_GET_VALUE);  }
-    public boolean isInsertOrUpdate() { return isCode(CODE_INSERT_UPDATE_SETTING); }
+    public boolean isInsertOrUpdateSetting() { return isCodes(true, CODE_INSERT_UPDATE_SETTING, CODE_INSERT_UPDATE_DEFAULT_AND_SETTING); }
+    public boolean isInsertOrUpdateDefault() { return isCodes(true, CODE_INSERT_UPDATE_DEFAULT_SETTING, CODE_INSERT_UPDATE_DEFAULT_AND_SETTING); }
+
+
     public boolean isGetObject() { return isCode(CODE_GET_OBJECT); }
     public boolean isGetValueOrDefault() { return isCode(CODE_GET_VALUE_OR_DEFAULT); }
     public boolean isOriginalCall() {  return isCode(CODE_VERSION_ONE); }
-    public boolean isDelete() { return (isNullOrEmptyCode() && value == null) || isCodes( CODE_DELETE_SETTING , CODE_DELETE_DEFAULT_AND_SETTING); }
+    public boolean isDelete() { return isDeleteSetting() || isDeleteDefault(); }
+    public boolean isDeleteSetting() { return (isNullOrEmptyCode() && value == null) || isCodes( CODE_DELETE_SETTING , CODE_DELETE_DEFAULT_AND_SETTING); }
     public boolean isDeleteDefault() { return isCodes(CODE_DELETE_DEFAULT_AND_SETTING , CODE_DELETE_DEFAULT_SETTING); }
     public boolean isGetAll() { return isCode(CODE_GET_ALL); }
     public boolean isGetModified() { return isCode(CODE_GET_MODIFIED); }

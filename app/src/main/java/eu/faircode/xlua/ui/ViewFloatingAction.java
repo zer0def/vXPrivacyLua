@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -33,11 +35,19 @@ public class ViewFloatingAction extends Fragment {
     private FloatingActionButton mainActionButton;
     private final List<FloatingActionButton> actionButtons = new ArrayList<>();
 
+    protected ProgressBar progressBar;
+    protected SwipeRefreshLayout swipeRefresh;
+
     public ViewFloatingAction() {  }
     //public ViewFloatingAction(Context context) { initActions(context); }
 
     protected List<FloatingActionButton> getHigherButtons() { return this.actionButtons; }
     protected FloatingActionButton getMainActionButton() { return this.mainActionButton; }
+
+    protected void setRefreshState(boolean refreshing) {
+        if(swipeRefresh != null) swipeRefresh.setRefreshing(refreshing);
+        if(progressBar != null) progressBar.setVisibility(refreshing ? View.VISIBLE : View.GONE);
+    }
 
     protected void bindTextViewsToAppId(View main, int tvAppIcon, int tvPackageName, int tvPackageFull, int tvPackageUid) {
         try {

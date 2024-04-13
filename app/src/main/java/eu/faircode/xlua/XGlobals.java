@@ -18,9 +18,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import eu.faircode.xlua.api.hook.XLuaHook;
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
 import eu.faircode.xlua.api.xlua.provider.XLuaHookProvider;
 import eu.faircode.xlua.utilities.DatabasePathUtil;
 
@@ -137,6 +138,12 @@ public class XGlobals {
         }
 
         DatabasePathUtil.log("Loaded hook definitions hooks=" + hooks.size() + " builtIns=" + builtIn.size(), false);
+    }
+
+    public static Map<String, XLuaHook> getAllHooks(Context context, XDatabase db) {
+        synchronized (hookLock) {
+            return new HashMap<>(hooks.size());
+        }
     }
 
     public static Collection<XLuaHook> getHooks(Context context, XDatabase db, boolean all) {

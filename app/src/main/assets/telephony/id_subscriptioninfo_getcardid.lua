@@ -5,6 +5,9 @@ function after(hook, param)
 	end
 
 	local settingValue = param:getSetting("gsm.sim.card.id", "8457894")--was 8457894
+	if settingValue == nil then
+	    return false
+	end
 	--check length
 	--local fake = tonumber(settingValue)
 	--if fake == nil then

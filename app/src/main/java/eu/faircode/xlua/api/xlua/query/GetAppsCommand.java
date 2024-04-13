@@ -3,14 +3,13 @@ package eu.faircode.xlua.api.xlua.query;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Binder;
-import android.util.Log;
 
 import java.util.Map;
 
 import eu.faircode.xlua.XUtil;
 import eu.faircode.xlua.api.XProxyContent;
-import eu.faircode.xlua.api.standard.QueryCommandHandler;
-import eu.faircode.xlua.api.standard.command.QueryPacket;
+import eu.faircode.xlua.api.xstandard.QueryCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.QueryPacket;
 import eu.faircode.xlua.api.xlua.provider.XLuaAppProvider;
 import eu.faircode.xlua.utilities.CursorUtil;
 
@@ -24,6 +23,7 @@ public class GetAppsCommand extends QueryCommandHandler {
         name = marshall ? "getApps2" : "getApps";
         this.marshall = marshall;
         requiresPermissionCheck = false;
+        this.requiresSingleThread = true;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class GetAppsCommand extends QueryCommandHandler {
                 XLuaAppProvider.getApps(
                         commandData.getContext(),
                         commandData.getDatabase(),
-                        XUtil.getUserId(Binder.getCallingUid()),
+                        Binder.getCallingUid(),
                         true,
                         true);
         return CursorUtil.toMatrixCursor(

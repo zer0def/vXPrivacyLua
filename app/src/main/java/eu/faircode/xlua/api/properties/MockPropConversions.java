@@ -14,8 +14,7 @@ import java.util.Map;
 
 import eu.faircode.xlua.DebugUtil;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
-import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
 
 public class MockPropConversions {
     private static final String TAG = "XLua.MockPropConversions";

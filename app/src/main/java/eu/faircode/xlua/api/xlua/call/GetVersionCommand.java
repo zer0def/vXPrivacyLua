@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import eu.faircode.xlua.api.XProxyContent;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
 import eu.faircode.xlua.api.xlua.provider.XLuaAppProvider;
 import eu.faircode.xlua.utilities.BundleUtil;
 

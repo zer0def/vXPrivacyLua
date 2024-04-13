@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
@@ -35,6 +39,8 @@ import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.api.xlua.XLuaCall;
 import eu.faircode.xlua.api.xmock.XMockQuery;
 import eu.faircode.xlua.api.xmock.call.KillAppCommand;
+import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.ui.dialogs.SettingAddDialog;
 import eu.faircode.xlua.ui.ViewFloatingAction;
 import eu.faircode.xlua.utilities.CollectionUtil;
@@ -42,8 +48,14 @@ import eu.faircode.xlua.utilities.SettingUtil;
 import eu.faircode.xlua.utilities.UiUtil;
 import eu.faircode.xlua.utilities.ViewUtil;
 
-public class FragmentSettings  extends ViewFloatingAction implements View.OnClickListener, View.OnLongClickListener {
-    private static final String TAG = "XLua.FragmentSettings";
+public class FragmentSettings
+        extends
+        ViewFloatingAction
+        implements
+        View.OnClickListener,
+        View.OnLongClickListener,
+        CompoundButton.OnCheckedChangeListener,
+        ILoader {
 
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefresh;
@@ -51,14 +63,17 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
 
     private ImageView ivExpander;
     private CardView cvAppView;
+    private CheckBox cbUseDefault;
 
     private Button btProperties, btConfigs, btKill;
     private boolean isViewOpen = true;
     private int lastHeight = 0;
 
+    private static final String USE_DEFAULT = "useDefault";
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View main = inflater.inflate(R.layout.settingrecyclerview, container, false);
-        this.TAG_ViewFloatingAction = TAG;
+        this.TAG_ViewFloatingAction = "XLua.FragmentSettings";
         this.application = AppGeneric.from(getArguments(), getContext());
         ivExpander = main.findViewById(R.id.ivExpanderSettingsApp);
         cvAppView = main.findViewById(R.id.cvAppInfoSettings);
@@ -66,6 +81,11 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
         btProperties = main.findViewById(R.id.btSettingsToProperties);
         btConfigs = main.findViewById(R.id.btSettingsToConfigs);
         btKill = main.findViewById(R.id.btSettingsKillApp);
+        cbUseDefault = main.findViewById(R.id.cbUseDefaultSettings);
+        if(this.application.isGlobal()) {
+            cbUseDefault.setEnabled(false);
+            btKill.setEnabled(false);
+        }else cbUseDefault.setChecked(XLuaCall.getSettingBoolean(getContext(), application.getUid(), application.getPackageName(), USE_DEFAULT));
 
         super.initActions();
         super.bindTextViewsToAppId(main, R.id.ivSettingsAppIcon, R.id.tvSettingsPackageName, R.id.tvSettingsPackageFull, R.id.tvSettingsPackageUid);
@@ -96,7 +116,6 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
         rvList.setAdapter(rvAdapter);
         rvList.addItemDecoration(SettingUtil.createSettingsDivider(getContext()));
 
-
         //Ensure Padding Between Top behind app card view and First Element
         cvAppView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -105,18 +124,13 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
                 if(height != lastHeight) {
                     ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) cvAppView.getLayoutParams();
                     int totalHeight = height + layoutParams.topMargin + layoutParams.bottomMargin + 15;
-                    Log.i(TAG, "Height changed before=" + lastHeight + " now=" + height);
                     rvList.setPadding(0, totalHeight, 0, 0);
-
                     int lastHeightCopy = lastHeight;
                     lastHeight = height;
-
                     UiUtil.setSwipeRefreshLayoutEndOffset(getContext(), swipeRefresh, totalHeight);
-
                     LinearLayoutManager layoutManager = (LinearLayoutManager) rvList.getLayoutManager();
                     assert layoutManager != null;
                     int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
-
                     if (firstVisiblePosition == 0) {
                         if(height > lastHeightCopy)
                             rvList.scrollBy(0, -totalHeight);
@@ -135,25 +149,25 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
     @Override
     public boolean onLongClick(View v) {
         int code = v.getId();
-        Log.i(TAG, "onLongClick=" + code);
+        XLog.i("onLongClick=" + code);
         switch (code) {
             case R.id.flSettingsButtonTwo:
-                Toast.makeText(getContext(), "Randomize All Selected", Toast.LENGTH_SHORT).show();
+                Snackbar.make(v, R.string.menu_settings_randomize_hint, Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.flSettingsButtonThree:
-                Toast.makeText(getContext(), "Add Setting", Toast.LENGTH_SHORT).show();
+                Snackbar.make(v, R.string.menu_settings_add_hint, Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.flSettingsButtonFour:
-                Toast.makeText(getContext(), "Save Un-Saved Settings", Toast.LENGTH_SHORT).show();
+                Snackbar.make(v, R.string.menu_settings_save_hint, Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.flSettingsButtonFive:
-                Toast.makeText(getContext(), "Delete ONLY Selected settings", Toast.LENGTH_SHORT).show();
+                Snackbar.make(v, R.string.menu_settings_delete_hint, Snackbar.LENGTH_SHORT).show();
                 break;
-                //case R.id.flActionConfigImport:
-            //    Toast.makeText(getContext(), "Import Config", Toast.LENGTH_SHORT).show();
-            //    break;
             case R.id.flSettingsButtonOne:
-                Toast.makeText(getContext(), "Options", Toast.LENGTH_SHORT).show();
+                Snackbar.make(v, R.string.menu_settings_hint, Snackbar.LENGTH_SHORT).show();
+                break;
+            case R.id.cbUseDefaultSettings:
+                Toast.makeText(getContext(), R.string.menu_settings_use_default_hint, Toast.LENGTH_LONG).show();
                 break;
         }
 
@@ -163,21 +177,17 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
     @SuppressLint("NonConstantResourceId") @Override
     public void onClick(View v) {
         int id = v.getId();
-        Log.i(TAG, " onClick id=" + id);
-
+        XLog.i("onClick id=" + id);
         switch (id) {
             case R.id.btSettingsKillApp:
                 final XResult res = KillAppCommand.invokeEx(v.getContext(), application.getPackageName(), application.getUid());
-                Toast.makeText(getContext(), res.getResultMessage(), Toast.LENGTH_SHORT).show();
+                Snackbar.make(v, res.getResultMessage(), Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.ivExpanderSettingsApp:
                 updateExpanded();
                 break;
             case R.id.btSettingsToProperties:
-                //have ability to go back and resume where we were last
-                //Save this instance jump there go back here if needed
                 Intent propsIntent = new Intent(v.getContext(), ActivityProperties.class);
-                Log.i(TAG, "opening props with package=" + application);
                 propsIntent.putExtra("packageName", application.getPackageName());
                 v.getContext().startActivity(propsIntent);
                 break;
@@ -187,7 +197,6 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
                 v.getContext().startActivity(configIntent);
                 break;
             case R.id.flSettingsButtonOne:
-                //invokeFloatingAction();
                 invokeFloatingActions();
                 break;
             case R.id.flSettingsButtonTwo:
@@ -208,6 +217,16 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
 
     }
 
+    @Override
+    public FragmentManager getManager() {  return getFragmentManager(); }
+
+    @Override
+    public Fragment getFragment() { return this; }
+
+    @Override
+    public AppGeneric getApplication() { return this.application; }
+
+    @Override
     public void filter(String query) { if (rvAdapter != null) rvAdapter.getFilter().filter(query); }
 
     private void wire() {
@@ -216,11 +235,30 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
         btKill.setOnClickListener(this);
         btConfigs.setOnClickListener(this);
         cvAppView.setOnClickListener(this);
+        cbUseDefault.setOnCheckedChangeListener(this);
+        cbUseDefault.setOnLongClickListener(this);
     }
 
     void updateExpanded() {
         isViewOpen = !isViewOpen;
-        ViewUtil.setViewsVisibility(ivExpander, isViewOpen, btProperties, btConfigs, btKill);
+        ViewUtil.setViewsVisibility(ivExpander, isViewOpen, btProperties, btConfigs, btKill, cbUseDefault);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        int id = buttonView.getId();
+        XLog.i("onCheckedChanged id=" + id);
+        try {
+            if(id == R.id.cbUseDefaultSettings) {
+                XLuaCall.putSettingBoolean(
+                        cbUseDefault.getContext(),
+                        application.getUid(),
+                        application.getPackageName(),
+                        USE_DEFAULT,
+                        isChecked,
+                        application.getForceStop());
+            }
+        }catch (Exception e) { XLog.e("onCheckedChanged Failed, id=" + id, e, true); }
     }
 
     @Override
@@ -229,8 +267,9 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
     @Override
     public void onPause() { super.onPause(); }
 
+    @Override
     public void loadData() {
-        Log.i(TAG, "Starting data loader");
+        XLog.i("Starting data loader");
         LoaderManager manager = getActivity().getSupportLoaderManager();
         manager.restartLoader(ActivityMain.LOADER_DATA, new Bundle(), dataLoaderCallbacks).forceLoad();
     }
@@ -241,11 +280,9 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
 
         @Override
         public void onLoadFinished(Loader<SettingsDataHolder> loader, SettingsDataHolder data) {
-            Log.i(TAG, "onLoadFinished");
+            XLog.i("onLoadFinished Data Loader Finished");
             if(data.exception == null) {
-                ActivityBase activity = (ActivityBase) getActivity();
-                if(activity != null) if (!data.theme.equals(activity.getThemeName())) activity.recreate();
-
+                UiUtil.initTheme(getActivity(), data.theme);
                 if(CollectionUtil.isValid(data.settings)) {
                     SettingUtil.sortSettings(data.settings);
                     rvAdapter.set(data.settings, application);
@@ -253,10 +290,7 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
 
                 swipeRefresh.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
-            }else {
-                Log.e(TAG, Log.getStackTraceString(data.exception));
-                Snackbar.make(Objects.requireNonNull(getView()), data.exception.toString(), Snackbar.LENGTH_LONG).show();
-            }
+            }else Snackbar.make(Objects.requireNonNull(getView()), data.exception.toString(), Snackbar.LENGTH_LONG).show();
         }
 
         @Override
@@ -265,33 +299,26 @@ public class FragmentSettings  extends ViewFloatingAction implements View.OnClic
 
     private static class SettingsDataLoader extends AsyncTaskLoader<SettingsDataHolder> {
         private AppGeneric application;
-        public SettingsDataLoader setApp(AppGeneric application) {
-            this.application = application;
-            return this;
-        }
+        public SettingsDataLoader setApp(AppGeneric application) { this.application = application; return this; }
 
-        SettingsDataLoader(Context context) {
-            super(context);
-            setUpdateThrottle(1000);
-        }
+        SettingsDataLoader(Context context) { super(context); setUpdateThrottle(1000); }
 
         @Nullable
         @Override
         public SettingsDataHolder loadInBackground() {
-            Log.i(TAG, "Data loader started");
+            XLog.i("Data loader started");
             SettingsDataHolder data = new SettingsDataHolder();
             try {
                 data.theme = XLuaCall.getTheme(getContext());
-                Log.i(TAG, "Getting settings for=" + application);
                 data.settings = new ArrayList<>(XMockQuery.getAllSettings(getContext(), application));
-                Log.i(TAG, "settings from cursor=" + data.settings.size());
+                XLog.i("Settings from Data Loader=" + data.settings.size());
             }catch (Throwable ex) {
                 data.settings.clear();
                 data.exception = ex;
-                Log.e(TAG, Objects.requireNonNull(ex.getMessage()));
+                XLog.e("Data Loader Exception", ex, true);
             }
 
-            Log.i(TAG, "DataLoader Settings Finished=" + data.settings.size());
+            XLog.i("Data Loader Settings Finished=" + data.settings.size());
             return data;
         }
     }

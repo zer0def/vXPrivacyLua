@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Process;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
 import eu.faircode.xlua.utilities.CursorUtil;
 import eu.faircode.xlua.utilities.DatabasePathUtil;
 

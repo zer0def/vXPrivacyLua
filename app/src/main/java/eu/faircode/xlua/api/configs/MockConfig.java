@@ -16,8 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
 import eu.faircode.xlua.utilities.BundleUtil;
 import eu.faircode.xlua.utilities.CollectionUtil;
 import eu.faircode.xlua.utilities.CursorUtil;
@@ -43,6 +43,21 @@ public class MockConfig extends UserIdentityPacket implements IJsonSerial, Parce
 
     public List<LuaSettingExtended> getSettings() { return settings; }
     public MockConfig setSettings(List<LuaSettingExtended> settings) { if(settings != null) this.settings = settings; return this; }
+
+    public List<LuaSettingExtended> getEnabledSettings() {
+        List<LuaSettingExtended> enabled = new ArrayList<>();
+        for(LuaSettingExtended setting : settings)
+            if(setting.isEnabled()) enabled.add(setting);
+
+        return enabled;
+    }
+
+    public List<LuaSettingExtended> getDisabledSettings() {
+        List<LuaSettingExtended> enabled = new ArrayList<>();
+        for(LuaSettingExtended setting : settings)
+            if(!setting.isEnabled()) enabled.add(setting);
+        return enabled;
+    }
 
     public void addSetting(LuaSettingExtended setting) {
         if(settings == null)
@@ -168,9 +183,11 @@ public class MockConfig extends UserIdentityPacket implements IJsonSerial, Parce
 
     public static class Table {
         public static final String name = "mock_configs";
+        public static final String FIELD_NAME = "name";
+        public static final String FIELD_SETTINGS = "settings";
         public static final LinkedHashMap<String, String> columns = new LinkedHashMap<String, String>() {{
-            put("name", "TEXT PRIMARY KEY");
-            put("settings", "TEXT");
+            put(FIELD_NAME, "TEXT PRIMARY KEY");
+            put(FIELD_SETTINGS, "TEXT");
         }};
     }
 }

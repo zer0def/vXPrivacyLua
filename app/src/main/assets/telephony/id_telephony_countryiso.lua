@@ -4,7 +4,11 @@ function after(hook, param)
 		return false
 	end
 
-	local fake = param:getSettingReMap("zone.country.iso", "phone.countryiso", "IS")
-	param:setResult(fake)
-	return true, ret, fake
+	local setting = param:getSettingReMap("zone.country.iso", "phone.countryiso", "IS")
+	if setting == nil then
+	    return false
+	end
+
+	param:setResult(setting)
+	return true, ret, setting
 end

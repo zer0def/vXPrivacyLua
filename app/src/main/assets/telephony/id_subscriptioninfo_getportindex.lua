@@ -4,8 +4,11 @@ function after(hook, param)
 		ret = 0
 	end
 
-	local settingValue = param:getSetting("gsm.index.sim.port", "8")
-	local fake = tonumber(settingValue)
-	param:setResult(fake)
-	return true, tostring(ret), settingValue
+	local setting = param:getSettingInt("gsm.index.sim.port", 8)
+	if setting == nil then
+	    return false
+	end
+
+	param:setResult(setting)
+	return true, tostring(ret), tostring(setting)
 end

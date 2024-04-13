@@ -4,9 +4,13 @@ function after(hook, param)
 		return false
 	end
 
-    local fakeString = param:getSetting("gsm.setting.network.opportunistic.bool", "false")
+    local setting = param:getSetting("gsm.setting.network.opportunistic.bool", "false")
+    if setting == nil then
+        return false
+    end
+
     local fake = false
-    if fakeString == "true" then
+    if setting == "true" then
         fake = true
     end
 

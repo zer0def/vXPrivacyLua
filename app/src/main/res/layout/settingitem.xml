@@ -23,7 +23,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/ivBtSaveSettingReset"
+                android:id="@+id/ivBtSettingReset"
                 android:layout_width="?android:attr/listPreferredItemHeightSmall"
                 android:layout_height="?android:attr/listPreferredItemHeightSmall"
                 android:alpha="0.5"
@@ -79,9 +79,9 @@
                 android:clickable="false"
                 android:focusable="false"
                 android:src="@drawable/ic_remix_dice_fill"
-                app:layout_constraintBottom_toBottomOf="@+id/ivBtSaveSettingReset"
-                app:layout_constraintStart_toEndOf="@+id/ivBtSaveSettingReset"
-                app:layout_constraintTop_toTopOf="@+id/ivBtSaveSettingReset" />
+                app:layout_constraintBottom_toBottomOf="@+id/ivBtSettingReset"
+                app:layout_constraintStart_toEndOf="@+id/ivBtSettingReset"
+                app:layout_constraintTop_toTopOf="@+id/ivBtSettingReset" />
 
             <ImageView
                 android:id="@+id/ivBtSaveSettingSetting"
@@ -91,9 +91,9 @@
                 android:clickable="false"
                 android:focusable="false"
                 android:src="@drawable/ic_remix_save_3_fill"
-                app:layout_constraintBottom_toBottomOf="@+id/ivBtSaveSettingReset"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBtSettingReset"
                 app:layout_constraintStart_toEndOf="@+id/ivBtDeleteSetting"
-                app:layout_constraintTop_toTopOf="@+id/ivBtSaveSettingReset" />
+                app:layout_constraintTop_toTopOf="@+id/ivBtSettingReset" />
 
             <Spinner
                 android:id="@+id/spSettingRandomizerSpinner"

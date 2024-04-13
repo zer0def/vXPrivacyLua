@@ -7,7 +7,7 @@ function after(hook, param)
     local fakeStr = param:getSetting("gsm.sim.type", "1")
     local fake = tonumber(fakeStr)
     if fake == nil then
-        fake = 1
+        return false
     end
 
     if fake ~= 0 and fake ~= 1 then

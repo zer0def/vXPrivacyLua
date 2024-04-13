@@ -6,6 +6,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <TextView
+        android:id="@+id/tvHookSettingDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="10dp"
+        android:clickable="false"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:lines="4"
+        android:maxLines="4"
+        android:singleLine="false"
+        android:text="Some Setting Description goes here, this text is a test to see how it wold appear on the UI if it was very long Description"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHookSettingFullName" />
+
+    <ImageView
+        android:id="@+id/ivExpanderSettingValue"
+        android:layout_width="30dp"
+        android:layout_height="?android:attr/listPreferredItemHeightSmall"
+        android:alpha="0.5"
+        android:clickable="false"
+        android:focusable="false"
+        android:rotation="87"
+        android:src="@drawable/ic_remix_settings_6_line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/ivBtHookSettingRandomize"
         android:layout_width="?android:attr/listPreferredItemHeightSmall"
@@ -67,17 +101,16 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHookSettingName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvHookSettingDescription" />
 
     <TextView
         android:id="@+id/tvHookSettingName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:layout_marginEnd="10dp"
         android:clickable="false"
         android:ellipsize="end"
@@ -85,8 +118,17 @@
         android:lines="1"
         android:text="Some_Cool_Setting"
         android:textAppearance="@android:style/TextAppearance.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/tvHookSettingFullName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/ivExpanderSettingValue"
+        app:layout_constraintTop_toTopOf="@+id/ivExpanderSettingValue" />
+
+    <TextView
+        android:id="@+id/tvHookSettingFullName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="unique.setting"
+        app:layout_constraintBottom_toBottomOf="@+id/ivExpanderSettingValue"
+        app:layout_constraintStart_toStartOf="@+id/tvHookSettingName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,9 +8,9 @@ import eu.faircode.xlua.XDatabase;
 import eu.faircode.xlua.XUtil;
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.settings.LuaSetting;
-import eu.faircode.xlua.api.standard.QueryCommandHandler;
-import eu.faircode.xlua.api.standard.command.QueryPacket;
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.QueryCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.QueryPacket;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
 
 
 public class GetSettingsCommand extends QueryCommandHandler {

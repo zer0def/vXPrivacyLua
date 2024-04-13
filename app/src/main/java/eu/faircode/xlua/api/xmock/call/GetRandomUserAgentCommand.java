@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 
 import eu.faircode.xlua.api.XProxyContent;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
 import eu.faircode.xlua.api.useragent.MockUserAgent;
-import eu.faircode.xlua.api.useragent.MockUserAgentDatabaseManager;
+import eu.faircode.xlua.api.xmock.database.MockUserAgentManager;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 public class GetRandomUserAgentCommand extends CallCommandHandler {
@@ -19,7 +19,7 @@ public class GetRandomUserAgentCommand extends CallCommandHandler {
 
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
-        return MockUserAgentDatabaseManager.getRandomUserAgent(
+        return MockUserAgentManager.getRandomUserAgent(
                 commandData.getContext(),
                 commandData.getDatabase(),
                 commandData.getExtraString(MockUserAgent.Table.FIELD_DEVICE, MockUserAgent.GET_UA_ANDROID)).toBundle();

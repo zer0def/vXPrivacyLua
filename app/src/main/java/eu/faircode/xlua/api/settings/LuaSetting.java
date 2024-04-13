@@ -16,13 +16,12 @@ import org.json.JSONObject;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
 import eu.faircode.xlua.utilities.ContentValuesUtil;
 import eu.faircode.xlua.utilities.CursorUtil;
 import eu.faircode.xlua.utilities.JSONUtil;
 import eu.faircode.xlua.utilities.ParcelUtil;
-import eu.faircode.xlua.utilities.StringUtil;
 
 public class LuaSetting extends UserIdentityPacket implements IJsonSerial, Parcelable {
     public static LuaSetting create() { return new LuaSetting(); }
@@ -59,6 +58,7 @@ public class LuaSetting extends UserIdentityPacket implements IJsonSerial, Parce
     public String getValue() { return this.value; }
     public LuaSetting setValue(String value) { if(value != null) this.value = value; return this; }
     public LuaSetting setValueForce(String value) { this.value = value; return this; }
+    public LuaSetting setValueToNull() { this.value = null; return this; }
 
     public boolean isValueNull() { return this.value == null; }
     public boolean isValueEmpty() { return this.value != null && TextUtils.isEmpty(this.value); }

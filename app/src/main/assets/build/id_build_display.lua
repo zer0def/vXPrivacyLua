@@ -5,6 +5,9 @@ function after(hook, param)
 	end
 
     local fake = param:getSetting("android.build.display.id", "TQ3A.230805.001 release-keys")
+    if fake == nil then
+        return false
+    end
     param:setResult(fake)
     return true, ret, fake
 end

@@ -4,10 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 
 import eu.faircode.xlua.api.XProxyContent;
-import eu.faircode.xlua.api.standard.QueryCommandHandler;
-import eu.faircode.xlua.api.standard.command.QueryPacket;
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
-import eu.faircode.xlua.api.useragent.MockUserAgentDatabaseManager;
+import eu.faircode.xlua.api.xstandard.QueryCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.QueryPacket;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xmock.database.MockUserAgentManager;
 import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.utilities.CursorUtil;
 
@@ -28,16 +28,16 @@ public class GetMockAgentsCommand extends QueryCommandHandler {
         String[] selection = commandData.getSelection();
         if(selection != null && selection.length > 0) {
             String dev = selection[0];
-            if(dev == null || dev.isEmpty() || !MockUserAgentDatabaseManager.DEVICES.contains(dev)) return null;
+            if(dev == null || dev.isEmpty() || !MockUserAgentManager.DEVICES.contains(dev)) return null;
             return CursorUtil.toMatrixCursor(
-                    MockUserAgentDatabaseManager.getUserAgentGroup(
+                    MockUserAgentManager.getUserAgentGroup(
                             commandData.getContext(),
                             commandData.getDatabase(), dev), marshall, 0);
         } return null;
     }
 
     public static Cursor invoke(Context context, String device, boolean marshall) {
-        if(!MockUserAgentDatabaseManager.DEVICES.contains(device)) {
+        if(!MockUserAgentManager.DEVICES.contains(device)) {
             XLog.e("Device being passed to the User Agent Database dosnt exist... " + device);
             return null;
         }

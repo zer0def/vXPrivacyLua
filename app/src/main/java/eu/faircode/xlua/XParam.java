@@ -19,6 +19,7 @@
 
 package eu.faircode.xlua;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -28,6 +29,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcel;
 import android.util.Log;
 import android.view.InputDevice;
@@ -78,6 +80,8 @@ public class XParam {
     private final Map<String, Integer> propSettings;
     private final Map<String, String> propMaps;
     private final String key;
+    private final boolean useDefault;
+    private final String packageName;
 
     private static final Map<Object, Map<String, Object>> nv = new WeakHashMap<>();
     private UserContextMaps getUserMaps() { return new UserContextMaps(this.settings, this.propMaps, this.propSettings); }
@@ -89,7 +93,9 @@ public class XParam {
             Map<String, String> settings,
             Map<String, Integer> propSettings,
             Map<String, String> propMaps,
-            String key) {
+            String key,
+            boolean useDefault,
+            String packageName) {
         this.context = context;
         this.field = field;
         this.param = null;
@@ -99,6 +105,8 @@ public class XParam {
         this.propSettings = propSettings;
         this.propMaps = propMaps;
         this.key = key;
+        this.useDefault = useDefault;
+        this.packageName = packageName;
     }
 
     // Method param
@@ -108,7 +116,9 @@ public class XParam {
             Map<String, String> settings,
             Map<String, Integer> propSettings,
             Map<String, String> propMaps,
-            String key) {
+            String key,
+            boolean useDefault,
+            String packageName) {
         this.context = context;
         this.field = null;
         this.param = param;
@@ -123,6 +133,8 @@ public class XParam {
         this.propSettings = propSettings;
         this.propMaps = propMaps;
         this.key = key;
+        this.useDefault = useDefault;
+        this.packageName = packageName;
     }
 
     //
@@ -146,6 +158,14 @@ public class XParam {
                 return null;//return MockUtils.HIDE_PROPERTY;
             if(code == MockPropSetting.PROP_SKIP)
                 return MockUtils.NOT_BLACKLISTED;
+            else {
+                if(code != MockPropSetting.PROP_FORCE) {
+                    try {
+                        Object res = getResult();
+                        if(res == null) return MockUtils.NOT_BLACKLISTED;
+                    }catch (Throwable e) {  }
+                }
+            }
         }
 
         //add force options now
@@ -158,6 +178,53 @@ public class XParam {
         }
 
         return MockUtils.NOT_BLACKLISTED;
+    }
+
+    @SuppressWarnings("unused")
+    public String filterBinder(String filterKind) {
+        try {
+            switch (filterKind) {
+                case "adid":
+                    IBinder binder = (IBinder)getThis();
+                    String iDesc = binder.getInterfaceDescriptor();
+                    if("com.google.android.gms.ads.identifier.internal.IAdvertisingIdService".equalsIgnoreCase(iDesc)) {
+                        XLog.i("Is GOOGLE GMS (adid)");
+                        int code = (int)getArgument(0);
+                        XLog.i("Is Code (adid) =" + code);
+                        if(code == 1) {
+                            XLog.i("Creating the Parcel: (adid)");
+                            @SuppressLint("SoonBlockedPrivateApi")
+                            Method methodObtain = Parcel.class.getDeclaredMethod("obtain", int.class);
+                            methodObtain.setAccessible(true);
+                            Parcel reply = (Parcel) methodObtain.invoke(null, param.args[2]);
+                            //Parcel.obtain(int at index 2) (we do this becuz that function cannot be accessed)
+                            // static protected final Parcel obtain(int obj)
+                            //2 = reply position but on this OS Code it does not represent it as an INTEGER but a long ????
+                            XLog.i("Created the Parcel:  (adid)");
+
+                            reply.setDataPosition(0);
+                            reply.writeNoException();
+
+                            XLog.i("Set Position in Parcel:  (adid)");
+
+                            String adid = getSetting("unique.google.advertising.id","a7bf815a-c37b-40db-be9d-3b395abbe888");
+                            if(adid == null)
+                                return null;
+
+                            XLog.i("Ad id is not null " + adid + "    (adid)");
+
+                            reply.writeString(adid);
+
+                            XLog.i("Wrote the data:  (adid)");
+                            //param.setResult(true);
+                            return adid;
+                            //param.setResult(true);
+                        }
+                    }
+                    break;
+            }
+        }catch (Exception e) { XLog.e("Failed to Filter", e); }
+        return null;
     }
 
     @SuppressWarnings("unused")
@@ -213,6 +280,19 @@ public class XParam {
 
     @SuppressWarnings("unused")
     public List<String> filterFileStringList(List<String> files) { return FileUtil.filterList(files); }
+
+    @SuppressWarnings("unused")
+    public boolean listHasString(String setting, String str) {
+        if(str.equalsIgnoreCase(this.packageName) || str.toLowerCase().contains("webview")) return true;
+        if(!StringUtil.isValidAndNotWhitespaces(str)) return false;
+        String allow = getSetting(setting);
+        if(!StringUtil.isValidAndNotWhitespaces(allow)) return false;
+        if(allow.equals("*")) return true;
+        if(!allow.contains(",")) return allow.equalsIgnoreCase(str);
+        String[] splt = allow.split(",");
+        for(String s : splt) if(s.equalsIgnoreCase(str)) return true;
+        return false;
+    }
 
 
     //
@@ -610,16 +690,14 @@ public class XParam {
     @SuppressWarnings("unused")
     public Throwable getException() {
         Throwable ex = (this.field == null ? this.param.getThrowable() : null);
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Get " + this.getPackageName() + ":" + this.getUid() + " result=" + ex.getMessage());
+        if(DebugUtil.isDebug()) Log.i(TAG, "Get " + this.getPackageName() + ":" + this.getUid() + " result=" + ex.getMessage());
         return ex;
     }
 
     @SuppressWarnings("unused")
     public Object getResult() throws Throwable {
         Object result = (this.field == null ? this.param.getResult() : this.field.get(null));
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Get " + this.getPackageName() + ":" + this.getUid() + " result=" + result);
+        if (DebugUtil.isDebug()) Log.i(TAG, "Get " + this.getPackageName() + ":" + this.getUid() + " result=" + result);
         return result;
     }
 
@@ -632,6 +710,7 @@ public class XParam {
     @SuppressWarnings("unused")
     public void setResultByteArray(Byte[] result) throws Throwable { setResult(result); }
 
+    @SuppressWarnings("unused")
     public void setResultBytes(byte[] result) throws Throwable {
         if(result == null) {
             Log.e(TAG, "Set Bytes is NULL ??? fix");
@@ -660,12 +739,7 @@ public class XParam {
 
     @SuppressWarnings("unused")
     public void setResult(Object result) throws Throwable {
-        //Do Note they have support if you pass a LONG String
-        //
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Set " + this.getPackageName() + ":" + this.getUid() +
-                    " result=" + result + " return=" + this.returnType);
-
+        if (DebugUtil.isDebug()) Log.i(TAG, "Set " + this.getPackageName() + ":" + this.getUid() + " result=" + result + " return=" + this.returnType);
         if (result != null && !(result instanceof Throwable) && this.returnType != null) {
             result = coerceValue(this.returnType, result);
             if (!boxType(this.returnType).isInstance(result))
@@ -674,51 +748,44 @@ public class XParam {
         }
 
         if (this.field == null)
-            if (result instanceof Throwable)
-                this.param.setThrowable((Throwable) result);
-            else
-                this.param.setResult(result);
-        else
-            this.field.set(null, result);
+            if (result instanceof Throwable) this.param.setThrowable((Throwable) result);
+            else this.param.setResult(result);
+        else this.field.set(null, result);
     }
 
     @SuppressWarnings("unused")
-    public int getSettingInt(String name, int defaultValue) {
+    public Integer getSettingInt(String name, int defaultValue) {
         String setting = getSetting(name);
-        if(!StringUtil.isValidString(setting))
-            return defaultValue;
-
+        if(setting == null) return useDefault ? defaultValue : null;
         try {
             return Integer.parseInt(setting);
         }catch (Exception e) {
             Log.e(TAG, "Invalid Numeric Input::\n", e);
-            return defaultValue;
+            return useDefault ? defaultValue : null;
         }
     }
 
     @SuppressWarnings("unused")
-    public String getSettingReMap(String name, String oldName) {
-        return getSettingReMap(name, oldName, null);
-    }
+    public String getSettingReMap(String name, String oldName) { return getSettingReMap(name, oldName, null); }
 
     @SuppressWarnings("unused")
     public String getSettingReMap(String name, String oldName, String defaultValue) {
+        if(name == null && oldName == null) return useDefault ? defaultValue : null;
         String setting = getSetting(name);
-        if(setting == null && StringUtil.isValidString(oldName)) {
-            Log.w(TAG, "setting[" + name + "] was null trying old setting name [" + oldName + "]");
+        if (setting != null) return setting;
+        if(oldName != null) {
             setting = getSetting(oldName);
+            if (setting != null) return setting;
+            return useDefault ? defaultValue : null;
         }
 
-        if(setting == null)
-            return defaultValue;
-        else
-            return setting;
+        return useDefault ? defaultValue : null;
     }
 
     @SuppressWarnings("unused")
     public String getSetting(String name, String defaultValue) {
         String setting = getSetting(name);
-        return setting == null ? defaultValue : setting;
+        return setting == null && useDefault ? defaultValue : setting;
     }
 
     @SuppressWarnings("unused")

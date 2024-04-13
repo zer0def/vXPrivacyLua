@@ -7,7 +7,7 @@ function after(hook, param)
 
 	local lacString = param:getSetting("gsm.cell.location.lac")
 	local cidString = param:getSetting("gsm.cell.location.cid")
-	if lacString ~= nil and cidString ~= cidString then
+	if lacString ~= nil and cidString ~= nil then
         local fakelac = tonumber(lacString)
         local fakecid = tonumber(cidString)
         if fakelac ~= nil and fakecid ~= nil then

@@ -66,12 +66,9 @@ public class XResult {
     }
 
     public static XResult combine(XResult a, XResult b) {
-        if(a == null && b != null)
-            return b;
-        if(b == null && a != null)
-            return a;
-        if(a == null && b == null)
-            return XResult.create().setFailed("No Message");
+        if(a == null && b != null) return b;
+        if(b == null && a != null) return a;
+        if(a == null && b == null) return XResult.create().setFailed("No Message");
 
         XResult res = XResult.create();
         res.methodName = new StringBuilder()
@@ -343,14 +340,10 @@ public class XResult {
     @Override
     public String toString() {
         return new StringBuilder()
-                .append("result:\n").append(getResultMessage())
-                .append("\n")
-                .append("error:\n").append(errorMessage)
-                .append("\n")
-                .append("message:\n").append(message)
-                .append("\n")
-                .append("method:\n").append(methodName)
-                .append("\n")
+                .append("result:\n").append(getResultMessage()).append("\n")
+                .append("error:\n").append(errorMessage).append("\n")
+                .append("message:\n").append(message).append("\n")
+                .append("method:\n").append(methodName).append("\n")
                 .append("extra:\n").append(extra)
                 .toString();
     }

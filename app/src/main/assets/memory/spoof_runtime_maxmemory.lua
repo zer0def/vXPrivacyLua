@@ -13,7 +13,7 @@ function after(hook, param)
 
     local total = param:getSetting("memory.total")
     if total == nil then
-        total = "80"
+        return false
     end
 
     local t = tonumber(total)
@@ -21,7 +21,7 @@ function after(hook, param)
         return false
     end
 
-    log("Spoofing maxMemory => [MAX]:[" .. total .. "]")
+    --log("Spoofing maxMemory => [MAX]:[" .. total .. "]")
     local fake = param:gigabytesToBytesString(t)
     param:setResultToLong(fake)
     --param:setResult(fake)

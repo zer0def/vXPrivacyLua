@@ -2,8 +2,8 @@ package eu.faircode.xlua.api.hook.group;
 
 import android.content.ContentValues;
 
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
-import eu.faircode.xlua.api.standard.interfaces.IDataDynamic;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.interfaces.IDataDynamic;
 
 public class XLuaGroupDataHelper implements IDataDynamic {
     private final String packageName;

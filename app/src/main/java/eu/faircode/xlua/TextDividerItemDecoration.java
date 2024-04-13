@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import eu.faircode.xlua.api.standard.interfaces.IDividerKind;
-import eu.faircode.xlua.loggers.LogHelper;
+import eu.faircode.xlua.api.xstandard.interfaces.IDividerKind;
 
 public class TextDividerItemDecoration extends RecyclerView.ItemDecoration {
     //Shitty expiremnt class for Dividers on RecyclerViews

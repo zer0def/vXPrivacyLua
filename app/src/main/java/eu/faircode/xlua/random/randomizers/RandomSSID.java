@@ -101,5 +101,4 @@ public class RandomSSID implements IRandomizer {
     public String toString() {
         return getName();
     }
-
 }

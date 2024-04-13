@@ -15,9 +15,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import eu.faircode.xlua.XDatabase;
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
-import eu.faircode.xlua.api.standard.interfaces.IDBQuery;
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.interfaces.IDBQuery;
+import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
 import eu.faircode.xlua.utilities.BundleUtil;
 import eu.faircode.xlua.utilities.ContentValuesUtil;
 import eu.faircode.xlua.utilities.CursorUtil;
@@ -64,8 +64,9 @@ public class MockPropSetting extends MockPropMap implements IJsonSerial, IDBQuer
     public Integer getValue() { return value; }
     public MockPropSetting setValue(Integer value) { if(value != null) this.value = value; return this; }
 
-    public boolean isSkip() { return this.value != null && this.value == PROP_SKIP; }
-    public boolean isHide() { return this.value != null && this.value == PROP_HIDE; }
+    public boolean isSkip() { return !isNullOrEmptyValue() && this.value == PROP_SKIP; }
+    public boolean isHide() { return !isNullOrEmptyValue() && this.value == PROP_HIDE;}
+    public boolean isForce() { return !isNullOrEmptyValue() && this.value == PROP_FORCE; }
     public boolean isNullOrEmptyValue() { return this.value == null || this.value == PROP_NULL; }
 
     @Override
@@ -150,7 +151,7 @@ public class MockPropSetting extends MockPropMap implements IJsonSerial, IDBQuer
     @Override
     public SqlQuerySnake createQuery(XDatabase db) {
         ensureIdentification();
-        return SqlQuerySnake.create(db, MockPropSetting.Table.name)
+        return SqlQuerySnake.create(db, MockPropSetting.Table.NAME)
                 .whereColumn("user", this.user)
                 .whereColumn("category", this.category)
                 .whereColumn("name", this.name);
@@ -175,8 +176,8 @@ public class MockPropSetting extends MockPropMap implements IJsonSerial, IDBQuer
     }
 
     public static class Table {
-        public static final String name = "prop_settings";
-        public static final LinkedHashMap<String, String> columns = new LinkedHashMap<String, String>() {{
+        public static final String NAME = "prop_settings";
+        public static final LinkedHashMap<String, String> COLUMNS = new LinkedHashMap<String, String>() {{
             put("user", "INTEGER");
             put("category", "TEXT");
             put("name", "TEXT PRIMARY KEY");

@@ -22,6 +22,10 @@ function after(hook, param)
     log("MEDIA DRM ID Return result (SHA256) was=" .. drm256 .. " DRM ID Return result (HEX STRING) was=" .. drmHex)
     local drmFake = param:getSetting("unique.drm.id", fakeString)
     if drmFake == nil then
+        return false
+    end
+
+    if drmFake == nil then
         -- check length ensure its 32 ? string of length 32 (since we are working with 16 bytes)
         log("DRM Error Setting value is NULL make sure its 32 char alpha numeric String. setting to: " .. fakeString)
         drmFake = fakeString

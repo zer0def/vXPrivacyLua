@@ -7,9 +7,10 @@ import android.util.Log;
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.XResult;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
-import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
+import eu.faircode.xlua.api.xmock.database.LuaSettingsManager;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
+import eu.faircode.xlua.logger.XLog;
 
 public class PutMockSettingCommand extends CallCommandHandler {
     public PutMockSettingCommand() {
@@ -20,34 +21,28 @@ public class PutMockSettingCommand extends CallCommandHandler {
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
         LuaSettingPacket packet = commandData.readExtrasAs(LuaSettingPacket.class);
-        if(packet == null)
-            return XResult.create().setMethodName("putMockSetting").setFailed("Setting Packet is NULL").toBundle();
-
+        if(packet == null) return XResult.create().setMethodName("putMockSetting").setFailed("Setting Packet is NULL").toBundle();
         packet.resolveUserID();
         packet.ensureCode(LuaSettingPacket.CODE_INSERT_UPDATE_SETTING);
-        Log.i("XLua.PutMockSettingCommand", "setting packet=" + packet);
+
+        XLog.i("[" + name + "] Command: packet=\n" + packet);
 
         XResult res1 = null;
         XResult res2 = null;
-
         switch (packet.getCode()) {
             case LuaSettingPacket.CODE_INSERT_UPDATE_SETTING:
             case LuaSettingPacket.CODE_DELETE_SETTING:
-                res1 = LuaSettingsDatabase.putSetting(commandData.getContext(), commandData.getDatabase(), packet);
-                break;
+                return LuaSettingsManager.putSetting(commandData.getContext(), commandData.getDatabase(), packet).toBundle();
             case LuaSettingPacket.CODE_INSERT_UPDATE_DEFAULT_SETTING:
             case LuaSettingPacket.CODE_DELETE_DEFAULT_SETTING:
-                res2 = LuaSettingsDatabase.putDefaultMappedSetting(commandData.getContext(), commandData.getDatabase(), packet);
-                break;
-            default:
+                return LuaSettingsManager.putDefaultMappedSetting(commandData.getContext(), commandData.getDatabase(), packet).toBundle();
             case LuaSettingPacket.CODE_INSERT_UPDATE_DEFAULT_AND_SETTING:
             case LuaSettingPacket.CODE_DELETE_DEFAULT_AND_SETTING:
-                res1 = LuaSettingsDatabase.putSetting(commandData.getContext(), commandData.getDatabase(), packet);
-                res2 = LuaSettingsDatabase.putDefaultMappedSetting(commandData.getContext(), commandData.getDatabase(), packet);
+                res1 = LuaSettingsManager.putSetting(commandData.getContext(), commandData.getDatabase(), packet);
+                res2 = LuaSettingsManager.putDefaultMappedSetting(commandData.getContext(), commandData.getDatabase(), packet);
                 break;
-        }
-
-        return XResult.combine(res1, res2).toBundle();
+            default: return XResult.create().setMethodName("putMockSetting").setFailed("Unsupported Code: " + packet.getCode()).toBundle();
+        } return XResult.combine(res1, res2).toBundle();
     }
 
     public static Bundle invoke(Context context, LuaSettingPacket packet) {

@@ -11,8 +11,8 @@ function after(hook, param)
 	ts.secondaryServerThreshold = param:toLongFromStr(t)
 	ts.visibleAppThreshold = param:toLongFromStr(t)
 	ts.foregroundAppThreshold = param:toLongFromStr(t)
-	log("[MemoryInfo].avilMem=" .. a .. " => [max] => " .. m .. " => [thr] => " .. t)
+	--log("[MemoryInfo].avilMem=" .. a .. " => [max] => " .. m .. " => [thr] => " .. t)
 	--local mem = param:getFakeMemoryInfo(a, m, t, false)
 	--param:setResult(mem)
-	return true
+	return true, "N/A", "avail=" .. a .. " max=" .. m
 end

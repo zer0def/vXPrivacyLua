@@ -17,7 +17,18 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import eu.faircode.xlua.api.app.XLuaApp;
+import eu.faircode.xlua.api.hook.LuaHooksGroup;
+import eu.faircode.xlua.api.hook.XLuaHook;
+import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
+import eu.faircode.xlua.api.xlua.XLuaCall;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
+import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.utilities.StringUtil;
 
 public class AppGeneric {
@@ -28,6 +39,7 @@ public class AppGeneric {
     private int uid;
     private String name;
     private String packageName;
+    private boolean forceStop;
 
     public static AppGeneric from(Bundle b, Context context) {
         if(b == null || !b.containsKey("packageName")) {
@@ -67,6 +79,9 @@ public class AppGeneric {
     public int getUid() { return uid; }
     public String getName() { return name; }
     public String getPackageName() { return packageName; }
+
+    public boolean getForceStop() { return !isGlobal() && this.forceStop; }
+    public void setForceStop(boolean forceStop) { this.forceStop = forceStop; }
 
     public void initView(Context context, View view, int appIcon, int textViewPackageName, int textViewPackageNameFull, int textViewPackageUid) {
         try {

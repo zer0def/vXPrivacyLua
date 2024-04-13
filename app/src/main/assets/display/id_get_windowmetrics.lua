@@ -6,20 +6,17 @@ function after(hook, param)
 
     local height = param:getSettingInt("display.height", 3100)
     local width = param:getSettingInt("display.width", 1400)
-
-    --local wMetricsClass = luajava.bindClass("android.view.WindowMetrics")
-    --local rectClass = luajava.bindClass("android.graphics.Rect")
+    if height == nil or width == nil then
+        return false
+    end
 
     local oRect = res:getBounds()
-    log("Display Swapping: [DP] " .. tostring(oRect.height()) .. "x" .. tostring(oRect.width()) .. " => " .. tostring(height) .. "x" .. tostring(width))
-
+    local old = tostring(oRect.height()) .. "x" .. tostring(oRect.width())
+    local new = tostring(height) .. "x" .. tostring(width)
     local rect = luajava.newInstance("android.graphics.Rect", 0, 0, width, height)
-    --local wMetric = luajava.newInstance("android.view.WindowMetrics", rect, null)
     local wMetric = luajava.newInstance("android.view.WindowMetrics", rect, res:getWindowInsets())
-
-    log("Display DIM Swapped: [" .. tostring(rect.height()) .. "x" .. tostring(rect.width())  .. "]")
     param:setResult(wMetric)
-    return true
+    return true, old, new
 end
 
 

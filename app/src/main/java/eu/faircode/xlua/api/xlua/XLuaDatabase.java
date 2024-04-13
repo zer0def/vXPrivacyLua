@@ -9,17 +9,37 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import org.json.JSONObject;
+import org.luaj.vm2.Globals;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import eu.faircode.xlua.AppGeneric;
 import eu.faircode.xlua.DebugUtil;
 import eu.faircode.xlua.XDatabase;
 import eu.faircode.xlua.XGlobals;
+import eu.faircode.xlua.XUtil;
+import eu.faircode.xlua.api.hook.LuaHookUpdate;
 import eu.faircode.xlua.api.hook.XLuaHook;
-import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
-import eu.faircode.xlua.api.standard.interfaces.IInitDatabase;
+import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
+import eu.faircode.xlua.api.hook.assignment.LuaAssignmentEx;
+import eu.faircode.xlua.api.hook.assignment.LuaAssignmentPacket;
+import eu.faircode.xlua.api.xlua.database.LuaHookManager;
+import eu.faircode.xlua.api.xmock.database.LuaSettingsManager;
+import eu.faircode.xlua.api.xstandard.JsonHelper;
+import eu.faircode.xlua.api.xstandard.database.DatabaseHelp;
+import eu.faircode.xlua.api.xstandard.database.DatabaseUtil;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.interfaces.IInitDatabase;
+import eu.faircode.xlua.api.xstandard.interfaces.IJCompare;
+import eu.faircode.xlua.hooks.LuaHook;
+import eu.faircode.xlua.ui.HookGroup;
+import eu.faircode.xlua.ui.interfaces.IConfigUpdate;
 import eu.faircode.xlua.utilities.DatabasePathUtil;
+import eu.faircode.xlua.utilities.StringUtil;
 
 public class XLuaDatabase implements IInitDatabase {
     private XDatabase db = null;
@@ -63,7 +83,7 @@ public class XLuaDatabase implements IInitDatabase {
         }
 
         if(!init) {
-            if(!check_1) check_1 = LuaSettingsDatabase.forceDatabaseCheck(context, db);
+            if(!check_1) check_1 = LuaSettingsManager.forceDatabaseCheck(context, db) && LuaSettingsManager.compareJsonToDatabase(context, db);
             DatabasePathUtil.log("XLUA init settings=" + check_1, false);
             init = check_1;
             //Make a centralized core for logs
@@ -183,23 +203,22 @@ public class XLuaDatabase implements IInitDatabase {
                 //deleteHook(_db, "Privacy.ContentResolver/query16");
                 //deleteHook(_db, "Privacy.ContentResolver/query26");
 
-                renameHook(_db, "TelephonyManager/getDeviceId", "TelephonyManager.getDeviceId");
-                renameHook(_db, "TelephonyManager/getDeviceId/slot", "TelephonyManager.getDeviceId/slot");
-                renameHook(_db, "TelephonyManager/getGroupIdLevel1", "TelephonyManager.getGroupIdLevel1");
-                renameHook(_db, "TelephonyManager/getImei", "TelephonyManager.getImei");
-                renameHook(_db, "TelephonyManager/getImei/slot", "TelephonyManager.getImei/slot");
-                renameHook(_db, "TelephonyManager/getLine1Number", "TelephonyManager.getLine1Number");
-                renameHook(_db, "TelephonyManager/getMeid", "TelephonyManager.getMeid");
-                renameHook(_db, "TelephonyManager/getMeid/slot", "TelephonyManager.getMeid/slot");
-                renameHook(_db, "TelephonyManager/getNetworkSpecifier", "TelephonyManager.getNetworkSpecifier");
-                renameHook(_db, "TelephonyManager/getSimSerialNumber", "TelephonyManager.getSimSerialNumber");
-                renameHook(_db, "TelephonyManager/getSubscriberId", "TelephonyManager.getSubscriberId");
-                renameHook(_db, "TelephonyManager/getVoiceMailAlphaTag", "TelephonyManager.getVoiceMailAlphaTag");
-                renameHook(_db, "TelephonyManager/getVoiceMailNumber", "TelephonyManager.getVoiceMailNumber");
-                renameHook(_db, "Settings.Secure.getString", "Settings.Secure.getString/android_id");
-                renameHook(_db, "SystemProperties.get", "SystemProperties.get/serial");
-                renameHook(_db, "SystemProperties.get/default", "SystemProperties.get.default/serial");
-
+                renameHookId(_db, "TelephonyManager/getDeviceId", "TelephonyManager.getDeviceId");
+                renameHookId(_db, "TelephonyManager/getDeviceId/slot", "TelephonyManager.getDeviceId/slot");
+                renameHookId(_db, "TelephonyManager/getGroupIdLevel1", "TelephonyManager.getGroupIdLevel1");
+                renameHookId(_db, "TelephonyManager/getImei", "TelephonyManager.getImei");
+                renameHookId(_db, "TelephonyManager/getImei/slot", "TelephonyManager.getImei/slot");
+                renameHookId(_db, "TelephonyManager/getLine1Number", "TelephonyManager.getLine1Number");
+                renameHookId(_db, "TelephonyManager/getMeid", "TelephonyManager.getMeid");
+                renameHookId(_db, "TelephonyManager/getMeid/slot", "TelephonyManager.getMeid/slot");
+                renameHookId(_db, "TelephonyManager/getNetworkSpecifier", "TelephonyManager.getNetworkSpecifier");
+                renameHookId(_db, "TelephonyManager/getSimSerialNumber", "TelephonyManager.getSimSerialNumber");
+                renameHookId(_db, "TelephonyManager/getSubscriberId", "TelephonyManager.getSubscriberId");
+                renameHookId(_db, "TelephonyManager/getVoiceMailAlphaTag", "TelephonyManager.getVoiceMailAlphaTag");
+                renameHookId(_db, "TelephonyManager/getVoiceMailNumber", "TelephonyManager.getVoiceMailNumber");
+                renameHookId(_db, "Settings.Secure.getString", "Settings.Secure.getString/android_id");
+                renameHookId(_db, "SystemProperties.get", "SystemProperties.get/serial");
+                renameHookId(_db, "SystemProperties.get/default", "SystemProperties.get.default/serial");
 
                 if(DebugUtil.isDebug())
                     DatabasePathUtil.log("Database version=" + _db.getVersion(), false);
@@ -218,17 +237,92 @@ public class XLuaDatabase implements IInitDatabase {
                 db.writeUnlock();// first lock is the bug
             }
 
-            try {
-                XGlobals.loadHooks(context, db);
-            }catch (Throwable ex) {
-                DatabasePathUtil.log("Failed to load in hooks: " + ex, true);
-            }
+            initHooks(db, context);
         }
 
         return init;
     }
 
-    private static void renameHook(SQLiteDatabase _db, String oldId, String newId) {
+    public void initHooks(XDatabase db, Context context) {
+
+        try {
+            if(db.hasTable(XLuaHook.Table.name)) {
+                //Honestly none if this is needed ssince it stores it in memory , only worry about assignemnts for now ignore assignments
+                /*DatabasePathUtil.log("First XLua Database Check starting...", false);
+                List<XLuaHook> databaseHooks = new ArrayList<>(DatabaseHelp.getFromDatabase(db, XLuaHook.Table.name, XLuaHook.class));
+                List<XLuaHook> assetHooks = XLuaHook.readHooks(context, XUtil.getApk(context));
+                for(XLuaHook hookDb : databaseHooks) {
+                    for (XLuaHook assetHook : assetHooks) {
+                        if(hookDb.getId().equalsIgnoreCase(assetHook.getId())) {
+                            String jOne = hookDb.toJSON();
+                            String jTwo = assetHook.toJSON();
+                            if(!jOne.equalsIgnoreCase(jTwo)) {
+                                DatabaseHelp.insertItem(db, XLuaHook.Table.name, assetHook, true);
+                            }
+                        }
+                    }
+                }*/
+
+                //This check is in case the Hook changed ID aka renamed
+                /*DatabasePathUtil.log("Second XLua Database Check starting (first finished)...", false);
+                List<LuaHookUpdate> updates = new ArrayList<>(JsonHelper.findJsonElementsFromAssets(XUtil.getApk(context), "updates.json", true, LuaHookUpdate.class));
+                for(LuaHookUpdate up : updates) {
+                    try {
+                        List<LuaAssignmentEx> assignments = new ArrayList<>(SqlQuerySnake.create(db, "assignment")
+                                .whereColumn("hook", up.getOldId())
+                                .queryAll(LuaAssignmentEx.class, true));
+
+                        if(!assignments.isEmpty()) {
+                            for(LuaAssignmentEx ass : assignments) {
+                                ass.setHookId(up.getNewId());
+                                SqlQuerySnake snakeQuery = SqlQuerySnake
+                                        .create(db, "assignment")
+                                        .whereColumn("hook", up.getOldId());
+
+                                DatabaseHelp.updateItem(snakeQuery, ass);
+                            }
+                        }
+                    }catch (Exception e) { DatabasePathUtil.log("Failed to Query Assignments", true); }
+
+                    try {
+                        XLuaHook oldHook = SqlQuerySnake.create(db, XLuaHook.Table.name)
+                                .whereColumn("id", up.getOldId())
+                                .queryGetFirstAs(XLuaHook.class, true);
+
+                        if(oldHook != null) {
+                            String[] data = up.getNewId().split(".");
+                            oldHook.setCollection(data[0]);
+                            oldHook.setName(up.getNewId().substring(data[0].length()));
+                            SqlQuerySnake snakeQuery = SqlQuerySnake
+                                    .create(db, XLuaHook.Table.name)
+                                    .whereColumn("id", up.getOldId());
+
+                            DatabaseHelp.updateItem(snakeQuery, oldHook);
+                        }
+                    }catch (Exception e) { DatabasePathUtil.log("Failed to Query Hooks", true); }
+                }
+                DatabasePathUtil.log("Finished Checking XLua Database for Updates....", false);*/
+            }
+
+            XGlobals.loadHooks(context, db);
+
+            //Pre-Check ? or can happen after
+            //Go through each Hook in the Database of 'hook' and Get the object (we will need the json form)
+            //then for each hook in assets compare if same ID then check if the "toJson" contents are the same
+            //If not remove the old 'hook' from the Table of 'hooks' then insert the new one
+            //Try all this without the "loadHooks" function ?
+
+
+            //First check if the Hook Exists in the DATABASE (OLD) ID
+            //IF Exists in the Database under 'hooks' or 'assignments' under the 'old' name
+            //Get the 'assignment' or 'hook' from the 'old' name, then Delete the 'old' from 'assignment' and or 'hook' tables
+            //Then the object pulled update the 'id' or whatever info insert it back into the Tables
+        }catch (Throwable ex) {
+            DatabasePathUtil.log("Failed to load in hooks: " + ex, true);
+        }
+    }
+
+    private static void renameHookId(SQLiteDatabase _db, String oldId, String newId) {
         try {
             ContentValues cv = new ContentValues();
             cv.put("hook", newId);
@@ -237,6 +331,17 @@ public class XLuaDatabase implements IInitDatabase {
         } catch (Throwable ex) {
             DatabasePathUtil.log("Renamed hook " + oldId + " into " + newId + " ex=" + ex.getMessage(), true);
         }
+    }
+
+    //assignment
+    //pkg, uid, hook (ID) not Name
+    //
+    //hook (ID) not name
+    //
+    //this.collection + "." + this.name;
+
+    public static void updateInternalHooks(SQLiteDatabase _db, String oldId, String newId) {
+
     }
 
     @Override

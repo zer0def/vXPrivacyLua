@@ -1,11 +1,6 @@
 package eu.faircode.xlua;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,164 +8,177 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import eu.faircode.xlua.api.XResult;
 import eu.faircode.xlua.api.properties.MockPropPacket;
 import eu.faircode.xlua.api.properties.MockPropSetting;
 
-import eu.faircode.xlua.api.xmock.XMockCall;
+import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.ui.interfaces.ILoader;
+import eu.faircode.xlua.ui.interfaces.IPropertyUpdate;
+import eu.faircode.xlua.ui.transactions.PropTransactionResult;
+import eu.faircode.xlua.ui.PropertyQue;
 import eu.faircode.xlua.ui.dialogs.PropertyDeleteDialog;
+import eu.faircode.xlua.utilities.StringUtil;
 
 public class AdapterProperty  extends RecyclerView.Adapter<AdapterProperty.ViewHolder> implements Filterable {
-    private static final String TAG = "XLua.AdapterProperty";
-
-    private List<MockPropSetting> properties = new ArrayList<>();
+    private final List<MockPropSetting> properties = new ArrayList<>();
     private List<MockPropSetting> filtered = new ArrayList<>();
 
     private boolean dataChanged = false;
     private CharSequence query = null;
 
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Object lock = new Object();
-
-    private FragmentManager fragmentManager;
-    private AppGeneric application;
+    private ILoader fragmentLoader;
+    private PropertyQue propertiesQue;
 
     public class ViewHolder extends RecyclerView.ViewHolder
-            implements CompoundButton.OnCheckedChangeListener, View.OnLongClickListener {
+            implements
+            CompoundButton.OnCheckedChangeListener,
+            View.OnLongClickListener,
+            View.OnClickListener,
+            IPropertyUpdate {
 
         final View itemView;
         final TextView tvPropName;
-        final CheckBox cbHide;
-        final CheckBox cbSkip;
-
-        final ConstraintLayout constraintLayout;
-        final CardView cardView;
+        final CheckBox cbHide, cbSkip, cbForce;
+        final ImageView ivDelete;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-
             tvPropName = itemView.findViewById(R.id.tvPropPropertyName);
             cbHide = itemView.findViewById(R.id.cbPropHide);
             cbSkip = itemView.findViewById(R.id.cbPropSkip);
-
-            constraintLayout = itemView.findViewById(R.id.clPropertiesPropPropLayout);
-            cardView = itemView.findViewById(R.id.cvPropertyProp);
+            cbForce = itemView.findViewById(R.id.cbPropForce);
+            ivDelete = itemView.findViewById(R.id.ivBtPropSettingDelete);
         }
 
         private void unWire() {
             cbHide.setOnCheckedChangeListener(null);
+            cbHide.setOnLongClickListener(null);
             cbSkip.setOnCheckedChangeListener(null);
-            constraintLayout.setOnLongClickListener(null);
-            cardView.setOnLongClickListener(null);
+            cbSkip.setOnLongClickListener(null);
+            cbForce.setOnCheckedChangeListener(null);
+            cbForce.setOnLongClickListener(null);
+            ivDelete.setOnClickListener(null);
+            ivDelete.setOnLongClickListener(null);
         }
 
         private void wire() {
             cbHide.setOnCheckedChangeListener(this);
+            cbHide.setOnLongClickListener(this);
             cbSkip.setOnCheckedChangeListener(this);
-            constraintLayout.setOnLongClickListener(this);
-            cardView.setOnLongClickListener(this);
+            cbSkip.setOnLongClickListener(this);
+            cbForce.setOnCheckedChangeListener(this);
+            cbForce.setOnLongClickListener(this);
+            ivDelete.setOnClickListener(this);
+            ivDelete.setOnLongClickListener(this);
         }
 
         @SuppressLint({"NonConstantResourceId", "NotifyDataSetChanged"})
         @Override
         public void onCheckedChanged(final CompoundButton cButton, final boolean isChecked) {
-            Log.i(TAG, "onCheckedChanged: " + cButton.getId() + " isChecked=" + isChecked);
-            final MockPropSetting setting = filtered.get(getAdapterPosition());
-
-            int valueNeeded = 0;
-            if(isChecked) {
-                switch (cButton.getId()) {
-                    case R.id.cbPropSkip: valueNeeded = MockPropPacket.PROP_SKIP; break;
-                    case R.id.cbPropHide: valueNeeded = MockPropPacket.PROP_HIDE; break;
-                    default: valueNeeded = MockPropPacket.PROP_NULL; break;
-                }
-            }
-
-            final int code = isChecked && valueNeeded != MockPropPacket.PROP_NULL ? MockPropPacket.CODE_INSERT_UPDATE_PROP_SETTING : MockPropPacket.CODE_DELETE_PROP_SETTING;
-            Log.i(TAG, "CheckBox Invoked code =" + code + " valueNeeded=" + valueNeeded + " application=" + application + " isChecked=" + isChecked + " id=" + cButton.getId() + " setting=" + setting);
-            final MockPropPacket packet = MockPropPacket.create(application.getUid(), application.getPackageName(), setting.getName(), setting.getSettingName(), valueNeeded, code);
-            final Context context = cButton.getContext();
-
-            Log.i(TAG, "Packet Created for Property: packet=" + packet);
-            executor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    synchronized (lock) {
-                        final XResult ret = XMockCall.putMockProp(context, packet);
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @SuppressLint("NotifyDataSetChanged")
-                            @Override
-                            public void run() {
-                                if(ret.succeeded())
-                                    setting.setValue(packet.getValue());
-
-                                Toast.makeText(context, ret.getResultMessage(), Toast.LENGTH_SHORT).show();
-                                notifyDataSetChanged();
-                            }
-                        });
+            int code = cButton.getId();
+            XLog.i("onCheckedChanged: code=" + code + " isChecked=" + isChecked);
+            try {
+                int adapterPosition = getAdapterPosition();
+                MockPropSetting setting = filtered.get(adapterPosition);
+                int valueNeeded = MockPropPacket.PROP_NULL;
+                if(isChecked)
+                    switch (code) {
+                        case R.id.cbPropSkip: valueNeeded = MockPropPacket.PROP_SKIP; break;
+                        case R.id.cbPropHide: valueNeeded = MockPropPacket.PROP_HIDE; break;
+                        case R.id.cbPropForce: valueNeeded = MockPropPacket.PROP_FORCE; break;
                     }
-                }
-            });
 
-
-            notifyDataSetChanged();
+                propertiesQue.sendPropertySetting(cButton.getContext(), setting, adapterPosition, valueNeeded, false, this);
+            }catch (Exception e) { XLog.e("onCheckedChanged Failed: code=" + code + " isChecked" + isChecked, e, true); }
         }
 
         @SuppressLint("NonConstantResourceId")
         @Override
         public boolean onLongClick(View v) {
             int code = v.getId();
-            Log.i(TAG, "onLongClick=" + code);
+            XLog.i("onLongClick: code=" + code);
+            try {
+                switch (code) {
+                    case R.id.cbPropSkip:
+                        Snackbar.make(v, R.string.check_prop_skip_hint, Snackbar.LENGTH_LONG).show();
+                        break;
+                    case R.id.cbPropHide:
+                        Snackbar.make(v, R.string.check_prop_hide_hint, Snackbar.LENGTH_LONG).show();
+                        break;
+                    case R.id.cbPropForce:
+                        Snackbar.make(v, R.string.check_prop_force_hint, Snackbar.LENGTH_LONG).show();
+                        break;
+                    case R.id.ivBtPropSettingDelete:
+                        Snackbar.make(v, R.string.menu_property_setting_delete_hint, Snackbar.LENGTH_LONG).show();
+                        break;
+                }
+            }catch (Exception e) { XLog.e("onLongClick Failed: code=" + code, e, true); }
+            return true;
+        }
 
-            MockPropSetting setting = filtered.get(getAdapterPosition());
+        @SuppressLint("NonConstantResourceId")
+        @Override
+        public void onClick(View v) {
+            int code = v.getId();
+            XLog.i("onClick: code=" + code);
+            try {
+                int position = getAdapterPosition();
+                MockPropSetting setting = filtered.get(position);
+                switch (code) {
+                    case R.id.ivBtPropSettingDelete:
+                        new PropertyDeleteDialog()
+                                .addAdapterPosition(position)
+                                .addSetting(setting)
+                                .addCallback(this)
+                                .addPropertyQue(propertiesQue)
+                                .show(fragmentLoader.getManager(), v.getContext().getString(R.string.title_delete_property));
+                        break;
+                }
+            }catch (Exception e) { XLog.e("Failed to Invoke onClick: code=" + code, e, true);  }
+        }
 
-            switch (code) {
-                case R.id.cvPropertyProp:
-                case R.id.clPropertiesPropPropLayout:
-                    PropertyDeleteDialog setDialog = new PropertyDeleteDialog();
-                    assert fragmentManager != null;
-                    setDialog.addApplication(application);
-                    setDialog.addSetting(setting);
-                    setDialog.show(fragmentManager, "Delete Property");
-                    break;
-            }
-
-            return false;
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        public void onPropertyUpdate(PropTransactionResult result) {
+            try {
+                Toast.makeText(result.context, result.result.getResultMessage(), Toast.LENGTH_SHORT).show();
+                MockPropSetting propSetting = result.getSetting();
+                if(result.hasAnySucceeded()) {
+                    if(result.code == MockPropPacket.CODE_DELETE_PROP_MAP_AND_SETTING) {
+                        fragmentLoader.loadData();
+                    }else {
+                        int adapterPosition = result.getAdapterPosition();
+                        propSetting.setValue(result.getPacket().getValue());//Update it, ensure this works
+                        if(adapterPosition > -1) notifyItemChanged(adapterPosition);
+                        else notifyDataSetChanged();
+                    }
+                }
+            }catch (Exception e) { XLog.e("Failed to Post Property Results!", e, true); }
         }
     }
 
     AdapterProperty() { setHasStableIds(true); }
-    AdapterProperty(FragmentManager manager, AppGeneric application) {
-        Log.i(TAG, "Within Adapter for Property , application=" + application);
-        setHasStableIds(true);
-        this.fragmentManager = manager;
-        this.application = application;
-    }
+    AdapterProperty(ILoader loader, PropertyQue propQue) { this(); this.fragmentLoader = loader; this.propertiesQue = propQue; }
 
     void set(List<MockPropSetting> properties) {
         this.dataChanged = true;
         this.properties.clear();
         this.properties.addAll(properties);
-
-        if(DebugUtil.isDebug())
-            Log.i(TAG, "Internal Count=" + this.properties.size());
-
+        XLog.i("Properties Settings Count=" + properties.size());
         getFilter().filter(query);
     }
 
@@ -184,9 +192,7 @@ public class AdapterProperty  extends RecyclerView.Adapter<AdapterProperty.ViewH
                 AdapterProperty.this.query = query;
                 List<MockPropSetting> visible = new ArrayList<>(properties);
                 List<MockPropSetting> results = new ArrayList<>();
-
-                if (TextUtils.isEmpty(query))
-                    results.addAll(visible);
+                if (!StringUtil.isValidAndNotWhitespaces(query)) results.addAll(visible);
                 else {
                     String q = query.toString().toLowerCase().trim();
                     for(MockPropSetting prop : visible) {
@@ -205,8 +211,6 @@ public class AdapterProperty  extends RecyclerView.Adapter<AdapterProperty.ViewH
             @Override
             protected void publishResults(CharSequence query, FilterResults result) {
                 final List<MockPropSetting> props = (result.values == null ? new ArrayList<MockPropSetting>() : (List<MockPropSetting>) result.values);
-                Log.i(TAG, "Filtered props size=" + props.size());
-
                 if(dataChanged) {
                     dataChanged = false;
                     filtered = props;
@@ -225,7 +229,6 @@ public class AdapterProperty  extends RecyclerView.Adapter<AdapterProperty.ViewH
         private final boolean refresh;
         private final List<MockPropSetting> prev;
         private final List<MockPropSetting> next;
-
         AppDiffCallback(boolean refresh, List<MockPropSetting> prev, List<MockPropSetting> next) {
             this.refresh = refresh;
             this.prev = prev;
@@ -233,14 +236,10 @@ public class AdapterProperty  extends RecyclerView.Adapter<AdapterProperty.ViewH
         }
 
         @Override
-        public int getOldListSize() {
-            return prev.size();
-        }
+        public int getOldListSize() { return prev.size(); }
 
         @Override
-        public int getNewListSize() {
-            return next.size();
-        }
+        public int getNewListSize() { return next.size(); }
 
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
@@ -265,19 +264,17 @@ public class AdapterProperty  extends RecyclerView.Adapter<AdapterProperty.ViewH
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.propelement, parent, false));
-    }
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.propelement, parent, false)); }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.unWire();
         MockPropSetting property = filtered.get(position);
-
         holder.tvPropName.setText(property.getName());
+        holder.tvPropName.setSelected(true);
         holder.cbSkip.setChecked(property.isSkip());
         holder.cbHide.setChecked(property.isHide());
-
+        holder.cbForce.setChecked(property.isForce());
         holder.wire();
     }
 }

@@ -13,8 +13,8 @@ package eu.faircode.xlua.api.hook.assignment;
 
 import android.content.ContentValues;
 
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
-import eu.faircode.xlua.api.standard.interfaces.IDataDynamic;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.interfaces.IDataDynamic;
 
 public class XLuaAssignmentDataHelper implements IDataDynamic {
     private String packageName;

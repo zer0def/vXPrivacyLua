@@ -5,8 +5,8 @@ import android.os.Bundle;
 
 import eu.faircode.xlua.XGlobals;
 import eu.faircode.xlua.api.XProxyContent;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 public class GetGroupsCommand extends CallCommandHandler {
@@ -14,6 +14,7 @@ public class GetGroupsCommand extends CallCommandHandler {
     public GetGroupsCommand() {
         name = "getGroups";
         requiresPermissionCheck = false;
+        this.requiresSingleThread = true;
     }
 
     @Override

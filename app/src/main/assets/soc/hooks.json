@@ -1,6 +1,6 @@
 [
   {
-    "builtin": false,
+    "builtin": true,
     "collection": "PrivacyEx",
     "group": "Spoof.SOC.EX",
     "name": "Build.SOC_MODEL",
@@ -20,7 +20,6 @@
     "luaScript": "@id_build_soc_model",
     "settings":["cpu.soc.model"]
   },
-
   {
     "builtin": true,
     "collection": "PrivacyEx",
@@ -41,7 +40,6 @@
     "notify":false,
     "luaScript": "@id_cpuinfo_one"
   },
-
   {
     "builtin": true,
     "collection": "PrivacyEx",
@@ -62,7 +60,6 @@
     "notify":false,
     "luaScript": "@id_cpuinfo_two"
   },
-
   {
     "builtin": true,
     "collection": "PrivacyEx",
@@ -83,7 +80,6 @@
     "notify":false,
     "luaScript": "@set_owner_fd_bypass"
   },
-
   {
     "builtin": true,
     "collection": "PrivacyEx",
@@ -105,10 +101,6 @@
     "luaScript": "@id_processor_count",
     "settings": [ "cpu.processor.count" ]
   },
-
-  //set_owner_fd_bypass
-  
-
   {
     "builtin": true,
     "collection": "PrivacyEx",

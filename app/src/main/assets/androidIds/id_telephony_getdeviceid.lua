@@ -17,7 +17,7 @@ function after(hook, param)
 	end
 
 	if fake == nil then
-		fake = "000"
+		return false
 	end
 
 	--log("Setting Device ID [" .. ret .. "] => " .. fake)

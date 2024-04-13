@@ -97,13 +97,23 @@
             android:layout_height="wrap_content"
             android:paddingBottom="15dp">
 
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/cbUseDefaultSettings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/title_use_default"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btSettingsToProperties"
+                app:layout_constraintTop_toTopOf="@+id/btSettingsToProperties" />
+
             <Button
                 android:id="@+id/btSettingsKillApp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_remix_skull_2_line"
-                android:text="Terminate"
+                android:text="@string/button_terminate"
                 app:layout_constraintEnd_toEndOf="@+id/btSettingsToProperties"
                 app:layout_constraintStart_toStartOf="@+id/btSettingsToProperties"
                 app:layout_constraintTop_toBottomOf="@+id/btSettingsToProperties" />
@@ -180,8 +190,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/ic_remix_settings_line"
-                android:text="Properties"
+                android:drawableLeft="@drawable/i8_prop_24"
+                android:text="@string/button_properties"
                 app:layout_constraintStart_toStartOf="@+id/ivExpanderSettingsApp"
                 app:layout_constraintTop_toBottomOf="@+id/ivSettingsAppIcon" />
 
@@ -189,9 +199,9 @@
                 android:id="@+id/btSettingsToConfigs"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/ic_remix_image_edit_line"
+                android:drawableLeft="@drawable/document_config_svgrepo_com"
                 android:layout_height="wrap_content"
-                android:text="Configs"
+                android:text="@string/button_configs"
                 app:layout_constraintEnd_toEndOf="@+id/btSettingsKillApp"
                 app:layout_constraintStart_toStartOf="@+id/btSettingsKillApp"
                 app:layout_constraintTop_toBottomOf="@+id/btSettingsKillApp" />

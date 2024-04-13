@@ -5,9 +5,9 @@ import android.os.Bundle;
 
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.app.LuaSimplePacket;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
-import eu.faircode.xlua.api.xlua.database.LuaAppDatabase;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
+import eu.faircode.xlua.api.xlua.database.LuaAppManager;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 public class ClearDataCommand extends CallCommandHandler {
@@ -20,7 +20,7 @@ public class ClearDataCommand extends CallCommandHandler {
     @Override
     public Bundle handle(CallPacket commandData) throws Throwable {
         return BundleUtil.createResultStatus(
-                LuaAppDatabase.clearData(
+                LuaAppManager.clearData(
                         commandData.getExtras().getInt("user"),
                         commandData.getDatabase()));
     }

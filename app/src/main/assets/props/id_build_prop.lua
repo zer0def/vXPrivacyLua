@@ -5,12 +5,12 @@ function after(hook, param)
 		return false
 	end
 
-	local ret = param:getResult() 
-	if res == nil then
-		log("Filtering Property::" .. prop)
-	else 
-		log("Filtering Property::" .. prop .. " [RETURN]::" .. ret)
-	end
+	--local ret = param:getResult()
+	--if res == nil then
+	--	log("Filtering Property::" .. prop)
+	--else
+	--	log("Filtering Property::" .. prop .. " [RETURN]::" .. ret)
+	--end
 
 	local filtered = param:filterBuildProperty(prop)
 	if filtered == "NotBlacklisted" then 

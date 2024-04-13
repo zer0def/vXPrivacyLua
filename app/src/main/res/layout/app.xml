@@ -1,11 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="6dp"
     android:paddingBottom="6dp">
+
+    <ImageView
+        android:id="@+id/ivPropertiesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.6"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="6dp"
+        android:src="@drawable/i8_prop_24"
+        app:layout_constraintBottom_toBottomOf="@+id/ivSettingsExButton"
+        app:layout_constraintStart_toEndOf="@+id/ivSettingsExButton"
+        app:layout_constraintTop_toTopOf="@+id/ivSettingsExButton"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/ivSettingsExButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.6"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="6dp"
+        android:src="@drawable/ic_remix_settings_line"
+        app:layout_constraintBottom_toBottomOf="@+id/ivConfigsButton"
+        app:layout_constraintStart_toEndOf="@+id/ivConfigsButton"
+        app:layout_constraintTop_toTopOf="@+id/ivConfigsButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/ivConfigsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.6"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="6dp"
+        android:src="@drawable/document_config_svgrepo_com"
+        app:layout_constraintBottom_toBottomOf="@+id/ivGroupHooks"
+        app:layout_constraintStart_toEndOf="@+id/ivGroupHooks"
+        app:layout_constraintTop_toTopOf="@+id/ivGroupHooks" />
+
+    <ImageView
+        android:id="@+id/ivGroupHooks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.6"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="6dp"
+        android:src="@drawable/hook_svgrepo_com__1_"
+        app:layout_constraintStart_toStartOf="@+id/cbForceStop"
+        app:layout_constraintTop_toBottomOf="@+id/cbForceStop" />
 
     <ImageView
         android:id="@+id/ivExpander"
@@ -139,15 +197,15 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGroup"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cbForceStop" />
+        app:layout_constraintTop_toBottomOf="@+id/ivGroupHooks" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/grpExpanded"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:constraint_referenced_ids="cbForceStop,rvGroup" />
+        app:constraint_referenced_ids="cbForceStop,rvGroup,ivGroupHooks,ivConfigsButton,ivPropertiesButton,ivSettingsExButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

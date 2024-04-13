@@ -5,9 +5,9 @@ import android.os.Bundle;
 
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.XResult;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
-import eu.faircode.xlua.api.xlua.database.LuaAppDatabase;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
+import eu.faircode.xlua.api.xlua.database.LuaAppManager;
 import eu.faircode.xlua.api.app.LuaSimplePacket;
 
 public class ClearAppCommand extends CallCommandHandler {
@@ -24,7 +24,7 @@ public class ClearAppCommand extends CallCommandHandler {
         return XResult.create()
                 .setMethodName("clearApp")
                 .setExtra(packet.toString())
-                .setResult(LuaAppDatabase.clearApp(
+                .setResult(LuaAppManager.clearApp(
                         commandData.getContext(), commandData.getDatabase(), packet)).toBundle();
     }
 

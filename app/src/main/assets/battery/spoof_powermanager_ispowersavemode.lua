@@ -1,11 +1,19 @@
 function after(hook, param)
-	local ret = param:getResult()
-	if ret == nil then 
-		return false
-	end
+    local res = param:getResult()
+    if res == nil then
+        return false
+    end
 
-	log("isPowerSaveMode")
+    local setting = param:getSetting("battery.is.power.save.mode.bool", "false")
+    if setting == nil then
+        return false
+    end
 
-	param:setResult(false)
-	return true
+    local fake = true
+    if setting == 'true' then
+        fake = true
+    end
+
+	param:setResult(fake)
+	return true, tostring(res), tostring(fake)
 end

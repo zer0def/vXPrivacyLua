@@ -13,7 +13,7 @@ function after(hook, param)
 
     local available = param:getSetting("memory.available")
     if available == nil then
-        available = "50"
+        return false
     end
 
     local a = tonumber(available)
@@ -21,7 +21,7 @@ function after(hook, param)
         return false
     end
 
-    log("Spoofing totalMemory => [TOTAL]:[" .. available .. "]")
+    --log("Spoofing totalMemory => [TOTAL]:[" .. available .. "]")
 
     local fake = param:gigabytesToBytesString(a)
     param:setResultToLong(fake)

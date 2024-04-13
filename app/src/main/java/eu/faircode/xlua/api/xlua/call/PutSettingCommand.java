@@ -6,9 +6,9 @@ import android.util.Log;
 
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
-import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
+import eu.faircode.xlua.api.xmock.database.LuaSettingsManager;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
 
 public class PutSettingCommand extends CallCommandHandler {
     public static PutSettingCommand create() { return new PutSettingCommand(); };
@@ -21,8 +21,7 @@ public class PutSettingCommand extends CallCommandHandler {
     public Bundle handle(CallPacket commandData) throws Throwable {
         LuaSettingPacket packet = commandData.readExtrasAs(LuaSettingPacket.class);
         packet.resolveUserID();
-        Log.i("XLua.PutSettingCommand", " packet=" + packet);
-        return LuaSettingsDatabase.putSetting(
+        return LuaSettingsManager.putSetting(
                 commandData.getContext(),
                 commandData.getDatabase(),
                 packet).toBundle();

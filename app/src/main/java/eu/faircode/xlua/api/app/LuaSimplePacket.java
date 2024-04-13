@@ -1,9 +1,8 @@
 package eu.faircode.xlua.api.app;
 
 import android.os.Bundle;
-import android.os.Parcel;
 
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 public class LuaSimplePacket extends UserIdentityPacket {

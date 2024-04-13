@@ -3,7 +3,6 @@ package eu.faircode.xlua.hooks;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -11,11 +10,11 @@ import java.util.List;
 
 import eu.faircode.xlua.XDatabase;
 import eu.faircode.xlua.XUtil;
-import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
-import eu.faircode.xlua.api.standard.interfaces.IDBSerial;
+import eu.faircode.xlua.api.xmock.database.LuaSettingsManager;
+import eu.faircode.xlua.api.xstandard.interfaces.IDBSerial;
 import eu.faircode.xlua.api.hook.group.XLuaGroup;
 import eu.faircode.xlua.api.hook.XLuaHook;
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
 
 public class XReport implements IDBSerial {
     public String hookId;
@@ -68,7 +67,7 @@ public class XReport implements IDBSerial {
 
     public boolean getNotify(XDatabase db) {
         if(notify == null)//This is where error can arrive , context is null and context is used and abused alot :P
-            notify = LuaSettingsDatabase.getSettingBoolean(null, db, "notify", getUserId(), packageName);
+            notify = LuaSettingsManager.getSettingBoolean(null, db, "notify", getUserId(), packageName);
 
         //Log.i("XLua.XReport", "XXR use=true,  (pkg=" + packageName + " userId=" + getUserId() + " uid=" + uid + " notify=" + notify + " )");
         return notify;

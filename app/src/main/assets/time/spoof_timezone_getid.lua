@@ -5,6 +5,10 @@ function after(hook, param)
 	end
 
 	local fake = param:getSettingReMap("zone.timezone.id", "zone.timezoneid", "Atlantic/Reykjavik")
+	if fake == nil then
+	    return false
+	end
+
 	param:setResult(fake)
 	return true, res, fake
 end

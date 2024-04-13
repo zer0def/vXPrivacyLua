@@ -6,13 +6,16 @@ function after(hook, param)
 
     local height = param:getSettingInt("display.height", 3100)
     local width = param:getSettingInt("display.width", 1400)
+    if height == nil or width == nil then
+        return false
+    end
 
-    log("Display Swapping: [DP] " .. tostring(res.heightPixels) .. "x" .. tostring(res.widthPixels) .. " => " .. tostring(height) .. "x" .. tostring(width))
+    local old = tostring(res.heightPixels) .. "x" .. tostring(res.widthPixels)
+    local new = tostring(height) .. "x" .. tostring(width)
 
     res.heightPixels = height
     res.widthPixels = width
 
-    log("Display DIM Swapped: [" .. tostring(res.heightPixels) .. "x" .. tostring(res.widthPixels)  .. "]")
     param:setResult(res)
-    return true
+    return true, old, new
 end

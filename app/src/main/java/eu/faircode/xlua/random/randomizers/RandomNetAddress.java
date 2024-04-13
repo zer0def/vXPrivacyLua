@@ -14,7 +14,7 @@ public class RandomNetAddress implements IRandomizer {
     private static final List<String> ipList = Arrays.asList("127.0.0.1", "10.0.0.1", "192.168.1.0", "random");
 
     @Override
-    public boolean isSetting(String setting) { return setting.equalsIgnoreCase(getSettingName()); }
+    public boolean isSetting(String setting) { return setting.equalsIgnoreCase(getSettingName()) || setting.equalsIgnoreCase("network.gateway"); }
 
     @Override
     public String getSettingName() {  return "network.host.address"; }

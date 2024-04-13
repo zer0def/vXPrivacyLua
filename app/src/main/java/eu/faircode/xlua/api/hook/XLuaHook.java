@@ -1,25 +1,36 @@
 package eu.faircode.xlua.api.hook;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
+import eu.faircode.xlua.R;
+import eu.faircode.xlua.XUtil;
+import eu.faircode.xlua.api.settings.LuaSettingExtended;
+import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
+import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.utilities.CursorUtil;
+import eu.faircode.xlua.utilities.StringUtil;
 
 public class XLuaHook extends XLuaHookBase implements IJsonSerial, Parcelable {
     private static final String TAG = "XLua.Hook";
+
+    private final List<LuaSettingExtended> managed_settings = new ArrayList<>();
 
     public XLuaHook() { }
     public XLuaHook(Parcel in) { fromParcel(in); }
@@ -32,6 +43,21 @@ public class XLuaHook extends XLuaHookBase implements IJsonSerial, Parcelable {
         }catch (Exception e) {
             Log.e(TAG, "Error converting xHook to Hook Packet! e=" + e + "\n" + Log.getStackTraceString(e));
             return null;
+        }
+    }
+
+    public List<LuaSettingExtended> getManagedSettings() { return this.managed_settings; }
+    public void initSettings(Map<String, LuaSettingExtended> settings) {
+        if(this.settings != null) {
+            managed_settings.clear();
+            for (String s : this.settings) {
+                if(!StringUtil.isValidAndNotWhitespaces(s)) continue;
+                if(settings.containsKey(s)) {
+                    LuaSettingExtended luaSetting = settings.get(s);
+                    if(luaSetting == null) continue;
+                    managed_settings.add(luaSetting);
+                }
+            }
         }
     }
 

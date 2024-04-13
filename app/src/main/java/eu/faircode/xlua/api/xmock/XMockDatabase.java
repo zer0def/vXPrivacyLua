@@ -6,11 +6,11 @@ import androidx.annotation.NonNull;
 
 import eu.faircode.xlua.XDatabase;
 import eu.faircode.xlua.XGlobals;
-import eu.faircode.xlua.api.configs.MockConfigDatabase;
-import eu.faircode.xlua.api.properties.MockPropDatabase;
-import eu.faircode.xlua.api.standard.interfaces.IInitDatabase;
-import eu.faircode.xlua.api.useragent.MockUserAgentDatabaseManager;
-import eu.faircode.xlua.api.xmock.database.XMockCpuDatabase;
+import eu.faircode.xlua.api.xmock.database.MockConfigManager;
+import eu.faircode.xlua.api.xmock.database.MockPropManager;
+import eu.faircode.xlua.api.xstandard.interfaces.IInitDatabase;
+import eu.faircode.xlua.api.xmock.database.MockUserAgentManager;
+import eu.faircode.xlua.api.xmock.database.MockCpuManager;
 import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.utilities.CollectionUtil;
 
@@ -58,11 +58,11 @@ public class XMockDatabase implements IInitDatabase {
             }
 
             if(!init) {
-                if(!check_1) check_1 = MockConfigDatabase.forceDatabaseCheck(context, db);
-                if(!check_2) check_2 = XMockCpuDatabase.forceDatabaseCheck(context, db);
-                if(!check_3) check_3 = CollectionUtil.isValid(MockPropDatabase.forceCheckMapsDatabase(context, db));
-                if(!check_4) check_4 = MockPropDatabase.ensurePropSettingsDatabase(context, db);
-                if(!check_5) check_5 = MockUserAgentDatabaseManager.forceDatabaseCheck(context, db);
+                if(!check_1) check_1 = MockConfigManager.forceDatabaseCheck(context, db);
+                if(!check_2) check_2 = MockCpuManager.forceDatabaseCheck(context, db);
+                if(!check_3) check_3 = CollectionUtil.isValid(MockPropManager.forceCheckMapsDatabase(context, db));
+                if(!check_4) check_4 = MockPropManager.ensurePropSettingsDatabase(context, db);
+                if(!check_5) check_5 = MockUserAgentManager.forceDatabaseCheck(context, db);
                 XLog.i(true, new StringBuilder()
                         .append("\t[1] Config Table Check=").append(check_1).append("\n")
                         .append("\t[2] Cpu Table Check=").append(check_2).append("\n")

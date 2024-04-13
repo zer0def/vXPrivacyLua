@@ -2,13 +2,12 @@ package eu.faircode.xlua.api.xmock.query;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.properties.MockPropPacket;
-import eu.faircode.xlua.api.properties.MockPropProvider;
-import eu.faircode.xlua.api.standard.QueryCommandHandler;
-import eu.faircode.xlua.api.standard.command.QueryPacket;
+import eu.faircode.xlua.api.xmock.provider.MockPropProvider;
+import eu.faircode.xlua.api.xstandard.QueryCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.QueryPacket;
 import eu.faircode.xlua.utilities.CursorUtil;
 
 public class GetMockPropertiesCommand extends QueryCommandHandler {

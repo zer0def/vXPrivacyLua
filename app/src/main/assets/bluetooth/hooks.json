@@ -261,9 +261,9 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_bluetooth_null_two"
+    "luaScript": "@id_bluetooth_null_two",
+    "settings": ["bluetooth.allow.discovery.bool"]
   },
-  //id_bluetoothadapter_getdefaultadapter
 
   {
     "builtin": true,
@@ -304,7 +304,8 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_bluetoothadapter_getname"
+    "luaScript": "@id_bluetoothadapter_getname",
+    "settings": ["bluetooth.name"]
   },
 
   {

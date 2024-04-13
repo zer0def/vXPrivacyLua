@@ -14,7 +14,7 @@ public class RandomPhoneNumber implements IRandomizer {
     //public static final String FORMAT = "%s(%s)%s-%s";
 
     @Override
-    public boolean isSetting(String setting) { return setting.equalsIgnoreCase(getSettingName()); }
+    public boolean isSetting(String setting) { return getSettingName().equalsIgnoreCase(setting); }
 
     @Override
     public String getSettingName() {  return "unique.gsm.phone.number"; }

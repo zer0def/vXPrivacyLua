@@ -5,9 +5,9 @@ import android.os.Bundle;
 
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.XResult;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
-import eu.faircode.xlua.api.xlua.database.LuaAppDatabase;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
+import eu.faircode.xlua.api.xlua.database.LuaAppManager;
 import eu.faircode.xlua.api.app.LuaSimplePacket;
 
 public class InitAppCommand extends CallCommandHandler {
@@ -24,7 +24,7 @@ public class InitAppCommand extends CallCommandHandler {
         return XResult.create()
                 .setMethodName(name)
                 .setExtra(packet.toString())
-                .setResult(LuaAppDatabase.initAppAssignments(commandData.getContext(), commandData.getDatabase(), packet)).toBundle();
+                .setResult(LuaAppManager.initAppAssignments(commandData.getContext(), commandData.getDatabase(), packet)).toBundle();
     }
 
     public static Bundle invoke(Context context, LuaSimplePacket packet) {

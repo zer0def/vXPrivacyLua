@@ -2,16 +2,13 @@ package eu.faircode.xlua.api.xlua.query;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import eu.faircode.xlua.XGlobals;
 import eu.faircode.xlua.api.XProxyContent;
-import eu.faircode.xlua.api.standard.QueryCommandHandler;
-import eu.faircode.xlua.api.standard.command.QueryPacket;
+import eu.faircode.xlua.api.xstandard.QueryCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.QueryPacket;
 import eu.faircode.xlua.api.hook.XLuaHook;
 import eu.faircode.xlua.utilities.CursorUtil;
-import eu.faircode.xlua.utilities.DatabasePathUtil;
-import eu.faircode.xlua.utilities.ReflectUtil;
 
 public class GetHooksCommand extends QueryCommandHandler {
     @SuppressWarnings("unused")
@@ -20,6 +17,7 @@ public class GetHooksCommand extends QueryCommandHandler {
         this.marshall = marshall;
         this.name = marshall ? "getHooks2" : "getHooks";
         requiresPermissionCheck = false;
+        requiresSingleThread = true;
     }
 
     @Override

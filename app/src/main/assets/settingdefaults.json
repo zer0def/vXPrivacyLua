@@ -1,224 +1,243 @@
 [
   //Device Info Settings
-  { "name": "device.brand", "description": "Device Manufacturer Brand Name", "value": "OnePlus" },
-  { "name": "device.manufacturer", "description": "Device Manufacturer Name", "value": "OnePlus" },
-  { "name": "device.nick.name", "description": "Device Special name or Nick name", "value": "OnePlus7ProNR" },
-  { "name": "device.model", "description": "Device Model Identifier", "value": "GM1920" },
-  { "name": "device.codename", "description": "Device Codename (usually is food) or something fun", "value": "guacamoles" },
-  { "name": "device.bootloader", "description": "Bootloader name", "value": "G1HZK00500" },
-  { "name": "device.boot.mode", "description": "Boot Mode", "value": "normal" },
+  { "name": "device.brand", "description": "Device Manufacturer Brand Name", "defaultValue": "OnePlus" },
+  { "name": "device.manufacturer", "description": "Device Manufacturer Name", "defaultValue": "OnePlus" },
+  { "name": "device.nick.name", "description": "Device Special name or Nick name", "defaultValue": "OnePlus7ProNR" },
+  { "name": "device.model", "description": "Device Model Identifier", "defaultValue": "GM1920" },
+  { "name": "device.codename", "description": "Device Codename (usually is food) or something fun", "defaultValue": "guacamoles" },
+  { "name": "device.bootloader", "description": "Bootloader name", "defaultValue": "G1HZK00500" },
+  { "name": "device.boot.mode", "description": "Boot Mode", "defaultValue": "normal" },
 
   //Android Build Settings
-  { "name": "android.build.date.one", "description": "These do not have to be set, they dont seem to be build date but something else.? YEAR.MONTH.DAY (2000.03.15)",  "value": "2018.08.15" },
-  { "name": "android.build.date.two", "description": "These do not have to be set, they dont seem to be build date but something else.? YEARMONTHDAY (20000315)",  "value": "20180815" },
+  { "name": "android.build.date.one", "description": "These do not have to be set, they dont seem to be build date but something else.? YEAR.MONTH.DAY (2000.03.15)",  "defaultValue": "2018.08.15" },
+  { "name": "android.build.date.two", "description": "These do not have to be set, they dont seem to be build date but something else.? YEARMONTHDAY (20000315)",  "defaultValue": "20180815" },
 
-  { "name": "android.build.date.utc", "description": "Android ROM Build Date (Unix Epoc TimeStamp)",  "value": "1696343919" },
-  { "name": "android.build.date", "description": "Android ROM Build Date (WEEKDAY MONTH DAY HOUR:MINUTE:SECOND YEAR)", "value": "Tue Oct 3 17:38:39 IDT 2023" },
+  { "name": "android.build.date.utc", "description": "Android ROM Build Date (Unix Epoc TimeStamp)",  "defaultValue": "1696343919" },
+  { "name": "android.build.date", "description": "Android ROM Build Date (WEEKDAY MONTH DAY HOUR:MINUTE:SECOND YEAR)", "defaultValue": "Tue Oct 3 17:38:39 IDT 2023" },
 
 
-  { "name": "android.build.version", "description": "Android version Determined by Number", "value": "13" },
-  { "name": "android.build.version.sdk", "description": "Android version Determined by Number", "value": "33" },
-  { "name": "android.build.version.min.sdk", "description": "Android version Build minimum SDK Version Number", "value": "23"},
-  { "name": "android.build.tags", "description": "Android version Build Tags (release-keys)", "value": "release-keys" },
-  { "name": "android.build.type", "description": "Android version Build Type (user)", "value": "user" },
-  { "name": "android.build.dev.codename", "description": "The version string visible in the development phase", "value": "REL" },
-  { "name": "android.build.incremental", "description": "Android ROM Build Incremental ID", "value": "eng.ido.20231003.173955" },
-  { "name": "android.build.description", "description": "Android ROM Build description", "value": "yaap_guacamoles-user 13 TQ3A.230805.001" },
-  { "name": "android.build.id", "description": "Android ROM Build ID", "value": "TQ3A.230805.001" },
-  { "name": "android.build.display.id", "description": "Android ROM Build ID Displayed Version", "value": "TQ3A.230805.001 release-keys" },
-  { "name": "android.build.flavor", "description": "Android ROM Build Name + Build Type (user)", "value": "yaap_guacamoles-user" },
-  { "name": "android.build.host", "description": "Im not too sure rn", "value": "ido-X3999A" },
-  { "name": "android.build.user", "description": "Im not too sure rn", "value": "ido" },
-  { "name": "android.build.patch", "description": "Android ROM Security Patch Date (YYYY-MM-DD)", "value": "2023-10-05" },
-  { "name": "android.build.codename", "description": "Just like flavor, Android ROM Build Name no Build Type", "value": "yaap_guacamoles" },
-  { "name": "android.build.fingerprint", "description": "Android ROM Build fingerprint", "value": "OnePlus/yaap_guacamoles/guacamoles:13/TQ3A.230805.001/ido10031738:user/release-keys" },
-  { "name": "android.build.radio", "description": "The radio firmware version number.", "value": "0" },
-  { "name": "android.build.base.os", "description": "The base OS build the product is based on. (Version.BASE_OS)", "value": "Android" },
+  { "name": "android.build.version", "description": "Android version Determined by Number", "defaultValue": "13" },
+  { "name": "android.build.version.sdk", "description": "Android version Determined by Number", "defaultValue": "33" },
+  { "name": "android.build.version.min.sdk", "description": "Android version Build minimum SDK Version Number", "defaultValue": "23"},
+  { "name": "android.build.tags", "description": "Android version Build Tags (release-keys)", "defaultValue": "release-keys" },
+  { "name": "android.build.type", "description": "Android version Build Type (user)", "defaultValue": "user" },
+  { "name": "android.build.dev.codename", "description": "The version string visible in the development phase", "defaultValue": "REL" },
+  { "name": "android.build.incremental", "description": "Android ROM Build Incremental ID", "defaultValue": "eng.ido.20231003.173955" },
+  { "name": "android.build.description", "description": "Android ROM Build description", "defaultValue": "yaap_guacamoles-user 13 TQ3A.230805.001" },
+  { "name": "android.build.id", "description": "Android ROM Build ID", "defaultValue": "TQ3A.230805.001" },
+  { "name": "android.build.display.id", "description": "Android ROM Build ID Displayed Version", "defaultValue": "TQ3A.230805.001 release-keys" },
+  { "name": "android.build.flavor", "description": "Android ROM Build Name + Build Type (user)", "defaultValue": "yaap_guacamoles-user" },
+  { "name": "android.build.host", "description": "Im not too sure rn", "defaultValue": "ido-X3999A" },
+  { "name": "android.build.user", "description": "User name of the Build. Kinda like Logged in User", "defaultValue": "ido" },
+  { "name": "android.build.patch", "description": "Android ROM Security Patch Date (YYYY-MM-DD)", "defaultValue": "2023-10-05" },
+  { "name": "android.build.codename", "description": "Just like flavor, Android ROM Build Name no Build Type", "defaultValue": "yaap_guacamoles" },
+  { "name": "android.build.fingerprint", "description": "Android ROM Build fingerprint", "defaultValue": "OnePlus/yaap_guacamoles/guacamoles:13/TQ3A.230805.001/ido10031738:user/release-keys" },
+  { "name": "android.build.radio", "description": "The radio firmware version number.", "defaultValue": "0" },
+  { "name": "android.build.base.os", "description": "The base OS build the product is based on. (Version.BASE_OS)", "defaultValue": "Android" },
 
   //Java VM Settings Default Value
-  { "name": "java.vendor", "description": "JAVA Runtime Vendor (Orcale)", "value": "Oracle YourMom" },
-  { "name": "java.vendor.url", "description": "JAVA Runtime Vendor URL", "value": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-  { "name": "java.vm.version", "description": "Java Virtual Machine Version", "value": "1.0" },
-  { "name": "java.vm.name", "description": "Java Virtual Machine Name", "value": "Dalvik"},
+  { "name": "java.vendor", "description": "JAVA Runtime Vendor (Orcale)", "defaultValue": "Oracle YourMom" },
+  { "name": "java.vendor.url", "description": "JAVA Runtime Vendor URL", "defaultValue": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+  { "name": "java.vm.version", "description": "Java Virtual Machine Version", "defaultValue": "1.0" },
+  { "name": "java.vm.name", "description": "Java Virtual Machine Name", "defaultValue": "Dalvik"},
 
   //Android Kernel Default Settings
-  { "name": "android.kernel.sys.name", "description": "Kernel Kind Name (Linux, Unix...)", "value": "Linux" },
-  { "name": "android.kernel.version", "description": "Kernel Version Info long", "value": "SMP PREEMPT Tue Oct 3 17:44:36 IDT 2023" },
-  { "name": "android.kernel.release", "description": "Kernel Release Number", "value": "4.14.326" },
-  { "name": "android.kernel.node.name", "description": "Kernel Build nodename (localhost)", "value": "localhost" },
+  { "name": "android.kernel.sys.name", "description": "Kernel Kind Name (Linux, Unix...)", "defaultValue": "Linux" },
+  { "name": "android.kernel.version", "description": "Kernel Version Info long", "defaultValue": "SMP PREEMPT Tue Oct 3 17:44:36 IDT 2023" },
+  { "name": "android.kernel.release", "description": "Kernel Release Number", "defaultValue": "4.14.326" },
+  { "name": "android.kernel.node.name", "description": "Kernel Build Node Name (localhost)", "defaultValue": "localhost" },
 
   //Android CPU Default Settings
-  { "name": "cpu.arch", "description": "CPU Architecture", "value": "aarch64" },
-  { "name": "cpu.abi", "description": "CPU ABI (Application Binary Interface)", "value": "arm64-v8a" },
-  { "name": "cpu.abilist", "description": "CPU ABI (Application Binary Interface) List", "value": "arm64-v8a,armeabi-v7a,armeabi" },
-  { "name": "cpu.abilist32", "description": "CPU ABI (Application Binary Interface) List 32bit", "value": "armeabi-v7a,armeabi" },
-  { "name": "cpu.abilist64", "description": "CPU ABI (Application Binary Interface) List 64bit", "value": "arm64-v8a" },
-  { "name": "cpu.dalvik.vm.variant", "description": "Base CPU Kind", "value": "cortex-a76" },
-  { "name": "cpu.platform.name", "description": "CPU Platform Name", "value": "msmnile" },
-  { "name": "cpu.base.band", "description": "CPU Band Name", "value": "mdm" },
-  { "name": "cpu.hardware.name", "description": "Like Manufacturer name of Hardware CPU", "value": "qcom" },
-  { "name": "cpu.soc.model", "description": "Model Name of SOC", "value": "SM8150" },
-  { "name": "cpu.soc.manufacturer", "description": "CPU SOC Manufacturer Name", "value": "Qualcomm" },
-  { "name": "cpu.processor.count", "description": "The Amount of Processors in the CPU", "value": "8" },
-  { "name": "cpu.cpuid", "description": "CPU ID Stuff", "value": "N/A" },
+  { "name": "cpu.arch", "description": "CPU Architecture", "defaultValue": "aarch64" },
+  { "name": "cpu.abi", "description": "CPU ABI (Application Binary Interface)", "defaultValue": "arm64-v8a" },
+  { "name": "cpu.abilist", "description": "CPU ABI (Application Binary Interface) List", "defaultValue": "arm64-v8a,armeabi-v7a,armeabi" },
+  { "name": "cpu.abilist32", "description": "CPU ABI (Application Binary Interface) List 32bit", "defaultValue": "armeabi-v7a,armeabi" },
+  { "name": "cpu.abilist64", "description": "CPU ABI (Application Binary Interface) List 64bit", "defaultValue": "arm64-v8a" },
+  { "name": "cpu.dalvik.vm.variant", "description": "Base CPU Kind", "defaultValue": "cortex-a76" },
+  { "name": "cpu.platform.name", "description": "CPU Platform Name", "defaultValue": "msmnile" },
+  { "name": "cpu.base.band", "description": "CPU Band Name", "defaultValue": "mdm" },
+  { "name": "cpu.hardware.name", "description": "Like Manufacturer name of Hardware CPU", "defaultValue": "qcom" },
+  { "name": "cpu.soc.model", "description": "Model Name of SOC", "defaultValue": "SM8150" },
+  { "name": "cpu.soc.manufacturer", "description": "CPU SOC Manufacturer Name", "defaultValue": "Qualcomm" },
+  { "name": "cpu.processor.count", "description": "The Amount of Processors in the CPU", "defaultValue": "8" },
+  { "name": "cpu.cpuid", "description": "CPU ID Stuff", "defaultValue": "N/A" },
 
 
   //Android GPU Default Settings
-  { "name": "gpu.opengls.version",  "description": "GPU OpenGLS Version Number", "value": "19660" },
-  { "name": "gpu.egl.code.name",  "description": "GPU EGL Suffix Code Name", "value": "mesa" },
+  { "name": "gpu.opengls.version",  "description": "GPU OpenGLS Version Number", "defaultValue": "19660" },
+  { "name": "gpu.egl.code.name",  "description": "GPU EGL Suffix Code Name", "defaultValue": "mesa" },
+  { "name": "gpu.gl.vendor",  "description": "Vendor for the GLS chip", "defaultValue": "private" },
+  { "name": "gpu.gl.renderer",  "description": "Renderer Name of the GLS", "defaultValue": "god" },
+  { "name": "gpu.gl.version",  "description": "GL Version String (not just a number) OpenGL ES V@-530.50 (GIT@af2a560751...)", "defaultValue": "OpenGL ES V@-530.50 (GIT@af2a560751...)" },
+
 
   //Android ROM Specific Default Settings
-  { "name": "android.rom.adb.secure", "description": "Is ADB Secure ?", "value": "1" },
-  { "name": "android.rom.secure", "description": "Is ROM Secure ?", "value": "1" },
-  { "name": "android.rom.debuggable", "description": "Is ROM Debuggable/Debug", "value": "0" },
-  { "name": "android.rom.allow.mock", "description": "Is Mock Locations allowed", "value": "0" },
-  { "name": "android.rom.enforce", "description": "SELinux Mode", "value": "enforce" },
-  { "name": "android.rom.flash.locked", "description": "Is Flash Locked ?", "value": "1" },
-  { "name": "android.rom.verified.boot", "description": "Verified Boot State", "value": "green" },
-  { "name": "android.rom.root.image.bool", "description": "I dunno", "value":  "true"  },
-  { "name": "android.rom.netflix", "description": "This prop makes Netflix select L1 instead of L3.", "value": "Q855-16947-1" },
+  { "name": "android.rom.adb.secure", "description": "Is ADB Secure ?", "defaultValue": "1" },
+  { "name": "android.rom.secure", "description": "Is ROM Secure ?", "defaultValue": "1" },
+  { "name": "android.rom.debuggable", "description": "Is ROM Debuggable/Debug", "defaultValue": "0" },
+  { "name": "android.rom.allow.mock", "description": "Is Mock Locations allowed", "defaultValue": "0" },
+  { "name": "android.rom.enforce", "description": "SELinux Mode", "defaultValue": "enforce" },
+  { "name": "android.rom.flash.locked", "description": "Is Flash Locked ?", "defaultValue": "1" },
+  { "name": "android.rom.verified.boot", "description": "Verified Boot State", "defaultValue": "green" },
+  { "name": "android.rom.root.image.bool", "description": "I dunno", "defaultValue":  "true"  },
+  { "name": "android.rom.netflix", "description": "This prop makes Netflix select L1 instead of L3.", "defaultValue": "Q855-16947-1" },
 
-  { "name": "android.system.supports.ab.bool", "description": "Does system support A/B partitions", "value": "true" },
-  { "name": "android.system.treble.enabled.bool", "description": "Is Treble Enabled on the Device", "value": "true" },
+  { "name": "android.system.supports.ab.bool", "description": "Does system support A/B partitions", "defaultValue": "true" },
+  { "name": "android.system.treble.enabled.bool", "description": "Is Treble Enabled on the Device", "defaultValue": "true" },
 
 
   //System hardware Default Settings
 
-  { "name": "hardware.efuse", "description": "E-fuse (1/0(", "value": "1" },
-  { "name": "hardware.nfc.kind", "description": "NFC Protocal", "value": "I2C" },
-  { "name": "hardware.camera.app", "description": "Packagename for Camera APP", "value": "com.oneplus.camera" },
-  { "name": "hardware.fp.sensor", "description": "Fingerprint Sensor Short Name", "value": "gdx" },
-  { "name": "hardware.fp.sensor.name", "description": "Fingerprint Sensor Name","value": "goodix" },
-  { "name": "hardware.boot.sku", "description": "PAI targeting per hardware SKU", "value":  "pn553"  },
-  { "name": "hardware.boot.product.sku", "description": "Property used by vintf for sku specific manifests", "value":  "noese"  },
-  { "name": "hardware.gsm.version", "description": "GSM Chip Name", "value": "Qualcomm RIL 1.0" },
-  { "name": "hardware.gsm.band.version", "description": "GSM Chip Version", "value": "017-SM8150_GENFUSION_PACK-1.299167.1.399259.3" },
+  { "name": "hardware.efuse", "description": "E-fuse (1/0(", "defaultValue": "1" },
+  { "name": "hardware.nfc.kind", "description": "NFC Protocal", "defaultValue": "I2C" },
+  { "name": "hardware.camera.app", "description": "Packagename for Camera APP", "defaultValue": "com.oneplus.camera" },
+  { "name": "hardware.fp.sensor", "description": "Fingerprint Sensor Short Name", "defaultValue": "gdx" },
+  { "name": "hardware.fp.sensor.name", "description": "Fingerprint Sensor Name","defaultValue": "goodix" },
+  { "name": "hardware.boot.sku", "description": "PAI targeting per hardware SKU", "defaultValue":  "pn553"  },
+  { "name": "hardware.boot.product.sku", "description": "Property used by vintf for sku specific manifests", "defaultValue":  "noese"  },
+  { "name": "hardware.gsm.version", "description": "GSM Chip Name", "defaultValue": "Qualcomm RIL 1.0" },
+  { "name": "hardware.gsm.band.version", "description": "GSM Chip Version", "defaultValue": "017-SM8150_GENFUSION_PACK-1.299167.1.399259.3" },
 
-  { "name": "hardware.gps.model.name", "description": "Returns the model name (including vendor and hardware/software version)", "value": "dunno" },
+  { "name": "hardware.gps.model.name", "description": "Returns the model name (including vendor and hardware/software version)", "defaultValue": "dunno" },
 
   //Bluetooth Default Setting Values
-  { "name": "bluetooth.state", "description": "Is Bluetooth On Disabled ??", "value": "10" },
-  { "name": "bluetooth.allow.discovery.bool", "description": "Allow to Start Discovery or Connect to Any Device etc", "value": "false" },
-  { "name": "bluetooth.name", "description": "Bluetooth Name Starter", "value": "Android" },
-  { "name": "bluetooth.soc", "description": "Bluetooh SOC", "value": "cherokee" },
-  { "name": "bluetooth.allowed.bonded.list", "description": "List seperated with a comma (,) of ALLOWED (SAVED/PAIRED/BONDED) Bluetooth Devices that the app can see. Use Device name or Bluetooth MAC", "value": "*" },
+  { "name": "bluetooth.state", "description": "Is Bluetooth On Disabled ??", "defaultValue": "10" },
+  { "name": "bluetooth.allow.discovery.bool", "description": "Allow to Start Discovery or Connect to Any Device etc", "defaultValue": "false" },
+  { "name": "bluetooth.name", "description": "Bluetooth Name Starter", "defaultValue": "Android" },
+  { "name": "bluetooth.soc", "description": "Bluetooth SOC", "defaultValue": "cherokee" },
+  { "name": "bluetooth.allowed.bonded.list", "description": "List seperated with a comma (,) of ALLOWED (SAVED/PAIRED/BONDED) Bluetooth Devices that the app can see. Use Device name or Bluetooth MAC", "defaultValue": "*" },
 
   //Unique Identifiers Default Values
-  { "name": "unique.serial.no", "description": "Android Build Serial", "value": "840er743" },
+  { "name": "unique.serial.no", "description": "Android Build Serial", "defaultValue": "840er743" },
   //old subid: 93939251723998531487
-  { "name": "unique.gsm.subscription.id", "description": "Subscription ID for Service", "value": "274299888888765" },
-  { "name": "unique.gsm.imei", "description": "IMEI Number for GSM Devices", "value": "743893156789320" },
-  { "name": "unique.gsm.meid", "description": "MEID Number for CDMA Devices", "value": "743893156789320" },
-  { "name": "unique.gsm.icc.id", "description": "First two digits are always 89, SIM Unique ID", "value": "891004234814455936F" },
-  { "name": "unique.gsm.phone.number", "description": "Device Phone Number", "value": "6666666666" },
-  { "name": "unique.gsm.sim.serial", "description": "Serial number of the SIM", "value": "djhwlmt51pd30ar4ymtk" },
-  { "name": "unique.gsm.voicemail.id", "description": "alphabetic identifier associated with the voice mail number", "value": "abc" },
-  { "name": "unique.bluetooth.address", "description": "Bluetooth MAC/Hardware Address", "value": "00:00:00:00:00:00" },
-  { "name": "unique.network.mac.address", "description": "Net MAC/Hardware Address", "value": "00:00:00:00:00:00" },
-  { "name": "unique.google.advertising.id", "description": "Google Advertising ID", "value": "84630630-u4ls-k487-f35f-h37afe0pomwq" },
-  { "name": "unique.android.id", "description": "Android ID", "value": "0329184861423674" },
-  { "name": "unique.drm.id", "description": "DRM ID", "value": "slvwoputzjflhwfozqjqtloqpxudqrrxtirqjgxtzairmaftdxruhmflneex" },
-  { "name": "unique.gsf.id", "description": "Google Services Framework ID", "value": "FMZIYEVGXZDCENRO" },
-  //{ "name": "unique.google.game.id", "description": "Google Games Game User ID thing", "value": "FFP3" },
-  { "name": "unique.network.ssid", "description": "Wifi SSID", "value": "Starbucks Free-Wifi" },
-  { "name": "unique.netd.secret.key", "description": "stable_secret contains RFC 7217 secret key which should never be leaked", "value": "90f8:f587:2bb7:db9b:e5:306a:67d7:a155" },
-  { "name": "unique.gsm.operator.msin", "description": "Mobile Subscription Identification Number (MSIN) is a 10-digit unique numeric code ", "value": "1234567890" },
-
+  { "name": "unique.gsm.subscription.id", "description": "Subscription ID for Service", "defaultValue": "274299888888765" },
+  { "name": "unique.gsm.imei", "description": "IMEI Number for GSM Devices", "defaultValue": "743893156789320" },
+  { "name": "unique.gsm.meid", "description": "MEID Number for CDMA Devices", "defaultValue": "743893156789320" },
+  { "name": "unique.gsm.icc.id", "description": "First two digits are always 89, SIM Unique ID", "defaultValue": "891004234814455936F" },
+  { "name": "unique.gsm.phone.number", "description": "Device Phone Number", "defaultValue": "6666666666" },
+  { "name": "unique.gsm.sim.serial", "description": "Serial number of the SIM", "defaultValue": "djhwlmt51pd30ar4ymtk" },
+  { "name": "unique.gsm.voicemail.id", "description": "alphabetic identifier associated with the voice mail number", "defaultValue": "abc" },
+  { "name": "unique.bluetooth.address", "description": "Bluetooth MAC/Hardware Address", "defaultValue": "00:00:00:00:00:00" },
+  { "name": "unique.network.mac.address", "description": "Net MAC/Hardware Address", "defaultValue": "00:00:00:00:00:00" },
+  { "name": "unique.google.advertising.id", "description": "Google Advertising ID", "defaultValue": "84630630-u4ls-k487-f35f-h37afe0pomwq" },
+  { "name": "unique.android.id", "description": "Android ID", "defaultValue": "0329184861423674" },
+  { "name": "unique.drm.id", "description": "DRM ID", "defaultValue": "slvwoputzjflhwfozqjqtloqpxudqrrxtirqjgxtzairmaftdxruhmflneex" },
+  { "name": "unique.gsf.id", "description": "Google Services Framework ID", "defaultValue": "FMZIYEVGXZDCENRO" },
+  //{ "name": "unique.google.game.id", "description": "Google Games Game User ID thing", "defaultValue": "FFP3" },
+  { "name": "unique.network.ssid", "description": "Wifi SSID", "defaultValue": "Starbucks Free-Wifi" },
+  { "name": "unique.netd.secret.key", "description": "stable_secret contains RFC 7217 secret key which should never be leaked", "defaultValue": "90f8:f587:2bb7:db9b:e5:306a:67d7:a155" },
+  { "name": "unique.gsm.operator.msin", "description": "Mobile Subscription Identification Number (MSIN) is a 10-digit unique numeric code ", "defaultValue": "1234567890" },
 
 
   //Zone Default Settings (Time, Date, Region, Language)
-  { "name": "zone.timezone.id", "description": "TimeZone ID (Atlantic/Reykjavik)", "value": "Atlantic/Reykjavik" },
-  { "name": "zone.country.iso", "description": "Country ISO3 ID", "value": "IS" },
-  { "name": "zone.country", "description": "Country Name", "value": "Iceland" },
-  { "name": "zone.language", "description": "Language Name", "value": "Icelandic" },
-  { "name": "zone.language.iso", "description": "Language ISO3 ID", "value": "IS" },
-  { "name": "zone.language.tag", "description": "Language Tag (is-IS)", "value": "is-IS" },
-  { "name": "zone.region", "description": "Region Specification Code (IS/CN...)", "value": "IS" },
-  { "name": "zone.timezone", "description": "TimeZone like a number thingy", "value": "GMT+0" },
-  { "name": "zone.timezone.display.name", "description": "TimeZone Display Name (Greenwich Mean Time)", "value": "Greenwich Mean Time" },
-
+  { "name": "zone.timezone.id", "description": "TimeZone ID (Atlantic/Reykjavik)", "defaultValue": "Atlantic/Reykjavik" },
+  { "name": "zone.country.iso", "description": "Country ISO3 ID", "defaultValue": "IS" },
+  { "name": "zone.country", "description": "Country Name", "defaultValue": "Iceland" },
+  { "name": "zone.language", "description": "Language Name", "defaultValue": "Icelandic" },
+  { "name": "zone.language.iso", "description": "Language ISO3 ID", "defaultValue": "IS" },
+  { "name": "zone.language.tag", "description": "Language Tag (is-IS)", "defaultValue": "is-IS" },
+  { "name": "zone.region", "description": "Region Specification Code (IS/CN...)", "defaultValue": "IS" },
+  { "name": "zone.timezone", "description": "TimeZone like a number thingy", "defaultValue": "GMT+0" },
+  { "name": "zone.timezone.display.name", "description": "TimeZone Display Name (Greenwich Mean Time)", "defaultValue": "Greenwich Mean Time" },
 
 
   //Network Default Settings
-  { "name": "network.dns", "description": "DNS Address (1.1.1.1)", "value": "1.1.1.1" },
-  { "name": "network.host.address", "description": "Local Network Host Address (127.0.0.1)", "value": "127.0.0.1" },
-  { "name": "network.host.name", "description": "Host name of Network (google.com)", "value": "google.com" },
-  { "name": "network.allowed.list", "description": "Set to (1) to allow (1 result). A list of either WIFI Macs (BSSID) or Names (SSIDs) that are allowed to be shown in Scan OR Saved Results", "value": "*" },
+  { "name": "network.dns", "description": "DNS Address (1.1.1.1)", "defaultValue": "1.1.1.1" },
+  { "name": "network.gateway", "description": "Wlan0 Gateway", "defaultValue": "1.1.1.1" },
+  { "name": "network.interface", "description": "Wlan0 Interface Name", "defaultValue": "private" },
+  { "name": "network.host.address", "description": "Local Network Host Address (127.0.0.1)", "defaultValue": "127.0.0.1" },
+  { "name": "network.host.name", "description": "Host name of Network (google.com)", "defaultValue": "google.com" },
+  { "name": "network.allowed.list", "description": "Set to (1) to allow (1 result). A list of either WIFI Macs (BSSID) or Names (SSIDs) that are allowed to be shown in Scan OR Saved Results", "defaultValue": "*" },
 
 
   //GSM Default Settings (re-checl all of these with the properties)
-  { "name": "gsm.operator.id", "description": "Operator ID (MCC + MNC)", "value": "573" }, //274+299
-  { "name": "gsm.operator.mcc", "description": "Operator MCC Value", "value": "274" },
-  { "name": "gsm.operator.mnc", "description": "Operator MNC Value", "value": "299" },
-
-  { "name": "gsm.cell.location.lac", "description": "Location Area Code", "value": "0" },
-  { "name": "gsm.cell.location.cid", "description": "Cell ID", "value": "0" },
+  { "name": "gsm.operator.id", "description": "Operator ID (MCC + MNC)", "defaultValue": "573" }, //274+299
+  { "name": "gsm.operator.mcc", "description": "Operator MCC Value", "defaultValue": "274" },
+  { "name": "gsm.operator.mnc", "description": "Operator MNC Value", "defaultValue": "299" },
 
 
-  { "name": "gsm.setting.network.roaming.bool", "description": "Is Network Roaming", "value": "false" },
-  { "name": "gsm.setting.network.opportunistic.bool", "description": "An opportunistic subscription connects to a network that is limited in functionality and / or coverage.", "value": "true" },
-  { "name": "gsm.setting.network.esim.bool", "description": "true if the subscription is from eSIM.", "value": "false" },
-  { "name": "gsm.setting.display.name", "description": "The name displayed to the user that identifies this subscription. This name is used in Settings page and can be renamed by the user.", "value": "Rob" },
-
-  { "name": "gsm.network.type",  "description": "Indicates the available radio technology. (unknown, GPRS, EDGE, UMTS)", "value": "GPRS" },
-  { "name": "gsm.network.carrier", "description": "Alpha name of current registered operator. aka Carrier Name", "value": "Siminn" },
-
-  { "name": "gsm.phone.type", "description": "GSM=(1) CDMA=(2) NONE=(0) SIP=(3)", "value": "1" },
-  { "name": "gsm.sim.type", "description": "LOCAL_SIM=(0) REMOTE_SIM=(1)", "value": "0" },
-  { "name": "gsm.sim.state", "description": "State of the SIM Card (SIM_STATE_READY)", "value": "READY" },
-  { "name": "gsm.sim.state.number", "description": "State of the SIM Card (SIM_STATE_READY) Number", "value": "5" },
-  { "name": "gsm.data.state", "description": "Current data connection state (cellular) Values=DISCONNECTED=0, DISCONNECTING=4, ENABLED_REASON_CARRIER=2, ENABLED_REASON_OVERRIDE=4, ENABLED_REASON_POLICY=1, ENABLED_REASON_THERMAL=3, ENABLED_REASON_UNKNOWN/UNKNOWN=-1, ENABLED_REASON_USER=0, HANDOVER_IN_PROGRESS=5, SUSPENDED=3", "value": "2" },
-  { "name": "gsm.sim.card.id", "description": "The card ID of the SIM card which contains the subscription.", "value": "8457894" },
-  { "name": "gsm.sim.count", "description": "Amount of SIM Cards or something...", "value": "1" },
+  { "name": "gsm.cell.location.lac", "description": "Location Area Code", "defaultValue": "0" },
+  { "name": "gsm.cell.location.cid", "description": "Cell ID", "defaultValue": "0" },
 
 
-  { "name": "gsm.index.sim.port", "description": "The port index of the SIM card which contains the subscription", "value": "1" },
-  { "name": "gsm.index.sim.slot", "description": "The index of the SIM slot that currently contains the subscription and not necessarily unique", "value": "1" },
-  { "name": "gsm.subscription.usage.setting", "description": "Get the usage setting for this subscription. UNKNOWN=(-1) DEFAULT=(0) VOICE_CENTRIC=(1) DATA_CENTRIC(2)", "value": "1" },
+  { "name": "gsm.setting.network.roaming.bool", "description": "Is Network Roaming", "defaultValue": "false" },
+  { "name": "gsm.setting.network.opportunistic.bool", "description": "An opportunistic subscription connects to a network that is limited in functionality and / or coverage.", "defaultValue": "true" },
+  { "name": "gsm.setting.network.esim.bool", "description": "true if the subscription is from eSIM.", "defaultValue": "false" },
+  { "name": "gsm.setting.display.name", "description": "The name displayed to the user that identifies this subscription. This name is used in Settings page and can be renamed by the user.", "defaultValue": "Rob" },
+
+
+  { "name": "gsm.network.type",  "description": "Indicates the available radio technology. (unknown, GPRS, EDGE, UMTS)", "defaultValue": "GPRS" },
+  { "name": "gsm.network.carrier", "description": "Alpha name of current registered operator. aka Carrier Name", "defaultValue": "Siminn" },
+
+
+  { "name": "gsm.phone.type", "description": "GSM=(1) CDMA=(2) NONE=(0) SIP=(3)", "defaultValue": "1" },
+  { "name": "gsm.sim.type", "description": "LOCAL_SIM=(0) REMOTE_SIM=(1)", "defaultValue": "0" },
+  { "name": "gsm.sim.state", "description": "State of the SIM Card (SIM_STATE_READY)", "defaultValue": "READY" },
+  { "name": "gsm.sim.state.number", "description": "State of the SIM Card (SIM_STATE_READY) Number", "defaultValue": "5" },
+  { "name": "gsm.data.state", "description": "Current data connection state (cellular) Values=DISCONNECTED=0, DISCONNECTING=4, ENABLED_REASON_CARRIER=2, ENABLED_REASON_OVERRIDE=4, ENABLED_REASON_POLICY=1, ENABLED_REASON_THERMAL=3, ENABLED_REASON_UNKNOWN/UNKNOWN=-1, ENABLED_REASON_USER=0, HANDOVER_IN_PROGRESS=5, SUSPENDED=3", "defaultValue": "2" },
+  { "name": "gsm.sim.card.id", "description": "The card ID of the SIM card which contains the subscription.", "defaultValue": "8457894" },
+  { "name": "gsm.sim.count", "description": "Amount of SIM Cards or something...", "defaultValue": "1" },
+
+
+  { "name": "gsm.index.sim.port", "description": "The port index of the SIM card which contains the subscription", "defaultValue": "1" },
+  { "name": "gsm.index.sim.slot", "description": "The index of the SIM slot that currently contains the subscription and not necessarily unique", "defaultValue": "1" },
+  { "name": "gsm.subscription.usage.setting", "description": "Get the usage setting for this subscription. UNKNOWN=(-1) DEFAULT=(0) VOICE_CENTRIC=(1) DATA_CENTRIC(2)", "defaultValue": "1" },
 
 
   //Display Default Settings
-  { "name": "display.height", "description": "Height of Display Pixels", "value": "3100" },
-  { "name": "display.width", "description": "Width of Display Pixels", "value": "1400" },
+  { "name": "display.height", "description": "Height of Display Pixels", "defaultValue": "3100" },
+  { "name": "display.width", "description": "Width of Display Pixels", "defaultValue": "1400" },
 
   //Memory Default Settings
-  { "name": "memory.total", "description": "Total amount of Memory on the Device", "value": "900" },
-  { "name": "memory.available", "description": "Available amount of Memory on the Device", "value": "500" },
+  { "name": "memory.total", "description": "Total amount of Memory on the Device", "defaultValue": "900" },
+  { "name": "memory.available", "description": "Available amount of Memory on the Device", "defaultValue": "500" },
 
 
   //Emulator stuff
-  { "name": "qemu.emulator*.bool", "description": "Control of all Emulator Functions (Hide/Skip....)", "value": "true" },
-  { "name": "qemu.emulator.kernel", "description": "Emulator Qemu Kernel", "value": "N/A" },
-  { "name": "qemu.emulator.props", "description": "Emulator Qemu Props", "value": "N/A" },
-  { "name": "qemu.emulator.hw.main.keys", "description": "Emulator Qemu Hardware Keys", "value": "N/A" },
-  { "name": "qemu.emulator.fake.camera", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.lcd_density", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.ud", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.gles", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.adb.secure", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.logcat", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.timezone", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.encrypt", "description": "Emulator Qemu Props", "value": "N/A" },
-  { "name": "qemu.emulator.opengls.version", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.gltransport", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.vsync", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.wifi", "description": "Emulator Qemu Shit", "value": "N/A" },
-  { "name": "qemu.emulator.initrc", "description": "Emulator Qemu Shit", "value": "N/A" },
+  { "name": "qemu.emulator*.bool", "description": "Control of all Emulator Functions (Hide/Skip....)", "defaultValue": "true" },
+  { "name": "qemu.emulator.kernel", "description": "Emulator Qemu Kernel", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.props", "description": "Emulator Qemu Props", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.hw.main.keys", "description": "Emulator Qemu Hardware Keys", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.fake.camera", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.lcd_density", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.ud", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.gles", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.adb.secure", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.logcat", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.timezone", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.encrypt", "description": "Emulator Qemu Props", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.opengls.version", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.gltransport", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.vsync", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.wifi", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
+  { "name": "qemu.emulator.initrc", "description": "Emulator Qemu Shit", "defaultValue": "N/A" },
 
 
-  { "name": "google.client.id.base", "description": "Some base property (dosnt seem to be ID) (android-vf-de)", "value": "android-vf-de" },
-  { "name": "google.client.id.base.name", "description": "Some base property (dosnt seem to be ID) (android-xiaomi-rvo3)", "value": "android-xiaomi-rvo3" },
-  { "name": "google.gms.version", "description": "GMS Version format (12_202112)", "value": "12_202112" },
+  { "name": "google.client.id.base", "description": "Some base property (dosnt seem to be ID) (android-vf-de)", "defaultValue": "android-vf-de" },
+  { "name": "google.client.id.base.name", "description": "Some base property (dosnt seem to be ID) (android-xiaomi-rvo3)", "defaultValue": "android-xiaomi-rvo3" },
+  { "name": "google.gms.version", "description": "GMS Version format (12_202112)", "defaultValue": "12_202112" },
 
   //Values for inner functions
-  { "name": "intercept.shell.meminfo.bool", "description": "Should Shell Interceptor Intercept (/proc/meminfo) file", "value": "true" },
-  { "name": "intercept.shell.getprop.bool", "description": "Should Shell Interceptor Intercept (getprop) command", "value": "true" },
-  { "name": "intercept.shell.su.bool", "description": "Should Shell Interceptor Intercept (SU) command", "value": "true" },
-  { "name": "intercept.shell.uname.bool", "description": "Should Shell Interceptor Intercept (uname) command", "value": "true" },
+  { "name": "intercept.shell.meminfo.bool", "description": "Should Shell Interceptor Intercept (/proc/meminfo) file", "defaultValue": "true" },
+  { "name": "intercept.shell.getprop.bool", "description": "Should Shell Interceptor Intercept (getprop) command", "defaultValue": "true" },
+  { "name": "intercept.shell.su.bool", "description": "Should Shell Interceptor Intercept (SU) command", "defaultValue": "true" },
+  { "name": "intercept.shell.uname.bool", "description": "Should Shell Interceptor Intercept (uname) command", "defaultValue": "true" },
+
+
+  { "name": "battery.charge.time.remaining", "description": "Battery Charge Time Remaining in Milliseconds", "defaultValue": "0" },
+  { "name": "battery.percentage.left", "description": "Battery Percentage Level", "defaultValue": "100" },
+  { "name": "battery.is.charging.bool", "description": "Is Battery Charging", "defaultValue": "true" },
+  { "name": "battery.is.power.save.mode.bool", "description": "Is Battery in Power Save Mode", "defaultValue": "true" },
+
+  { "name": "clipboard.label", "description": "Label that holds the data this inst important", "defaultValue": "l33t" },
+  { "name": "clipboard.contents", "description": "Data that the Clipboard is Holding", "defaultValue": "error" },
+
+
+  { "name": "applications.allow.list", "description": "List of Applications allowed through the filter", "defaultValue": "*" },
 
 
   //User Default Values
-  { "name": "user.agent", "description": "User agent of Device, for APIs that grab User-agent", "value": "Mozilla/5.0 (iPhone; CPU iPhone OS 10_9_8; like Mac OS X) AppleWebKit/603.13 (KHTML, like Gecko)  Chrome/50.0.3404.328 Mobile Safari/533.1" }
+  { "name": "user.agent", "description": "User agent of Device, for APIs that grab User-agent", "defaultValue": "Mozilla/5.0 (iPhone; CPU iPhone OS 10_9_8; like Mac OS X) AppleWebKit/603.13 (KHTML, like Gecko)  Chrome/50.0.3404.328 Mobile Safari/533.1" }
 ]
 
 

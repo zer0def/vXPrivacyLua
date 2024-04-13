@@ -1,0 +1,15 @@
+[
+  {
+    "collection": "PrivacyEx",
+    "group": "Read.Clipboard",
+    "name": "ClipData.createFromParcel",
+    "author": "M66B x OBC",
+    "className": "android.content.ClipData",
+    "methodName": "CREATOR:createFromParcel",
+    "parameterTypes": ["android.os.Parcel"],
+    "returnType": "android.content.ClipData",
+    "minSdk": 11,
+    "luaScript": "@clipdata_createfromparcel",
+    "settings": ["clipboard.label", "clipboard.contents"]
+  }
+]

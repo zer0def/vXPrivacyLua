@@ -1,7 +1,7 @@
 package eu.faircode.xlua;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,47 +9,61 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import eu.faircode.xlua.api.app.XLuaApp;
+import eu.faircode.xlua.api.XResult;
 import eu.faircode.xlua.api.hook.XLuaHook;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
-import eu.faircode.xlua.api.properties.MockPropGroupHolder;
+import eu.faircode.xlua.api.settings.LuaSettingExtended;
+import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.ui.HookGroup;
+import eu.faircode.xlua.ui.interfaces.IHookTransaction;
+import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.utilities.SettingUtil;
+import eu.faircode.xlua.utilities.StringUtil;
+import eu.faircode.xlua.utilities.UiUtil;
 import eu.faircode.xlua.utilities.ViewUtil;
 
-public class AdapterGroupHooks extends RecyclerView.Adapter<AdapterGroupHooks.ViewHolder> {
-    private static final String TAG = "XLua.AdapterGroupHooks";
+public class AdapterGroupHooks extends RecyclerView.Adapter<AdapterGroupHooks.ViewHolder> implements Filterable {
+    private final LinkedHashMap<HookGroup, List<XLuaHook>> all = new LinkedHashMap<>();
+    private LinkedHashMap<HookGroup, List<XLuaHook>> filtered_max = new LinkedHashMap<>();
 
-    private XLuaApp app;
-    private List<Group> groups = new ArrayList<>();
-    private final List<Group> filtered = new ArrayList<>();
+    private List<HookGroup> filtered_groups = new ArrayList<>();
+    private List<List<XLuaHook>> filtered_hooks = new ArrayList<>();
+
     private final HashMap<String, Boolean> expanded = new HashMap<>();
 
+    private boolean dataChanged = false;
+    private CharSequence query = null;
+    private ILoader fragmentLoader;
+
     public class ViewHolder extends RecyclerView.ViewHolder
-            implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+            implements
+            CompoundButton.OnCheckedChangeListener,
+            View.OnClickListener,
+            IHookTransaction {
 
         final View view;
-        final TextView tvGroupName;
+        final TextView tvGroupName, tvHooksCount, tvHooksSelectedCount;
         final CheckBox cbGroup;
         final ImageView ivExpander;
-
-        final RecyclerView rvGroups;
+        final CardView cardView;
+        final RecyclerView rvHooks;
         final AdapterHook adapterHook;
 
         ViewHolder(View itemView) {
@@ -58,16 +72,14 @@ public class AdapterGroupHooks extends RecyclerView.Adapter<AdapterGroupHooks.Vi
             this.view = itemView;
             this.tvGroupName = itemView.findViewById(R.id.tvHookGroupName);
             this.cbGroup = itemView.findViewById(R.id.cbHookGroup);
-            this.rvGroups = itemView.findViewById(R.id.rvHookGroup);
+            this.rvHooks = itemView.findViewById(R.id.rvHookGroup);
             this.ivExpander = itemView.findViewById(R.id.ivExpanderGroup);
+            this.tvHooksCount = itemView.findViewById(R.id.tvHookGroupsHooksCount);
+            this.tvHooksSelectedCount = itemView.findViewById(R.id.tvHookGroupsHooksCountSelected);
 
-            //init RV
-            rvGroups.setHasFixedSize(true);
-            LinearLayoutManager llm = new LinearLayoutManager(itemView.getContext());
-            llm.setAutoMeasureEnabled(true);
-            rvGroups.setLayoutManager(llm);
-            adapterHook = new AdapterHook();
-            rvGroups.setAdapter(adapterHook);
+            this.cardView = itemView.findViewById(R.id.cvHookGroups);
+            adapterHook = new AdapterHook(fragmentLoader);
+            UiUtil.initRv(itemView.getContext(), rvHooks, adapterHook);
         }
 
         @SuppressLint("ClickableViewAccessibility")
@@ -87,167 +99,218 @@ public class AdapterGroupHooks extends RecyclerView.Adapter<AdapterGroupHooks.Vi
         @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(final View view) {
-            int code = view.getId();
-            Log.i(TAG, "onClick=" + code);
-
-            final Group group = filtered.get(getAdapterPosition());
-            final String name = group.name;
-
-            switch (code) {
-                case R.id.itemViewGroupHooks:
-                case R.id.tvHookGroupName:
-                case R.id.ivExpanderGroup:
-                    ViewUtil.internalUpdateExpanded(expanded, name);
-                    updateExpanded();
-                    break;
-            }
+            int id = view.getId();
+            XLog.i("onClick id=" + id);
+            try {
+                final HookGroup group = filtered_groups.get(getAdapterPosition());
+                final String name = group.name;
+                switch (id) {
+                    case R.id.itemViewGroupHooks:
+                    case R.id.tvHookGroupName:
+                    case R.id.ivExpanderGroup:
+                        ViewUtil.internalUpdateExpanded(expanded, name);
+                        updateExpanded();
+                        break;
+                }
+            }catch (Exception e) { XLog.e("onClick Failed: code=" + id, e, true); }
         }
 
         @SuppressLint({"NonConstantResourceId", "NotifyDataSetChanged"})
         @Override
         public void onCheckedChanged(final CompoundButton cButton, final boolean isChecked) {
-
+            HookGroup group = filtered_groups.get(getAdapterPosition());//this was originally group ??
+            group.sendAll(cButton.getContext(), getAdapterPosition(), isChecked, this);
         }
 
         void updateExpanded() {
-            Group group = filtered.get(getAdapterPosition());
+            HookGroup group = filtered_groups.get(getAdapterPosition());
             String name = group.name;
             boolean isExpanded = expanded.containsKey(name) && Boolean.TRUE.equals(expanded.get(name));
-            ViewUtil.setViewsVisibility(ivExpander, isExpanded, rvGroups);
+            ViewUtil.setViewsVisibility(ivExpander, isExpanded, rvHooks);
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        public void onGroupFinished(List<LuaAssignment> assignments, int position, boolean assign, XResult result) {
+            try {
+                if(position < 0) throw new Exception("Invalid Position: " + position);
+                notifyItemChanged(position);
+            }catch (Exception e) {
+                XLog.e("Failed to Init Update for Hooks: position=" + position + " assign=" + assign + " assignments count=" + assignments.size(), e, true);
+                notifyDataSetChanged();
+            }
         }
     }
 
-
     AdapterGroupHooks() { setHasStableIds(true); }
-    AdapterGroupHooks(FragmentManager manager, AppGeneric application) {
-
-    }
+    AdapterGroupHooks(ILoader fragmentLoader) {  this(); this.fragmentLoader = fragmentLoader; }
 
     @Override
-    public long getItemId(int position) { return filtered.get(position).hashCode(); }
+    public long getItemId(int position) { return filtered_groups.get(position).name.hashCode(); }
 
     @Override
-    public int getItemCount() { return filtered.size(); }
+    public int getItemCount() { return filtered_max.size(); }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.hookgroup, parent, false));
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.hookgroup, parent, false)); }
+
+    public void set(List<HookGroup> groups) {
+        this.dataChanged = true;
+        all.clear();
+        for(HookGroup g : groups) all.put(g, g.getHooks());
+        XLog.i("Groups size=" + this.all.size());
+        getFilter().filter(query);
     }
 
-    void setGroup(String name) {
-        //Set the group from the Spinner / Drop Down Menu at top of UI menu
-        //That being said ALL is all but specific kinds
-        //Get passed down to here to update view as well as show Restrict button
-        //if (group == null ? name != null : !group.equals(name)) {
-        //    group = name;
-        //}
-    }
-
-    public void set(XLuaApp app, List<XLuaHook> hooks, Context context) {
-        this.app = app;
-        //List<XLuaHook> selectedHooks = new ArrayList<>();
-        //for (XLuaHook hook : hooks)
-        //    if (hook.isAvailable(app.getPackageName(), collection) &&
-        //            (group == null || group.equals(hook.getGroup())))
-        //        selectedHooks.add(hook);
-
-        Map<String, Group> map = new HashMap<>();
-        for (XLuaHook hook : hooks) {
-            Group group;
-            if (map.containsKey(hook.getGroup()))
-                group = map.get(hook.getGroup());
-            else {
-                group = new Group();
-
-                Resources resources = context.getResources();
-                String name = hook.getGroup().toLowerCase().replaceAll("[^a-z]", "_");
-                group.id = resources.getIdentifier("group_" + name, "string", context.getPackageName());
-                group.name = hook.getGroup();
-                group.title = (group.id > 0 ? resources.getString(group.id) : hook.getGroup());
-
-                map.put(hook.getGroup(), group);
-            }
-            group.hooks.add(hook);
-        }
-
-        for (String groupId : map.keySet()) {
-            for (LuaAssignment assignment : app.getAssignments())
-                if (assignment.getHook().getGroup().equals(groupId)) {
-                    Group group = map.get(groupId);
-                    if (assignment.getException() != null)
-                        group.exception = true;
-                    if (assignment.getInstalled() >= 0)
-                        group.installed++;
-                    if (assignment.getHook().isOptional())
-                        group.optional++;
-                    if (assignment.getRestricted())
-                        group.used = Math.max(group.used, assignment.getUsed());
-                    group.assigned++;
-                }
-        }
-
-        this.groups = new ArrayList<>(map.values());
-        Log.i(TAG, "groups size=" + this.groups.size());
-
-        final Collator collator = Collator.getInstance(Locale.getDefault());
-        collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
-        Collections.sort(this.groups, new Comparator<Group>() {
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            private boolean expanded1 = false;
             @Override
-            public int compare(Group group1, Group group2) {
-                return collator.compare(group1.title, group2.title);
-            }
-        });
+            protected FilterResults performFiltering(CharSequence query) {
+                AdapterGroupHooks.this.query = query;
 
-        notifyDataSetChanged();
+                LinkedHashMap<HookGroup, List<XLuaHook>> visible = new LinkedHashMap<>(all);
+                LinkedHashMap<HookGroup, List<XLuaHook>> results = new LinkedHashMap<>();
+
+                if (!StringUtil.isValidAndNotWhitespaces(query)) results.putAll(visible);
+                else {
+                    String q = query.toString().toLowerCase().trim();
+                    if(q.equals("!")) {
+                        results.putAll(visible);
+                    }else {
+                        boolean filterSubHooks = q.startsWith("!");
+                        if(filterSubHooks)  q = q.substring(1);
+                        XLog.i("Filtering query=" + q + "\nSubHooks=" + filterSubHooks);
+
+                        for(Map.Entry<HookGroup, List<XLuaHook>> e : visible.entrySet()) {
+                            HookGroup group = e.getKey();
+                            if(SettingUtil.cleanSettingName(group.name).toLowerCase().contains(q) ||
+                                    group.name.toLowerCase().contains(q) ||
+                                    group.title.toLowerCase().contains(q) ||
+                                    filterSubHooks) {
+                                List<XLuaHook> hooks = new ArrayList<>();
+                                if(filterSubHooks) {
+                                    for(XLuaHook h : group.getHooks()) {
+                                        if(h.getId().toLowerCase().contains(q))
+                                            hooks.add(h);
+                                        else {
+                                            for(LuaSettingExtended s : h.getManagedSettings()) {
+                                                if(s.getName().toLowerCase().contains(q) || SettingUtil.cleanSettingName(s.getName()).toLowerCase().contains(q)) {
+                                                    hooks.add(h);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }else {
+                                    hooks = group.getHooks();
+                                }
+
+                                if(!hooks.isEmpty())
+                                    results.put(group, hooks);
+                            }
+                        }
+                    }
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = results;
+                filterResults.count = results.size();
+                return filterResults;
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            protected void publishResults(CharSequence query, FilterResults result) {
+                try {
+                    final LinkedHashMap<HookGroup, List<XLuaHook>> groups =
+                            (result == null ? new LinkedHashMap<HookGroup, List<XLuaHook>>() : (LinkedHashMap<HookGroup, List<XLuaHook>>)result.values);
+
+                    if(dataChanged) {
+                        dataChanged = false;
+                        filtered_max = groups;
+                        filtered_groups = new ArrayList<>(groups.keySet());
+                        filtered_hooks = new ArrayList<>(groups.values());
+                        XLog.i("FM=" + filtered_max.size() + " FG=" + filtered_groups.size() + " FH=" + filtered_hooks.size());
+                        notifyDataSetChanged();
+                    }else {
+                        DiffUtil.DiffResult diff =
+                                DiffUtil.calculateDiff(new GroupHooksDiffCallback(expanded1,
+                                        filtered_max,
+                                        groups));
+                        filtered_max = groups;
+                        filtered_groups = new ArrayList<>(groups.keySet());
+                        filtered_hooks = new ArrayList<>(groups.values());
+                        XLog.i("FM=" + filtered_max.size() + " FG=" + filtered_groups.size() + " FH=" + filtered_hooks.size());
+                        diff.dispatchUpdatesTo(AdapterGroupHooks.this);
+                    }
+                }catch (Exception e) {
+                    XLog.e("Failed to Publish Results for Adapter Settings", e);
+                }
+            }
+        };
+    }
+
+    private static class GroupHooksDiffCallback extends DiffUtil.Callback {
+        private final boolean refresh;
+        private final List<HookGroup> prevGroups;
+        private final List<List<XLuaHook>> prevHooks;
+        private final List<HookGroup> nextGroups;
+        private final List<List<XLuaHook>> nextHooks;
+
+        GroupHooksDiffCallback(boolean refresh, LinkedHashMap<HookGroup, List<XLuaHook>> prev, LinkedHashMap<HookGroup, List<XLuaHook>> next) {
+            this.refresh = refresh;
+            this.prevGroups = new ArrayList<>(prev.keySet());
+            this.prevHooks = new ArrayList<>(prev.values());
+            this.nextGroups = new ArrayList<>(next.keySet());
+            this.nextHooks = new ArrayList<>(next.values());
+        }
+
+        @Override
+        public int getOldListSize() { return prevGroups.size(); }
+
+        @Override
+        public int getNewListSize() { return nextGroups.size(); }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            HookGroup g1 = prevGroups.get(oldItemPosition);
+            HookGroup g2 = nextGroups.get(newItemPosition);
+            return !refresh && g1.name.equalsIgnoreCase(g2.name);
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            List<XLuaHook> h1 = prevHooks.get(oldItemPosition);
+            List<XLuaHook> h2 = nextHooks.get(newItemPosition);
+            if(h1.size() == h2.size()) {
+                for(XLuaHook h : h1)
+                    if(!h2.contains(h))
+                        return false;
+            }else return false;
+            return true;
+        }
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.unWire();
-        Group group = filtered.get(position);
+        HookGroup group = filtered_groups.get(position);
+        List<XLuaHook> hooks = filtered_hooks.get(position);
         holder.tvGroupName.setText(SettingUtil.cleanSettingName(group.title));
-        holder.adapterHook.set(group.hooks);
+        holder.adapterHook.set(group, hooks);
+        holder.tvHooksCount.setText(new StringBuilder().append("[").append(group.hooksSize()).append("]"));
+        holder.tvHooksSelectedCount.setText(new StringBuilder().append(group.getAssigned()));
+        holder.tvHooksSelectedCount.setVisibility(group.hasAssigned() ? View.VISIBLE : View.GONE);
+        Resources resources = holder.itemView.getContext().getResources();
+        holder.cbGroup.setButtonTintList(ColorStateList.valueOf(resources.getColor(
+                group.allAssigned() ? R.color.colorAccent : android.R.color.darker_gray, null)));
+
+        holder.cbGroup.setChecked(group.hasAssigned());
+        XLog.i("group=" + group.name + " assignments=" + group.getAssigned());
         holder.updateExpanded();
         holder.wire();
-    }
-
-    private class Group {
-        int id;
-        String name;
-        String title;
-        boolean exception = false;
-        int installed = 0;
-        int optional = 0;
-        long used = -1;
-        int assigned = 0;
-        List<XLuaHook> hooks = new ArrayList<>();
-
-        Group() {
-        }
-
-        boolean hasException() {
-            return (assigned > 0 && exception);
-        }
-
-        boolean hasInstalled() {
-            return (assigned > 0 && installed > 0);
-        }
-
-        boolean allInstalled() {
-            return (assigned > 0 && installed + optional == assigned);
-        }
-
-        long lastUsed() {
-            return used;
-        }
-
-        boolean hasAssigned() {
-            return (assigned > 0);
-        }
-
-        boolean allAssigned() {
-            return (assigned == hooks.size());
-        }
     }
 }

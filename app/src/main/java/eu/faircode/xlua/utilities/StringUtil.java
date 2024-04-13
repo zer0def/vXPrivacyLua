@@ -12,11 +12,42 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
+import eu.faircode.xlua.logger.XLog;
+
 public class StringUtil {
     private static final String TAG = "XLua.StringUtil";
 
     public static final String BUILD_PROP_ENDING = "\r\n";//(0D 0A) or  \u000D\u000A
     public static final List<Character> ESCAPE_CHARS = Arrays.asList('\n', '\t', '\b', '\f', '\r', '\"', '\0');
+
+    public static boolean parseBoolean(String str) {
+        if(str == null) return false;
+        try {
+            String s = str.trim().toLowerCase();
+            if(s.isEmpty()) return false;
+            if(s.equals("yes") || s.equals("true") || s.equals("1") || s.equals("checked") || s.equals("enabled"))
+                return true;
+            if(s.equals("no") || s.equals("false") || s.equals("0") || s.equals("unchecked") || s.equals("disabled"))
+                return false;
+
+            return false;
+        }catch (Exception e) {
+            XLog.e("Failed to parse boolean: ", e, true);
+            return false;
+        }
+    }
+
+    public static boolean isValidAndNotWhitespaces(CharSequence s) { return s != null && isValidAndNotWhitespaces(s.toString()); }
+    public static boolean isValidAndNotWhitespaces(String s) {
+        if(s == null || s.isEmpty()) return false;
+        for(int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if(!(c == '\n' || c == '\t' || c == '\0' || c == ' ' || c == '\b' || c == '\r' || c == '\f'))
+                return true;
+        }
+
+        return false;
+    }
 
     public static String trimEnsureEnd(String s, String endsIn) {
         if(s == null || s.isEmpty()) return s;

@@ -63,9 +63,6 @@
     "notify":false,
     "luaScript": "@id_wifimanager_getdhcpinfo"
   },
-
-
-
   {
     "builtin": true,
     "collection": "PrivacyEx",
@@ -86,7 +83,6 @@
     "notify":false,
     "luaScript": "@generic_empty_list"
   },
-
   {
     "builtin": true,
     "collection": "PrivacyEx",
@@ -105,10 +101,9 @@
     "optional":true,
     "usage":true,
     "notify":false,
-    "luaScript": "@id_linkproperties_getdomains"
+    "luaScript": "@id_linkproperties_getdomains",
+    "settings": ["network.dns"]
   },
-
-
   {
     "builtin": true,
     "collection": "PrivacyEx",

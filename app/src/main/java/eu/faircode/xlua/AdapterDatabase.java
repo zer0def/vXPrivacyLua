@@ -20,7 +20,8 @@ public class AdapterDatabase extends RecyclerView.Adapter<AdapterDatabase.ViewHo
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public class ViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+            implements
+            View.OnClickListener {
 
         final View itemView;
 

@@ -6,7 +6,11 @@ function after(hook, param)
 
 	local mcc = "274"
 	local fake = param:getSetting("gsm.operator.mcc")
-	if fake ~= nil and tonumber(fake) ~= nil then
+	if fake == nil then
+	    return false
+	end
+
+	if tonumber(fake) ~= nil then
 		mcc = fake
 	end
 

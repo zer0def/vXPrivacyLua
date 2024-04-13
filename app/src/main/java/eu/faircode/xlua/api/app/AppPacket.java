@@ -1,7 +1,10 @@
 package eu.faircode.xlua.api.app;
 
+import android.os.Bundle;
+import android.util.Log;
+
 import eu.faircode.xlua.AppGeneric;
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
 
 public class AppPacket  extends UserIdentityPacket {
     public static AppPacket create(AppGeneric application) { return new AppPacket(application, true, true); }
@@ -28,6 +31,15 @@ public class AppPacket  extends UserIdentityPacket {
         setUser(userId);
         setCategory(packageName);
         setCode(getCode(initForceStop, initSettings));
+    }
+
+    @Override
+    public Bundle toBundle() { return writePacketHeaderBundle(super.toBundle()); }
+
+    @Override
+    public void fromBundle(Bundle b) {
+        super.fromBundle(b);
+        super.readPacketHeaderBundle(b);
     }
 
     public static int getCode(boolean initForceStop, boolean initSettings) {

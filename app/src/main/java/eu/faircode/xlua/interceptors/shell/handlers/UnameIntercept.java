@@ -2,14 +2,10 @@ package eu.faircode.xlua.interceptors.shell.handlers;
 
 import android.util.Log;
 
-import java.util.List;
-
-import eu.faircode.xlua.api.standard.interfaces.ICommandIntercept;
+import eu.faircode.xlua.api.xstandard.interfaces.ICommandIntercept;
 import eu.faircode.xlua.interceptors.UserContextMaps;
 import eu.faircode.xlua.interceptors.shell.CommandInterceptor;
 import eu.faircode.xlua.interceptors.shell.ShellInterceptionResult;
-import eu.faircode.xlua.utilities.CollectionUtil;
-import eu.faircode.xlua.utilities.ShellUtils;
 import eu.faircode.xlua.utilities.StringUtil;
 
 public class UnameIntercept extends CommandInterceptor implements ICommandIntercept  {

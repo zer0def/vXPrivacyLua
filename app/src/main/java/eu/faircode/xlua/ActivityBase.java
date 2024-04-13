@@ -43,9 +43,7 @@ public class ActivityBase extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
-    String getThemeName() {
-        return (theme == null ? "light" : theme);
-    }
+    public String getThemeName() { return (theme == null ? "dark" : theme); }
 
     void setDarkMode() { setThemeName("dark"); }
     void setLightMode() { setThemeName("light"); }
@@ -53,8 +51,9 @@ public class ActivityBase extends AppCompatActivity {
         final Context context = this;
 
         Log.i(TAG, "Set Theme=" + name);
+        //If the GET value is not the SAME as the PUT value THEN recreate the UI
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        /*new Handler(Looper.getMainLooper()).post(new Runnable() {
             final XResult ret = XLuaCall.putSetting(context, "theme", name);
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -66,6 +65,6 @@ public class ActivityBase extends AppCompatActivity {
                     recreate();
                 }
             }
-        });
+        });*/
     }
 }

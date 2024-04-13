@@ -9,6 +9,13 @@ function after(hook, param)
 	--local setting = param:getSetting("MMC,MNC")
 	local mcc = param:getSettingReMap("gsm.operator.mcc", "phone.mmc")
 	local mnc = param:getSettingReMap("gsm.operator.mnc", "phone.mnc")
+
+	if mcc == nil or mnc == nil then
+	    if fake == nil then
+	        return false
+	    end
+	end
+
 	if mmc ~= nil and mnc ~= nil then
 		if tonumber(mcc) ~= nil and tonumber(mnc) ~= nil then
 			fake = mcc .. mnc

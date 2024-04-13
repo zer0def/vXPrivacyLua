@@ -5,6 +5,10 @@ function after(hook, param)
 	end
 
     local fake = param:getSetting("net.ipaddress", "6.6.6.6")
+    if fake == nil then
+        return false
+    end
+
     param:setResult(fake)
     return true, ret, fake
 end

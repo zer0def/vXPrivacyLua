@@ -19,8 +19,7 @@ import eu.faircode.xlua.api.properties.MockPropSetting;
 import eu.faircode.xlua.api.settings.LuaSetting;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
-import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
 import eu.faircode.xlua.api.useragent.MockUserAgent;
 import eu.faircode.xlua.api.xmock.query.GetMockAgentsCommand;
 import eu.faircode.xlua.api.xmock.query.GetMockConfigsCommand;
@@ -135,4 +134,22 @@ public class XMockQuery {
 
     public static Collection<MockConfig> getConfigs(Context context) { return getConfigs(context, true); }
     public static Collection<MockConfig> getConfigs(Context context, boolean marshall) { return CursorUtil.readCursorAs(GetMockConfigsCommand.invoke(context, marshall), marshall, MockConfig.class); }
+
+    public static Collection<MockConfig> getConfigsEx(Context context) { return getConfigsEx(context, true); }
+    public static Collection<MockConfig> getConfigsEx(Context context, boolean marshall) {
+        Collection<MockConfig> configs = getConfigs(context, marshall);
+        Collection<LuaSettingExtended> settings = getAllSettings(context);
+        for(MockConfig config : configs) {
+            for(LuaSettingExtended configSetting : config.getSettings()) {
+                for (LuaSettingExtended setting : settings) {
+                    if(configSetting.getName().equalsIgnoreCase(setting.getName())) {
+                        configSetting.setDescription(setting.getDescription());
+                        break;
+                    }
+                }
+            }
+        }
+
+        return configs;
+    }
 }

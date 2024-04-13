@@ -1,7 +1,14 @@
-function before(hook, param)
-    log("HEIGHT")
+function after(hook, param)
+    local res = param:getResult()
+    if res == nil then
+        return false
+    end
+
     local height = param:getSettingInt("display.height", 3100)
-    log("HEIGHT: " .. height)
+    if height == nil then
+        return false
+    end
+
     param:setResult(height)
-    return true
+    return true, tostring(res), tostring(height)
 end

@@ -10,6 +10,8 @@ import android.os.Binder;
 import android.os.Process;
 import android.util.Log;
 
+import com.bumptech.glide.util.Util;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +29,8 @@ import eu.faircode.xlua.api.app.AppPacket;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignmentWriter;
 import eu.faircode.xlua.api.settings.LuaSetting;
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
 import eu.faircode.xlua.api.app.XLuaApp;
 import eu.faircode.xlua.api.hook.XLuaHook;
 
@@ -72,14 +74,14 @@ public class XLuaAppProvider {
     }
 
 
-    public static XLuaApp getApp(Context context, XDatabase db, AppPacket packet) { return getApp(context, db, XUtil.getUserId(packet.getUser()), packet.getCategory(), packet.isInitForceStop(), packet.isInitSettings()); }
-    public static XLuaApp getApp(Context context, XDatabase db, int userId, String packageName, boolean initForceStop, boolean initSettings) {
+    public static XLuaApp getApp(Context context, XDatabase db, int cuid, String packageName, boolean initForceStop, boolean initSettings) {
         long identity = Binder.clearCallingIdentity();
+        int userid = XUtil.getUserId(cuid);
         try {
-            Context contextForUser = XUtil.createContextForUser(context, userId);
+            Context contextForUser = XUtil.createContextForUser(context, userid);
             PackageManager pm = contextForUser.getPackageManager();
 
-            Log.i(TAG, "getApp for Package=" + packageName);
+            Log.i(TAG, "getApp for Package=" + packageName + " uid=" + userid + " cuid=" + cuid + " initForceStop=" + initForceStop + " initSettings=" + initSettings);
 
             for (ApplicationInfo ai : XposedUtil.getApplications(contextForUser))
                 if (ai.packageName.equalsIgnoreCase(packageName)) {
@@ -112,9 +114,8 @@ public class XLuaAppProvider {
 
                         final HashMap<String, XLuaApp> apps = new HashMap<>();
                         apps.put(app.getPackageName(), app);
-                        if(initForceStop) initAppForceToStop(apps, db, userId);
-                        if(initSettings) initAppDatabaseSettings(context, db, apps, userId);
-
+                        if(initForceStop) initAppForceToStop(apps, db, userid);
+                        if(initSettings) initAppDatabaseSettings(context, db, apps, userid);
 
                         Log.i(TAG, "Settings=" + app.getAssignments().size());
                         return app;
@@ -125,20 +126,21 @@ public class XLuaAppProvider {
                     //Log.w(TAG, "Not Pkg=" + ai.packageName);
                 }
         }catch (Throwable e) {
-            Log.e(TAG, "Failed to get App: pkg=" + packageName + " uid=" + userId + " e=" + e + "\n" + Log.getStackTraceString(e));
+            Log.e(TAG, "Failed to get App: pkg=" + packageName + " uid=" + userid + " e=" + e + "\n" + Log.getStackTraceString(e));
         }finally {
             Binder.restoreCallingIdentity(identity);
         } return new XLuaApp();
     }
 
-    public static Map<String, XLuaApp> getApps(Context context, XDatabase db, int userId, boolean initForceToStop, boolean initSettings) {
+    public static Map<String, XLuaApp> getApps(Context context, XDatabase db, int cuid, boolean initForceToStop, boolean initSettings) {
+        int userid = XUtil.getUserId(cuid);
         Map<String, XLuaApp> apps = new HashMap<>();
 
         long identity = Binder.clearCallingIdentity();
         try {
             //https://github.com/zer0def/vXPrivacyLua/commit/c030dd1880afda81b989185f8e2527c8358db799
             //For TaiChi support
-            Context contextForUser = XUtil.createContextForUser(context, userId);
+            Context contextForUser = XUtil.createContextForUser(context, userid);
             PackageManager pm = contextForUser.getPackageManager();
 
             for (ApplicationInfo ai : XposedUtil.getApplications(contextForUser))
@@ -173,12 +175,12 @@ public class XLuaAppProvider {
             Binder.restoreCallingIdentity(identity);
         }
 
-        Log.i(TAG, "Installed apps=" + apps.size() + " userId=" + userId);
+        Log.i(TAG, "Installed apps=" + apps.size() + " userId=" + userid + " cuid=" + cuid);
         if(initForceToStop)
-            initAppForceToStop(apps, db, userId);
+            initAppForceToStop(apps, db, userid);
 
         if(initSettings)
-            initAppDatabaseSettings(context, db, apps, userId);
+            initAppDatabaseSettings(context, db, apps, userid);
             //initAppDatabaseSettings(context, apps, db, userId);
 
         return apps;
@@ -266,10 +268,10 @@ public class XLuaAppProvider {
                         app.addAssignment(assignment);
                     }
 
-                    if(apps.size() == 1) {
-                        Log.i(TAG, "Returning from Init Setting sfrom app as it is one");
-                        return;
-                    }
+                    //if(apps.size() == 1) {
+                    //    Log.i(TAG, "Returning from Init Setting sfrom app as it is one");
+                    //    return;
+                    //}
 
                 } else
                     Log.i(TAG, "Package " + pkg + " not found");

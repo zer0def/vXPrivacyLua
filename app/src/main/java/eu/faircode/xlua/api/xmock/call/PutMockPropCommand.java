@@ -6,12 +6,12 @@ import android.util.Log;
 
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.XResult;
-import eu.faircode.xlua.api.properties.MockPropDatabase;
+import eu.faircode.xlua.api.xmock.database.MockPropManager;
 import eu.faircode.xlua.api.properties.MockPropPacket;
-import eu.faircode.xlua.api.properties.MockPropProvider;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
-import eu.faircode.xlua.api.standard.command.CallPacket;
+import eu.faircode.xlua.api.xmock.provider.MockPropProvider;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
 
 public class PutMockPropCommand extends CallCommandHandler {
     //This will register with the LUA Database not the MOCK Database
@@ -35,10 +35,10 @@ public class PutMockPropCommand extends CallCommandHandler {
                 return MockPropProvider.putMockPropMap(commandData.getContext(), commandData.getDatabase(), packet).toBundle();
             case  MockPropPacket.CODE_DELETE_PROP_SETTING:
             case MockPropPacket.CODE_INSERT_UPDATE_PROP_SETTING:
-                return MockPropDatabase.putPropertySetting(commandData.getDatabase(), packet).toBundle();
+                return MockPropManager.putPropertySetting(commandData.getDatabase(), packet).toBundle();
             case MockPropPacket.CODE_DELETE_PROP_MAP_AND_SETTING:
                 XResult res1 = MockPropProvider.putMockPropMap(commandData.getContext(), commandData.getDatabase(), packet);
-                XResult res2 =  MockPropDatabase.putPropertySetting(commandData.getDatabase(), packet);
+                XResult res2 =  MockPropManager.putPropertySetting(commandData.getDatabase(), packet);
                 return XResult.combine(res1, res2).toBundle();
         }
 

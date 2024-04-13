@@ -8,15 +8,12 @@ function before(hook, param)
 
     local total = param:getSetting("memory.total")
     local avail = param:getSetting("memory.available")
-
     if total == nil or avail == nil then
-        total = "80"
-        avail = "70"
+        return false
     end
 
     local t = tonumber(total)
     local a = tonumber(avail)
-
     if t == nil or a == nil then
         return false
     end

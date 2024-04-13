@@ -5,13 +5,10 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
-
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
 
 public class CollectionUtil {
     private static final String TAG = "XLua.CollectionUtil";

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.faircode.xlua.api.properties.MockPropSetting;
-import eu.faircode.xlua.api.standard.interfaces.ICommandIntercept;
+import eu.faircode.xlua.api.xstandard.interfaces.ICommandIntercept;
 import eu.faircode.xlua.interceptors.UserContextMaps;
 import eu.faircode.xlua.interceptors.shell.CommandInterceptor;
 import eu.faircode.xlua.interceptors.shell.ShellInterceptionResult;

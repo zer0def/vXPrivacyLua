@@ -6,6 +6,9 @@ function after(hook, param)
 
     --local fake = param:getSetting("google.advertisingid")
     local fake = param:getSettingReMap("unique.google.advertising.id", "ad.id")
+    if fake == nil then
+        return false
+    end
     if fake == nil then 
     	local i, digit
     	fake = ""

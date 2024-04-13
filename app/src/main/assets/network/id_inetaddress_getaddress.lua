@@ -5,7 +5,11 @@ function after(hook, param)
     end
 
     local setting = param:getSetting("network.host.address", "12.7.0.0.1");
+    if setting == nil then
+        return false
+    end
+
     local fake = param:getIpAddressBytes(setting)
     param:setResultByteArray(fake)
-    return true
+    return true, "N/A", setting
 end

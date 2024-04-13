@@ -5,6 +5,10 @@ function after(hook, param)
     end
 
     local fake = param:getSetting("network.dns", "1.1.1.1")
+    if fake == nil then
+        return false
+    end
+
     param:setResult(fake)
     return true, result, fake
 end

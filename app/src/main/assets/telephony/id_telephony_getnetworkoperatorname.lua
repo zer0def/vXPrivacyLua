@@ -5,6 +5,10 @@ function after(hook, param)
 	end
 
 	local fake = param:getSettingReMap("gsm.network.carrier", "phone.isp", "Siminn")
+	if fake == nil then
+	    return false
+	end
+
 	param:setResult(fake)
 	return true, ret, fake
 end

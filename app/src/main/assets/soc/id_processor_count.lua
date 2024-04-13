@@ -5,6 +5,9 @@ function after(hook, param)
 	end
 
 	local fake = param:getSettingInt("cpu.processor.count", 99)
+	if fake == nil then
+	    return false
+	end
 	--local fake = 99
 	--if setting ~= nil then
 	--	local n = tonumber(setting)

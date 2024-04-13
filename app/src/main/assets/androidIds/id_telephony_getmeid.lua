@@ -20,6 +20,9 @@ function after(hook, param)
 	--	fake = "000"
 	--end
 	local fake = param:getSettingReMap("unique.gsm.meid", "value.meid", "000")
+	if fake == nil then
+	    return false
+	end
 	--log("Setting MEID [" .. res .. "] => " .. fake)
 	param:setResult(fake)
 	return true, ret, fake

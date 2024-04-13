@@ -5,9 +5,13 @@ function after(hook, param)
 	end
 
 	local fake = 5
-	local state = param:getSettingReMap("gsm.sim.state", "phone.simstate")
-	if state ~= nil and tonumber(state) ~= nil then
-		fake = tonumber(state)
+	local setting = param:getSettingReMap("gsm.sim.state", "phone.simstate")
+	if setting == nil then
+	    return false
+	end
+
+	if state ~= nil and tonumber(setting) ~= nil then
+		fake = tonumber(setting)
 	else
 		if ret == fake then
 			fake = 0

@@ -5,14 +5,12 @@ import android.os.Binder;
 import android.os.Process;
 import android.util.Log;
 
-import java.util.Arrays;
-
 import eu.faircode.xlua.XDatabase;
 import eu.faircode.xlua.XUtil;
-import eu.faircode.xlua.api.standard.QueryCommandHandler;
-import eu.faircode.xlua.api.standard.command.QueryPacket;
+import eu.faircode.xlua.api.xstandard.QueryCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.QueryPacket;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
 
 public class GetLogCommand extends QueryCommandHandler {
     private static final String TAG = "XLua.GetLogCommand";

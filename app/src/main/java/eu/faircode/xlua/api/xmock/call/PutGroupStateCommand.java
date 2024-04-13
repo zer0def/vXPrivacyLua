@@ -5,9 +5,8 @@ import android.os.Bundle;
 
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.properties.MockPropMap;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
-import eu.faircode.xlua.utilities.BundleUtil;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
 
 public class PutGroupStateCommand extends CallCommandHandler {
     public static PutGroupStateCommand create() { return new PutGroupStateCommand(); };

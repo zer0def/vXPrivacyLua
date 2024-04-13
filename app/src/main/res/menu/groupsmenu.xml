@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_show"
+        android:icon="@drawable/ic_filter_list_white_24dp"
+        android:title="@string/menu_filter"
+        android:visible="false"
+        android:enabled="false"
+        app:showAsAction="always">
+        <menu>
+            <group
+                android:id="@+id/groupShow"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menu_hooks_filter_settings"
+                    android:title="@string/menu_filter_settings" />
+                <item
+                    android:id="@+id/menu_hooks_filter_groups"
+                    android:title="@string/menu_filter_groups" />
+                <item
+                    android:id="@+id/menu_hooks_filter_hooks"
+                    android:title="@string/menu_filter_hooks" />
+                <item
+                    android:id="@+id/menu_hooks_filter_all"
+                    android:title="@string/menu_filter_all" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_search_group"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/menu_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+</menu>

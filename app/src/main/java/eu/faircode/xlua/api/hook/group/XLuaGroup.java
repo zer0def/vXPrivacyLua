@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import eu.faircode.xlua.api.standard.interfaces.IDBSerial;
+import eu.faircode.xlua.api.xstandard.interfaces.IDBSerial;
 import eu.faircode.xlua.utilities.CursorUtil;
 
 public class XLuaGroup extends XLuaGroupBase implements IDBSerial {

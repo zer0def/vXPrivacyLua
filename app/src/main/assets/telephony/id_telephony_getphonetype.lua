@@ -4,13 +4,17 @@ function after(hook, param)
 		return false
 	end
 
-	local fakeStr = param:getSettingReMap("gsm.phone.type", "phone.type", "2")
+	local setting = param:getSettingReMap("gsm.phone.type", "phone.type", "2")
+	if setting == nil then
+	    return false
+	end
+
 	--PHONE_TYPE_CDMA=2
 	--PHONE_TYPE_GSM=1
 	--PHONE_TYPE_NONE=0
 	--PHONE_TYPE_SIP=3
 
-	local fake = tonumber(fakeStr)
+	local fake = tonumber(setting)
 	if fake == nil then
 	    fake = 2
 	end

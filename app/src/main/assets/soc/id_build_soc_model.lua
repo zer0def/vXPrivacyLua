@@ -5,6 +5,10 @@ function after(hook, param)
 	end
 
     local fake = param:getSetting("cpu.soc.model", "SM8150")
+    if fake == nil then
+        return false
+    end
+
     param:setResult(fake)
     return true, ret, fake
 end

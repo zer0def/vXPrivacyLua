@@ -16,26 +16,25 @@ function before(hook, param)
 
         log("App is trying to Open /proc/meminfo File ... Spoofing....")
 
-        --public File createFakeMeminfoFile(int totalGigabytes, int availableGigabytes) 
-        --"settings":["memory.total", "memory.available"]
-
         local scope = param:getApplicationContext()
         local fake = param:getValue("MEMINFOFILE", scope)
         if fake == nil then
             local total = param:getSettingInt("memory.total", 900)
             local available = param:getSettingInt("memory.available", 500)
+            if total == nil or available == nil then
+                return false
+            end
+
             fake = param:createFakeMeminfoFile(total, available)
             param:putValue("MEMINFOFILE", fake, scope)
         end
 
         if fake == nil then
-            log("Error NIL File Object /proc/meminfo")
             return false
         end
 
         local path = fake:getPath()
         if path == nil then
-            log("Error NIL Path Object /proc/meminfo")
             return false
         end
 

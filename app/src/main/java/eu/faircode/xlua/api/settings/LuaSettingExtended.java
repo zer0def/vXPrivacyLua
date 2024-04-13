@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -17,9 +18,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
+import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
+import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.random.IRandomizer;
 import eu.faircode.xlua.random.IRandomizerManager;
 import eu.faircode.xlua.random.elements.ISpinnerElement;
@@ -61,6 +66,7 @@ public class LuaSettingExtended extends LuaSettingDefault implements IJsonSerial
 
     protected IRandomizer randomizer;
     protected TextInputEditText inputText;
+    protected TextWatcher textWatcher;
 
     public LuaSettingExtended() { setUseUserIdentity(true); }
     public LuaSettingExtended(Parcel in) { this(); fromParcel(in); }
@@ -98,13 +104,17 @@ public class LuaSettingExtended extends LuaSettingDefault implements IJsonSerial
     }
 
     public void updateValue() { this.value = this.modifiedValue; }
+    public void updateValue(boolean updateTextBoxBinding) {
+        updateValue();
+        if(updateTextBoxBinding && this.inputText != null) setInputText(this.value);
+    }
+
     public String getModifiedValue() { return this.modifiedValue; }
+    public LuaSetting setModifiedValueToNull() { this.modifiedValue = null; return this; }
     public void setModifiedValue(String modifiedValue) { setModifiedValue(modifiedValue, false); }
     public void setModifiedValue(String modifiedValue, boolean setTextInput) {
-        Log.w("XLua.LuaSettingExtended", " modified value=" + modifiedValue);
         this.modifiedValue = modifiedValue;
-        if(this.inputText != null && setTextInput)
-            setInputText(modifiedValue);
+        if(this.inputText != null && setTextInput) setInputText(modifiedValue);
     }
 
     public void resetModified() { resetModified(false);  }
@@ -174,12 +184,18 @@ public class LuaSettingExtended extends LuaSettingDefault implements IJsonSerial
         }
     }
 
-    public void bindInputTextBox(TextInputEditText textEdit) { if(textEdit != null) this.inputText = textEdit; }
-    public void unBindInputTextBox() { this.inputText = null; }
+    public void bindInputTextBox(TextInputEditText textEdit) { bindInputTextBox(textEdit, null); }
+    public void bindInputTextBox(TextInputEditText textEdit, TextWatcher onTextEdit) { if(textEdit != null) { this.inputText = textEdit; this.textWatcher = onTextEdit; } }
+    public void unBindInputTextBox() { this.inputText = null; this.textWatcher = null; }
     public void setInputTextEmpty() { setInputText(""); }
     public void setInputText(String text) {
         try {
-            if(this.inputText != null && text != null) this.inputText.setText(text);
+            if(text == null) text = "";
+            if(this.inputText != null && text != null) {
+                if(this.textWatcher != null) this.inputText.removeTextChangedListener(this.textWatcher);
+                this.inputText.setText(text);
+                if(this.textWatcher != null) this.inputText.addTextChangedListener(this.textWatcher);
+            }
         }catch (Exception e) {
             Log.e("XLua.LuaSettingExtended", "Failed to set InputTextEdit e=" + e);
         }
@@ -244,4 +260,12 @@ public class LuaSettingExtended extends LuaSettingDefault implements IJsonSerial
     @NonNull
     @Override
     public String toString() { return new StringBuilder(super.toString()).append(" enabled=").append(this.enabled).toString(); }
+
+    public static Map<String, LuaSettingExtended> toMap(Collection<LuaSettingExtended> managed_settings) {
+        Map<String, LuaSettingExtended> m = new HashMap<>();
+        for(LuaSettingExtended s : managed_settings)
+            m.put(s.getName(), s);
+
+        return m;
+    }
 }

@@ -12,6 +12,10 @@ function after(hook, param)
     else
         local mcc = param:getSettingReMap("gsm.operator.mcc", "phone.mcc", "274")
         local mnc = param:getSettingReMap("gsm.operator.mnc", "phone.mnc", "299")
+        if mcc == nil or mnc == nil then
+            return false
+        end
+
         if param:isNumericString(mcc) and param:isNumericString(mnc) then
             local fake = mcc .. mnc
             param:setResultToLongInt(fake)

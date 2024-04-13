@@ -20,7 +20,7 @@
   { "settingName": "android.build.date.two", "propNames": [ "ril.manufacturedate" ] },
 
 
-  { "settingName": "android.build.dev.codename", "propNames": [ "ro.build.version.codename", "ro.build.version.preview_sdk_fingerprint", "ro.build.version.all_codenames", "" ] },
+  { "settingName": "android.build.dev.codename", "propNames": [ "ro.build.version.codename", "ro.build.version.preview_sdk_fingerprint", "ro.build.version.all_codenames"] },
   { "settingName": "android.build.incremental", "propNames": ["ro.vendor_dlkm.build.version.incremental", "ro.build.version.incremental","ro.system.build.version.incremental","ro.system_ext.build.version.incremental"] },
   { "settingName": "android.build.description", "propNames": [ "ro.build.description" ] },
   { "settingName": "android.build.id", "propNames": [ "ro.build.id", "ro.system.build.id", "ro.system_ext.build.id", "ro.vendor.build.id" ] },
@@ -95,8 +95,8 @@
   { "settingName": "unique.serial.no", "propNames": [  "ro.kernel.androidboot.serialno", "ro.build.serial", "persist.odm.ril.oem.sno", "persist.odm.ril.oem.psno", "persist.odm.ril.odm.ril.oem.psno", "ro.ril.oem.psno", "ro.ril.oem.sno","ro.serialno", "ro.boot.serialno", "ril.serialnumber", "gsm.sn1", "sys.serialnumber" ] },
   { "settingName": "unique.gsm.imei", "propNames": [ "ro.ril.miui.imei2", "ro.ril.miui.imei1", "ro.ril.miui.imei0", "ro.ril.miui.imei", "persist.radio.imei2", "persist.radio.imei1", "persist.radio.imei0", "persist.radio.imei", "persist.odm.ril.oem.imei2", "persist.odm.ril.oem.imei1", "persist.odm.ril.oem.imei0", "persist.odm.ril.oem.imei", "persist.radio.imei1", "persist.radio.imei0", "ro.ril.oem.imei", "ro.ril.oem.imei0", "ro.ril.oem.imei1", "ro.ril.oem.imei2" ] },
   { "settingName": "unique.gsm.meid", "propNames": [ "ro.ril.oem.meid" ] },
-  { "settingName": "unique.gsm.icc.id", "propNames": [ "gsm.sim.preiccid_0", "gsm.sim.preiccid_1", "persist.vendor.cfu.iccid.0", "persist.vendor.radio.cfu.iccid.1" ] },
-  { "settingName": "unique.network.mac.address", "propNames": [ "ro.ril.oem.btmac", "persist.odm.ril.oem.btmac", "ro.ril.oem.wifimac", "persist.odm.ril.oem.wifimac" ] },
+  { "settingName": "unique.gsm.icc.id", "propNames": [  "ril.iccid.sim1", "ril.iccid.sim2", "gsm.sim.preiccid_0", "gsm.sim.preiccid_1", "persist.vendor.cfu.iccid.0", "persist.radio.data.iccido", "persist.vendor.radio.cfu.iccid.1" ] },
+  { "settingName": "unique.network.mac.address", "propNames": [ "ro.ril.oem.btmac", "persist.odm.ril.oem.btmac", "ro.ril.oem.wifimac", "wlan.driver.macaddr", "persist.odm.ril.oem.wifimac" ] },
   { "settingName": "unique.netd.secret.key", "propNames": [ "persist.netd.stable_secret" ] },
 
 
@@ -113,7 +113,10 @@
   //  { "name": "zone.region", "description": "Region Specification (IS)", "value": "IS" },
 
   //Network Settings
-  { "settingName": "network.dns", "propNames": [ "net.dns", "net.dns1", "net.dns2", "net.dns3", "net.dns4" ] },
+  { "settingName": "network.dns", "propNames": [ "net.dns", "net.dns1", "net.dns2", "net.dns3", "net.dns4", "dhcp.wlan0.dns1" ] },
+  { "settingName": "network.gateway", "propNames": [ "dhcp.wlan0.gateway", "dhcp.wlan0.ipaddress", "dhcp.wlan0.server" ] },
+  { "settingName": "network.interface", "propNames": [ "wifi.interface" ] },
+
   { "settingName": "network.host.name", "propNames": [ "net.hostname", "sys.device_name" ] },
 
 
@@ -129,6 +132,8 @@
   { "settingName": "gsm.network.carrier", "propNames": [ "ro.carrier", "ro.cdma.home.operator.alpha", "gsm.operator.alpha", "gsm.sim.operator.alpha"] },
   { "settingName": "gsm.phone.type", "propNames": [ "gsm.current.phone-type" , "gsm.phone.type"] },
   { "settingName": "gsm.sim.state", "propNames": [ "gsm.sim.state" ] },
+  { "settingName": "unique.gsm.sim.serial", "propNames": [ "gsm.serial" ] },
+
   { "settingName": "gsm.setting.network.roaming.bool", "propNames": [ "gsm.operator.isroaming" ] },
   { "settingName": "gsm.operator.id", "propNames": [ "gsm.operator.numeric", "gsm.sim.operator.numeric", "vendor.gsm.ril.uicc.mccmnc", "vendor.gsm.ril.uicc.mccmnc.1", "persist.vendor.mtk.provision.mccmnc.0", "persist.vendor.mtk.provision.mccmnc.1" ] },
 

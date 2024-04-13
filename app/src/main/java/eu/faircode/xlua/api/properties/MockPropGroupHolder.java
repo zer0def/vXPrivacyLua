@@ -16,9 +16,9 @@ import java.util.List;
 
 import eu.faircode.xlua.XDatabase;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
-import eu.faircode.xlua.api.standard.interfaces.IDBQuery;
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.interfaces.IDBQuery;
+import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
 import eu.faircode.xlua.utilities.StringUtil;
 
 public class MockPropGroupHolder implements IJsonSerial, IDBQuery {

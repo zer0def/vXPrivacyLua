@@ -13,9 +13,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import eu.faircode.xlua.api.hook.XLuaHook;
-import eu.faircode.xlua.api.standard.interfaces.IDBSerial;
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
-import eu.faircode.xlua.api.standard.interfaces.ISerial;
+import eu.faircode.xlua.api.xstandard.interfaces.IDBSerial;
+import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
+import eu.faircode.xlua.api.xstandard.interfaces.ISerial;
 import eu.faircode.xlua.utilities.CursorUtil;
 
 public class LuaAssignment extends XLuaAssignmentBase implements ISerial, IDBSerial, IJsonSerial, Parcelable {

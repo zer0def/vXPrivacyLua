@@ -19,6 +19,7 @@
 
 package eu.faircode.xlua;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -44,6 +45,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
 
+import eu.faircode.xlua.api.hook.LuaHooksGroup;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
 import eu.faircode.xlua.api.hook.XLuaHook;
 
@@ -55,7 +57,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
     private static final String TAG = "XLua.Group";
 
     private XLuaApp app;
-    private List<Group> groups = new ArrayList<>();
+    private List<LuaHooksGroup> groups = new ArrayList<>();
 
     public class ViewHolder extends RecyclerView.ViewHolder
             implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
@@ -89,9 +91,10 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
             cbAssigned.setOnCheckedChangeListener(null);
         }
 
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View view) {
-            Group group = groups.get(getAdapterPosition());
+            LuaHooksGroup group = groups.get(getAdapterPosition());
             switch (view.getId()) {
                 case R.id.ivException:
                     StringBuilder sb = new StringBuilder();
@@ -125,9 +128,10 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
             }
         }
 
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-            final Group group = groups.get(getAdapterPosition());
+            final LuaHooksGroup group = groups.get(getAdapterPosition());
             switch (compoundButton.getId()) {
                 case R.id.cbAssigned:
                     app.notifyAssign(compoundButton.getContext(), group.name, checked);
@@ -140,16 +144,17 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
         setHasStableIds(true);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     void set(XLuaApp app, List<XLuaHook> hooks, Context context) {
         this.app = app;
 
-        Map<String, Group> map = new HashMap<>();
+        Map<String, LuaHooksGroup> map = new HashMap<>();
         for (XLuaHook hook : hooks) {
-            Group group;
+            LuaHooksGroup group;
             if (map.containsKey(hook.getGroup()))
                 group = map.get(hook.getGroup());
             else {
-                group = new Group();
+                group = new LuaHooksGroup();
 
                 Resources resources = context.getResources();
                 String name = hook.getGroup().toLowerCase().replaceAll("[^a-z]", "_");
@@ -165,7 +170,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
         for (String groupId : map.keySet()) {
             for (LuaAssignment assignment : app.getAssignments())
                 if (assignment.getHook().getGroup().equals(groupId)) {
-                    Group group = map.get(groupId);
+                    LuaHooksGroup group = map.get(groupId);
                     if (assignment.getException() != null)
                         group.exception = true;
                     if (assignment.getInstalled() >= 0)
@@ -182,9 +187,9 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
 
         final Collator collator = Collator.getInstance(Locale.getDefault());
         collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
-        Collections.sort(this.groups, new Comparator<Group>() {
+        Collections.sort(this.groups, new Comparator<LuaHooksGroup>() {
             @Override
-            public int compare(Group group1, Group group2) {
+            public int compare(LuaHooksGroup group1, LuaHooksGroup group2) {
                 return collator.compare(group1.title, group2.title);
             }
         });
@@ -210,7 +215,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.unWire();
-        Group group = groups.get(position);
+        LuaHooksGroup group = groups.get(position);
 
         // Get localized group name
         Context context = holder.itemView.getContext();
@@ -229,44 +234,5 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
                 group.allAssigned() ? R.color.colorAccent : android.R.color.darker_gray, null)));
 
         holder.wire();
-    }
-
-    private class Group {
-        int id;
-        String name;
-        String title;
-        boolean exception = false;
-        int installed = 0;
-        int optional = 0;
-        long used = -1;
-        int assigned = 0;
-        List<XLuaHook> hooks = new ArrayList<>();
-
-        Group() {
-        }
-
-        boolean hasException() {
-            return (assigned > 0 && exception);
-        }
-
-        boolean hasInstalled() {
-            return (assigned > 0 && installed > 0);
-        }
-
-        boolean allInstalled() {
-            return (assigned > 0 && installed + optional == assigned);
-        }
-
-        long lastUsed() {
-            return used;
-        }
-
-        boolean hasAssigned() {
-            return (assigned > 0);
-        }
-
-        boolean allAssigned() {
-            return (assigned == hooks.size());
-        }
     }
 }

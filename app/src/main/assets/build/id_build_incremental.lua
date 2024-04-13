@@ -5,6 +5,9 @@ function after(hook, param)
 	end
 
     local fake = param:getSetting("android.build.incremental", "eng.ido.20231003.173955")
+    if fake == nil then
+        return false
+    end
     param:setResult(fake)
     return true, ret, fake
 end

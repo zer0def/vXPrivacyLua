@@ -1,13 +1,14 @@
 package eu.faircode.xlua.api.xlua.call;
 
 import android.content.Context;
+import android.os.Binder;
 import android.os.Bundle;
 import android.util.Log;
 
 import eu.faircode.xlua.api.XProxyContent;
 import eu.faircode.xlua.api.app.AppPacket;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
 import eu.faircode.xlua.api.xlua.provider.XLuaAppProvider;
 
 public class GetAppCommand extends CallCommandHandler {
@@ -15,6 +16,7 @@ public class GetAppCommand extends CallCommandHandler {
     public GetAppCommand() {
         name = "getApp";
         requiresPermissionCheck = true;
+        requiresSingleThread = true;
     }
 
     @Override
@@ -29,7 +31,10 @@ public class GetAppCommand extends CallCommandHandler {
         return XLuaAppProvider.getApp(
                 commandData.getContext(),
                 commandData.getDatabase(),
-                packet).toBundle();
+                Binder.getCallingUid(),
+                packet.getCategory(),
+                packet.isInitForceStop(),
+                packet.isInitSettings()).toBundle();
     }
 
     public static Bundle invoke(Context context, AppPacket packet) {

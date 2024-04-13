@@ -9,6 +9,10 @@ function after(hook, param)
     --	fake = def
     --end
 
+    if fake == nil then
+        return false
+    end
+
     param:setResult(fake)
     return true, ret, fake
 end

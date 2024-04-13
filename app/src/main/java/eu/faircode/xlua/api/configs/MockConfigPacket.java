@@ -7,8 +7,6 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
-import eu.faircode.xlua.api.standard.interfaces.IPacket;
-import eu.faircode.xlua.utilities.BundleUtil;
 
 public class MockConfigPacket extends MockConfig {
     public static MockConfigPacket create(String name, List<LuaSettingExtended> settings) { return new MockConfigPacket(name, settings); }

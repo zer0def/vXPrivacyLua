@@ -2,12 +2,11 @@ package eu.faircode.xlua.interceptors.shell.handlers;
 
 import android.util.Log;
 
-import eu.faircode.xlua.api.standard.interfaces.ICommandIntercept;
+import eu.faircode.xlua.api.xstandard.interfaces.ICommandIntercept;
 import eu.faircode.xlua.interceptors.UserContextMaps;
 import eu.faircode.xlua.interceptors.shell.CommandInterceptor;
 import eu.faircode.xlua.interceptors.shell.ShellInterceptionResult;
 import eu.faircode.xlua.utilities.MemoryUtil;
-import eu.faircode.xlua.utilities.StringUtil;
 
 public class MemInfoIntercept extends CommandInterceptor implements ICommandIntercept {
     private static final String TAG = "XLua.MemInfoIntercept";

@@ -5,10 +5,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,14 +14,16 @@ import org.json.JSONObject;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
+import eu.faircode.xlua.api.xstandard.interfaces.IJCompare;
+import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
 import eu.faircode.xlua.utilities.BundleUtil;
 import eu.faircode.xlua.utilities.CursorUtil;
+import eu.faircode.xlua.utilities.DatabasePathUtil;
 import eu.faircode.xlua.utilities.JSONUtil;
 import eu.faircode.xlua.utilities.ParcelUtil;
 import eu.faircode.xlua.utilities.StringUtil;
 
-public class LuaSettingDefault extends LuaSetting implements IJsonSerial, Parcelable {
+public class LuaSettingDefault extends LuaSetting implements IJCompare, Parcelable {
     public static LuaSettingDefault create() { return new LuaSettingPacket(); }
     public static LuaSettingDefault create(String name, String defaultValue, String description) { return new LuaSettingDefault(name, defaultValue, description); }
     public static LuaSettingDefault create(LuaSetting setting) { return new LuaSettingDefault(setting); }
@@ -168,12 +168,50 @@ public class LuaSettingDefault extends LuaSetting implements IJsonSerial, Parcel
                 .append(this.description).toString();
     }
 
+    @Override
+    public boolean equalsPartner(Object obj) {
+        if(obj instanceof  String) {
+            String s = (String)obj;
+            return s.equalsIgnoreCase(this.name);
+        }
+
+        if(obj instanceof LuaSettingDefault) {
+            LuaSettingDefault d = (LuaSettingDefault) obj;
+            return d.getName().equalsIgnoreCase(this.name);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean equalsPartnerContents(Object obj) {
+        if(!(obj instanceof LuaSettingDefault)) return false;
+        LuaSettingDefault def = (LuaSettingDefault) obj;
+        //pls one line this hell or something , I hate if's
+        if((this.defaultValue == null && def.defaultValue != null) || (this.defaultValue != null && def.defaultValue == null))
+            return false;
+
+        if((this.description == null && def.description != null) || (this.description != null && def.description == null))
+            return false;
+
+        if(this.description != null && !this.description.equals(def.description))
+            return false;
+
+        if(this.defaultValue != null && !this.defaultValue.equals(def.defaultValue))
+            return false;
+
+        return true;
+    }
+
     public static class Table {
-        public static final String name = "default_settings";
-        public static final LinkedHashMap<String, String> columns = new LinkedHashMap<String, String>() {{
-            put("name", "TEXT PRIMARY KEY");
-            put("defaultValue", "TEXT");
-            put("description", "TEXT");
+        public static final String NAME = "default_settings";
+        public static final String FIELD_NAME = "name";
+        public static final String FIELD_DEFAULT_VALUE = "defaultValue";
+        public static final String FIELD_DESCRIPTION = "description";
+        public static final LinkedHashMap<String, String> COLUMNS = new LinkedHashMap<String, String>() {{
+            put(FIELD_NAME, "TEXT PRIMARY KEY");
+            put(FIELD_DEFAULT_VALUE, "TEXT");
+            put(FIELD_DESCRIPTION, "TEXT");
         }};
     }
 }

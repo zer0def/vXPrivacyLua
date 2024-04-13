@@ -20,15 +20,12 @@ import eu.faircode.xlua.BuildConfig;
 import eu.faircode.xlua.R;
 import eu.faircode.xlua.XDatabase;
 import eu.faircode.xlua.XGlobals;
-import eu.faircode.xlua.XNotify;
 import eu.faircode.xlua.XUtil;
 import eu.faircode.xlua.api.XProxyContent;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
 import eu.faircode.xlua.api.hook.XLuaHook;
-import eu.faircode.xlua.api.xlua.database.XLuaHookDatabase;
 import eu.faircode.xlua.hooks.XReport;
-import eu.faircode.xlua.utilities.BundleUtil;
 
 public class ReportCommand extends CallCommandHandler {
     private static final String TAG = "XLua.ReportCommand";

@@ -5,6 +5,9 @@ function after(hook, param)
 	end
 
     local fake = param:getSetting("android.build.radio", "M8994F-2.6.36.2.20")
+    if fake == nil then
+        return false
+    end
     param:setResult(fake)
     return true, ret, fake
 end

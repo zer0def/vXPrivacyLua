@@ -5,5 +5,5 @@ function after(hook, param)
         return true
     end
 
-	return false
+	return false, "N/A", "Spoofed"
 end

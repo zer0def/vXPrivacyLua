@@ -5,6 +5,10 @@ function after(hook, param)
 	end
 
 	local setting = param:getSettingReMap("unique.gsm.subscription.id", "phone.subscriberid")
+	if setting nil then
+	    return false
+	end
+
 	if param:isNumericString(setting) then
         param:setResultToLongInt(setting)
         return true, tostring(ret), setting
@@ -14,6 +18,10 @@ function after(hook, param)
 	local mnc = param:getSetting("gsm.operator.mnc", "phone.mnc", "299")
 	--next line is 9 chars MSIN
 	local msin = param:getSettingReMap("unique.gsm.operator.msin", "phone.msin", "842762952")
+    if mcc == nil or mnc == nil or msin == nil then
+        return false
+    end
+
 	--Returns the unique subscriber ID, for example, the IMSI for a GSM phone.
 	if param:isNumericString(mcc) and param:isNumericString(mnc) and param:isNumericString(msin) then
 	    local fake = mcc .. mnc .. msin

@@ -1,6 +1,6 @@
 [
   {
-    "builtin": false,
+    "builtin": true,
     "collection": "PrivacyEx",
     "group": "Spoof.Language",
     "name": "Locale.getCountry",
@@ -21,7 +21,7 @@
     "settings": [ "zone.country" ]
   },
   {
-    "builtin": false,
+    "builtin": true,
     "collection": "PrivacyEx",
     "group": "Spoof.Language",
     "name": "Locale.getDisplayLanguage",
@@ -42,7 +42,7 @@
     "settings": [ "zone.language" ]
   },
   {
-    "builtin": false,
+    "builtin": true,
     "collection": "PrivacyEx",
     "group": "Spoof.Language",
     "name": "Locale.getDisplayName",
@@ -63,7 +63,7 @@
     "settings": [ "zone.language", "zone.country" ]
   },
   {
-    "builtin": false,
+    "builtin": true,
     "collection": "PrivacyEx",
     "group": "Spoof.Language",
     "name": "Locale.getISO3Country",
@@ -84,7 +84,7 @@
     "settings": [ "zone.country.iso" ]
   },
   {
-    "builtin": false,
+    "builtin": true,
     "collection": "PrivacyEx",
     "group": "Spoof.Language",
     "name": "Locale.getISO3Language",
@@ -105,7 +105,7 @@
     "settings": [ "zone.language.iso" ]
   },
   {
-    "builtin": false,
+    "builtin": true,
     "collection": "PrivacyEx",
     "group": "Spoof.Language",
     "name": "Locale.toLanguageTag",
@@ -138,7 +138,7 @@
   "luaScript": "@spoof_locale_hashcode"
 },*/
   {
-    "builtin": false,
+    "builtin": true,
     "collection": "PrivacyEx",
     "group": "Spoof.Language",
     "name": "Locale.toString",

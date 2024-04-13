@@ -37,7 +37,9 @@ public class LuaHookWrapper {
             String function,
             XC_MethodHook.MethodHookParam param,
             Globals globals,
-            String key) {
+            String key,
+            boolean useDefault,
+            String packageName) {
 
         isMemberOrMethod = true;
         this.globals = globals;
@@ -54,7 +56,7 @@ public class LuaHookWrapper {
         args = new LuaValue[]{
                 CoerceJavaToLua.coerce(hook),
                 //Create XPARAM here
-                CoerceJavaToLua.coerce(new XParam(context, param, settings, propSettings, propMaps, key))
+                CoerceJavaToLua.coerce(new XParam(context, param, settings, propSettings, propMaps, key, useDefault, packageName))
         };
     }
 
@@ -66,10 +68,12 @@ public class LuaHookWrapper {
             Map<String, String> propMaps,
             Prototype compiledScript,
             Field field,
-            String key) {
+            String key,
+            boolean useDefault,
+            String packageName) {
         isMemberOrMethod = false;
         // Initialize Lua runtime
-        globals = XHookUtil.getGlobals(context, hook, settings, propSettings, propMaps, key);
+        globals = XHookUtil.getGlobals(context, hook, settings, propSettings, propMaps, key, useDefault, packageName);
         closure = new LuaClosure(compiledScript, globals);
         closure.call();
 
@@ -78,7 +82,7 @@ public class LuaHookWrapper {
 
         args = new LuaValue[]{
                 CoerceJavaToLua.coerce(hook),
-                CoerceJavaToLua.coerce(new XParam(context, field, settings, propSettings, propMaps, key))
+                CoerceJavaToLua.coerce(new XParam(context, field, settings, propSettings, propMaps, key, useDefault, packageName))
         };
     }
 
@@ -90,8 +94,12 @@ public class LuaHookWrapper {
             Map<String, String> propMaps,
             Prototype compiledScript,
             String function,
-            XC_MethodHook.MethodHookParam param, Globals globals, String key) {
-        return new LuaHookWrapper(context, hook, settings, propSettings, propMaps, compiledScript, function, param, globals, key);
+            XC_MethodHook.MethodHookParam param,
+            Globals globals,
+            String key,
+            boolean useDefault,
+            String packageName) {
+        return new LuaHookWrapper(context, hook, settings, propSettings, propMaps, compiledScript, function, param, globals, key, useDefault, packageName);
     }
 
     public static LuaHookWrapper createField(
@@ -99,8 +107,12 @@ public class LuaHookWrapper {
             XLuaHook hook,
             Map<String, String> settings,
             Map<String, Integer> propSettings,
-            Map<String, String> propMaps, Prototype compiledScript, Field field, String key) {
-        return new LuaHookWrapper(context, hook, settings, propSettings, propMaps, compiledScript, field, key);
+            Map<String, String> propMaps, Prototype compiledScript,
+            Field field,
+            String key,
+            boolean useDefault,
+            String packageName) {
+        return new LuaHookWrapper(context, hook, settings, propSettings, propMaps, compiledScript, field, key, useDefault, packageName);
     }
 
     public Varargs invoke() {

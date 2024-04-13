@@ -1,16 +1,12 @@
 package eu.faircode.xlua.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,8 +14,11 @@ import eu.faircode.xlua.AppGeneric;
 import eu.faircode.xlua.api.XResult;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
-import eu.faircode.xlua.api.standard.interfaces.ISettingUpdate;
+import eu.faircode.xlua.api.xstandard.interfaces.ISettingUpdate;
 import eu.faircode.xlua.api.xlua.XLuaCall;
+import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.ui.interfaces.ISettingUpdateEx;
+import eu.faircode.xlua.ui.transactions.SettingTransactionResult;
 
 public class SettingsQue {
     private static final String TAG = "XLua.SettingsQue";
@@ -84,6 +83,129 @@ public class SettingsQue {
         });
     }
 
+    public void updateSetting(
+            final Context context,
+            final LuaSettingExtended setting,
+            final int adapterPosition,
+            final boolean insertSetting,
+            final boolean insertDefaultMap,
+            final boolean forceKill,
+            final ISettingUpdateEx onCallback) { sendSettingEx(context, setting, adapterPosition, insertSetting, insertDefaultMap, false, false, forceKill, onCallback); }
+
+    public void deleteSetting(
+            final Context context,
+            final LuaSettingExtended setting,
+            final int adapterPosition,
+            final boolean deleteSetting,
+            final boolean deleteDefaultMap,
+            final boolean forceKill,
+            final ISettingUpdateEx onCallback) { sendSettingEx(context, setting, adapterPosition, false, false, deleteSetting, deleteDefaultMap, forceKill, onCallback); }
+
+    public void sendSettingEx(
+            final Context context,
+            final LuaSettingExtended setting,
+            final int adapterPosition,
+            final boolean insertSetting,
+            final boolean insertDefaultMap,
+            final boolean deleteSetting,
+            final boolean deleteDefaultMap,
+            final boolean forceKill,
+            final ISettingUpdateEx onCallback) {
+
+        if(setting.isBusy()) {
+            XLog.e("Setting is Busy, wait til it is ready! setting=" + setting);
+            return;
+        }
+
+        if(!deleteSetting && !setting.isModified()) {
+            XLog.e("Make changes to the setting before 'sending' setting=" + setting);
+            return;
+        }
+
+        try {
+            setting.setIsBusy(true);
+            executor.submit(new Runnable() {
+                @Override
+                public void run() { synchronized (lock) {
+                    try {
+                        final LuaSettingPacket packet = createPacket(setting, insertSetting, insertDefaultMap, deleteSetting, deleteDefaultMap, forceKill);
+                        final XResult ret = XLuaCall.sendMockSetting(context, packet);
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                SettingTransactionResult result = new SettingTransactionResult();
+                                result.context = context;
+                                result.adapterPosition = adapterPosition;
+                                result.result = ret;
+                                result.settings.add(setting);
+                                result.id = setting.getName().hashCode();
+                                result.packets.add(packet);
+                                result.code = packet.getCode();
+                                if(ret.succeeded()) result.succeeded.add(setting);
+                                else if(ret.failed()) result.failed.add(setting);
+                                if(onCallback != null) onCallback.onSettingUpdate(result);
+                            }
+                        });
+                    }catch (Exception e) {
+                        XLog.e("Failed to execute setting Transaction, setting=" + setting + " pos=" + adapterPosition, e, true);
+                    }
+                }
+                }
+            });
+        }catch (Exception e) {
+            XLog.e("Failed to wait for setting to apply, setting=" + setting + " pos=" + adapterPosition, e, true);
+        }
+    }
+
+    public void sendSetting(
+            final Context context,
+            final LuaSettingExtended setting,
+            final int adapterPosition,
+            final boolean delete,
+            final boolean forceKill,
+            final ISettingUpdateEx onCallback) {
+        if(setting.isBusy()) {
+            XLog.e("Setting is Busy, wait til it is ready! setting=" + setting);
+            return;
+        }
+
+        if(!delete && !setting.isModified()) {
+            XLog.e("Make changes to the setting before 'sending' setting=" + setting);
+            return;
+        }
+
+        try {
+            executor.submit(new Runnable() {
+                @Override
+                public void run() { synchronized (lock) {
+                    try {
+                        final LuaSettingPacket packet = createUpdatePacket(setting, delete, forceKill);
+                        final XResult ret = XLuaCall.sendSetting(context, packet);
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                SettingTransactionResult result = new SettingTransactionResult();
+                                result.context = context;
+                                result.adapterPosition = adapterPosition;
+                                result.result = ret;
+                                result.settings.add(setting);
+                                result.id = setting.getName().hashCode();
+                                result.code = delete ? LuaSettingPacket.CODE_DELETE_SETTING : LuaSettingPacket.CODE_INSERT_UPDATE_SETTING;
+                                if(ret.succeeded()) result.succeeded.add(setting);
+                                else if(ret.failed()) result.failed.add(setting);
+                                if(onCallback != null) onCallback.onSettingUpdate(result);
+                            }
+                        });
+                    }catch (Exception e) {
+                        XLog.e("Failed to execute setting Transaction, setting=" + setting + " pos=" + adapterPosition, e, true);
+                    }
+                }
+                }
+            });
+        }catch (Exception e) {
+            XLog.e("Failed to wait for setting to apply, setting=" + setting + " pos=" + adapterPosition, e, true);
+        }
+    }
 
     public void sendSetting(final Context context, final  LuaSettingExtended setting, final boolean deleteSetting, final boolean forceKill) { sendSetting(context, setting, deleteSetting, forceKill); }
     public void sendSetting(final Context context, final  LuaSettingExtended setting, final boolean deleteSetting, final boolean forceKill, final ISettingUpdate onResult) {
@@ -115,9 +237,29 @@ public class SettingsQue {
         }
     }
 
+    public LuaSettingPacket createPacket(
+            LuaSettingExtended setting,
+            boolean insertSetting,
+            boolean insertDefaultMap,
+            boolean deleteSetting,
+            boolean deleteDefaultMap,
+            boolean forceKill) {
+
+        int code = (deleteSetting || deleteDefaultMap) ?
+                LuaSettingPacket.getCodeForDeletion(deleteSetting, deleteDefaultMap) :
+                LuaSettingPacket.getCodeForInsertOrUpdate(insertSetting, insertDefaultMap);
+        LuaSettingPacket packet = setting.createPacket(code, forceKill)
+                .copyIdentification(application);
+
+        if(packet.isInsertOrUpdateSetting()) packet.setValueForce(setting.getModifiedValue());
+        else if(packet.isDeleteSetting()) packet.setValueForce(null);
+        return packet;
+    }
+
     public LuaSettingPacket createUpdatePacket(LuaSettingExtended setting, boolean deleteSetting, boolean forceKill) {
         LuaSettingPacket packet =
-                LuaSettingPacket.create(setting, LuaSettingPacket.getCodeInsertOrDelete(deleteSetting), forceKill)
+                LuaSettingPacket.create(
+                        setting, LuaSettingPacket.getCodeInsertOrDelete(deleteSetting), forceKill)
                         .copyIdentification(application);
 
         if(!deleteSetting) packet.setValueForce(setting.getModifiedValue());

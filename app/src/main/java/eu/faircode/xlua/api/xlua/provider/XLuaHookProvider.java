@@ -20,13 +20,13 @@ import eu.faircode.xlua.XGlobals;
 import eu.faircode.xlua.XUiGroup;
 import eu.faircode.xlua.api.XResult;
 import eu.faircode.xlua.api.hook.LuaHookPacket;
-import eu.faircode.xlua.api.settings.LuaSettingsDatabase;
-import eu.faircode.xlua.api.standard.UserIdentityPacket;
+import eu.faircode.xlua.api.xmock.database.LuaSettingsManager;
+import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
 import eu.faircode.xlua.api.xlua.XLuaCall;
 
 import eu.faircode.xlua.api.hook.XLuaHook;
 import eu.faircode.xlua.api.xlua.call.GetVersionCommand;
-import eu.faircode.xlua.api.xlua.database.XLuaHookDatabase;
+import eu.faircode.xlua.api.xlua.database.LuaHookManager;
 import eu.faircode.xlua.utilities.StringUtil;
 
 public class XLuaHookProvider {
@@ -34,15 +34,15 @@ public class XLuaHookProvider {
 
     public static List<String> getCollections(Context context, XDatabase db, int userId) {
         //check this
-        String value = LuaSettingsDatabase.getSettingValue(context, db, "collection",  userId, UserIdentityPacket.GLOBAL_NAMESPACE);
+        String value = LuaSettingsManager.getSettingValue(context, db, "collection",  userId, UserIdentityPacket.GLOBAL_NAMESPACE);
         List<String> result = new ArrayList<>();
 
         if(DebugUtil.isDebug())
             Log.i(TAG, "collection=" + value);
 
         if(!StringUtil.isValidString(value)) {
-            value = LuaSettingsDatabase.DEFAULT_COLLECTIONS;
-            LuaSettingsDatabase.putSetting(context, db, "collection", value);
+            value = LuaSettingsManager.DEFAULT_COLLECTIONS;
+            LuaSettingsManager.putSetting(context, db, "collection", value);
         }
 
         if(value.contains(",")) Collections.addAll(result, value.split(","));
@@ -76,7 +76,7 @@ public class XLuaHookProvider {
         if(!XGlobals.updateHookCache(context, hook, id))
             return res.appendErrorMessage("Failed at Updating Hook Cache, id=" + id, TAG).setFailed();
 
-        return XLuaHookDatabase.updateHook(database, hook, id);
+        return LuaHookManager.updateHook(database, hook, id);
     }
 
     public static boolean isAvailable(Context context) {

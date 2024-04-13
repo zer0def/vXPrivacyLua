@@ -28,6 +28,30 @@
             android:layout_height="wrap_content"
             android:paddingBottom="15dp">
 
+            <ImageView
+                android:id="@+id/ivBtAddPropertyToSettingsGroup"
+                android:layout_width="?android:attr/listPreferredItemHeightSmall"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/ic_remix_add_circle_line"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBtRandomSettingValueFromProperties"
+                app:layout_constraintEnd_toEndOf="@+id/tiSettingValueFromProperties"
+                app:layout_constraintTop_toTopOf="@+id/ivBtRandomSettingValueFromProperties" />
+
+            <ImageView
+                android:id="@+id/ivBtResetSettingValueFromProperties"
+                android:layout_width="?android:attr/listPreferredItemHeightSmall"
+                android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                android:alpha="0.5"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/ic_remix_a_b"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBtRandomSettingValueFromProperties"
+                app:layout_constraintStart_toEndOf="@+id/ivBtSaveSettingFromProperties"
+                app:layout_constraintTop_toBottomOf="@+id/spSettingRandomizerSpinnerProperties" />
+
             <TextView
                 android:id="@+id/tvGroupPropertiesSettingFullName"
                 android:layout_width="0dp"
@@ -50,15 +74,14 @@
                 android:clickable="false"
                 android:focusable="false"
                 android:src="@drawable/ic_remix_dice_fill"
-                app:layout_constraintBottom_toBottomOf="@+id/spSettingRandomizerSpinnerProperties"
-                app:layout_constraintEnd_toEndOf="@+id/tiSettingValueFromProperties"
-                app:layout_constraintTop_toTopOf="@+id/spSettingRandomizerSpinnerProperties" />
+                app:layout_constraintStart_toEndOf="@+id/ivBtResetSettingValueFromProperties"
+                app:layout_constraintTop_toBottomOf="@+id/spSettingRandomizerSpinnerProperties" />
 
             <Spinner
                 android:id="@+id/spSettingRandomizerSpinnerProperties"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                app:layout_constraintEnd_toStartOf="@+id/ivBtRandomSettingValueFromProperties"
+                app:layout_constraintStart_toStartOf="@+id/tiSettingValueFromProperties"
                 app:layout_constraintTop_toBottomOf="@+id/tiSettingValueFromProperties" />
 
             <ImageView
@@ -69,9 +92,9 @@
                 android:clickable="false"
                 android:focusable="false"
                 android:src="@drawable/ic_remix_save_3_fill"
-                app:layout_constraintBottom_toBottomOf="@+id/spSettingRandomizerSpinnerProperties"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBtResetSettingValueFromProperties"
                 app:layout_constraintStart_toEndOf="@+id/ivBtDeleteSettingFromProperties"
-                app:layout_constraintTop_toTopOf="@+id/spSettingRandomizerSpinnerProperties" />
+                app:layout_constraintTop_toTopOf="@+id/ivBtResetSettingValueFromProperties" />
 
             <ImageView
                 android:id="@+id/ivBtDeleteSettingFromProperties"
@@ -82,7 +105,7 @@
                 android:focusable="false"
                 android:src="@drawable/ic_remix_delete_bin_2_line"
                 app:layout_constraintBottom_toBottomOf="@+id/ivBtSaveSettingFromProperties"
-                app:layout_constraintStart_toStartOf="@+id/tiSettingValueFromProperties"
+                app:layout_constraintStart_toStartOf="@+id/spSettingRandomizerSpinnerProperties"
                 app:layout_constraintTop_toTopOf="@+id/ivBtSaveSettingFromProperties" />
 
             <TextView
@@ -112,12 +135,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spSettingRandomizerSpinnerProperties" />
+                app:layout_constraintTop_toBottomOf="@+id/ivBtDeleteSettingFromProperties" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiSettingValueFromProperties"

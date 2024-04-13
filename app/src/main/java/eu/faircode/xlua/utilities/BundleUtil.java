@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import eu.faircode.xlua.api.standard.interfaces.ISerial;
+import eu.faircode.xlua.api.xstandard.interfaces.ISerial;
 
 public class BundleUtil {
 

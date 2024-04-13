@@ -1,18 +1,11 @@
 function after(hook, param)
-	--local fake = param:getSetting("value.tzhshcode")
-	--local res = param:getResult()
-	--if fake == nil then
-	--	fake = 100468396
-	--end
-
-	--if res ~= nil then
-	--	log("Fake [hashCode] [" + res + "] => [" + fake + "]")
-	--end
+    local res = param:getResult()
+    if res == nil then
+        return false
+    end
 
 	local fake = "100468396";
-    --local fake = 100468396
 	log("Fake [hashCode] [" .. fake .. "]")
     param:setReturnToIntFromStr(fake);
-	--param:setResult(fake)
-	return true
+	return true, tostring(res), fake
 end

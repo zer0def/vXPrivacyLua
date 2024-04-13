@@ -8,7 +8,6 @@ function before(hook, param)
         return false
     end
 
-    log("Bluetooth Discovery Flag Flipped to not Discover")
     param:setResult(false)
-    return true
+    return true, "N/A", setting
 end

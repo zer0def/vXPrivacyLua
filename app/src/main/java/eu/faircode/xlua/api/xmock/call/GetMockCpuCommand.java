@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 
 import eu.faircode.xlua.api.XProxyContent;
-import eu.faircode.xlua.api.standard.CallCommandHandler;
-import eu.faircode.xlua.api.standard.command.CallPacket;
+import eu.faircode.xlua.api.xstandard.CallCommandHandler;
+import eu.faircode.xlua.api.xstandard.command.CallPacket;
 import eu.faircode.xlua.api.cpu.MockCpu;
-import eu.faircode.xlua.api.xmock.provider.XMockCpuProvider;
+import eu.faircode.xlua.api.xmock.provider.MockCpuProvider;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 public class GetMockCpuCommand extends CallCommandHandler {
@@ -22,7 +22,7 @@ public class GetMockCpuCommand extends CallCommandHandler {
         MockCpu packet = commandData.readExtrasAs(MockCpu.class);
         if(packet.getName() == null) {
             return BundleUtil.createFromISerial(
-                    XMockCpuProvider.getSelectedCpuMap(
+                    MockCpuProvider.getSelectedCpuMap(
                             commandData.getContext(),
                             commandData.getDatabase()), true);
         }

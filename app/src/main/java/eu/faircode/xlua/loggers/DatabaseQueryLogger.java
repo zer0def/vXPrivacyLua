@@ -6,7 +6,7 @@ import android.util.Log;
 import java.util.List;
 
 import eu.faircode.xlua.XDatabase;
-import eu.faircode.xlua.api.standard.database.SqlQuerySnake;
+import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
 
 public class DatabaseQueryLogger {
     public static void logSnakeSnapshot(SqlQuerySnake snake, boolean logStack, boolean logTableEntries) {

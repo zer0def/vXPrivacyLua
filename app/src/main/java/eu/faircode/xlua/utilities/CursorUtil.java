@@ -3,7 +3,6 @@ package eu.faircode.xlua.utilities;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -14,7 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import eu.faircode.xlua.api.standard.interfaces.IJsonSerial;
+import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
 import eu.faircode.xlua.logger.XLog;
 
 public class CursorUtil {
@@ -63,9 +62,10 @@ public class CursorUtil {
         }
     }
 
-    public static Long getLong(Cursor c, String columnName) {
+    public static Long getLong(Cursor c, String columnName) {return getLong(c, columnName, null); }
+    public static Long getLong(Cursor c, String columnName, Long defaultValue) {
         int ix = c.getColumnIndex(columnName);
-        if(ix == -1) return null;
+        if(ix == -1) return defaultValue;
 
         //if(c.getType(ix) == Cursor.)
         //    return c.getInt(ix);
@@ -73,10 +73,7 @@ public class CursorUtil {
         return c.getLong(ix);
     }
 
-    public static Integer getInteger(Cursor c, String columnName) {
-        return getInteger(c, columnName, null);
-    }
-
+    public static Integer getInteger(Cursor c, String columnName) { return getInteger(c, columnName, null); }
     public static Integer getInteger(Cursor c, String columnName, Integer defaultValue) {
         int ix = c.getColumnIndex(columnName);
         if(ix == -1) return defaultValue;

@@ -6,5 +6,5 @@ function after(hook, param)
 
     log("Nulling out DHCP Info...")
     param:setResult(null)
-    return true
+    return true, "N/A", "NULL"
 end
