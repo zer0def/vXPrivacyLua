@@ -10,6 +10,7 @@ function after(hook, param)
     end
 
     log("GPU GETSTRING: " .. p)
+
     if p == 7936 then
         local vendor = param:getSetting("gpu.gl.vendor")
         if vendor == nil then

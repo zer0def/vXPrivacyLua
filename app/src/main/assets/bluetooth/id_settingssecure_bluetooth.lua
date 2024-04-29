@@ -4,6 +4,5 @@ function after(hook, param)
         log("BLUETOOTH NAME SPOOFED")
         return true
     end
-
 	return false, "N/A", "Spoofed"
 end

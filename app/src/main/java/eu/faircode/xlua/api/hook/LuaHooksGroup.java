@@ -29,6 +29,8 @@ public class LuaHooksGroup {
     public int assigned = 0;
     public List<XLuaHook> hooks = new ArrayList<>();
 
+    public boolean hasWarning = false;
+
     public XLuaApp app;
 
     public LuaHooksGroup() { }

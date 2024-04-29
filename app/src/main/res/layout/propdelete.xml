@@ -17,9 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivDeleteProp"
-        android:lines="5"
-        android:maxLines="10"
-        android:text="Are you sure you want to delete the property? This will Delete the MAP (object that links the Property Name to a Setting) and the Actual Property Setting Value (not the linked setting but the setting that specifies control on the property)"
+        android:maxLines="50"
+        android:text="@string/msg_delete_property"
         />
 
 </RelativeLayout>

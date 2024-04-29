@@ -36,7 +36,7 @@ public class GetSettingsCommand extends QueryCommandHandler {
         }
 
         SqlQuerySnake snake = SqlQuerySnake
-                .create(db, LuaSetting.Table.name)
+                .create(db, LuaSetting.Table.NAME)
                 .whereColumn("user", Integer.toString(userid))
                 .whereColumn("category", packageName)
                 .onlyReturnColumns("name", "value");

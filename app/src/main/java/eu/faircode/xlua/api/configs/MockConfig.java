@@ -44,6 +44,13 @@ public class MockConfig extends UserIdentityPacket implements IJsonSerial, Parce
     public List<LuaSettingExtended> getSettings() { return settings; }
     public MockConfig setSettings(List<LuaSettingExtended> settings) { if(settings != null) this.settings = settings; return this; }
 
+    public void saveValuesFromInput() {
+        for(LuaSettingExtended s : settings) {
+            s.updateValue(true);
+        }
+    }
+
+
     public List<LuaSettingExtended> getEnabledSettings() {
         List<LuaSettingExtended> enabled = new ArrayList<>();
         for(LuaSettingExtended setting : settings)

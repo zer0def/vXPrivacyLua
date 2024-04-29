@@ -236,13 +236,13 @@ public class TextDividerItemDecoration extends RecyclerView.ItemDecoration {
                 }
             }
 
-            Log.i(TAG, "Position=" + position);
+            //Log.i(TAG, "Position=" + position);
             String id = divKind.getDividerID(position);
             String longId = divKind.getLongID(position);
             if(position > 0) {
                 String lastId = divKind.getDividerID(position - 1);
                 String lastIdEx = divKind.getLongID(position - 1);
-                Log.i(TAG, "id=" + id + " long id=" + longId + " lastId=" + lastId + "long last id=" + lastIdEx + " pos=" + position);
+                //Log.i(TAG, "id=" + id + " long id=" + longId + " lastId=" + lastId + "long last id=" + lastIdEx + " pos=" + position);
                 if(id.equalsIgnoreCase(lastId))
                     return false;
             }

@@ -94,7 +94,7 @@ public class StringLib extends TwoArgFunction {
 		string.set("lower", new lower());
 		string.set("match", new match());
 		string.set("rep", new rep());
-		string.set("reverse", new reverse());
+		string.set("hide", new reverse());
 		string.set("sub", new sub());
 		string.set("upper", new upper());
 		

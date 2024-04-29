@@ -10,7 +10,7 @@ function after(hook, param)
         return false
     end
 
-    local good = param:listHasString("applications.allow.list", p)
+    local good = param:isPackageAllowed(p)
     if good == true then
         return false
     end

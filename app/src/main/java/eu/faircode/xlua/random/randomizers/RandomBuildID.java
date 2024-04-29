@@ -30,7 +30,7 @@ public class RandomBuildID implements IRandomizer {
     public String generateString() {
         return String.format(FORMAT,
                 RandomStringGenerator.generateRandomLetterString(RandomUtil.getInt(4, 8), RandomStringGenerator.UPPER_LETTERS),
-                RandomUtil.getInt(100000, 99999),
+                RandomUtil.getInt(10000, 99999),
                 RandomUtil.getIntEnsureFormat(1, 999));
     }
 

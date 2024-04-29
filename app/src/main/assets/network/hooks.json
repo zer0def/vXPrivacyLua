@@ -1,4 +1,25 @@
 [
+
+  {
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "ID.Network",
+    "name": "NetworkInfo.getExtraInfo",
+    "author": "M66B",
+    "className": "android.net.NetworkInfo",
+    "methodName": "getExtraInfo",
+    "parameterTypes": [ ],
+    "returnType": "java.lang.String",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@generic_null_value"
+  },
   {
     "builtin": true,
     "collection": "PrivacyEx",

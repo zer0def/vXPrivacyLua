@@ -37,19 +37,29 @@ import java.util.List;
 import eu.faircode.xlua.api.XResult;
 
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
+import eu.faircode.xlua.api.settings.LuaSettingPacket;
 import eu.faircode.xlua.api.xstandard.interfaces.IDividerKind;
 import eu.faircode.xlua.api.xstandard.interfaces.ISettingUpdate;
 import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.random.randomizers.NARandomizer;
+import eu.faircode.xlua.ui.dialogs.NoRandomDialog;
 import eu.faircode.xlua.ui.dialogs.SettingDeleteDialog;
 import eu.faircode.xlua.random.GlobalRandoms;
 import eu.faircode.xlua.random.IRandomizer;
 import eu.faircode.xlua.ui.AlertMessage;
 import eu.faircode.xlua.ui.SettingsQue;
+import eu.faircode.xlua.ui.dialogs.SettingDeleteDialogEx;
+import eu.faircode.xlua.ui.interfaces.ILoader;
+import eu.faircode.xlua.ui.interfaces.ISettingUpdateEx;
+import eu.faircode.xlua.ui.transactions.SettingTransactionResult;
 import eu.faircode.xlua.utilities.SettingUtil;
 import eu.faircode.xlua.utilities.UiUtil;
 import eu.faircode.xlua.utilities.ViewUtil;
 
-public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHolder> implements Filterable, IDividerKind, ISettingUpdate {
+public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHolder> implements
+        Filterable,
+        IDividerKind,
+        ISettingUpdateEx {
     private static final String TAG = "XLua.AdapterSetting";
     private final List<IRandomizer> randomizers = GlobalRandoms.getRandomizers();
 
@@ -57,10 +67,9 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
     private final List<LuaSettingExtended> settings = new ArrayList<>();
     private List<LuaSettingExtended> filtered = new ArrayList<>();
 
-    private SettingsQue settingsQue;
-
-    private AppGeneric application;
-    private FragmentManager fragmentManager;
+    //private SettingsQue settingsQue;
+    //private AppGeneric application;
+    //private FragmentManager fragmentManager;
 
     //Filter / Divider VARs
     private boolean isRandomizingAll = false;;
@@ -71,13 +80,16 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
     private boolean dataChanged = false;
     private CharSequence query = null;
 
+    private ILoader loaderFragment;
+    private SettingsQue settingsQue;
+
     public class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener,
             View.OnLongClickListener,
             TextWatcher,
             CompoundButton.OnCheckedChangeListener,
             AdapterView.OnItemSelectedListener,
-            ISettingUpdate {
+            ISettingUpdateEx {
 
         final View itemView;
         final CardView cvSetting;
@@ -195,7 +207,8 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
         @Override
         public void onClick(final View view) {
             int id = view.getId();
-            final LuaSettingExtended setting = filtered.get(getAdapterPosition());
+            int pos = getAdapterPosition();
+            final LuaSettingExtended setting = filtered.get(pos);
             String name = setting.getName();
             XLog.i("onClick id=" + id + " selected=" + setting);
             switch (id) {
@@ -205,15 +218,31 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
                     updateExpanded();
                     break;
                 case R.id.ivBtRandomSettingValue:
-                    setting.randomizeValue(view.getContext());
-                    SettingUtil.initCardViewColor(view.getContext(), tvSettingName, cvSetting, setting);
+                    if(NARandomizer.isNA(setting.getRandomizer())) {
+                        new NoRandomDialog()
+                                .show(loaderFragment.getManager(), view.getResources().getString(R.string.title_no_random));
+                    }else {
+                        setting.randomizeValue(view.getContext());
+                        SettingUtil.initCardViewColor(view.getContext(), tvSettingName, cvSetting, setting);
+                    }
                     break;
                 case R.id.ivBtSaveSettingSetting:
-                    settingsQue.sendSetting(view.getContext(), setting, false, false, this);
+                    settingsQue.updateSetting(
+                            view.getContext(),
+                            setting,
+                            pos,
+                            true,
+                            false,
+                            this);
                     break;
                 case R.id.ivBtDeleteSetting:
-                    SettingDeleteDialog setDialog = new SettingDeleteDialog(setting, application);
-                    setDialog.show(fragmentManager, "Delete Setting");
+                    new SettingDeleteDialogEx()
+                            .setSetting(setting)
+                            .setAdapterPosition(pos)
+                            .setSettingsQue(settingsQue)
+                            .setCallback(this)
+                            .setApplication(loaderFragment.getApplication())
+                            .show(loaderFragment.getManager(), view.getResources().getString(R.string.title_delete_setting));
                     break;
                 case R.id.ivBtSettingReset:
                     if(setting.isModified()) {
@@ -224,23 +253,23 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
             }
         }
 
-        @SuppressLint("NotifyDataSetChanged")
-        @Override
-        public void onSettingUpdatedSuccessfully(Context context, LuaSettingExtended setting, XResult result) {
-            setting.updateValue();
-            Toast.makeText(context, "Setting updated successfully!", Toast.LENGTH_SHORT).show();
-            SettingUtil.initCardViewColor(context, tvSettingName, cvSetting, setting);
-            notifyDataSetChanged();
-        }
+        //@SuppressLint("NotifyDataSetChanged")
+        //@Override
+        //public void onSettingUpdatedSuccessfully(Context context, LuaSettingExtended setting, XResult result) {
+        //    setting.updateValue();
+        //    Toast.makeText(context, "Setting updated successfully!", Toast.LENGTH_SHORT).show();
+        //    SettingUtil.initCardViewColor(context, tvSettingName, cvSetting, setting);
+        //    notifyDataSetChanged();
+        //}
 
-        @Override
-        public void onSettingUpdateFailed(Context context, LuaSettingExtended setting, XResult result) { AlertMessage.displayMessageFailed(context, setting, result); }
+        //@Override
+        //public void onSettingUpdateFailed(Context context, LuaSettingExtended setting, XResult result) { AlertMessage.displayMessageFailed(context, setting, result); }
 
-        @Override
-        public void onBatchFinished(Context context, List<LuaSettingExtended> successful, List<LuaSettingExtended> failed) { }
+        //@Override
+        //public void onBatchFinished(Context context, List<LuaSettingExtended> successful, List<LuaSettingExtended> failed) { }
 
-        @Override
-        public void onException(Context context, Exception e, LuaSettingExtended setting) { AlertMessage.displayMessageException(context, setting, e); }
+        //@Override
+        //public void onException(Context context, Exception e, LuaSettingExtended setting) { AlertMessage.displayMessageException(context, setting, e); }
 
         @Override
         public void afterTextChanged(Editable editable) {
@@ -272,10 +301,12 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             int code = buttonView.getId();
             if(DebugUtil.isDebug()) Log.i(TAG, "onCheckedChanged=" + code + " isChecked=" + isChecked);
-            final LuaSettingExtended setting = filtered.get(getAdapterPosition());
+            int pos = getAdapterPosition();
+            final LuaSettingExtended setting = filtered.get(pos);
             if (code == R.id.cbSettingEnabled) {
                 setting.setIsEnabled(isChecked);
-                notifyDataSetChanged();
+                //notifyDataSetChanged();
+                notifyItemChanged(pos);
             }
         }
 
@@ -291,10 +322,32 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
                 SettingUtil.initCardViewColor(spRandomSelector.getContext(), tvSettingName, cvSetting, setting);
             }
         }
+
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        public void onSettingUpdate(SettingTransactionResult result) {
+            LuaSettingExtended setting = result.getSetting();
+            setting.setIsBusy(false);
+            if(result.hasAnySucceeded()) {
+                Snackbar.make(itemView, itemView.getResources().getString(R.string.result_update_setting_success), Snackbar.LENGTH_LONG).show();
+                if(result.getPacket().isDelete()) {
+                    loaderFragment.loadData();
+                }else {
+                    setting.updateValue();
+                    SettingUtil.initCardViewColor(result.context, tvSettingName, cvSetting, setting);
+                    //if(result.adapterPosition > -1) notifyItemInserted(result.adapterPosition);
+                    ///else notifyDataSetChanged();
+                    notifyDataSetChanged();
+                }
+            }else {
+                Snackbar.make(itemView, result.result.getFullMessage(), Snackbar.LENGTH_LONG).show();
+                notifyDataSetChanged();
+            }
+        }
     }
 
     AdapterSetting() { setHasStableIds(true); }
-    AdapterSetting(FragmentManager fragmentManager) { this(); this.fragmentManager = fragmentManager;  }
+    AdapterSetting(ILoader loaderFragment, SettingsQue que) { this(); this.loaderFragment = loaderFragment; this.settingsQue = que;  }
 
     @Override
     public String getDividerID(int position) { return filtered.get(position).getGroupId(); }
@@ -311,28 +364,55 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
     @Override
     public void resetHashChanged() { this.hasChanged = false; }
 
-    @SuppressLint("NotifyDataSetChanged")
-    @Override
-    public void onSettingUpdatedSuccessfully(Context context, LuaSettingExtended setting, XResult result) {
-        setting.updateValue();
-        setting.setIsBusy(false);
-        Log.i(TAG, "Successfully updated setting=" + setting.getName());
-        notifyDataSetChanged();
-    }
+    //@SuppressLint("NotifyDataSetChanged")
+    //@Override
+    //public void onSettingUpdatedSuccessfully(Context context, LuaSettingExtended setting, XResult result) {
+    //    setting.updateValue();
+    //    setting.setIsBusy(false);
+    //    Log.i(TAG, "Successfully updated setting=" + setting.getName());
+    //    notifyDataSetChanged();
+    //}
+
+    //@SuppressLint("NotifyDataSetChanged")
+    //@Override
+    //public void onSettingUpdateFailed(Context context, LuaSettingExtended setting, XResult result) {
+    //    Log.w(TAG, "Failed to update setting=" + setting.getName());
+    //    setting.setIsBusy(false);
+    //    notifyDataSetChanged();
+    //}
+
+    //@Override
+    //public void onException(Context context, Exception e, LuaSettingExtended setting) { }
+
+    //@Override
+    //public void onBatchFinished(Context context, List<LuaSettingExtended> successful, List<LuaSettingExtended> failed) { AlertMessage.displayMessageBatch(context, successful, failed, application); }
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void onSettingUpdateFailed(Context context, LuaSettingExtended setting, XResult result) {
-        Log.w(TAG, "Failed to update setting=" + setting.getName());
-        setting.setIsBusy(false);
-        notifyDataSetChanged();
+    public void onSettingUpdate(SettingTransactionResult result) {
+        if(result.isBatch()) {
+
+            //What is its not a batch
+            for(LuaSettingExtended s : result.settings)
+                s.setIsBusy(false);
+
+            if(result.code == LuaSettingPacket.CODE_DELETE_SETTING) {
+                for(LuaSettingExtended s : result.succeeded) {
+                    s.setValueForce(null);
+                    s.resetModified(true);
+                }
+            }
+            else if(result.code == LuaSettingPacket.CODE_INSERT_UPDATE_SETTING) {
+                for(LuaSettingExtended s : result.succeeded) {
+                    //s.updateValue(true);
+                    s.updateValue();
+                }
+            }
+
+            notifyDataSetChanged();
+            AlertMessage.displayMessageBatch(result.context, result.succeeded, result.failed, loaderFragment.getApplication());
+        }
     }
-
-    @Override
-    public void onException(Context context, Exception e, LuaSettingExtended setting) { }
-
-    @Override
-    public void onBatchFinished(Context context, List<LuaSettingExtended> successful, List<LuaSettingExtended> failed) { AlertMessage.displayMessageBatch(context, successful, failed, application); }
 
     @SuppressLint("NotifyDataSetChanged")
     void randomizeAll(Context context) {
@@ -341,6 +421,9 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
         int randomized = 0;
         for(LuaSettingExtended e : filtered) {
             if(e.getRandomizer() != null && e.isEnabled()) {
+                if(NARandomizer.isNA(e.getRandomizer()))
+                    continue;
+
                 e.randomizeValue(context);
                 randomized++;
             }
@@ -357,23 +440,25 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
         Log.i(TAG, "Delete Selected settings... filtered=" + filtered.size());
         List<LuaSettingExtended> batch = new ArrayList<>();
         for(LuaSettingExtended e : filtered)
-            if(!e.isValueNull() && e.isEnabled()) { batch.add(e); e.setIsBusy(true); }
+            if(!e.isValueNull() && e.isEnabled()) batch.add(e);
 
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
         if(!batch.isEmpty()) {
             Log.i(TAG, "settings=" + settings.size() + " batch size=" + batch.size());
             settingsQue.batchUpdate(context, batch, true, this);
         }
     }
 
+    List<LuaSettingExtended> getSettings() { return settings; }
+
     @SuppressLint("NotifyDataSetChanged")
     void saveAll(Context context) {
         Log.i(TAG, "Saving all settings... filtered=" + filtered.size());
         List<LuaSettingExtended> batch = new ArrayList<>();
         for(LuaSettingExtended e : filtered)
-            if(e.isModified()) { batch.add(e); e.setIsBusy(true); }
+            if(e.isModified()) batch.add(e);
 
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
         if(!batch.isEmpty()) {
             Log.i(TAG, "settings=" + settings.size() + " batch size=" + batch.size());
             settingsQue.batchUpdate(context, batch, false, this);
@@ -394,12 +479,6 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
         this.dataChanged = true;
         this.settings.clear();
         this.settings.addAll(settings);
-
-        if(this.settingsQue == null) {
-            this.application = application;
-            this.settingsQue = new SettingsQue(application);
-        }
-
         if(DebugUtil.isDebug())
             Log.i(TAG, "Internal Count=" + this.settings.size() + " app=" + application);
 
@@ -518,9 +597,7 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.settingitem, parent, false));
-    }
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.settingitem, parent, false)); }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
@@ -543,6 +620,8 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
 
         holder.cvSetting.setEnabled(!setting.isBusy());
         holder.ivSettingDrop.setEnabled(!setting.isBusy());
+
+        holder.tiSettingValue.setEnabled(!setting.getName().endsWith(".bool"));
 
         holder.updateExpanded();
         holder.wire();

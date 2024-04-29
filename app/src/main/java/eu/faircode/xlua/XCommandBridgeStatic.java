@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import de.robv.android.xposed.XC_MethodHook;
 import eu.faircode.xlua.api.xlua.call.CleanHooksCommand;
+import eu.faircode.xlua.api.xlua.call.ClearSettingsCommand;
+import eu.faircode.xlua.api.xmock.call.ClearAppDataCommand;
 import eu.faircode.xlua.api.xstandard.CommanderService;
 import eu.faircode.xlua.api.xstandard.command.CallPacket;
 import eu.faircode.xlua.api.xstandard.command.QueryPacket;
@@ -74,7 +76,8 @@ public class XCommandBridgeStatic {
                 .registerQuery(GetMockSettingsCommand.class, true)
                 .registerCall(PutMockSettingCommand.class)
                 .registerCall(GetAppCommand.class)
-                .registerCall(CleanHooksCommand.class);
+                .registerCall(CleanHooksCommand.class)
+                .registerCall(ClearSettingsCommand.class);
 
         mockCommandService
                 .registerCall(GetMockCpuCommand.class)
@@ -88,7 +91,8 @@ public class XCommandBridgeStatic {
                 .registerQuery(GetMockPropertiesCommand.class, true)
                 .registerQuery(GetMockPropMapsCommand.class, true)
                 .registerQuery(GetMockAgentsCommand.class, true)
-                .registerCall(GetRandomUserAgentCommand.class);
+                .registerCall(GetRandomUserAgentCommand.class)
+                .registerCall(ClearAppDataCommand.class);
     }
 
     public static Bundle vxpCall(Context context, String arg, Bundle extras, String method)  {

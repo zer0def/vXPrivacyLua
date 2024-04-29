@@ -45,6 +45,7 @@ public class ConfigQue {
             final boolean deleteEnabledSettings,
             final IConfigUpdate onCallback) {
 
+        config.saveValuesFromInput();
         final MockConfigPacket packet = MockConfigPacket.create(config.getName(),
                 deleteEnabledSettings ? config.getDisabledSettings() : config.getSettings());
 

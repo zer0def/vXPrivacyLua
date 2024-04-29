@@ -38,7 +38,6 @@ public class RandomSIMType implements IRandomizer {
     @Override
     public String generateString() {
         ISpinnerElement el = dataStates.get(ThreadLocalRandom.current().nextInt(1, dataStates.size()));
-
         return el.getValue();
     }
 

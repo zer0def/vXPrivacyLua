@@ -179,7 +179,11 @@ public class LuaSettingExtended extends LuaSettingDefault implements IJsonSerial
                 if(isBuiltIntSetting())
                     return;
 
-                this.randomizer = randomizers.get(0);
+                for(IRandomizer r : randomizers)
+                    if(r.getID().equalsIgnoreCase("%n_a%"))
+                        this.randomizer = r;
+
+                //this.randomizer = randomizers.get(0);
             }
         }
     }
@@ -191,7 +195,7 @@ public class LuaSettingExtended extends LuaSettingDefault implements IJsonSerial
     public void setInputText(String text) {
         try {
             if(text == null) text = "";
-            if(this.inputText != null && text != null) {
+            if(this.inputText != null) {
                 if(this.textWatcher != null) this.inputText.removeTextChangedListener(this.textWatcher);
                 this.inputText.setText(text);
                 if(this.textWatcher != null) this.inputText.addTextChangedListener(this.textWatcher);

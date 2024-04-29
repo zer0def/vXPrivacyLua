@@ -1158,8 +1158,7 @@
     "author": "M66B",
     "className": "android.net.NetworkInfo",
     "methodName": "getExtraInfo",
-    "parameterTypes": [
-    ],
+    "parameterTypes": [ ],
     "returnType": "java.lang.String",
     "minSdk": 1,
     "luaScript": "@generic_null_value"
@@ -1889,6 +1888,10 @@
     "optional": true,
     "luaScript": "@firebase_setenabled"
   },
+
+
+
+
   // logPayment is not hooked to prevent problems with payments
   {
     "collection": "Privacy",
@@ -2079,6 +2082,10 @@
     "optional": true,
     "luaScript": "@generic_block_method"
   },
+
+
+
+
   {
     "collection": "Privacy",
     "group": "Use.Analytics",
@@ -2143,6 +2150,8 @@
     "optional": true,
     "luaScript": "@generic_block_method"
   },
+
+
   {
     "collection": "Privacy",
     "group": "Use.Analytics",

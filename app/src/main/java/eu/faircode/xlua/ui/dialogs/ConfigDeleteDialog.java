@@ -33,7 +33,7 @@ public class ConfigDeleteDialog extends AppCompatDialogFragment {
 
 
     public ConfigDeleteDialog setAdapterPosition(int adapterPosition) { this.adapterPosition = adapterPosition; return this; }
-    public ConfigDeleteDialog setConfig(MockConfig config) { this.config = config; return this;  }
+    public ConfigDeleteDialog setConfig(MockConfig config) { this.config = config; this.config.saveValuesFromInput(); return this;  }
     public ConfigDeleteDialog setCallback(IConfigUpdate onCallback) { this.onCallback = onCallback; return this; }
     public ConfigDeleteDialog setQue(ConfigQue que) { this.que = que; return this; }
 

@@ -21,10 +21,13 @@ package eu.faircode.xlua;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,11 +38,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,8 +54,10 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
@@ -63,14 +70,18 @@ import eu.faircode.xlua.api.xlua.XLuaQuery;
 import eu.faircode.xlua.api.hook.HookDatabaseEntry;
 import eu.faircode.xlua.api.hook.LuaHookPacket;
 import eu.faircode.xlua.api.xlua.call.PutHookCommand;
+import eu.faircode.xlua.ui.dialogs.PrivacyGroupWarningDialog;
+import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.utilities.CollectionUtil;
 
 import eu.faircode.xlua.api.hook.XLuaHook;
 import eu.faircode.xlua.api.app.XLuaApp;
+import eu.faircode.xlua.utilities.PrefUtil;
+import eu.faircode.xlua.utilities.StringUtil;
 import eu.faircode.xlua.utilities.UiUtil;
 
 
-public class FragmentMain extends Fragment {
+public class FragmentMain extends Fragment implements ILoader {
     private final static String TAG = "XLua.Fragment";
 
     private ProgressBar pbApplication;
@@ -89,6 +100,23 @@ public class FragmentMain extends Fragment {
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View main = inflater.inflate(R.layout.restrictions, container, false);
+
+        List<String> collections = XLuaCall.getCollections(getContext());
+        if(!collections.isEmpty()) {
+            if(collections.contains("Privacy")) {
+                boolean privacyWarning = PrefUtil.getBoolean(getContext(), "privacyWarn", false, true);
+                if(!privacyWarning) {
+                    PrefUtil.setBoolean(getContext(), "privacyWarn", true);
+                    collections.remove("Privacy");
+                    if(collections.isEmpty())
+                        collections.add("PrivacyEx");
+
+                    XLuaCall.putSetting(getContext(), "collection", StringUtil.join(collections));
+                    new PrivacyGroupWarningDialog()
+                            .show(Objects.requireNonNull(getFragmentManager()), getString(R.string.title_collection_privacy));
+                }
+            }
+        }
 
         pbApplication = main.findViewById(R.id.pbApplication);
         btnRestrict = main.findViewById(R.id.btnRestrict);
@@ -119,7 +147,7 @@ public class FragmentMain extends Fragment {
         };
         llm.setAutoMeasureEnabled(true);
         rvApplication.setLayoutManager(llm);
-        rvAdapter = new AdapterApp(getActivity());
+        rvAdapter = new AdapterApp(getActivity(), this);
         rvApplication.setAdapter(rvAdapter);
 
         //This point i dont use cuz its the menu drop down items
@@ -203,7 +231,17 @@ public class FragmentMain extends Fragment {
         if (rvAdapter != null) rvAdapter.getFilter().filter(query);
     }
 
-    private void loadData() {
+    @Override
+    public FragmentManager getManager() { return getFragmentManager(); }
+
+    @Override
+    public Fragment getFragment() { return this; }
+
+    @Override
+    public AppGeneric getApplication() { return null; }
+
+    @Override
+    public void loadData() {
         Log.i(TAG, "Starting data loader");
         LoaderManager manager = getActivity().getSupportLoaderManager();
         manager.restartLoader(ActivityMain.LOADER_DATA, new Bundle(), dataLoaderCallbacks).forceLoad();

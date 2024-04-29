@@ -27,6 +27,7 @@ import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Process;
 import android.os.SystemClock;
 import android.util.Log;
@@ -40,7 +41,6 @@ import org.luaj.vm2.Varargs;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
-import java.security.Key;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,13 +66,15 @@ import eu.faircode.xlua.api.xlua.XLuaQuery;
 import eu.faircode.xlua.hooks.LuaHookWrapper;
 import eu.faircode.xlua.hooks.LuaScriptHolder;
 import eu.faircode.xlua.hooks.XReporter;
-import eu.faircode.xlua.hooks.XResolved;
+import eu.faircode.xlua.hooks.LuaHookResolver;
 import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.logger.XReport;
 import eu.faircode.xlua.random.GlobalRandoms;
 import eu.faircode.xlua.random.IRandomizer;
 import eu.faircode.xlua.utilities.BundleUtil;
 
 import eu.faircode.xlua.api.hook.XLuaHook;
+import eu.faircode.xlua.utilities.ReflectUtil;
 
 public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
     private static final String TAG = "XLua.XCoreStartup";
@@ -236,101 +238,46 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 });
     }
 
-    public static final HashMap<String, String> keys = new HashMap<>();
-
     public void hookPackage(final XC_LoadPackage.LoadPackageParam lpparam, int uid, final Context context) throws Throwable {
-
-        //
-        //
-        //
-        //
-        //Havee as main param "key" then sun clas method like invoke
-        //since the hook will be in a different context this can help
-        //final String password
-        //i hope ?
-
         final String pName = lpparam.packageName;
-
-        //Since we are calling let us just check caller hash
-        //For functions like this just check caller hash
-        //boolean protectCommunication = XLuaCall.getSettingBoolean(context, 1337, "protect", Integer.toString(pName.hashCode()));
-        //if(protectCommunication) { }
-
-        //We can make it so if a key returns from the DB
-        //Again we as the caller were authed already
-        //if returns from the DB then there is a protect flag and that is the key
-        //simply unchecking and re-checking will reset the key
-        //On System side we can init keys in cache
-        //in order for the UI to do as needed we will keep cache on this context updated
-        //we can also each load get keys
-
         final String key = UUID.randomUUID().toString();
-        Log.i(TAG, "Key created! pkg=" + pName + " key=" + key);
-        keys.put(pName, key);
+        XLog.i("pkg [" + pName + "] key [" + key + "]");
 
-        Collection<XLuaHook> hooks =
-                XLuaQuery.getAssignments(context, pName, uid, true);
-
+        Collection<XLuaHook> hooks = XLuaQuery.getAssignments(context, pName, uid, true);
         final boolean useDefault = XLuaCall.getSettingBoolean(context, UserIdentityPacket.GLOBAL_USER, pName, "useDefault");
 
-        Log.i(TAG, "pkg=" + pName + " uid=" + uid + " hooks=" + hooks.size());
+        XLog.i("pkg [" + pName + "] uid [" + uid + "] hook size [" + hooks.size() + "]");
 
         final Map<String, String> settings = XLuaQuery.getGlobalSettings(context, uid);
         settings.putAll(XLuaQuery.getSettings(context, uid, pName, true));
+        GlobalRandoms.bindRandomToSettings(settings);
 
-        List<IRandomizer> randomizers = GlobalRandoms.getRandomizers();
-        for(Map.Entry<String, String> s : settings.entrySet()) {
-            if(s.getValue().equalsIgnoreCase("%random%") || s.getValue().equalsIgnoreCase("%randomize%")) {
-                for(IRandomizer r : randomizers) {
-                    if(r.isSetting(s.getKey())) {
-                        String nv = r.generateString();
-                        settings.put(s.getKey(), nv);
-                        break;
-                    }
-                }
-            }
-        }
-
-        //why global settings ? I suspect if null still use ?
-        //nvm global is good, as in defined for all, then ovveride if need with the putAll
-        //can be 0 globals to how ever many
-
-        //final Map<String, Integer> propSettings = MockPropConversions.toMap(XMockQuery.getModifiedProperties(context));
-        //propSettings.putAll(MockPropConversions.toMap(XMockQuery.getModifiedProperties(context, uid, pName)));
         final Map<String, Integer> propSettings = MockPropConversions.toMap(XMockQuery.getModifiedProperties(context, uid, pName));
         final Map<String, String> propMaps = XMockQuery.getMockPropMapsMap(context, true, settings, false);
-        //we can also lazy load it ?
 
-        Log.i(TAG,"pkg [" + pName + "] settings=" + settings.size() + " properties=" + propSettings.size() + " prop maps=" + propMaps.size());
+        XLog.i("pkg [" + pName + "] settings size [" + settings.size() + "] properties size [" + propSettings.size() + "] prop maps size [" + propMaps.size() + "]");
 
         Map<LuaScriptHolder, Prototype> scriptPrototype = new HashMap<>();
         PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-
-
-
         for(final XLuaHook hook : hooks) {
             try {
-                //SDK Check min & max
-                if(!hook.isAvailable(pInfo.versionCode))
+                if(!hook.isAvailable(pInfo.versionCode)) {
+                    XLog.w("Hook is not compatible with Target SDK: " + hook.getId());
                     continue;
+                }
 
                 //get time & Compile Script
                 final long install = SystemClock.elapsedRealtime();
                 final Prototype compiledScript = XHookUtil.compileScript(scriptPrototype, hook);
+                final LuaHookResolver target = XHookUtil.resolveTargetHook(context, hook);
 
-                XResolved target = XHookUtil.resolveTargetHook(context, hook);
-
-                Log.i(TAG, "Created Target Hook For: " + target);
-
+                XLog.i("Created Target Hook: " + target);
                 if(target.isField()) {
-                    final Field field = target.tryGetField(true);
+                    final Field field = target.tryGetAsField(true);
                     if(field != null) {
                         try {
                             if (target.paramTypes.length > 0)  throw new NoSuchFieldException("Field with parameters");
                             long run = SystemClock.elapsedRealtime();
-
-
-                            //Init lua runtime / Hook
                             LuaHookWrapper luaField = LuaHookWrapper.createField(
                                     context,
                                     hook,
@@ -344,52 +291,46 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                                     pName);
 
                             if(!luaField.isValid()) {
-                                Log.w(TAG, "Skipping over Field: " + field.getName() + " because its not a AFTER function...");
+                                XLog.w("Skipping over Field: [" + field.getName() + "] Its not a After Function" );
                                 continue;
                             }
 
-                            // Run function
                             Varargs result = luaField.invoke();
-                            report.reportUsage(hook, result, run, "after", context);
+                            XReport.usage(hook, result, run, XReport.FUNCTION_AFTER, context);
                         }catch (Exception e) {
-                            report.reportFieldException(context, e, hook, field);
+                            XReport.fieldException(context, e, hook, field);
                         }
                     }
                 }else {
-                    final Member member = target.tryGetMember();
+                    final Member member = target.tryGetAsMember();
                     if(member != null) {
-                        //target.throwIfMismatchReturn(member);
+                        XLog.w("Member Method Name=" + member.getName());
                         if(target.hasMismatchReturn(member)) {
                             XLog.e("Invalid Return Type for Hook: " + hook.getId());
                             continue;
                         }
 
                         XposedBridge.hookMethod(member, new XC_MethodHook() {
-                            //within here set key
                             private final WeakHashMap<Thread, Globals> threadGlobals = new WeakHashMap<>();
-                            //private final String SecretKey
-                            //Some how in the given context grab the key ???
-                            //upon first
 
                             @Override
-                            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                            protected void beforeHookedMethod(MethodHookParam param)  {
                                 execute(param, "before");
                             }
 
                             @Override
-                            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                            protected void afterHookedMethod(MethodHookParam param)  {
                                 execute(param, "after");
                             }
 
                             private void execute(MethodHookParam param, String function) {
                                 long run = SystemClock.elapsedRealtime();
-
                                 try {
                                     LuaHookWrapper luaMember;
                                     synchronized (threadGlobals) {
                                         Thread thread = Thread.currentThread();
                                         if (!threadGlobals.containsKey(thread))
-                                            threadGlobals.put(thread, XHookUtil.getGlobals(
+                                            threadGlobals.put(thread, XHookUtil.getHookGlobals(
                                                     context,
                                                     hook,
                                                     settings,
@@ -400,8 +341,6 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                                                     pName));
 
                                         Globals globals = threadGlobals.get(thread);
-
-                                        // Initialize Lua runtime
                                         luaMember = LuaHookWrapper
                                                 .createMember(
                                                         context,
@@ -417,41 +356,26 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                                                         useDefault,
                                                         pName);
 
-                                        if(!luaMember.isValid())
+                                        if(!luaMember.isValid()) {
+                                            XLog.w("Lua Member is Not Valid [" + target.methodName + "] Most likely not a after or before : now a:" + function);
                                             return;
+                                        }
                                     }
 
-                                    // Run function
                                     Varargs result = luaMember.invoke();
-                                    report.reportUsage(hook, result, run, function, context);
+                                    XReport.usage(hook, result, run, function, context);
                                 }catch (Exception ex) {
                                     synchronized (threadGlobals) { threadGlobals.remove(Thread.currentThread()); }
-                                    report.reportMemberException(context, ex, hook, member, function, param);
+                                    XReport.memberException(context, ex, hook, member, function, param);
                                 }
                             }
                         });
-                    }else {
-                        Log.e(TAG, "Member NULL: hook=" + hook.getName() + " id=" + hook.getId());
-                    }
+                    }else XLog.e("Member is NULL. hook=" + hook.getName() + " id=" + hook.getId(), new Throwable(), true);
                 }
-                // Report install
-                if (BuildConfig.DEBUG) {
-                    report.pushReport(context, hook.getId(), "none", "install",
-                            BundleUtil.createSingleLong(
-                                    "duration",
-                                    SystemClock.elapsedRealtime() - install));
-                }
+                if (BuildConfig.DEBUG) XReport.install(hook, install, context);
             }catch (Throwable fe) {
-                if (hook.isOptional() && XHookUtil.isReflectError(fe))
-                    Log.i(TAG, "Optional hook=" + hook.getId() + ": " + fe.getClass().getName() + ": " + fe.getMessage());
-                else {
-                    Log.e(TAG, hook.getId() + ": " + Log.getStackTraceString(fe));
-                    // Report install error
-                    report.pushReport(context, hook.getId(), "none", "install",
-                            BundleUtil.createSingleString(
-                                    "exception",
-                                    fe instanceof LuaError ? fe.getMessage() : Log.getStackTraceString(fe)));
-                }
+                if (hook.isOptional() && ReflectUtil.isReflectError(fe)) XLog.e("Optional Hook=" + hook.getId() + " class=" + fe.getClass().getName(), fe, true);
+                else XReport.installException(hook, fe, context);
             }
         }
     }

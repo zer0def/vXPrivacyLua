@@ -5,7 +5,7 @@ function after(hook, param)
 	end
 
 	local setting = param:getSettingReMap("unique.gsm.subscription.id", "phone.subscriberid")
-	if setting nil then
+	if setting == nil then
 	    return false
 	end
 

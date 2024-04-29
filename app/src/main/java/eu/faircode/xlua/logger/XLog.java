@@ -17,6 +17,10 @@ public class XLog {
     private String functionName;
     private String exception;
 
+
+
+
+
     //public XLog(XLuaHook hook, )
 
     //public static XLog create(XLuaHook hook, String packageName, int uid, long time, String data) {

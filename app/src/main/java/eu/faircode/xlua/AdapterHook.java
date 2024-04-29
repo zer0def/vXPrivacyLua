@@ -142,15 +142,18 @@ public class AdapterHook extends RecyclerView.Adapter<AdapterHook.ViewHolder> {
             if(result.hasAnySucceeded()) {
                 if (!result.getPacket().isDelete()) result.group.putAssignment(new LuaAssignment(result.getHook()));
                 else result.group.removeAssignment(new LuaAssignment(result.getHook()));
-                if(result.getAdapterPosition() > -1) {
-                    try {
-                        notifyItemChanged(result.getAdapterPosition());
-                    }catch (Exception e) {
-                        notifyDataSetChanged();
-                        XLog.e("Failed to update Hook: " + result.getHook().getId(), e, true);
-                    }
-                }
-                else notifyDataSetChanged();
+
+                fragmentLoader.loadData();
+
+                //if(result.getAdapterPosition() > -1) {
+                //    try {
+                //        notifyItemChanged(result.getAdapterPosition());
+                //    }catch (Exception e) {
+                //        notifyDataSetChanged();
+                //        XLog.e("Failed to update Hook: " + result.getHook().getId(), e, true);
+                //    }
+                //}
+                //else notifyDataSetChanged();
             }
         }
     }

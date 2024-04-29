@@ -7,8 +7,8 @@ function after(hook, param)
 
     local setting = param:getSetting("gsm.operator.id")
     if param:isNumericString(setting) then
-        param:setResultToLongInt(setting)
-        return true, tostring(ret), setting
+        param:setResult(setting)
+        return true, ret, setting
     else
         local mcc = param:getSettingReMap("gsm.operator.mcc", "phone.mcc", "274")
         local mnc = param:getSettingReMap("gsm.operator.mnc", "phone.mnc", "299")
@@ -18,8 +18,8 @@ function after(hook, param)
 
         if param:isNumericString(mcc) and param:isNumericString(mnc) then
             local fake = mcc .. mnc
-            param:setResultToLongInt(fake)
-            return true, tostring(ret), fake
+            param:setResult(fake)
+            return true, ret, fake
         end
     end
 	return false

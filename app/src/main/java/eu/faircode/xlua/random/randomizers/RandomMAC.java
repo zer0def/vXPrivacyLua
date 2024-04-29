@@ -11,11 +11,13 @@ import eu.faircode.xlua.utilities.RandomStringGenerator;
 public class RandomMAC implements IRandomizer {
     @Override
     public boolean isSetting(String setting) {
-        return setting.equalsIgnoreCase(getSettingName()) ||
-                setting.equalsIgnoreCase("bluetooth.id") ||
-                setting.equalsIgnoreCase("unique.bluetooth.address") ||
-                setting.equalsIgnoreCase("net.bssid") ||
-                setting.equalsIgnoreCase("unique.network.mac.address");
+        return getSettingName().equalsIgnoreCase(setting) ||
+                "bluetooth.id".equalsIgnoreCase(setting) ||
+                "unique.bluetooth.address".equalsIgnoreCase(setting) ||
+                "net.bssid".equalsIgnoreCase(setting) ||
+                "unique.network.mac.address".equalsIgnoreCase(setting) ||
+                "unique.network.bssid".equalsIgnoreCase(setting) ||
+                "unique.network.ethernet.mac.address".equalsIgnoreCase(setting);
     }
 
     @Override
@@ -32,10 +34,8 @@ public class RandomMAC implements IRandomizer {
         String rawString = RandomStringGenerator.generateRandomAlphanumericString(12, RandomStringGenerator.UPPER_LETTERS);
         StringBuilder sb = new StringBuilder();
         int rawLen = rawString.length();
-
         for(int i = 0; i < rawString.length(); i += 2) {
             sb.append(rawString, i, Math.min(i + 2, rawLen));
-
             if(i + 2 < rawLen)
                 sb.append(":");
         }

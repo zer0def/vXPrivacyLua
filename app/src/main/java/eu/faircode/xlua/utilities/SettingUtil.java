@@ -64,7 +64,7 @@ public class SettingUtil {
                 else if(name.equalsIgnoreCase("value.serial"))
                     desc = "Android Build Serial " + m66bExtension;
                 else if(name.equalsIgnoreCase("lac,cid"))
-                    desc = "Cell Location stuff " + m66bExtension;
+                    desc = "Cell Location stuff " + m66bExtension + "Setting must match exactly like LAC,CID . for example:26550,187363073";
                 else if(name.endsWith(".randomize"))
                     desc = "M66Bs flag to indicate Startup Randomization for: " + name.substring(0, name.length() - ".randomize".length());
             }

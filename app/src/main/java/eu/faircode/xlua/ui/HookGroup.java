@@ -238,7 +238,21 @@ public class HookGroup {
         Map<String, HookGroup> groups = new HashMap<>();
         try {
             Collection<XLuaHook> hooks = XLuaQuery.getHooks(context, true);
-            XLuaApp app = XLuaCall.getApp(context, application, true, true);
+
+            //XLuaApp app = XLuaCall.getApp(context, application, true, true);
+            XLuaApp app = null;
+            for (XLuaApp a : XLuaQuery.getApps(context, true)) {
+                if(a.getPackageName().equalsIgnoreCase(application.getPackageName())) {
+                    app = a;
+                    break;
+                }
+            }
+
+            if(app == null) {
+                XLog.e("App Object is NULL from the search...", new Throwable(), true);
+                return new ArrayList<>();
+            }
+
             List<String> collection = XLuaCall.getCollections(context);
             Map<String, LuaSettingExtended> settings = LuaSettingExtended.toMap(XMockQuery.getAllSettings(context, application));
             XLog.i("Hooks Size=" + hooks.size() + " Collection Size=" + collection.size() + " Settings Size=" + settings.size());

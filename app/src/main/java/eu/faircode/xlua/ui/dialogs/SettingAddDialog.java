@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import eu.faircode.xlua.AppGeneric;
 import eu.faircode.xlua.R;
+import eu.faircode.xlua.Str;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
 import eu.faircode.xlua.utilities.StringUtil;
 
@@ -64,10 +65,9 @@ public class SettingAddDialog extends AppCompatDialogFragment {
                         String settingName = edSettingName.getText().toString();
                         String settingDescription = edSettingDescription.getText().toString();
                         String settingValue = edSettingValue.getText().toString();
-                        boolean createSetting = cbCreateSetting.isChecked();
-                        boolean createDefault = cbCreateDefaultSetting.isChecked() && StringUtil.isValidString(settingDescription);
-
-                        if(!StringUtil.isValidString(settingName) || (!createSetting && !createDefault))
+                        boolean createSetting = cbCreateSetting.isChecked() && Str.isValidNotWhitespaces(settingName) && Str.isValidNotWhitespaces(settingValue);
+                        boolean createDefault = cbCreateDefaultSetting.isChecked();
+                        if(!createDefault && !createSetting)
                             return;
 
                         Log.i(TAG, "Initialized all the Data from setting add now creating packet...");

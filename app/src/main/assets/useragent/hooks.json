@@ -68,6 +68,48 @@
     "settings":["user.agent"]
   },*/
 
+
+  {
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "Spoof.UserAgent",
+    "name": "Agent/AdjustConfig.init",
+    "author": "OBC",
+    "className": "com.adjust.sdk.AdjustConfig",
+    "methodName": "init",
+    "parameterTypes": [ "android.content.Context", "java.lang.String", "java.lang.String", "boolean" ],
+    "returnType": "",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "optional": true,
+    "usage": true,
+    "notify": false,
+    "luaScript": "@adjust_config_init"
+  },
+  {
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "Spoof.UserAgent",
+    "name": "Agent/AdjustConfig.setUserAgent",
+    "author": "OBC",
+    "className": "com.adjust.sdk.AdjustConfig",
+    "methodName": "setUserAgent",
+    "parameterTypes": [ "java.lang.String" ],
+    "returnType": "boolean",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "optional": true,
+    "usage": true,
+    "notify": false,
+    "luaScript": "@adjust_setuseragent",
+    "settings":["user.agent"]
+  },
+
+
   {
     "builtin": true,
     "collection": "PrivacyEx",

@@ -38,6 +38,8 @@ import eu.faircode.xlua.api.settings.LuaSettingPacket;
 import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.random.GlobalRandoms;
 import eu.faircode.xlua.random.IRandomizer;
+import eu.faircode.xlua.random.randomizers.NARandomizer;
+import eu.faircode.xlua.ui.dialogs.NoRandomDialog;
 import eu.faircode.xlua.ui.transactions.PropTransactionResult;
 import eu.faircode.xlua.ui.PropertyQue;
 import eu.faircode.xlua.ui.dialogs.PropertyAddDialogEx;
@@ -180,7 +182,6 @@ public class AdapterPropertiesGroup extends RecyclerView.Adapter<AdapterProperti
                     case R.id.itemViewPropGroup:
                         ViewUtil.internalUpdateExpanded(expanded, name);
                         updateExpanded();
-
                         break;
                     case R.id.ivBtDeleteSettingFromProperties:
                         new SettingDeleteDialogEx()
@@ -192,7 +193,11 @@ public class AdapterPropertiesGroup extends RecyclerView.Adapter<AdapterProperti
                                 .show(fragmentLoader.getManager(),  view.getContext().getString(R.string.title_delete_setting));
                         break;
                     case R.id.ivBtRandomSettingValueFromProperties:
-                        setting.randomizeValue(view.getContext());
+                        if(NARandomizer.isNA(setting.getRandomizer()))
+                            new NoRandomDialog()
+                                    .show(fragmentLoader.getManager(),
+                                            view.getResources().getString(R.string.title_no_random));
+                        else setting.randomizeValue(view.getContext());
                         break;
                     case R.id.ivBtSaveSettingFromProperties:
                         settingsQue.updateSetting(

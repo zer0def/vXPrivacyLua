@@ -10,6 +10,20 @@ public class ParcelUtil {
     private static final String TAG = "XLua.ParcelUtil";
     public static final String IGNORE_VALUE = "<<!>>";
 
+
+    public static String parcelToHexString(Parcel parcel) {
+        Log.w(TAG, "AD ID (phs) pos=" + parcel.dataPosition() + " size=" + parcel.dataSize());
+        byte[] parcelBytes = parcel.marshall();
+        parcel.setDataPosition(0);  // Reset parcel for future use
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : parcelBytes) {
+            hexString.append(String.format("%02X ", b));
+        }
+
+        return hexString.toString();
+    }
+
     public static void writeString(Parcel in, String value, String ignoreValue) {
         writeString(in, value, ignoreValue, true);
     }

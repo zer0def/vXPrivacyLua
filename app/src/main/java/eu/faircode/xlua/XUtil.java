@@ -49,7 +49,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 public class XUtil {
     private final static String TAG = "XLua.Util";
 
-    static final String PRO_PACKAGE_NAME = "eu.faircode.xlua.pro";
+    public static final String PRO_PACKAGE_NAME = "eu.faircode.xlua.pro";
     private static final int PER_USER_RANGE = 100000;
 
     public static String getApk(Context context) {

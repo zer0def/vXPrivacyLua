@@ -10,8 +10,6 @@ import android.os.Binder;
 import android.os.Process;
 import android.util.Log;
 
-import com.bumptech.glide.util.Util;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +23,6 @@ import eu.faircode.xlua.api.XResult;
 
 import eu.faircode.xlua.XUtil;
 import eu.faircode.xlua.XposedUtil;
-import eu.faircode.xlua.api.app.AppPacket;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignmentWriter;
 import eu.faircode.xlua.api.settings.LuaSetting;
@@ -33,6 +30,7 @@ import eu.faircode.xlua.api.xstandard.UserIdentityPacket;
 import eu.faircode.xlua.api.xstandard.database.SqlQuerySnake;
 import eu.faircode.xlua.api.app.XLuaApp;
 import eu.faircode.xlua.api.hook.XLuaHook;
+import eu.faircode.xlua.logger.XLog;
 
 public class XLuaAppProvider {
     private static final String TAG = "XLua.XAppProvider";
@@ -42,6 +40,32 @@ public class XLuaAppProvider {
             return pi.versionCode;
         } else
             return -55;
+    }
+
+    public static boolean clearAppData(Context context, String packageName) {
+        if(packageName.equalsIgnoreCase(UserIdentityPacket.GLOBAL_NAMESPACE)) {
+            return false;
+        }
+
+        XLog.i("Clearing App Data for Package: " + packageName);
+        try {
+            long identity = Binder.clearCallingIdentity();
+            try {
+                //android.content.pm.IPackageDataObserver java
+                ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+                Method mForceStop = am.getClass().getMethod("clearApplicationUserData", String.class, Class.forName("android.content.pm.IPackageDataObserver"));
+                XLog.i("Found method [clearApplicationUserData] Now invoking....");
+                mForceStop.invoke(am, packageName, null);
+                return true;
+            } catch (Exception e) {
+                XLog.e("Failed to clear App Data for Package: " + packageName, e, true);
+                return false;
+            } finally {
+                Binder.restoreCallingIdentity(identity);
+            }
+        }catch (Exception e) {
+            return false;
+        }
     }
 
     public static boolean forceStop(Context context, String packageName, int userid) { return forceStop(context, packageName, userid, null); }
@@ -189,7 +213,7 @@ public class XLuaAppProvider {
     private static void initAppForceToStop(Map<String, XLuaApp> apps, XDatabase db, int userid) {
         //direct insert here
         SqlQuerySnake snake = SqlQuerySnake
-                .create(db, LuaSetting.Table.name)
+                .create(db, LuaSetting.Table.NAME)
                 .whereColumn("user", Integer.toString(userid))
                 .whereColumn("name", "'forcestop'")
                 .onlyReturnColumns("category", "value");

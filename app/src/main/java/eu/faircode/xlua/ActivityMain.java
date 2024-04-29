@@ -90,7 +90,6 @@ public class ActivityMain extends ActivityBase {
         // Check if service is running
         if (!XLuaHookProvider.isAvailable(this)) {
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.msg_no_service), Snackbar.LENGTH_INDEFINITE);
-
             final Intent intent = getPackageManager().getLaunchIntentForPackage("de.robv.android.xposed.installer");
             if (intent != null && intent.resolveActivity(getPackageManager()) != null)
                 snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
@@ -158,16 +157,6 @@ public class ActivityMain extends ActivityBase {
         boolean isVerbose = getDebugState();
 
         final ArrayAdapterDrawer drawerArray = new ArrayAdapterDrawer(ActivityMain.this, R.layout.draweritem);
-
-        if (!XposedUtil.isVirtualXposed())
-            drawerArray.add(new DrawerItem(this, R.string.menu_clean_privacy_ex_hooks, new DrawerItem.IListener() {
-                @Override
-                public void onClick(DrawerItem item) {
-                    XResult res = CleanHooksCommand.invokeEx(ActivityMain.this);
-                    Toast.makeText(ActivityMain.this, res.getFullMessage(), Toast.LENGTH_LONG).show();
-                    drawerArray.notifyDataSetChanged();
-                }
-            }));
 
         if (!XposedUtil.isVirtualXposed())
             drawerArray.add(new DrawerItem(this, R.string.menu_notify_new, notifyNew, new DrawerItem.IListener() {
@@ -302,7 +291,7 @@ public class ActivityMain extends ActivityBase {
         drawerList.setAdapter(drawerArray);
         //whatsNew
 
-        checkFirstRun();
+        initCore();
     }
 
     public void setDebugState(boolean enabled) {
@@ -517,6 +506,25 @@ public class ActivityMain extends ActivityBase {
         firstRunDialog.show();
     }
 
+    public void initCore() {
+        String lastHash = PrefUtil.getString(this, PrefUtil.PREF_LAST_RUN);
+        String curHash = String.valueOf(BuildConfig.VERSION_NAME.hashCode());
+        if(lastHash == null || lastHash.equals(curHash)) {
+            try {
+                XResult res = CleanHooksCommand.invokeEx(this);
+                if(res.succeeded()) {
+                    PrefUtil.setString(this, PrefUtil.PREF_LAST_RUN, curHash);
+                    for(int i = 0; i < 6; i++)
+                        CleanHooksCommand.invokeEx(this);
+                }
+            }catch (Exception e) {
+                XLog.e("Failed to Clean PEX Hooks", e, true);
+            }
+        }
+
+        checkFirstRun();
+    }
+
     public void checkFirstRun() {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean firstRun = prefs.getBoolean("firstrun", true);
@@ -559,8 +567,8 @@ public class ActivityMain extends ActivityBase {
             observer.startObserving(this, firstRunDialog);
         }
 
-        if(!PrefUtil.getPreferenceBoolean(this, "welcome", false, true)) {
-            PrefUtil.setPreferenceBoolean(this, "welcome", true);
+        if(!PrefUtil.getBoolean(this, "welcome", false, true)) {
+            PrefUtil.setBoolean(this, "welcome", true);
             whatsNew();
         }
     }

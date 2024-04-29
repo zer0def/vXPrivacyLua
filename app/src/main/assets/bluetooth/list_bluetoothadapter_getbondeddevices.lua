@@ -3,17 +3,14 @@ function after(hook, param)
     if res == nil then
         return false
     end
-
     local sz = param:getContainerSize(res)
     if sz == 0 then
         return false
     end
-
     local setting = param:getSetting("bluetooth.allowed.bonded.list", "*")
     if setting == nil then
         return false
     end
-
     local allowed = param:stringToList(setting, ",")
     local filtered = param:filterSavedBluetoothDevices(res, allowed)
     local newSz = param:getContainerSize(filtered)

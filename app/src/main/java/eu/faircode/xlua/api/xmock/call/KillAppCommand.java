@@ -22,7 +22,11 @@ public class KillAppCommand extends CallCommandHandler {
     public Bundle handle(CallPacket commandData) throws Throwable {
         LuaSettingPacket packet = commandData.readExtrasAs(LuaSettingPacket.class);
         XResult res = XResult.create().setMethodName("killApp").setExtra(packet.toString());
-        return res.setResult(XLuaAppProvider.forceStop(commandData.getContext(), packet.getCategory(), XUtil.getUserId(packet.getUser()), res)).toBundle();
+        return res.setResult(XLuaAppProvider.forceStop(
+                commandData.getContext(),
+                packet.getCategory(),
+                XUtil.getUserId(packet.getUser()),
+                res)).toBundle();
     }
 
     public static XResult invokeEx(Context context, String packageName, int uid) {

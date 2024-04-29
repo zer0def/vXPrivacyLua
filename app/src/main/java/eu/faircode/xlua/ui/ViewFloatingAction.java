@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -103,6 +104,11 @@ public class ViewFloatingAction extends Fragment {
         }
     }
 
+    public boolean isOpen() { return mainActionButton.isShown(); }
+    public boolean isActionOpen() { return isActionOpen; }
+    public boolean isMainHidden() { return isMainHidden; }
+
+
     protected void bindActionButtonToRecyclerView() { bindActionButtonToRecyclerView(this.rvList); }
     protected void bindActionButtonToRecyclerView(RecyclerView rvView) {
         if(rvView == null || mainActionButton == null)
@@ -113,7 +119,7 @@ public class ViewFloatingAction extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 // If scrolling up, show the FAB; if scrolling down, hide the FAB
-                if (dy > 0 && mainActionButton.isShown()) {
+                if (dy > 0 && mainActionButton.isShown() && isRecyclerScrollable()) {
                     if(isActionOpen)
                         invokeFloatingActions();
 
@@ -125,6 +131,15 @@ public class ViewFloatingAction extends Fragment {
         });
     }
 
+    public boolean isRecyclerScrollable() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) rvList.getLayoutManager();
+        RecyclerView.Adapter adapter = rvList.getAdapter();
+        if (layoutManager == null || adapter == null) return false;
+
+        return layoutManager.findLastCompletelyVisibleItemPosition() < adapter.getItemCount() - 1;
+    }
+
+
     protected void hideMainActionButton(boolean hide) {
         if(mainActionButton == null) return;
         this.isMainHidden = hide;
@@ -132,6 +147,19 @@ public class ViewFloatingAction extends Fragment {
         else mainActionButton.show();
         mainActionButton.setLongClickable(!hide);
         mainActionButton.setClickable(!hide);
+    }
+
+    public void handleFloatingActions() {
+        if(!mainActionButton.isShown() && !isRecyclerScrollable())
+            hideMainActionButton(false);
+
+        //if (mainActionButton.isShown() && isRecyclerScrollable()) {
+        //    if(isActionOpen)
+        //        invokeFloatingActions();
+        //    hideMainActionButton(true);
+        //} else if (!mainActionButton.isShown()) {
+        //    hideMainActionButton(false);
+        //}
     }
 
     protected void invokeFloatingActions() {

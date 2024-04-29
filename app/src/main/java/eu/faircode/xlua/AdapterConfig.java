@@ -39,6 +39,10 @@ import eu.faircode.xlua.api.xlua.XLuaCall;
 import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.random.IRandomizer;
 import eu.faircode.xlua.random.GlobalRandoms;
+import eu.faircode.xlua.random.randomizers.NARandomizer;
+import eu.faircode.xlua.ui.ViewFloatingAction;
+import eu.faircode.xlua.ui.dialogs.NoRandomDialog;
+import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.utilities.SettingUtil;
 import eu.faircode.xlua.utilities.UiUtil;
 import eu.faircode.xlua.utilities.ViewUtil;
@@ -48,7 +52,7 @@ public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder
     private final List<LuaSettingExtended> settings = new ArrayList<>();
     private final HashMap<String, Boolean> expanded = new HashMap<>();
 
-    private AppGeneric application = null;
+    private ILoader fragmentLoader;
     private MockConfig config = null;
 
     public class ViewHolder
@@ -122,6 +126,14 @@ public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder
         @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(final View view) {
+
+            Log.i("XLua.AdapterConfig", "IsOpen=" + vf.isOpen() + " IsScrollable=" + vf.isRecyclerScrollable() + " IsActionOpen=" + vf.isActionOpen() + " IsMainHidden="+ vf.isMainHidden());
+
+            //if(!vf.isOpen() && !vf.isRecyclerScrollable())
+            //    vf.invokeFloatingActions();
+
+            vf.handleFloatingActions();
+
             int id = view.getId();
             XLog.i("onClick id=" + id);
             final LuaSettingExtended setting = settings.get(getAdapterPosition());
@@ -132,7 +144,11 @@ public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder
                     updateExpanded();
                     break;
                 case R.id.ivBtRandomConfigSettingValue:
-                    setting.randomizeValue(view.getContext());
+                    if(NARandomizer.isNA(setting.getRandomizer()))
+                        new NoRandomDialog()
+                                .show(fragmentLoader.getManager(),
+                                        view.getResources().getString(R.string.title_no_random));
+                    else setting.randomizeValue(view.getContext());
                     break;
                 case R.id.ivBtResetConfigSettingValue:
                     if(setting.isModified()) setting.resetModified(true);
@@ -205,19 +221,23 @@ public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder
         }
     }
 
+    private ViewFloatingAction vf;
+
     AdapterConfig() { setHasStableIds(true); }
-    AdapterConfig(AppGeneric application) { this(); this.application = application; }
+    AdapterConfig(ILoader fragmentLoader, ViewFloatingAction vf) { this(); this.fragmentLoader = fragmentLoader; this.vf = vf; }
 
     void applyConfig(Context context) {
+        config.saveValuesFromInput();
         XLog.i("Applying config setting size=" + settings.size());
         int failed = 0;
         int succeeded = 0;
 
         for(LuaSettingExtended setting : settings) {
             if(setting.isEnabled()) {
-                LuaSettingPacket packet = LuaSettingPacket.create(setting, LuaSettingPacket.CODE_INSERT_UPDATE_SETTING, false)
-                        .copyIdentification(application);
-
+                setting.updateValue(true);
+                LuaSettingPacket packet = LuaSettingPacket
+                        .create(setting, LuaSettingPacket.CODE_INSERT_UPDATE_SETTING, false)
+                        .copyIdentification(fragmentLoader.getApplication());
                 XResult res = XLuaCall.sendMockSetting(context, packet);
                 if(res.succeeded())
                     succeeded++;
@@ -245,7 +265,7 @@ public class AdapterConfig extends RecyclerView.Adapter<AdapterConfig.ViewHolder
         notifyDataSetChanged();
     }
 
-    public MockConfig getConfig() { return config; }
+    public MockConfig getConfig() {  config.setSettings(this.settings); return config; }
     public String getConfigName() { return config.getName(); }
     public List<LuaSettingExtended> getSettings() { return this.settings; }
     public List<LuaSettingExtended> getEnabledSettings() {

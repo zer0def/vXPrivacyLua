@@ -52,10 +52,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -75,6 +77,9 @@ import eu.faircode.xlua.api.hook.assignment.LuaAssignmentPacket;
 
 import eu.faircode.xlua.api.app.XLuaApp;
 import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.ui.HookWarnings;
+import eu.faircode.xlua.ui.dialogs.HookWarningDialog;
+import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.utilities.ViewUtil;
 
 public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> implements Filterable {
@@ -83,6 +88,8 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
     private int iconSize;
 
     public enum enumShow {none, user, icon, all}
+
+    private ILoader fragmentLoader;
 
     private enumShow show = enumShow.icon;
     private String group = null;
@@ -97,7 +104,12 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public class ViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener, View.OnLongClickListener, CompoundButton.OnCheckedChangeListener, IListener {
+            implements
+            View.OnClickListener,
+            View.OnLongClickListener,
+            CompoundButton.OnCheckedChangeListener,
+            IListener {
+
         final View itemView;
         final ImageView ivExpander;
         final ImageView ivIcon;
@@ -141,7 +153,7 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
             LinearLayoutManager llm = new LinearLayoutManager(itemView.getContext());
             llm.setAutoMeasureEnabled(true);
             rvGroup.setLayoutManager(llm);
-            adapter = new AdapterGroup();
+            adapter = new AdapterGroup(fragmentLoader);
             rvGroup.setAdapter(adapter);
 
             grpExpanded = itemView.findViewById(R.id.grpExpanded);
@@ -320,12 +332,24 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
             Log.i(TAG, pkgName + " " + groupName + "=" + assign);
 
             final ArrayList<String> hookIds = new ArrayList<>();
+            final Set<String> ids = new HashSet<>();
             for (XLuaHook hook : hooks)
                 if (hook.isAvailable(pkgName, collection) &&
                         (groupName == null || groupName.equals(hook.getGroup()))) {
                     hookIds.add(hook.getId());
-                    if (assign)
+                    if (assign) {
+                        //if(ids.contains(hook.getGroup())) {
+                        //    String wMsg = HookWarnings.getWarningMessage(context, hook.getGroup());
+                        //    if(wMsg != null) {
+                        //        ids.add(hook.getGroup());
+                        //        new HookWarningDialog()
+                        //                .setGroup(group)
+                        //                .setText(wMsg)
+                        //                .show(fragmentLoader.getManager(), context.getString(R.string.title_hook_warning));
+                        //    }
+                        //}
                         app.addAssignment(new LuaAssignment(hook));
+                    }
                     else
                         app.removeAssignment(new LuaAssignment(hook));
                 }
@@ -348,9 +372,8 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
         }
     }
 
+    AdapterApp(Context context, ILoader loader) { this(context); this.fragmentLoader = loader; }
     AdapterApp(Context context) {
-        //This is to create the icons for each app.xml item
-        //Needs context
         TypedValue typedValue = new TypedValue();
         context.getTheme().resolveAttribute(android.R.attr.listPreferredItemHeight, typedValue, true);
         int height = TypedValue.complexToDimensionPixelSize(typedValue.data, context.getResources().getDisplayMetrics());

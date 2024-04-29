@@ -13,16 +13,10 @@ function after(hook, param)
 	if action == "android.intent.action.BATTERY_CHANGED" or action == "BATTERY_CHANGED" then
 		local bmn = luajava.bindClass("android.os.BatteryManager")
 		local bundle = intent:getExtras()
-		--local eLevel = bmn.EXTRA_LEVEL
-
         local scale = bundle:getInt(bmn.EXTRA_SCALE, -1)
         if bundle:getInt(bmn.EXTRA_LEVEL, -1) ~= scale and scale >= 0 then
           bundle:putInt(bmn.EXTRA_LEVEL, math.floor(.95*scale))
         end
-
-		--if bundle:getInt(eLevel, -1) then
-		--	bundle:putInt(eLevel, math.floor(.95*scale))
-		--end
 
 		bundle:remove(bmn.EXTRA_BATTERY_LOW)
 		bundle:putInt(bmn.EXTRA_VOLTAGE, 4200)

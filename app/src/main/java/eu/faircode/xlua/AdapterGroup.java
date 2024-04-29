@@ -40,6 +40,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatCheckBox;
@@ -50,17 +52,24 @@ import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
 import eu.faircode.xlua.api.hook.XLuaHook;
 
 import eu.faircode.xlua.api.app.XLuaApp;
+import eu.faircode.xlua.ui.HookWarnings;
+import eu.faircode.xlua.ui.dialogs.HookWarningDialog;
+import eu.faircode.xlua.ui.dialogs.SettingAddDialogEx;
+import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.utilities.SettingUtil;
 
 
 public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> {
-    private static final String TAG = "XLua.Group";
-
     private XLuaApp app;
     private List<LuaHooksGroup> groups = new ArrayList<>();
+    private ILoader fragmentLoader;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    public class ViewHolder extends RecyclerView.ViewHolder
-            implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+
+    public class ViewHolder extends
+            RecyclerView.ViewHolder
+            implements CompoundButton.OnCheckedChangeListener,
+            View.OnClickListener {
         final View itemView;
         final ImageView ivException;
         final ImageView ivInstalled;
@@ -125,6 +134,8 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
                 case R.id.tvGroup:
                     cbAssigned.setChecked(!cbAssigned.isChecked());//Invoke the onCheck
                     break;
+
+                    //if they click on the Name then pop up
             }
         }
 
@@ -134,6 +145,15 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
             final LuaHooksGroup group = groups.get(getAdapterPosition());
             switch (compoundButton.getId()) {
                 case R.id.cbAssigned:
+                    if(group.hasWarning && checked) {
+                        String wMsg = HookWarnings.getWarningMessage(compoundButton.getContext(), group.name);
+                        if(wMsg != null)
+                            new HookWarningDialog()
+                                    .setGroup(group)
+                                    .setText(wMsg)
+                                    .show(fragmentLoader.getManager(), compoundButton.getContext().getString(R.string.title_hook_warning));
+                    }
+
                     app.notifyAssign(compoundButton.getContext(), group.name, checked);
                     break;
             }
@@ -143,6 +163,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
     AdapterGroup() {
         setHasStableIds(true);
     }
+    AdapterGroup(ILoader loader) { this(); this.fragmentLoader = loader; }
 
     @SuppressLint("NotifyDataSetChanged")
     void set(XLuaApp app, List<XLuaHook> hooks, Context context) {
@@ -161,6 +182,8 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
                 group.id = resources.getIdentifier("group_" + name, "string", context.getPackageName());
                 group.name = hook.getGroup();
                 group.title = (group.id > 0 ? resources.getString(group.id) : hook.getGroup());
+
+                group.hasWarning = HookWarnings.hasWarning(context, group.name);
 
                 map.put(hook.getGroup(), group);
             }
@@ -208,9 +231,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.group, parent, false));
-    }
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.group, parent, false)); }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {

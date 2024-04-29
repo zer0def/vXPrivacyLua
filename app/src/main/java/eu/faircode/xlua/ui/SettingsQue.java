@@ -83,6 +83,95 @@ public class SettingsQue {
         });
     }
 
+    public void batchUpdate(final Context context, final List<LuaSettingExtended> settings, final boolean delete, final ISettingUpdateEx callback) {
+        for(LuaSettingExtended sm : settings)
+            sm.setIsBusy(true);
+
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (lock) {
+                    //final List<LuaSettingExtended> successful = new ArrayList<>();
+                    //final List<LuaSettingExtended> failed = new ArrayList<>();
+
+
+                    final SettingTransactionResult result = new SettingTransactionResult();
+                    result.context = context;
+                    result.adapterPosition = -1;
+                    //result.result = ret;
+                    //result.settings.add(setting);
+                    //result.id = setting.getName().hashCode();
+                    //result.packets.add(packet);
+                    //result.code = packet.getCode();
+                    //if(ret.succeeded()) result.succeeded.add(setting);
+                    //else if(ret.failed()) result.failed.add(setting);
+                    //if(onCallback != null) onCallback.onSettingUpdate(result);
+
+
+                    for(final LuaSettingExtended s : settings) {
+                        result.settings.add(s);
+                        final LuaSettingPacket packet = createUpdatePacket(s, delete, false);
+                        result.packets.add(packet);
+                        result.code = packet.getCode();
+                        try {
+                            final XResult ret = XLuaCall.sendSetting(context, packet);
+                            result.results.add(ret);
+                            if(ret.failed()) result.failed.add(s);
+                            else result.succeeded.add(s);
+                            /*new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(ret.failed()) {
+                                        failed.add(s);
+                                        if(onResult != null) onResult.onSettingUpdateFailed(context, s, ret);
+                                    }else {
+                                        successful.add(s);
+                                        if(delete) {
+                                            s.setValueForce(null);
+                                            s.resetModified(true);
+                                        }
+                                        if(onResult != null) onResult.onSettingUpdatedSuccessfully(context, s, ret);
+                                    }
+                                }
+                            });*/
+                        }catch (final Exception e) {
+                            XLog.e("Failed to send setting Exception: s=" + s, e, true);
+                            result.results.add(XResult.create().setFailed(e.getMessage()));
+                            result.failed.add(s);
+                            /*Log.e(TAG, "Failed to update setting setting=" + s + " e=" + e);
+                            if(onResult != null) onResult.onSettingUpdateFailed(context, s, XResult.create().setFailed(e.getMessage()));
+                            failed.add(s);
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    failed.add(s);
+                                    if(onResult != null) onResult.onSettingUpdateFailed(context, s, XResult.create().setFailed(e.getMessage()));
+                                }
+                            });*/
+                        }
+                    }
+                    if(callback != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onSettingUpdate(result);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void updateSetting(
+            final Context context,
+            final LuaSettingExtended setting,
+            final int adapterPosition,
+            final boolean insertSetting,
+            final boolean insertDefaultMap,
+            final ISettingUpdateEx onCallback) { sendSettingEx(context, setting, adapterPosition, insertSetting, insertDefaultMap, false, false, application.getForceStop(), onCallback); }
+
     public void updateSetting(
             final Context context,
             final LuaSettingExtended setting,
@@ -117,8 +206,9 @@ public class SettingsQue {
             return;
         }
 
-        if(!deleteSetting && !setting.isModified()) {
-            XLog.e("Make changes to the setting before 'sending' setting=" + setting);
+
+        if(!deleteDefaultMap && !deleteSetting && !setting.isModified()) {
+            XLog.e("Make changes to the setting before 'sending' setting=" + setting + " del de=" + deleteDefaultMap + " del=" + deleteSetting, new Throwable(), true);
             return;
         }
 
@@ -157,7 +247,7 @@ public class SettingsQue {
         }
     }
 
-    public void sendSetting(
+    /*public void sendSetting(
             final Context context,
             final LuaSettingExtended setting,
             final int adapterPosition,
@@ -205,9 +295,9 @@ public class SettingsQue {
         }catch (Exception e) {
             XLog.e("Failed to wait for setting to apply, setting=" + setting + " pos=" + adapterPosition, e, true);
         }
-    }
+    }*/
 
-    public void sendSetting(final Context context, final  LuaSettingExtended setting, final boolean deleteSetting, final boolean forceKill) { sendSetting(context, setting, deleteSetting, forceKill); }
+    /*public void sendSetting(final Context context, final  LuaSettingExtended setting, final boolean deleteSetting, final boolean forceKill) { sendSetting(context, setting, deleteSetting, forceKill); }
     public void sendSetting(final Context context, final  LuaSettingExtended setting, final boolean deleteSetting, final boolean forceKill, final ISettingUpdate onResult) {
         if(!deleteSetting && !setting.isModified()) {
             Log.w(TAG, "Make changes to the setting before 'sending' setting=" + setting);
@@ -235,7 +325,7 @@ public class SettingsQue {
         }catch (Exception e) {
             Log.e(TAG, "Failed to wait for Setting to apply , setting=" + setting);
         }
-    }
+    }*/
 
     public LuaSettingPacket createPacket(
             LuaSettingExtended setting,
@@ -258,8 +348,9 @@ public class SettingsQue {
 
     public LuaSettingPacket createUpdatePacket(LuaSettingExtended setting, boolean deleteSetting, boolean forceKill) {
         LuaSettingPacket packet =
-                LuaSettingPacket.create(
-                        setting, LuaSettingPacket.getCodeInsertOrDelete(deleteSetting), forceKill)
+                LuaSettingPacket.create(setting,
+                                LuaSettingPacket.getCodeInsertOrDelete(deleteSetting),
+                                forceKill)
                         .copyIdentification(application);
 
         if(!deleteSetting) packet.setValueForce(setting.getModifiedValue());

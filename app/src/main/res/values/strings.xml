@@ -22,9 +22,12 @@
     <string name="title_bootloop">Restricting can cause a bootloop</string>
     <string name="title_force_stop">Force stop automatically</string>
     <string name="title_use_default" translatable="false">Use Default Values for settings</string>
+    <string name="button_reset_settings" translatable="false">Reset Settings</string>
+
     <string name="button_terminate" translatable="false">Terminate</string>
     <string name="button_properties" translatable="false">Properties</string>
     <string name="button_configs" translatable="false">Configs</string>
+
 
 
     <string name="title_help_instructions">
@@ -45,14 +48,14 @@
     <string name="menu_whats_new_button" translatable="false">Whats New!</string>
 
     <string name="whats_new" translatable="false">
-        Whats new in 1.4.2.3 Update XPL-EX (ObbedCode)
+        Whats new in 1.4.2.4 Update XPL-EX (ObbedCode) v77
         <![CDATA[<br><br>]]> !!!Warning this is BETA it WILL have Bugs but over time code will be cleaned and things will be fixed!!!
         <![CDATA[<br><br>]]> Privacy will never be lost I wont stop til each app is FULLY black boxed.
         <![CDATA[<br>]]>This is my Art, Quality over Quantity so be patience pls and thanks to all who are patient!.
         <![CDATA[<br>]]>Free, Open Source, No Analytics, No Servers, offline ...
         <![CDATA[<br><br>]]> Shout out to Hubert (always keeps me informed updated!) (want to hide root ? this is your man!)
         <![CDATA[<br>]]>Telegram: <![CDATA[<a href="https://t.me/HubertHub">HubertHub</a>]]>
-        <![CDATA[<br><br>]]> Shout out to AppListo (Gives me Apis to Hooks when I am lost!)
+        <![CDATA[<br><br>]]> Shout out to AppListo (Gives me Apis to Hooks when I am lost! pls Purchase AppCloner!)
         <![CDATA[<br>]]>Website: <![CDATA[<a href="https://appcloner.app/">AppCloner</a>]]>
 
         <![CDATA[<br><br>]]><![CDATA[<a href="https://t.me/xplexex">XPL-EX Announcements</a>]]>
@@ -65,6 +68,51 @@
         <![CDATA[<br><br>]]> VDInfos. Grabbing your own Device info cool dev
         <![CDATA[<br>]]><![CDATA[<a href="https://xdaforums.com/t/app-vdinfos.4097379/">XDA</a>]]>
         <![CDATA[<br>]]><![CDATA[<a href="https://github.com/VD171/VD-Infos">GitHub</a>]]>
+
+        <![CDATA[<br><br>]]> 1.4.2.4 Changes v6
+        <![CDATA[<br><br>]]>        [All]
+        <![CDATA[<br>]]>    -> Improved Text View Lines using (maxLines) remove (Lines)
+        <![CDATA[<br>]]>    -> Improved Reporter Code
+        <![CDATA[<br>]]>    -> Added Dialog for No Randomizer and added No Randomizer selection
+        <![CDATA[<br>]]>    -> Added Dialog for Empty Groups how to Fix it
+        <![CDATA[<br>]]>    -> Added new way to handle (Bundle, Parcel, Json, ContentValues, Cursor) Data Types
+        <![CDATA[<br>]]>    -> Improved Type Conversions
+        <![CDATA[<br>]]>    -> Added (Messages) Hooks
+        <![CDATA[<br>]]>    -> Added (Location) Hooks
+        <![CDATA[<br>]]>    -> Added (Sync) Hooks
+        <![CDATA[<br>]]>    -> Added (Record Audio) Hooks
+        <![CDATA[<br>]]>    -> Added (Camera) Hooks
+        <![CDATA[<br>]]>    -> Added (Contacts) Hooks
+        <![CDATA[<br>]]>    -> Added (Notification) Hooks
+        <![CDATA[<br>]]>    -> Added (Calender) Hooks
+        <![CDATA[<br>]]>    -> Added More Telephony Hooks
+        <![CDATA[<br>]]>    -> Added (BSSID and SSID) Hooks
+        <![CDATA[<br>]]>    -> Deprecated Command (GetAppCommand)
+        <![CDATA[<br>]]>    -> Added Clean up for some Streams (memory stuff)
+        <![CDATA[<br>]]>    -> Improved on the (0) Groups "issue"
+        <![CDATA[<br>]]>    -> Improved UI updating for Hooks UI
+        <![CDATA[<br>]]>    -> Added new Advertising ID Hook: com.google.android.gms.ads.identifier.internal.IAdvertisingIdService
+        <![CDATA[<br>]]>    -> Improved the Randomizer for the AD ID to follow more standards
+        <![CDATA[<br>]]>    -> Fixed the Configs Bug not saving the new Values for the Settings
+        <![CDATA[<br>]]>    -> Added more GPU Hooks (GLES10/11/20/30/31/32 EGL14/15 and EGLImpl)
+        <![CDATA[<br>]]>    -> Fixed the Map Delete Bug (Not deleting Map)
+        <![CDATA[<br>]]>    -> Added Warnings Dialogs for Hooks
+        <![CDATA[<br>]]>    -> Added Delete all settings (Per Package) option
+        <![CDATA[<br>]]>    -> Added Adjust User Agent Changer Hooks
+        <![CDATA[<br>]]>    -> Added Adjust Crippler (Destroy Spoof Adjust) Hooks
+        <![CDATA[<br>]]>    -> Added Amazon Ad ID and Facebook Ad ID Hooks
+        <![CDATA[<br>]]>    -> Added In App Paypal Security Spoof (Trick Paypal Environment) Hooks
+        <![CDATA[<br>]]>    -> Added Firebase Hooks
+        <![CDATA[<br>]]>    -> Added Root and Emulator Hider Hooks (Non Native!!)
+        <![CDATA[<br>]]>    -> Added More MNC + MCC Hooks and Location Hooks
+        <![CDATA[<br>]]>    -> Added Facebook Analytics Hooks
+        <![CDATA[<br>]]>    -> Added Google Analytics Hooks
+        <![CDATA[<br>]]>    -> Fixed Return Type Mismatch with Box and Unboxed Types
+        <![CDATA[<br>]]>    -> Fixed Scroll Bug Hidden Action Buttons for the Config UI
+        <![CDATA[<br>]]>    -> Added Rename Prompt for Configs if Same name is present
+        <![CDATA[<br>]]>    -> Added More Cell Location Hooks
+        <![CDATA[<br>]]>    -> Added More Specific Unique ID Hooks
+        <![CDATA[<br>]]>    -> Added Zone Randomizers (beta)
 
         <![CDATA[<br><br>]]> 1.4.2.3 Changes
         <![CDATA[<br><br>]]>        [Coming Soon possibly next update...]
@@ -152,6 +200,24 @@
         <![CDATA[<br><br>]]>This is my Art, Quality over Quantity so be patience pls and thanks to all who are patient!.
    </string>
 
+    <string name="warning_hook_user_agent" translatable="false">If you have Installed a custom WebView on the Device Example like BroMite this hook MAY not work there for expect that. It will still work on applications that use OkHttp3 , HttpUrlConnection and GeckoWebView from Firefox. These hooks WILL not work on Chromium Based browsers no matter what like Chrome, Brave (anything that is built off of the chrome base as it uses native code to build its User Agent). Lastly using it on Such apps like DoorDash is Dumb as DoorDash uses their own type of User-Agent , if you do not spoof it correctly it can make doordash flag you. </string>
+    <string name="warning_hook_soc_ex" translatable="false">This Hook can cause Applications to Crash on Certain versions of Androids and or Devices so disable this if you have issues with the Application Crashing. Enable ONLY this hook open the App to see if this can be the reason for Application crashing. </string>
+    <string name="warning_hook_properties" translatable="false">To Control the Interception filter use the Properties UI. This hook currently right now does not Support Native Build Proper Properties Interception so if they are still getting the property despite your proper filter config then assume they are using Native methods!</string>
+    <string name="warning_hook_language" translatable="false">This will not ALWAYS work and can be unstable at times as it does target a lot of APIs that CAN be use for legitimate reasons. If you exhibit odd behaviour in the application disable this Hook!</string>
+    <string name="warning_hook_vpn_state" translatable="false">This will hide the fact that you have a VPN Enabled and Connected, but if the target application uses Server Sided methods to Detect the VPN it can not be bypassed via Hooks. This hook is a Local Detection bypass using 4 methods</string>
+    <string name="warning_hook_spoof_features" translatable="false">Enabling this Hook can cause odd behaviour in the application such as possible connection Issues. This filter out ALL (for now) device features there for when applications use this function to legitimately check if you have a Camera and or have Wifi Chip it will appear as if you do not since those are considered features.</string>
+    <string name="warning_hook_get_app" translatable="false">This will prevent the action of getting SINGLE application data, this will not filter the List of applications but it will intercept the functions that can get single pieces of data on the target application there for revealing that the app exists. HMA (Hide My App List) will block and filter the Lists this will cover everything else that is not listing of apps but getting something of A APP. You can have Whitelist mode or Blacklist mode control it all in settings.</string>
+
+    <string name="warning_hook_gsm_status" translatable="false">These hooks will only Spoof the State of Data as in it will show it as enabled despite it being disabled.</string>
+    <string name="warning_hook_embed_paypal" translatable="false">This will ATTEMPT to spoof the Environment to HELP trick Paypal payment gateways within apps that the phone its working off of is not Rooted or a Emulator. This is an ATTEMPT nothing bullet proof.</string>
+    <string name="warning_hook_intercept_shell" translatable="false">You can control the commands it will intercept (hardcoded) in the settings UI containing SHELL. If the app uses Native Shell this hook will not work!</string>
+    <string name="warning_hook_hide_environment" translatable="false">This hook will ATTEMPT to Hide if the System is an Emulator and or is Rooted. By NO means this Bulletproof or even SUPER especially if target app uses Native Detection methods. DO NOT complain if it does not Hide it for some APPS, to ensure it works the best select the (Intercept Shell, Intercept Properties, and Get Apps) Hooks. Of course combine Get Apps with HMA (Hide my App List) Get Apps Hook if Whitelist Mode is enabled will automatically block MY hardcoded list of Root packages to ensure strength put in your own list as well in settings.</string>
+
+
+    <string name="warning_hook_get_location" translatable="false">Get Location will will allow control over the target application if it is ALLOWED to get the Location versus Spoofing or Spoof Location will imply that you allow it to get location now you want to spoof it.</string>
+
+
+    <string name="title_hook_warning" translatable="false">Hook Group Warning!</string>
 
     <string name="title_help_installed">Restriction installed</string>
     <string name="title_help_system">Applying restrictions can result in problems</string>
@@ -162,15 +228,27 @@
     <string name="title_delete_setting" translatable="false">Setting Delete</string>
     <string name="title_add_property" translatable="false">Property Add</string>
     <string name="title_delete_config" translatable="false">Config Delete</string>
+    <string name="title_no_groups" translatable="false">Groups Error</string>
+    <string name="title_error_generic" translatable="false">Error</string>
+
 
     <string name="menu_clean_privacy_ex_hooks" translatable="false">Clean PEX Hooks</string>
 
 
     <string name="title_select_file" translatable="false">Select File</string>
+    <string name="title_no_random" translatable="false">Setting Missing Random</string>
+    <string name="title_collection_privacy" translatable="false">For my mental health</string>
 
 
     <string name="msg_delete_config" translatable="false">Are you sure you really want to Delete this Config ? (whole config) </string>
+    <string name="msg_na_randomizer" translatable="false">This setting does not have a Randomizer and or you set the Randomizer to N/A. Reason most likely is due to the Fact that there are SOO many settings to make Randomizers for all is asking North Korea to free its people. That being said as each Update comes more Randomizers will come, in the mean Time Use Google to find out what you think best fits this setting and use Description for help and maybe a Possible Format. Thank you! </string>
+    <string name="msg_delete_property" translatable="false">Are you sure you want to delete the property? This will Delete the MAP (object that links the Property Name to a Setting) and the Actual Property Setting Value (not the linked setting but the setting that specifies control on the property)</string>
+    <string name="msg_no_groups" translatable="false">Error it appears that 0 Groups have been returned. Make sure you have Restarted your phone when and if you first installed the APK, and Either you have no (collections) selected / enabled and or You have interfering (Collections) Enabled. Having the (old) (Privacy) collection and the (new) (PrivacyEx) collection enabled can cause this. Disable one of them (Recommend to disable Privacy) then try again. You can control this within the Pro Application that is provided in the Pins in the XPL-EX Channel. Opening the Pro Companion app on the first screen will show you the Collections, having (Privacy) and (PrivacyEx) Collections both enabled can cause issues. </string>
 
+    <string name="msg_old_group" translatable="false">HEY I noticed you have original M66Bs Collection enabled (Privacy) I WILL be disabling this without your choice as this is to prevent people from getting confused and or complaining about issues solved years ago. That being said IF you go out and enable it again I will NOT help you if you have issues as I do no longer support or maintain that collection. Any issues relating to the fact you have a old outdated collection will be 100% ignored!</string>
+
+
+    <string name="result_update_setting_success" translatable="false">Setting Updated Successfully</string>
     <string name="result_delete_setting_success" translatable="false">Setting Deleted Successfully</string>
     <string name="result_delete_setting_failed" translatable="false">Failed to Delete Setting</string>
     <string name="result_delete_setting_null" translatable="false">Parameters are NULL or not filled, make sure something is checked or input!</string>
@@ -213,6 +291,13 @@
     <string name="menu_settings_save_hint" translatable="false">Saved the Un-Saved settings to the Database</string>
     <string name="menu_settings_delete_hint" translatable="false">Delete the selected Settings</string>
     <string name="menu_settings_hint" translatable="false">Options</string>
+    <string name="menu_settings_reset_hint" translatable="false">Reset all settings back to Empty Values</string>
+
+    <string name="msg_settings_reset" translatable="false">Are you sure you want to reset all the settings ? it will just revert the values back to being Empty or Null will not Delete any Maps.</string>
+    <string name="title_settings_reset" translatable="false">Reset all Settings</string>
+    <string name="title_config_rename_config" translatable="false">Rename Config</string>
+
+    <string name="msg_delete_app_data" translatable="false">Are you sure you want to clear Application App Data ? This will delete specifically the App Data not the Hook Settings or Assignments.</string>
 
 
     <string name="menu_config_hint" translatable="false">Options</string>
@@ -224,8 +309,15 @@
     <string name="option_delete" translatable="false">Delete</string>
     <string name="option_cancel" translatable="false">Cancel</string>
     <string name="option_add" translatable="false">Add</string>
+    <string name="option_not_ask" translatable="false">Do not ask Again</string>
+    <string name="option_thanks" translatable="false">OK THANKS</string>
+    <string name="option_ok" translatable="false">Ok</string>
+    <string name="option_rename" translatable="false">Rename</string>
+    <string name="option_clear" translatable="false">Clear</string>
+
 
     <string name="title_groups" translatable="false">Groups</string>
+    <string name="title_delete_appdata" translatable="false">Clear App Data</string>
 
     <string name="menu_filter" translatable="false">Search Filter</string>
     <string name="menu_filter_settings" translatable="false">Settings</string>
@@ -256,6 +348,16 @@
     <string name="button_settings_ex_hint" translatable="false">Advance Settings UI not from the Pro App</string>
     <string name="button_props_hint" translatable="false">Properties UI to control Properties Interceptor</string>
 
+    <string name="button_reset_settings_hint" translatable="false">Reset the Setting Values back to Null or Nothing</string>
+
+
+    <string name="button_settings_reset_data_hint" translatable="false">Reset the Application Data, not Hooks or settings but the actual Data</string>
+    <string name="button_settings_reset_data" translatable="false">Clear Data</string>
+    <string name="button_settings_save_checked_hint" translatable="false">Save what is Checked so next time you open the UI it will have those selections checked.</string>
+    <string name="button_settings_save_checked" translatable="false">Save Checked</string>
+
+
+
     <string name="check_prop_hide_hint" translatable="false">Hide Specific Property from Build Props</string>
     <string name="check_prop_skip_hint" translatable="false">Skip/Ignore Specific Property from Build Props</string>
     <string name="check_prop_force_hint" translatable="false">Force to push Build Property even if it does not exist.</string>
@@ -264,6 +366,16 @@
     <string name="text_hide" translatable="false">Hide</string>
     <string name="text_skip" translatable="false">Skip</string>
     <string name="text_force" translatable="false">Force</string>
+
+    <string name="title_add_dialog_setting_builder" translatable="false">Setting Builder</string>
+    <string name="error_add_dialog_bad_name" translatable="false">Setting Name was invalid please use periods instead of spaces avoid using white spaced</string>
+    <string name="error_add_dialog_bad_input" translatable="false">Invalid Input for the setting Name</string>
+    <string name="error_add_dialog_no_checks" translatable="false">Error no options were selected either setting map and or setting value</string>
+    <string name="text_add_dialog_setting_name" translatable="false">Setting Name</string>
+    <string name="text_add_dialog_setting_value" translatable="false">Setting Value</string>
+    <string name="text_add_dialog_setting_description" translatable="false">Setting Default Description</string>
+    <string name="text_add_dialog_setting_help" translatable="false">A Setting Map is considered a Default setting. Adding a Map and or Default Map will add the Setting to the default settings allowing you to delete the Setting Value yet still have it show up as a setting to modify. It will also allow you to see the setting in different app setting contexts. Not adding a map will make it so when the setting value is Deleted it will disappear. Note setting names and maps should always use periods instead of whitespaces!</string>
+
 
 
     <string name="error_no_activity" translatable="false">Application has no Start Activity...</string>
@@ -305,7 +417,6 @@
     <string name="menu_save" translatable="false">Save</string>
     <string name="menu_cpumaps" translatable="false">CPU Maps</string>
 
-    <string name="option_thanks" translatable="false">OK THANKS</string>
 
     <string name="msg_no_service">Module not running or updated</string>
     <string name="msg_review_settings">Review privacy settings</string>

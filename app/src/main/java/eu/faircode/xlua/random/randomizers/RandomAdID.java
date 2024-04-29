@@ -7,6 +7,7 @@ import java.util.List;
 import eu.faircode.xlua.random.IRandomizer;
 import eu.faircode.xlua.random.elements.ISpinnerElement;
 import eu.faircode.xlua.utilities.RandomStringGenerator;
+import eu.faircode.xlua.utilities.RandomUtil;
 
 public class RandomAdID implements IRandomizer {
     //google.advertisingid
@@ -34,15 +35,15 @@ public class RandomAdID implements IRandomizer {
 
     @Override
     public String generateString() {
-        return RandomStringGenerator.generateRandomNumberString(8) +
+        return (RandomStringGenerator.generateRandomHexString(8) +
                 "-" +
-                RandomStringGenerator.generateRandomAlphanumericString(4, RandomStringGenerator.LOWER_LETTERS) +
+                RandomStringGenerator.generateRandomHexString(4) +
                 "-" +
-                RandomStringGenerator.generateRandomAlphanumericString(4, RandomStringGenerator.LOWER_LETTERS) +
+                RandomStringGenerator.generateRandomNumberString(4) +
                 "-" +
-                RandomStringGenerator.generateRandomAlphanumericString(4, RandomStringGenerator.LOWER_LETTERS) +
+                RandomStringGenerator.generateRandomNumberString(4)+
                 "-" +
-                RandomStringGenerator.generateRandomAlphanumericString(12, RandomStringGenerator.LOWER_LETTERS);
+                RandomStringGenerator.generateRandomHexString(12)).toLowerCase();
     }
 
     @Override

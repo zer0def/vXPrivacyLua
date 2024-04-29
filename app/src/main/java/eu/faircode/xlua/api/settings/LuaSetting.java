@@ -192,12 +192,18 @@ public class LuaSetting extends UserIdentityPacket implements IJsonSerial, Parce
     };
 
     public static class Table {
-        public static final String name = "setting";
+        public static final String NAME = "setting";
+
+        public static final String FIELD_USER = "user";
+        public static final String FIELD_CATEGORY = "category";
+        public static final String FIELD_NAME = "name";
+        public static final String FIELD_VALUE = "value";
+
         public static final LinkedHashMap<String, String> columns = new LinkedHashMap<String, String>() {{
-            put("user", "INTEGER");
-            put("category", "TEXT");
-            put("name", "TEXT");
-            put("value", "TEXT");
+            put(FIELD_USER, "INTEGER");
+            put(FIELD_CATEGORY, "TEXT");
+            put(FIELD_NAME, "TEXT");
+            put(FIELD_VALUE, "TEXT");
         }};
     }
 }

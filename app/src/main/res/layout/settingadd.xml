@@ -6,29 +6,50 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etAddSettingSettingName"
+    <TextView
+        android:id="@+id/tvSettingNameAddDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"/>
+        android:text="@string/text_add_dialog_setting_name"
+        />
+
+    <EditText
+        android:id="@+id/etAddSettingSettingName"
+        android:layout_below="@+id/tvSettingNameAddDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="cool.setting.name"/>
+
+    <TextView
+        android:id="@+id/tvSettingValueAddDialog"
+        android:layout_below="@+id/etAddSettingSettingName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_add_dialog_setting_value"
+        />
 
     <EditText
         android:id="@+id/etAddSettingSettingValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etAddSettingSettingName"
+        android:layout_below="@+id/tvSettingValueAddDialog"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="0dp"
-        android:hint="Value"
         tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
+        android:id="@+id/tvSettingDescAddDialog"
+        android:layout_below="@+id/etAddSettingSettingValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_add_dialog_setting_description"
+        />
 
     <EditText
         android:id="@+id/etAddSettingSettingDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/etAddSettingSettingValue"
+        android:layout_below="@id/tvSettingDescAddDialog"
         android:layout_marginTop="-3dp"
-        android:hint="Description"
         tools:layout_editor_absoluteX="16dp" />
 
     <CheckBox
@@ -46,5 +67,14 @@
         android:layout_below="@id/cbAddSettingSettingAddCheck"
         android:checked="true"
         android:text="Create Default Map Setting" />
+
+    <TextView
+        android:id="@+id/tvSettingAddDialogHelp"
+        android:layout_below="@+id/cbAddSettingDefaultSettingAddCheck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="25"
+        android:text="@string/text_add_dialog_setting_help"
+        />
 
 </RelativeLayout >

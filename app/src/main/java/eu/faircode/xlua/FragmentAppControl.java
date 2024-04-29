@@ -28,6 +28,7 @@ import java.util.Objects;
 import eu.faircode.xlua.api.xlua.XLuaCall;
 import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.ui.HookGroup;
+import eu.faircode.xlua.ui.dialogs.NoGroupsDialog;
 import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.ui.ViewFloatingAction;
 import eu.faircode.xlua.utilities.UiUtil;
@@ -106,6 +107,12 @@ public class FragmentAppControl extends ViewFloatingAction implements ILoader {
                     UiUtil.initTheme(getActivity(), data.theme);
                     rvAdapter.set(data.groups);
                     tvGroupsCount.setText(new StringBuilder().append(" - ").append(data.groups.size()));
+                    if(data.groups == null || data.groups.isEmpty()) {
+                        XLog.e("Groups for App Control is Zero or Null");
+                        new NoGroupsDialog()
+                                .show(Objects.requireNonNull(getFragmentManager()), getString(R.string.title_no_groups));
+                    }
+
                     swipeRefresh.setRefreshing(false);
                     progressBar.setVisibility(View.GONE);
                 } else {

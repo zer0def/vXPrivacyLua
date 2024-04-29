@@ -1,5 +1,4 @@
 [
-  //
 
   /*{
     "builtin": false,
@@ -44,7 +43,113 @@
     "luaScript": "@id_advertising_two",
     "settings": ["unique.google.advertising.id"]
   },*/
+  /*{
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "ID.AD.EX",
+    "name": "Ad/IBinder.execTransactInternal(int, Parcel, Parcel, int, int)",
+    "author": "OBC",
+    "className": "android.os.Binder",
+    "methodName": "!execTransactInternal",
+    "parameterTypes": ["int", "android.os.Parcel", "android.os.Parcel", "int", "int"],
+    "returnType": "boolean",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "This is for test",
+    "enabled": true,
+    "optional": true,
+    "usage": true,
+    "notify": false,
+    "luaScript": "@id_advertising_two",
+    "settings": ["unique.google.advertising.id"]
+  },*/
 
+  /*{
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "ID.Unique",
+    "name": "Ad/Parcel.readString",
+    "author": "OBC",
+    "className": "android.os.Parcel",
+    "methodName": "readString",
+    "parameterTypes": [ ],
+    "returnType": "java.lang.String",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "Check if the Parcel Read String resembles a Ad ID",
+    "enabled": true,
+    "optional": true,
+    "usage": true,
+    "notify": false,
+    "luaScript": "@id_advertising_three",
+    "settings": ["unique.google.advertising.id"]
+  },*/
+
+  /*{
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "ID.Unique",
+    "name": "Ad/IBinder.execTransact(int, long, long, int)",
+    "author": "OBC",
+    "className": "android.os.Binder",
+    "methodName": "!execTransact",
+    "parameterTypes": ["int", "long", "long", "int"],
+    "returnType": "boolean",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "This is for test",
+    "enabled": true,
+    "optional": true,
+    "usage": true,
+    "notify": false,
+    "luaScript": "@id_advertising_two",
+    "settings": ["unique.google.advertising.id"]
+  },*/
+
+  //unique.network.ssid
+  {
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "ID.Unique",
+    "name": "WifiInfo.getBSSID",
+    "author": "M66B x OBC",
+    "className": "android.net.wifi.WifiInfo",
+    "methodName": "getBSSID",
+    "parameterTypes": [ ],
+    "returnType": "java.lang.String",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "optional": true,
+    "usage": true,
+    "notify": false,
+    "luaScript": "@id_wifiinfo_getbssid",
+    "settings": ["unique.network.bssid"]
+  },
+  {
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "ID.Unique",
+    "name": "WifiInfo.getSSID",
+    "author": "M66B x OBC",
+    "className": "android.net.wifi.WifiInfo",
+    "methodName": "getSSID",
+    "parameterTypes": [ ],
+    "returnType": "java.lang.String",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "optional": true,
+    "usage": true,
+    "notify": false,
+    "luaScript": "@id_wifiinfo_getssid",
+    "settings": ["unique.network.ssid"]
+  },
   {
     "builtin": true,
     "collection": "PrivacyEx",
@@ -296,8 +401,6 @@
     "luaScript": "@id_telephony_getdeviceid",
     "settings":[ "unique.gsm.imei", "unique.gsm.meid", "value.imei", "value.meid" ]
   },
-
-
   {
     "builtin": false,
     "collection": "PrivacyEx",
@@ -830,6 +933,28 @@
     "builtin": true,
     "collection": "PrivacyEx",
     "group": "ID.Unique",
+    "name": "Ad/BinderProxy.transact(int, Parcel, Parcel, int)",
+    "author": "OBC",
+    "className": "android.os.BinderProxy",
+    "methodName": "transact",
+    "parameterTypes": ["int", "android.os.Parcel", "android.os.Parcel", "int"],
+    "returnType": "boolean",
+    "minSdk": 1,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "Advertisement ID for com.google.android.gms.ads.identifier.internal.IAdvertisingIdService",
+    "enabled": true,
+    "optional": true,
+    "usage": true,
+    "notify": false,
+    "luaScript": "@id_advertising_binderproxy",
+    "settings": ["unique.google.advertising.id"]
+  },
+
+  {
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "ID.Unique",
     "name": "AdvertisingIdClient$Info.getId",
     "author": "M66B, Fif_,OBC",
     "className": "com.google.android.gms.ads.identifier.AdvertisingIdClient$Info",
@@ -868,6 +993,27 @@
     "notify":false,
     "luaScript": "@id_advertising_settings",
     "settings":[ "unique.google.advertising.id" ]
+  },
+
+  {
+    "builtin": true,
+    "collection": "PrivacyEx",
+    "group": "ID.Unique",
+    "name": "SettingsSecure.getInt/limit_ad_tracking",
+    "author": "OBC",
+    "className": "android.provider.Settings$Secure",
+    "methodName": "getInt",
+    "parameterTypes": [ "android.content.ContentResolver", "java.lang.String"],
+    "returnType": "int",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@id_settingssecure_getint"
   },
 
   {

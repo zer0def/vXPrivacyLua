@@ -21,6 +21,7 @@ import eu.faircode.xlua.api.xstandard.interfaces.IDBSerial;
 import eu.faircode.xlua.api.xstandard.interfaces.IJsonSerial;
 import eu.faircode.xlua.api.xstandard.interfaces.ISerial;
 import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
+import eu.faircode.xlua.logger.XLog;
 
 public class XLuaApp extends XLuaAppBase implements ISerial, IDBSerial, IJsonSerial, Parcelable {
     public static XLuaApp create(Bundle b) { return new XLuaApp(b); }
@@ -53,7 +54,9 @@ public class XLuaApp extends XLuaAppBase implements ISerial, IDBSerial, IJsonSer
     public Bundle toBundle() {
         Bundle b = new Bundle();
         Log.i(TAG, "To Got bundle spoofing: " + this.packageName + this.toString());
-        try { b.putString("app", toJSON());
+        try {
+            b.putString("app", toJSON());
+            XLog.i("APP TO BUNDLE: " + b.getString("app"));
         }catch (Exception e) {
             Log.e(TAG, "[toBundle] to JSON Error App: " + this.packageName + " e=" + e + " stack=\n" + Log.getStackTraceString(e));
             b.putString("app", "{ }");
@@ -62,12 +65,21 @@ public class XLuaApp extends XLuaAppBase implements ISerial, IDBSerial, IJsonSer
 
     @Override
     public void fromBundle(Bundle bundle) {
-        Log.i(TAG, "From Bundle...");
-        String dataBlob = bundle.getString("app");
-        Log.i(TAG, "Blob: " + dataBlob);
-        try { fromJSONObject(new JSONObject(dataBlob));
-        }catch (Exception e) {
-            Log.e(TAG, "[fromBundle] from JSON Error App: " + this.packageName + " e=" + e + " stack=\n" + Log.getStackTraceString(e));
+        try {
+            Log.i(TAG, "From Bundle...");
+            String dataBlob = bundle.getString("app");
+            Log.i(TAG, "Blob: " + dataBlob);
+
+            try { fromJSONObject(new JSONObject(dataBlob));
+            }catch (Exception e) {
+                Log.e(TAG, "[fromBundle] from JSON Error App: " + this.packageName + " e=" + e + " stack=\n" + Log.getStackTraceString(e));
+            }
+        }catch (Exception ee) {
+            XLog.e("Failed from bundle", ee, true);
+            if(bundle != null) {
+                for (String s : bundle.keySet())
+                    XLog.w("K=" + s);
+            }
         }
     }
 

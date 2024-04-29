@@ -1,0 +1,62 @@
+[
+  {
+    "collection": "Analytics",
+    "group": "AD.Analytics",
+    "name": "GoogleAnalytics.getInstance",
+    "author": "M66B",
+    "className": "com.google.android.gms.analytics.GoogleAnalytics",
+    "methodName": "getInstance",
+    "parameterTypes": [
+      "android.content.Context"
+    ],
+    "returnType": "com.google.android.gms.analytics.GoogleAnalytics",
+    "minSdk": 1,
+    "optional": true,
+    "luaScript": "@ga_getinstance"
+  },
+  {
+    "collection": "Analytics",
+    "group": "AD.Analytics",
+    "name": "GoogleAnalytics.setDryRun",
+    "author": "M66B",
+    "className": "com.google.android.gms.analytics.GoogleAnalytics",
+    "methodName": "setDryRun",
+    "parameterTypes": [
+      "boolean"
+    ],
+    "returnType": "void",
+    "minSdk": 1,
+    "optional": true,
+    "luaScript": "@ga_setdryrun"
+  },
+  {
+    "collection": "Analytics",
+    "group": "AD.Analytics",
+    "name": "SegmentAnalytics.setSingletonInstance",
+    "author": "M66B",
+    "className": "com.segment.analytics.Analytics",
+    "methodName": "setSingletonInstance",
+    "parameterTypes": [
+      "com.segment.analytics.Analytics"
+    ],
+    "returnType": "void",
+    "minSdk": 1,
+    "optional": true,
+    "luaScript": "@segment_getinstance"
+  },
+  {
+    "collection": "Analytics",
+    "group": "AD.Analytics",
+    "name": "SegmentAnalytics.optOut",
+    "author": "M66B",
+    "className": "com.segment.analytics.Analytics",
+    "methodName": "optOut",
+    "parameterTypes": [
+      "boolean"
+    ],
+    "returnType": "void",
+    "minSdk": 1,
+    "optional": true,
+    "luaScript": "@segment_optout"
+  }
+]

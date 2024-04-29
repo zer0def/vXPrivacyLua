@@ -125,6 +125,7 @@
   { "name": "unique.gsf.id", "description": "Google Services Framework ID", "defaultValue": "FMZIYEVGXZDCENRO" },
   //{ "name": "unique.google.game.id", "description": "Google Games Game User ID thing", "defaultValue": "FFP3" },
   { "name": "unique.network.ssid", "description": "Wifi SSID", "defaultValue": "Starbucks Free-Wifi" },
+  { "name": "unique.network.bssid", "description": "Wifi BSSID", "defaultValue": "00:00:00:00:00:00" },
   { "name": "unique.netd.secret.key", "description": "stable_secret contains RFC 7217 secret key which should never be leaked", "defaultValue": "90f8:f587:2bb7:db9b:e5:306a:67d7:a155" },
   { "name": "unique.gsm.operator.msin", "description": "Mobile Subscription Identification Number (MSIN) is a 10-digit unique numeric code ", "defaultValue": "1234567890" },
 
@@ -137,7 +138,7 @@
   { "name": "zone.language.iso", "description": "Language ISO3 ID", "defaultValue": "IS" },
   { "name": "zone.language.tag", "description": "Language Tag (is-IS)", "defaultValue": "is-IS" },
   { "name": "zone.region", "description": "Region Specification Code (IS/CN...)", "defaultValue": "IS" },
-  { "name": "zone.timezone", "description": "TimeZone like a number thingy", "defaultValue": "GMT+0" },
+  { "name": "zone.timezone", "description": "TimeZone Offset like GMT-XXX", "defaultValue": "GMT+0" },
   { "name": "zone.timezone.display.name", "description": "TimeZone Display Name (Greenwich Mean Time)", "defaultValue": "Greenwich Mean Time" },
 
 
@@ -233,7 +234,23 @@
   { "name": "clipboard.contents", "description": "Data that the Clipboard is Holding", "defaultValue": "error" },
 
 
-  { "name": "applications.allow.list", "description": "List of Applications allowed through the filter", "defaultValue": "*" },
+  { "name": "applications.allow.list", "description": "List of Applications allowed through the filter example (cool.app,new.app,someother.app.name,amazon)", "defaultValue": "*" },
+  { "name": "applications.block.list", "description": "List of Applications blocked through the filter example (cool.app,new.app,someother.app.name,amazon)", "defaultValue": "*" },
+  { "name": "applications.blacklist.mode.bool", "description": "", "defaultValue": "false" },
+
+
+
+  { "name": "location.latitude", "description": "Latitude GPS", "defaultValue": "0.0000" },
+  { "name": "location.longitude", "description": "Longitude GPS", "defaultValue": "0.0000" },
+  { "name": "location.radius", "description": "Radius something 0.0F", "defaultValue": "0.0" },
+  { "name": "location.type", "description": "Location Type either (set) what is longitude and latitude or (coarse) accuracy. I you don't know put it to set", "defaultValue": "set" },
+  { "name": "location.accuracy", "description": "Im not 100% sure", "defaultValue": "0" },
+  { "name": "location.provider", "description": "Provider name, not important like carrier name", "defaultValue": "privacy" },
+
+  { "name": "notification.message", "description": "Notification Message", "defaultValue": "private" },
+
+
+  { "name": "analytics.firebase.instance.id", "description": "Firebase Instance ID", "defaultValue": "4320c07b-5de1-4fd8-8668-3889e9d18be7" },
 
 
   //User Default Values

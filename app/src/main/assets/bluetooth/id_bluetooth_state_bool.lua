@@ -9,7 +9,6 @@ function after(hook, param)
         return false
     end
 
-
     if setting == "12" then
         log("Setting Bluetooth IsEnabled State to true")
         param:setResult(true)

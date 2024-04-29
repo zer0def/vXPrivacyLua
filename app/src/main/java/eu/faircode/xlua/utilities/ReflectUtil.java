@@ -20,23 +20,55 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
+import eu.faircode.xlua.Str;
+
 public class ReflectUtil {
+    private static final String JAVA_LANG = "java.lang";
+
+
+
     private static final String TAG = "XLua.ReflectUtil";
     private static final String GL_PATTEN = ".*\\.GL\\d{2}$";
     private static final String GLES_PATTERN = ".*\\.GLES\\d{2}$";
 
+    public static boolean isReflectError(Throwable fe) {
+        return  fe instanceof NoSuchFieldException ||
+                fe instanceof NoSuchMethodException ||
+                fe instanceof ClassNotFoundException ||
+                fe instanceof NoClassDefFoundError;
+    }
 
-    public static String logStack() {
-        StringBuilder sb = new StringBuilder();
-        for(StackTraceElement e : new Exception().getStackTrace()) {
-            sb.append(e.getClassName());
-            sb.append("::");
-            sb.append(e.getMethodName());
-            sb.append("\n");
+    public static boolean returnTypeIsValid(Class<?> compareType, Class<?> returnType) {
+        if(ReflectUtil.isReturnTypeNullOrVoid(compareType) && ReflectUtil.isReturnTypeNullOrVoid(returnType))
+            return true;
+
+        if(ReflectUtil.isReturnTypeNullOrVoid(compareType) || ReflectUtil.isReturnTypeNullOrVoid(returnType))
+            return false;
+
+        return compareType.isAssignableFrom(returnType);
+    }
+
+
+    public static boolean sameTypes(Class<?> a, Class<?> b) {
+        String aType = a.getName().toLowerCase();
+        String bType = b.getName().toLowerCase();
+        if(aType.startsWith(JAVA_LANG) || bType.startsWith(JAVA_LANG)) {
+            //Log.e(TAG, "ATYPE=" + aType + " BTYPE=" + bType);
+            if(aType.contains(".")) aType = Str.getLastString(aType, ".");
+            if(bType.contains(".")) bType = Str.getLastString(bType, ".");
+            //.e(TAG, "ANAME=" + aType + " BNAME=" + bType);
+            if(aType.startsWith("bool")) return bType.startsWith("bool");
+            if(aType.startsWith("int")) return bType.startsWith("int");
+            if(aType.equals("long")) return bType.equals(aType);
+            if(aType.equals("float")) return bType.equals(aType);
+            if(aType.equals("double")) return bType.equals(aType);
+            if(aType.equals("short")) return bType.equals(aType);
+            if(aType.equals("string")) return bType.equals(aType);
         }
 
-        return sb.toString();
+        return false;
     }
+
 
     public static boolean extendsGpuClass(Class<?> clazz) {
         Class<?> superClass = clazz.getSuperclass();

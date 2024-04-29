@@ -6,11 +6,19 @@ import java.util.List;
 
 public class DataNumberElement implements ISpinnerElement {
     public static DataNumberElement create(int n) { return new DataNumberElement(n); }
+    public static DataNumberElement create(String dn, int n) { return new DataNumberElement(dn, n); }
+
     private String displayName;
     private Integer value;
+
+    public DataNumberElement(String dn, Integer n) {
+        this.displayName = dn;
+        this.value = n;
+    }
+
     public DataNumberElement(int n) {
-        displayName = Integer.toString(n);
-        value = n;
+        this.displayName = Integer.toString(n);
+        this.value = n;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package eu.faircode.xlua.ui.dialogs;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,7 +28,7 @@ import eu.faircode.xlua.ui.SettingsQue;
 import eu.faircode.xlua.ui.interfaces.ISettingUpdateEx;
 import eu.faircode.xlua.utilities.StringUtil;
 
-public class SettingDeleteDialogEx extends AppCompatDialogFragment {
+public class SettingDeleteDialogEx extends AppCompatDialogFragment{
     private Context context;
     private int adapterPosition;
     private ISettingUpdateEx callback;
@@ -53,7 +55,11 @@ public class SettingDeleteDialogEx extends AppCompatDialogFragment {
         cbDelete = view.findViewById(R.id.cbDeleteSettingDeleteSetting);
         cbDeleteDefaultMap = view.findViewById(R.id.cbDeleteSettingDeleteDefault);
         cbForceKill = view.findViewById(R.id.cbDeleteSettingForceKill);
-        if(application.isGlobal()) cbForceKill.setEnabled(false);
+
+        boolean isValidSetting = !setting.isValueNull();
+        cbDelete.setChecked(isValidSetting);
+        cbDelete.setEnabled(isValidSetting);
+        cbForceKill.setEnabled(!application.isGlobal());
         builder.setView(view)
                 .setTitle(R.string.title_delete_setting)
                 .setNegativeButton(R.string.option_cancel, new DialogInterface.OnClickListener() {
@@ -65,7 +71,7 @@ public class SettingDeleteDialogEx extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if(application != null && setting != null) {
                             boolean deleteSetting = cbDelete.isChecked();
-                            boolean deleteDefault = StringUtil.isValidString(setting.getDescription()) && cbDeleteDefaultMap.isChecked();
+                            boolean deleteDefault = cbDeleteDefaultMap.isChecked();
                             boolean forceKill = cbForceKill.isChecked();
                             if(!deleteSetting && !deleteDefault) {
                                 Toast.makeText(context, R.string.result_delete_setting_null, Toast.LENGTH_SHORT).show();
@@ -73,6 +79,8 @@ public class SettingDeleteDialogEx extends AppCompatDialogFragment {
                             }
 
                             que.deleteSetting(context, setting, adapterPosition, deleteSetting, deleteDefault, forceKill, callback);
+                        }else {
+                            Toast.makeText(context, "NULL NULL For settings delete", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

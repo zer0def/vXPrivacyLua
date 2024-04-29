@@ -1,10 +1,6 @@
 [
   //https://android.googlesource.com/platform/frameworks/base/+/2164cf4f4043b4892db5688ed53624af758fcdaa/core/java/android/os/BatteryManager.java
   //https://developer.android.com/reference/android/os/BatteryManager
-
-  //IntentFilter
-
-
   {
     "builtin": true,
     "collection": "PrivacyEx",

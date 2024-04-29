@@ -109,9 +109,11 @@ public class UiUtil {
             }
             else {
                 adapterRandomizer.addAll(randomizers);
+                boolean found = false;
                 for(int i = 0; i < adapterRandomizer.getCount(); i++) {
-                    IRandomizer r =adapterRandomizer.getItem(i);
+                    IRandomizer r = adapterRandomizer.getItem(i);
                     if(r == null) continue;
+                    //if(r.isSetting(randomizer))
                     if(r.getName().equalsIgnoreCase(randomizer.getName())) {
                         spRandomSelector.setSelection(i);
                         break;

@@ -36,7 +36,9 @@ import eu.faircode.xlua.api.xstandard.interfaces.ISettingUpdate;
 import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.random.GlobalRandoms;
 import eu.faircode.xlua.random.IRandomizer;
+import eu.faircode.xlua.random.randomizers.NARandomizer;
 import eu.faircode.xlua.ui.AlertMessage;
+import eu.faircode.xlua.ui.dialogs.NoRandomDialog;
 import eu.faircode.xlua.ui.dialogs.SettingDeleteDialogEx;
 import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.ui.interfaces.ISettingTransaction;
@@ -168,7 +170,11 @@ public class AdapterHookSettings extends RecyclerView.Adapter<AdapterHookSetting
                         if(setting.isModified()) setting.resetModified(true);
                         break;
                     case R.id.ivBtHookSettingRandomize:
-                        setting.randomizeValue(view.getContext());
+                        if(NARandomizer.isNA(setting.getRandomizer()))
+                            new NoRandomDialog()
+                                    .show(fragmentLoader.getManager(),
+                                            view.getResources().getString(R.string.title_no_random));
+                        else setting.randomizeValue(view.getContext());
                         break;
                 }
             }catch (Exception e) { XLog.e("onClick Failed: code=" + code, e, true); }
@@ -292,6 +298,7 @@ public class AdapterHookSettings extends RecyclerView.Adapter<AdapterHookSetting
         boolean enable = UiUtil.initRandomizer(holder.adapterRandomizer, holder.spRandomSelector, setting, randomizers);
         holder.spRandomSelector.setEnabled(enable);
         holder.btRandomize.setEnabled(enable);
+        holder.tiSettingValue.setEnabled(!setting.getName().endsWith(".bool"));
         setting.setInputText();
         holder.updateExpanded();
         holder.wire();

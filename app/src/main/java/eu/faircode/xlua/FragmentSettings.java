@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,12 +38,21 @@ import eu.faircode.xlua.api.XResult;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.api.xlua.XLuaCall;
 import eu.faircode.xlua.api.xmock.XMockQuery;
+import eu.faircode.xlua.api.xmock.call.ClearAppDataCommand;
 import eu.faircode.xlua.api.xmock.call.KillAppCommand;
 import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.ui.SettingsQue;
+import eu.faircode.xlua.ui.dialogs.ClearAppDataDialog;
+import eu.faircode.xlua.ui.dialogs.SettingAddDialogEx;
+import eu.faircode.xlua.ui.dialogs.SettingsResetDialog;
 import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.ui.dialogs.SettingAddDialog;
 import eu.faircode.xlua.ui.ViewFloatingAction;
+import eu.faircode.xlua.ui.interfaces.ISettingUpdateEx;
+import eu.faircode.xlua.ui.interfaces.ISettingsReset;
+import eu.faircode.xlua.ui.transactions.SettingTransactionResult;
 import eu.faircode.xlua.utilities.CollectionUtil;
+import eu.faircode.xlua.utilities.PrefUtil;
 import eu.faircode.xlua.utilities.SettingUtil;
 import eu.faircode.xlua.utilities.UiUtil;
 import eu.faircode.xlua.utilities.ViewUtil;
@@ -55,7 +64,9 @@ public class FragmentSettings
         View.OnClickListener,
         View.OnLongClickListener,
         CompoundButton.OnCheckedChangeListener,
-        ILoader {
+        ILoader,
+        ISettingUpdateEx,
+        ISettingsReset {
 
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefresh;
@@ -65,26 +76,39 @@ public class FragmentSettings
     private CardView cvAppView;
     private CheckBox cbUseDefault;
 
-    private Button btProperties, btConfigs, btKill;
+    private Button btProperties, btConfigs, btKill, btResetAll, btClearData, btSaveChecked;
     private boolean isViewOpen = true;
     private int lastHeight = 0;
 
+    private View main;
     private static final String USE_DEFAULT = "useDefault";
+    private static final String LAST_CHECKED = "lastChecked";
+    private SettingsQue que;
+
+    private List<String> lastChecked = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View main = inflater.inflate(R.layout.settingrecyclerview, container, false);
+        main = inflater.inflate(R.layout.settingrecyclerview, container, false);
         this.TAG_ViewFloatingAction = "XLua.FragmentSettings";
         this.application = AppGeneric.from(getArguments(), getContext());
         ivExpander = main.findViewById(R.id.ivExpanderSettingsApp);
         cvAppView = main.findViewById(R.id.cvAppInfoSettings);
 
+        que = new SettingsQue(this.application);
+        lastChecked = Str.splitToList(PrefUtil.getString(getContext(), LAST_CHECKED));
+
         btProperties = main.findViewById(R.id.btSettingsToProperties);
         btConfigs = main.findViewById(R.id.btSettingsToConfigs);
         btKill = main.findViewById(R.id.btSettingsKillApp);
+        btResetAll = main.findViewById(R.id.btSettingsResetAll);
+        btClearData = main.findViewById(R.id.btSettingsClearData);
+        btSaveChecked = main.findViewById(R.id.btSettingsSaveChecked);
+
         cbUseDefault = main.findViewById(R.id.cbUseDefaultSettings);
         if(this.application.isGlobal()) {
             cbUseDefault.setEnabled(false);
             btKill.setEnabled(false);
+            btClearData.setEnabled(false);
         }else cbUseDefault.setChecked(XLuaCall.getSettingBoolean(getContext(), application.getUid(), application.getPackageName(), USE_DEFAULT));
 
         super.initActions();
@@ -112,7 +136,7 @@ public class FragmentSettings
 
         llm.setAutoMeasureEnabled(true);
         rvList.setLayoutManager(llm);
-        rvAdapter = new AdapterSetting(getFragmentManager());
+        rvAdapter = new AdapterSetting(this, que);
         rvList.setAdapter(rvAdapter);
         rvList.addItemDecoration(SettingUtil.createSettingsDivider(getContext()));
 
@@ -169,6 +193,15 @@ public class FragmentSettings
             case R.id.cbUseDefaultSettings:
                 Toast.makeText(getContext(), R.string.menu_settings_use_default_hint, Toast.LENGTH_LONG).show();
                 break;
+            case R.id.btSettingsResetAll:
+                Snackbar.make(main, getString(R.string.menu_settings_reset_hint), Snackbar.LENGTH_LONG).show();
+                break;
+            case R.id.btSettingsClearData:
+                Snackbar.make(main, getString(R.string.button_settings_reset_data_hint), Snackbar.LENGTH_LONG).show();
+                break;
+            case R.id.btSettingsSaveChecked:
+                Snackbar.make(main, getString(R.string.button_settings_save_checked_hint), Snackbar.LENGTH_LONG).show();
+                break;
         }
 
         return true;
@@ -203,15 +236,36 @@ public class FragmentSettings
                 rvAdapter.randomizeAll(v.getContext());
                 break;
             case R.id.flSettingsButtonThree:
-                SettingAddDialog setDialog = new SettingAddDialog();
-                setDialog.setApplication(application);
-                setDialog.show(Objects.requireNonNull(getFragmentManager()), "Add Setting");
+                new SettingAddDialogEx()
+                        .setCallback(this)
+                        .setQue(que)
+                        .show(Objects.requireNonNull(getFragmentManager()), getString(R.string.title_add_dialog_setting_builder));
                 break;
             case R.id.flSettingsButtonFour:
                 rvAdapter.saveAll(v.getContext());
                 break;
             case R.id.flSettingsButtonFive:
                 rvAdapter.deleteSelected(v.getContext());
+                break;
+            case R.id.btSettingsResetAll:
+                new SettingsResetDialog()
+                        .setCallback(this)
+                        .setApplication(application)
+                        .show(Objects.requireNonNull(getFragmentManager()), getString(R.string.title_settings_reset));
+                break;
+            case R.id.btSettingsClearData:
+                new ClearAppDataDialog()
+                        .setApplication(application)
+                        .show(getManager(), getString(R.string.title_delete_appdata));
+                break;
+            case R.id.btSettingsSaveChecked:
+                List<String> selected = new ArrayList<>();
+                for(LuaSettingExtended s : rvAdapter.getSettings())
+                    if(s.isEnabled())
+                        selected.add(s.getName());
+
+                if(!selected.isEmpty()) PrefUtil.setString(getContext(), LAST_CHECKED, Str.joinList(selected));
+                else PrefUtil.setString(getContext(), LAST_CHECKED, "");
                 break;
         }
 
@@ -237,11 +291,19 @@ public class FragmentSettings
         cvAppView.setOnClickListener(this);
         cbUseDefault.setOnCheckedChangeListener(this);
         cbUseDefault.setOnLongClickListener(this);
+        btResetAll.setOnClickListener(this);
+        btResetAll.setOnLongClickListener(this);
+
+        btSaveChecked.setOnClickListener(this);
+        btSaveChecked.setOnLongClickListener(this);
+
+        btClearData.setOnClickListener(this);
+        btClearData.setOnLongClickListener(this);
     }
 
     void updateExpanded() {
         isViewOpen = !isViewOpen;
-        ViewUtil.setViewsVisibility(ivExpander, isViewOpen, btProperties, btConfigs, btKill, cbUseDefault);
+        ViewUtil.setViewsVisibility(ivExpander, isViewOpen, btProperties, btConfigs, btKill, cbUseDefault, btResetAll, btSaveChecked, btClearData);
     }
 
     @Override
@@ -285,6 +347,12 @@ public class FragmentSettings
                 UiUtil.initTheme(getActivity(), data.theme);
                 if(CollectionUtil.isValid(data.settings)) {
                     SettingUtil.sortSettings(data.settings);
+                    if(!lastChecked.isEmpty()) {
+                        for(LuaSettingExtended s : data.settings)
+                            if(lastChecked.contains(s.getName()))
+                                s.setIsEnabled(true);
+                    }
+
                     rvAdapter.set(data.settings, application);
                 }
 
@@ -296,6 +364,17 @@ public class FragmentSettings
         @Override
         public void onLoaderReset(@NonNull Loader<SettingsDataHolder> loader) { }
     };
+
+    @Override
+    public void onSettingUpdate(SettingTransactionResult result) {
+        if(result.hasAnySucceeded())
+            loadData();
+    }
+
+    @Override
+    public void onFinish(XResult result) {
+        loadData();
+    }
 
     private static class SettingsDataLoader extends AsyncTaskLoader<SettingsDataHolder> {
         private AppGeneric application;

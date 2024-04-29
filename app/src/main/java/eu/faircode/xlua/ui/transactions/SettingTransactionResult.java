@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.faircode.xlua.api.XResult;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.api.settings.LuaSettingPacket;
 import eu.faircode.xlua.utilities.CollectionUtil;
@@ -14,6 +15,7 @@ public class SettingTransactionResult extends Transaction {
     public List<LuaSettingExtended> settings = new ArrayList<>();
     public List<LuaSettingExtended> failed = new ArrayList<>();
     public List<LuaSettingExtended> succeeded = new ArrayList<>();
+    public List<XResult> results = new ArrayList<>();
 
     public int getAdapterPosition() { return settings.size() == 1 ? adapterPosition : -1; }
     public boolean hasAnyFailed() { return CollectionUtil.isValid(failed); }
