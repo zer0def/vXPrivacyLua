@@ -75,7 +75,7 @@ public class SettingAddDialogEx extends AppCompatDialogFragment {
                             return;
                         }
 
-                        if(Str.hasChars(name, Str.EMPTY_CHAR)) {
+                        if(Str.hasChars(name, Str.SPACE_CHAR)) {
                             Toast.makeText(context, R.string.error_add_dialog_bad_name, Toast.LENGTH_LONG).show();
                             return;
                         }

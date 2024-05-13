@@ -1,0 +1,40 @@
+[
+  {
+    "builtin": true,
+    "collection": "Analytics",
+    "group": "AD.Analytics",
+    "name": "Ad/AdStir.AdSize",
+    "author": "OBC",
+    "className": "com.ad_stir.webview.AdSize",
+    "parameterTypes": [ "int", "int" ],
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@adstire_adsize"
+  },
+  {
+    "builtin": true,
+    "collection": "Analytics",
+    "group": "AD.Analytics",
+    "name": "Ad/AdStir.AdStirMraidView",
+    "author": "OBC",
+    "className": "com.ad_stir.webview.AdstirMraidView",
+    "methodName": "onCreate",
+    "parameterTypes": [ "android.app.Activity", "java.lang.String", "int" ],
+    "returnType": "void",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@adstir_before_null"
+  }
+]

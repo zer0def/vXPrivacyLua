@@ -255,7 +255,7 @@ public class StringUtil {
     }
 
     public static String join(List<String> args) {
-        if (args == null || args.size() == 0)
+        if (args == null || args.isEmpty())
             return ""; // Return an empty string if the array is null or empty.
 
         StringBuilder sb = new StringBuilder();
@@ -267,7 +267,7 @@ public class StringUtil {
 
 
     public static String joinDelimiter(String delimiter, List<String> args) {
-        if (args == null || args.size() == 0)
+        if (args == null || args.isEmpty())
             return ""; // Return an empty string if the array is null or empty.
 
         StringBuilder sb = new StringBuilder();

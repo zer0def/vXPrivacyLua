@@ -23,7 +23,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "List.Wifi",
+    "group": "Get.Wifi",
     "name": "WifiManager.getScanResults",
     "author": "OBC",
     "className": "android.net.wifi.WifiManager",
@@ -45,7 +45,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "List.Wifi",
+    "group": "Get.Wifi",
     "name": "WifiManager.getConfiguredNetworks",
     "author": "OBC",
     "className": "android.net.wifi.WifiManager",
@@ -67,7 +67,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "List.Wifi",
+    "group": "Get.Wifi",
     "name": "WifiManager.getDhcpInfo",
     "author": "OBC",
     "className": "android.net.wifi.WifiManager",

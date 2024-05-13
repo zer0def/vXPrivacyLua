@@ -1,0 +1,42 @@
+[
+  {
+    "builtin": true,
+    "collection": "Analytics",
+    "group": "AD.Analytics",
+    "name": "Ad/AppsFlyerLib.getInstance",
+    "author": "OBC",
+    "className": "com.appsflyer.AppsFlyerLib",
+    "methodName": "getInstance",
+    "parameterTypes": [ ],
+    "returnType": "com.appsflyer.AppsFlyerLib",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@appsflyer_before_null"
+  },
+  {
+    "builtin": true,
+    "collection": "Analytics",
+    "group": "AD.Analytics.Spoof",
+    "name": "Ad/AppsFlyerLib.enableLocationCollection",
+    "author": "OBC",
+    "className": "com.appsflyer.AppsFlyerLib",
+    "methodName": "enableLocationCollection",
+    "parameterTypes": [ "boolean" ],
+    "returnType": "com.appsflyer.AppsFlyerLib", //Check this return type ??
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@appflyer_enablelocation"
+  }
+]

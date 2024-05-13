@@ -1,8 +1,8 @@
 [
   {
     "builtin": true,
-    "collection": "PrivacyEx",
-    "group": "Spoof.VPN.State",
+    "collection": "Hide",
+    "group": "Hide.VPN.State",
     "name": "VPN/NetworkInfo.isConnected",
     "author": "OBC",
     "className": "android.net.NetworkInfo",
@@ -22,7 +22,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Spoof.VPN.State",
+    "group": "Hide.VPN.State",
     "name": "VPN/NetworkInfo.isConnectedOrConnecting",
     "author": "OBC",
     "className": "android.net.NetworkInfo",
@@ -42,7 +42,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Spoof.VPN.State",
+    "group": "Hide.VPN.State",
     "name": "VPN/NetworkInterface.getName",
     "author": "OBC",
     "className": "java.net.NetworkInterface",
@@ -63,7 +63,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Spoof.VPN.State",
+    "group": "Hide.VPN.State",
     "name": "VPN/NetworkCapabilities.getCapabilities",
     "author": "OBC",
     "className": "android.net.NetworkCapabilities",
@@ -84,7 +84,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Spoof.VPN.State",
+    "group": "Hide.VPN.State",
     "name": "VPN/NetworkCapabilities.hasCapability",
     "author": "OBC",
     "className": "android.net.NetworkCapabilities",

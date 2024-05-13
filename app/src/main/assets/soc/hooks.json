@@ -104,7 +104,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Kernel",
+    "group": "Spoof.SOC",
     "name": "Os.uname",
     "author": "OBC",
     "className": "android.system.Os",

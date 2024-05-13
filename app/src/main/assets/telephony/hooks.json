@@ -849,7 +849,7 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "Spoof.GSM.Status",
+    "group": "Spoof.Status.Cell",
     "name": "TelephonyManager.getSimState",
     "author": "OBC",
     "className": "android.telephony.TelephonyManager",
@@ -870,7 +870,7 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "Spoof.GSM.Status",
+    "group": "Spoof.Status.Cell",
     "name": "TelephonyManager.getSimState/slot",
     "author": "OBC",
     "className": "android.telephony.TelephonyManager",
@@ -891,7 +891,7 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "Spoof.GSM.Status",
+    "group": "Spoof.Status.Cell",
     "name": "TelephonyManager.getDataState",
     "author": "OBC",
     "className": "android.telephony.TelephonyManager",

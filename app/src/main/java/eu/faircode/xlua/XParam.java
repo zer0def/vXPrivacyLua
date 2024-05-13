@@ -23,13 +23,11 @@ import android.app.ActivityManager;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.CaptivePortal;
 import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Parcel;
 import android.util.Log;
 import android.view.InputDevice;
@@ -56,7 +54,7 @@ import eu.faircode.xlua.interceptors.ShellIntercept;
 import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.rootbox.XReflectUtils;
 import eu.faircode.xlua.tools.BytesReplacer;
-import eu.faircode.xlua.utilities.EvidenceUtil;
+import eu.faircode.xlua.utilities.Evidence;
 import eu.faircode.xlua.utilities.ListFilterUtil;
 import eu.faircode.xlua.utilities.CollectionUtil;
 import eu.faircode.xlua.utilities.CursorUtil;
@@ -156,8 +154,6 @@ public class XParam {
         if(property == null || MockUtils.isPropVxpOrLua(property))
             return MockUtils.NOT_BLACKLISTED;
 
-        
-
         if(DebugUtil.isDebug())
             Log.i(TAG, "Filtering Property=" + property + " prop maps=" + propMaps.size() + " settings size=" + settings.size());
 
@@ -170,8 +166,23 @@ public class XParam {
                     try {
                         Object res = getResult();
                         if(res == null) return MockUtils.NOT_BLACKLISTED;
-                    }catch (Throwable e) {  }
+                    } catch (Throwable ignore) {  }
                 }
+            }
+        }
+
+        boolean cleanEmulator = getSettingBool(Evidence.SETTING_QEMU_EMULATOR, false) || getSettingBool(Evidence.SETTING_EMULATOR, false);
+        boolean cleanRoot = getSettingBool(Evidence.SETTING_ROOT, false);
+        if(cleanEmulator || cleanRoot) {
+            if(cleanEmulator && Evidence.property(property, 1))
+                return null;
+            if(cleanRoot) {
+                if(Evidence.property(property, 2))
+                    return null;
+                if(property.equalsIgnoreCase(Evidence.PROP_DEBUGGABLE))
+                    return Evidence.PROP_DEBUGGABLE_GOOD;
+                if(property.equalsIgnoreCase(Evidence.PROP_SECURE))
+                    return Evidence.PROP_SECURE_GOOD;
             }
         }
 
@@ -192,12 +203,10 @@ public class XParam {
         try {
             Object ths = getThis();
             Method mth = XReflectUtils.getMethodFor("android.os.BinderProxy", "getInterfaceDescriptor");
-            if (ths == null || mth == null)
-                throw new RuntimeException("No such Member [getInterfaceDescriptor] for Binder proxy and or the current Instance is NULL!");
+            if (ths == null || mth == null) throw new RuntimeException("No such Member [getInterfaceDescriptor] for Binder proxy and or the current Instance is NULL!");
 
             String interfaceName = (String) mth.invoke(ths);
-            if (!Str.isValidNotWhitespaces(interfaceName))
-                throw new RuntimeException("Invalid Interface Name for the Binder Proxy! Method has failed to invoke...");
+            if (!Str.isValidNotWhitespaces(interfaceName)) throw new RuntimeException("Invalid Interface Name for the Binder Proxy! Method has failed to invoke...");
 
             int code = (int) getArgument(0);
             Parcel data = (Parcel) getArgument(1);
@@ -205,7 +214,6 @@ public class XParam {
             switch (filterKind) {
                 case "adid":
                     if ("com.google.android.gms.ads.identifier.internal.IAdvertisingIdService".equalsIgnoreCase(interfaceName)) {
-                        Log.w(TAG, "Go purchase AppCloner (AppListo) stop cracking it skids! This method was brought to you from AppListo");
                         String fAd = getSetting("unique.google.advertising.id");
                         if(!Str.isValidNotWhitespaces(fAd)) return null;
                         Object res = getResult();
@@ -214,21 +222,21 @@ public class XParam {
                             byte[] bytes = reply.marshall();
                             reply.setDataPosition(0);
                             if (bytes.length == 84) {
-                                Log.i(TAG, "onAfterTransact; bytes: " + Str.bytesToHex(bytes));
+                                Log.i(TAG, "[onAfterTransact] bytes: " + Str.bytesToHex(bytes));
                                 try {
                                     reply.readException();
                                 } finally {
                                     String adId = reply.readString();
-                                    Log.i(TAG, "onAfterTransact; adId: " + adId);
+                                    Log.i(TAG, "[onAfterTransact] adId: " + adId);
                                     if (adId != null) {
                                         try {
                                             byte[] from = adId.getBytes("UTF-16");
                                             from = Arrays.copyOfRange(from, 2, from.length);
-                                            Log.i(TAG, "onAfterTransact; from: " + Str.bytesToHex(from));
+                                            Log.i(TAG, "[onAfterTransact] from: " + Str.bytesToHex(from));
 
                                             byte[] to = fAd.getBytes("UTF-16");
                                             to = Arrays.copyOfRange(to, 2, to.length);
-                                            Log.i(TAG, "onAfterTransact; to: " + Str.bytesToHex(to));
+                                            Log.i(TAG, "[onAfterTransact] to: " + Str.bytesToHex(to));
 
                                             BytesReplacer bytesReplacer = new BytesReplacer(from, to);
                                             bytesReplacer.replace(bytes);
@@ -243,8 +251,7 @@ public class XParam {
                                 }
                             }
                         }  return fAd;
-                    }
-                    break;
+                    } break;
             }
         }catch (Throwable e) {
             XLog.e("Failed to get Result / Transaction! after", e, true);
@@ -252,82 +259,19 @@ public class XParam {
     }
 
     @SuppressWarnings("unused")
-    public String filterBinderProxyBefore(String filterKind) {
+    public boolean filterSettingsSecure(String setting, String newValue) {
         try {
-            Object ths = getThis();
-            Method mth = XReflectUtils.getMethodFor("android.os.BinderProxy", "getInterfaceDescriptor");
-            if(ths == null || mth == null)
-                throw new RuntimeException("No such Member [getInterfaceDescriptor] for Binder proxy and or the current Instance is NULL!");
-
-            String interfaceName = (String)mth.invoke(ths);
-            if(!Str.isValidNotWhitespaces(interfaceName))
-                throw new RuntimeException("Invalid Interface Name for the Binder Proxy! Method has failed to invoke...");
-
-            //public boolean transact(int code, Parcel data, Parcel reply, int flags)
-            Log.i(TAG, "Binder Interface:" + interfaceName);
-            int code = (int)getArgument(0);
-            Parcel data = (Parcel) getArgument(1);
-            Parcel reply = (Parcel) getArgument(2);
-            switch (filterKind) {
-                case "adid":
-                    if("com.google.android.gms.ads.identifier.internal.IAdvertisingIdService".equalsIgnoreCase(interfaceName) && code == 1) {
-                        XLog.i("Advertising ID Binder being Intercepted! " + interfaceName);
-                        String fake = getSettingReMap("unique.google.advertising.id", "ad.id");
-                        if(fake != null) {
-                            reply.setDataPosition(0);
-                            reply.writeNoException();
-                            reply.writeString(fake);
-                            reply.setDataPosition(0);
-                            return fake;
-                        }
-                    }
-                    break;
+            Object arg = getArgument(1);
+            if(setting != null && newValue != null && arg instanceof String) {
+                String set = ((String)arg);
+                if(setting.equalsIgnoreCase(set)) {
+                    setResult(newValue);
+                    return true;
+                }
             }
-        }catch (Exception e) {
-            XLog.e("Failed to Filter Binder Transaction!", e, true);
-        } return null;
-    }
-
-    @SuppressWarnings("unused")
-    public boolean filterSettingsSecure(String setting) throws Throwable {
-        Object arg = getArgument(1);
-        if(arg == null)
-            return false;
-
-        if (!(arg instanceof String))
-            return false;
-
-        String set = ((String)arg).toLowerCase();
-        switch (setting) {
-            case "android_id":
-                if(set.equalsIgnoreCase(setting)) {
-                    String v = getSettingReMap("unique.android.id", "value.android_id", "0000000000000000");
-                    if(v == null) return false;
-                    setResult(v);
-                    return true;
-                }
-                break;
-            case "bluetooth_name":
-                if(set.equalsIgnoreCase(setting)) {
-                    String v = getSettingReMap("unique.bluetooth.address", "bluetooth.id", "00:00:00:00:00:00");
-                    if(v == null) return false;
-                    setResult(v);
-                    return true;
-                }
-                break;
-            case "advertising_id":
-                if(set.equalsIgnoreCase(setting)) {
-                    String v = getSettingReMap("unique.google.advertising.id", "ad.id", "84630630-u4ls-k487-f35f-h37afe0pomwq");
-                    if(v == null) return false;
-                    setResult(v);
-                    return true;
-                }
-        }
-
+        }catch (Throwable e) { Log.e(TAG, "Filter SettingsSecure Error: " + e.getMessage()); }
         return false;
     }
-
-
 
     //
     //End of FILTER Functions
@@ -387,7 +331,7 @@ public class XParam {
                             return true;
                     }
                 }
-                if(EvidenceUtil.packageName(str, 3))
+                if(Evidence.packageName(str, 3))
                     return false;
 
                 for(String p : ALLOWED_PACKAGES)
@@ -396,11 +340,7 @@ public class XParam {
 
                 return false;
             }
-        }
-        if(EvidenceUtil.packageName(str, 3))
-            return false;
-
-        return true;
+        } return !Evidence.packageName(str, 3);
     }
 
     //
@@ -418,7 +358,9 @@ public class XParam {
                     if(res.getNewValue() != null) {
                         Log.w(TAG, "Command Intercepted: " + command);
                         Log.w(TAG, "Replacing Command with: " + res.getNewValue());
-                        setResult(res.getEchoProcess());
+                        if(returnType.equals(Process.class))
+                            setResult(res.getEchoProcess());
+
                         return res.getNewValue();
                     }
                 }
@@ -437,7 +379,9 @@ public class XParam {
                     if(res.getNewValue() != null) {
                         Log.w(TAG, "Command Intercepted: " + joinArray(commands));
                         Log.w(TAG, "Replacing Command with: " + res.getNewValue());
-                        setResult(res.getEchoProcess());
+                        if(returnType.equals(Process.class))
+                            setResult(res.getEchoProcess());
+
                         return res.getNewValue();
                     }else {
                         Log.e(TAG, "[getNewValue] is NULL!");
@@ -458,7 +402,9 @@ public class XParam {
                     if(res.getNewValue() != null) {
                         Log.w(TAG, "Command Intercepted: " + joinList(commands));
                         Log.w(TAG, "Replacing Command with: " + res.getNewValue());
-                        setResult(res.getEchoProcess());
+                        if(returnType.equals(Process.class))
+                            setResult(res.getEchoProcess());
+
                         return res.getNewValue();
                     }else {
                         Log.e(TAG, "[getNewValue] is NULL!");
@@ -474,15 +420,15 @@ public class XParam {
     //End of Shell Intercept
     //
 
-    @SuppressWarnings("unused")
-    public int getFileDescriptorId(FileDescriptor fs) { return FileUtil.getDescriptorNumber(fs);  }
-
     //
     //Start of Memory/CPU Functions
     //
 
     @SuppressWarnings("unused")
-    public File createFakeMeminfoFile(int totalGigabytes, int availableGigabytes) { return FileUtil.generateFakeFile(MemoryUtil.generateFakeMeminfoContents(totalGigabytes, availableGigabytes)); }
+    public int getFileDescriptorId(FileDescriptor fs) { return FileUtil.getDescriptorNumber(fs);  }
+
+    @SuppressWarnings("unused")
+    public File createFakeMeminfoFile(int totalGigabytes, int availableGigabytes) { return FileUtil.generateTempFakeFile(MemoryUtil.generateFakeMeminfoContents(totalGigabytes, availableGigabytes)); }
 
     @SuppressWarnings("unused")
     public FileDescriptor createFakeMeminfoFileDescriptor(int totalGigabytes, int availableGigabytes) { return FileUtil.generateFakeFileDescriptor(MemoryUtil.generateFakeMeminfoContents(totalGigabytes, availableGigabytes)); }
@@ -508,15 +454,13 @@ public class XParam {
     //
 
     @SuppressWarnings("unused")
-    public static Set<BluetoothDevice> filterSavedBluetoothDevices(Set<BluetoothDevice> devices, List<String> allowList) { return ListFilterUtil.filterSavedBluetoothDevices(devices, allowList); }
+    public Set<BluetoothDevice> filterSavedBluetoothDevices(Set<BluetoothDevice> devices, List<String> allowList) { return ListFilterUtil.filterSavedBluetoothDevices(devices, allowList); }
 
     @SuppressWarnings("unused")
-    public static List<ScanResult> filterWifiScanResults(List<ScanResult> results, List<String> allowList) { return ListFilterUtil.filterWifiScanResults(results, allowList); }
+    public List<ScanResult> filterWifiScanResults(List<ScanResult> results, List<String> allowList) { return ListFilterUtil.filterWifiScanResults(results, allowList); }
 
     @SuppressWarnings("unused")
-    public static List<WifiConfiguration> filterSavedWifiNetworks(List<WifiConfiguration> results, List<String> allowList) { return ListFilterUtil.filterSavedWifiNetworks(results, allowList); }
-
-
+    public List<WifiConfiguration> filterSavedWifiNetworks(List<WifiConfiguration> results, List<String> allowList) { return ListFilterUtil.filterSavedWifiNetworks(results, allowList); }
 
     //
     //End of Bluetooth Functions
@@ -570,30 +514,26 @@ public class XParam {
     //
 
     @SuppressWarnings("unused")
-    public static File[] fileArrayHasEvidence(File[] files, int code) { return EvidenceUtil.fileArray(files, code); }
+    public File[] fileArrayHasEvidence(File[] files, int code) { return Evidence.fileArray(files, code); }
     @SuppressWarnings("unused")
-    public static List<File> fileListHasEvidence(List<File> files, int code) { return EvidenceUtil.fileList(files, code); }
+    public List<File> fileListHasEvidence(List<File> files, int code) { return Evidence.fileList(files, code); }
     @SuppressWarnings("unused")
-    public static String[] stringArrayHasEvidence(String[] file, int code) { return EvidenceUtil.stringArray(file, code); }
+    public String[] stringArrayHasEvidence(String[] file, int code) { return Evidence.stringArray(file, code); }
     @SuppressWarnings("unused")
-    public static List<String> stringListHasEvidence(List<String> files, int code) { return EvidenceUtil.stringList(files, code); }
+    public List<String> stringListHasEvidence(List<String> files, int code) { return Evidence.stringList(files, code); }
     @SuppressWarnings("unused")
-    public static boolean packageNameHasEvidence(String packageName, int code) { return EvidenceUtil.packageName(packageName, code); }
+    public boolean packageNameHasEvidence(String packageName, int code) { return Evidence.packageName(packageName, code); }
     @SuppressWarnings("unused")
-    public static boolean fileIsEvidence(String file, int code) { return EvidenceUtil.file(new File(file), code); }
+    public boolean fileIsEvidence(String file, int code) { return Evidence.file(new File(file), code); }
     @SuppressWarnings("unused")
-    public static boolean fileIsEvidence(File file,  int code) { return EvidenceUtil.file(file.getAbsolutePath(), file.getName(), code); }
+    public boolean fileIsEvidence(File file,  int code) { return Evidence.file(file.getAbsolutePath(), file.getName(), code); }
     @SuppressWarnings("unused")
-    public static boolean fileIsEvidence(String fileFull, String fileName, int code) { return EvidenceUtil.file(fileFull, fileName, code); }
+    public boolean fileIsEvidence(String fileFull, String fileName, int code) { return Evidence.file(fileFull, fileName, code); }
+    @SuppressWarnings("unused")
+    public StackTraceElement[] stackHasEvidence(StackTraceElement[] elements) { return Evidence.stack(elements); }
 
     @SuppressWarnings("unused")
-    public String paypalFillZeros(String s) {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < s.length(); i++)
-            sb.append("0");
-
-        return sb.toString();
-    }
+    public String createFilledString(String s, String fillChar) { return Str.createFilledCopy(s, fillChar); }
 
     @SuppressWarnings("unused")
     public String[] extractSelectionArgs() {
@@ -601,73 +541,35 @@ public class XParam {
         if(paramTypes[2].getName().equals(Bundle.class.getName())){
             //ContentResolver.query26
             Bundle bundle = (Bundle) getArgument(2);
-            if(bundle != null) {
-                sel = bundle.getStringArray("android:query-arg-sql-selection-args");
-            }
+            if(bundle != null) sel = bundle.getStringArray("android:query-arg-sql-selection-args");
         }
-        else if(paramTypes[3].getName().equals(String[].class.getName()))
-            sel = (String[]) getArgument(3);
-
+        else if(paramTypes[3].getName().equals(String[].class.getName())) sel = (String[]) getArgument(3);
         return sel;
     }
 
     @SuppressWarnings("unused")
-    public boolean queryFilterAfter(String filter) throws Throwable {
-        Uri uri = (Uri)getArgument(0);
-        if(uri == null) return false;
-        return queryFilterAfter(filter, uri);
-    }
+    public boolean queryFilterAfter(String serviceName, String columnName, String newValue) { return queryFilterAfter(serviceName, columnName, newValue, (Uri)getArgument(0)); }
 
     @SuppressWarnings("unused")
-    public boolean queryFilterAfter(String filter, Uri uri) throws Throwable {
-        String authority = uri.getAuthority();
-        Cursor ret = (Cursor) getResult();
-        if(ret == null || authority == null)
-            return false;
-
-        //com.facebook.katana.provider.AttributionIdProvider
-        authority = authority.toLowerCase();
-        switch (filter) {
-            case "gsf_id":
-                if(authority.endsWith("com.google.android.gsf.gservices")) {
+    public boolean queryFilterAfter(String serviceName, String columnName, String newValue, Uri uri) {
+        if(newValue != null && serviceName != null && columnName != null) {
+            try {
+                String authority = uri.getAuthority();
+                Cursor ret = (Cursor) getResult();
+                if((ret != null && authority != null) && authority.equalsIgnoreCase(serviceName)) {
                     String[] args = extractSelectionArgs();
-                    if (args == null)
-                        return false;
-
-                    for(String arg : args) {
-                        if(arg.equalsIgnoreCase("android_id")) {
-                            String newId = getSetting("unique.gsf.id");
-                            if(newId == null)
-                                return false;
-
-                            Log.d(TAG, "GSF new=" + newId);
-                            Cursor cc = CursorUtil.copyKeyValue(ret, "android_id", newId);
-                            Log.d(TAG, "GSF Matrix Cursor Column Count=" + cc.getColumnCount());
-                            setResult(cc);
-                            return true;
+                    if(args != null) {
+                        for(String arg : args) {
+                            if(arg.equalsIgnoreCase(newValue)) {
+                                Log.i(TAG, "Found Query Service [" + serviceName + "] and Column [" + columnName + "] new Value [" + newValue + "]");
+                                setResult(CursorUtil.copyKeyValue(ret, columnName, newValue));
+                                return true;
+                            }
                         }
                     }
                 }
-                break;
-            case "fb_id":
-                if(authority.endsWith("com.facebook.katana.provider.AttributionIdProvider")) {
-                    String[] args = extractSelectionArgs();
-                    if (args == null)
-                        return false;
-
-                    for(String arg : args) {
-                        if(arg.equalsIgnoreCase("aid")) {
-                            String newId = getSetting("unique.google.advertising.id");
-                            if(newId == null)
-                                return false;
-
-                        }
-                    }
-                }
-                break;
-        }
-
-        return false;
+            }catch (Throwable e) { Log.e(TAG, "LUA PARAM [queryFilterAfter] Error: " + e.getMessage()); }
+        } return false;
     }
 
     //
@@ -675,14 +577,10 @@ public class XParam {
     //
 
     @SuppressWarnings("unused")
-    public Context getApplicationContext() {
-        return this.context;
-    }
+    public Context getApplicationContext() { return this.context; }
 
     @SuppressWarnings("unused")
-    public String getPackageName() {
-        return this.context.getPackageName();
-    }
+    public String getPackageName() { return this.context.getPackageName(); }
 
     @SuppressWarnings("unused")
     public int getUid() { return this.context.getApplicationInfo().uid; }
@@ -697,9 +595,13 @@ public class XParam {
     public void printFileContents(String filePath) { FileUtil.printContents(filePath); }
 
     @SuppressWarnings("unused")
-    public void printStack() {
-        Log.w("XLua.XParam", Log.getStackTraceString(new Throwable()));
-    }
+    public StackTraceElement[] getStackTrace() { return Thread.currentThread().getStackTrace(); }
+
+    @SuppressWarnings("unused")
+    public String getStackTraceString() { return Log.getStackTraceString(new Throwable()); }
+
+    @SuppressWarnings("unused")
+    public void printStack() { Log.w(TAG, Log.getStackTraceString(new Throwable())); }
 
     //
     //Start of REFLECT Functions
@@ -724,30 +626,31 @@ public class XParam {
     public Character[] createCharArray(int size) { return new Character[size]; }
 
     @SuppressWarnings("unused")
-    public boolean javaMethodExists(String className, String methodName) { return ReflectUtil.javaMethodExists(className, methodName); }
-
-    @SuppressWarnings("unused")
-    public Class<?> getClassType(String className) { return ReflectUtil.getClassType(className); }
-
-
-
-    @SuppressWarnings("unused")
     public static boolean isNumericString(String s) { return StringUtil.isNumeric(s); }
 
     @SuppressWarnings("unused")
     public static int getContainerSize(Object o) { return CollectionUtil.getSize(o); }
 
     @SuppressWarnings("unused")
-    public Object createReflectArray(String className, int size) { return ReflectUtil.createArray(className, size); }
-
-    @SuppressWarnings("unused")
-    public Object createReflectArray(Class<?> classType, int size) { return ReflectUtil.createArray(classType, size); }
-
-    @SuppressWarnings("unused")
     public String joinArray(String[] array) { return array == null ? "" : StringUtil.joinDelimiter(" ", array); }
 
     @SuppressWarnings("unused")
+    public String joinArray(String[] array, String delimiter) {  return array == null ? "" : StringUtil.joinDelimiter(delimiter, array); }
+
+    @SuppressWarnings("unused")
     public String joinList(List<String> list) { return  list == null ? "" : StringUtil.joinDelimiter(" ", list); }
+
+    @SuppressWarnings("unused")
+    public String joinList(List<String> list, String delimiter) { return  list == null ? "" : StringUtil.joinDelimiter(delimiter, list);  }
+
+    @SuppressWarnings("unused")
+    public List<String> stringToList(String s, String del) { return StringUtil.stringToList(s, del); }
+
+    @SuppressWarnings("unused")
+    public boolean listHasString(List<String> lst, String s) { return StringUtil.listHasString(lst, s);  }
+
+    @SuppressWarnings("unused")
+    public int stringLength(String s) { return s == null ? -1 : s.length(); }
 
     @SuppressWarnings("unused")
     public byte[] stringToUTF8Bytes(String s) { return StringUtil.getUTF8Bytes(s); }
@@ -764,21 +667,33 @@ public class XParam {
     @SuppressWarnings("unused")
     public String bytesToSHA256Hash(byte[] bs) { return StringUtil.getBytesSHA256Hash(bs); }
 
-    @SuppressWarnings("unused")
-    public List<String> stringToList(String s, String del) { return StringUtil.stringToList(s, del); }
-
-    @SuppressWarnings("unused")
-    public boolean listHasString(List<String> lst, String s) { return StringUtil.listHasString(lst, s);  }
-
     //
     //End of REFLECT Functions
     //
+
+    @SuppressWarnings("unused")
+    public boolean javaMethodExists(String className, String methodName) { return ReflectUtil.javaMethodExists(className, methodName); }
+
+    @SuppressWarnings("unused")
+    public Class<?> getClassType(String className) { return ReflectUtil.getClassType(className); }
+
+    @SuppressWarnings("unused")
+    public Object createReflectArray(String className, int size) { return ReflectUtil.createArray(className, size); }
+
+    @SuppressWarnings("unused")
+    public Object createReflectArray(Class<?> classType, int size) { return ReflectUtil.createArray(classType, size); }
 
     @SuppressWarnings("unused")
     public boolean hasFunction(String classPath, String function) { return XReflectUtils.methodExists(classPath, function); }
 
     @SuppressWarnings("unused")
     public boolean hasFunction(String function) { return XReflectUtils.methodExists(getThis().getClass().getName(), function); }
+
+    @SuppressWarnings("unused")
+    public boolean hasField(String classPath, String field) { return XReflectUtils.fieldExists(classPath, field); }
+
+    @SuppressWarnings("unused")
+    public boolean hasField(String field) { return XReflectUtils.fieldExists(getThis().getClass().getName(), field); }
 
     //
     //START OF LONG HELPER FUNCTIONS
@@ -838,11 +753,8 @@ public class XParam {
         if (value != null) {
             value = coerceValue(this.paramTypes[index], value);
             if (!boxType(this.paramTypes[index]).isInstance(value))
-                throw new IllegalArgumentException(
-                        "Expected argument #" + index + " " + this.paramTypes[index] + " got " + value.getClass());
-        }
-
-        this.param.args[index] = value;
+                throw new IllegalArgumentException("Expected argument #" + index + " " + this.paramTypes[index] + " got " + value.getClass());
+        } this.param.args[index] = value;
     }
 
 
@@ -951,12 +863,15 @@ public class XParam {
     }
 
     @SuppressWarnings("unused")
+    public boolean getSettingBool(String name, boolean defaultValue) {
+        String setting = getSetting(name);
+        if(setting == null) return defaultValue;
+        return Str.toBoolean(setting, defaultValue);
+    }
+
+    @SuppressWarnings("unused")
     public String getSetting(String name) {
-        synchronized (this.settings) {
-            String value = (this.settings.containsKey(name) ? this.settings.get(name) : null);
-            //Log.i(TAG, "Get setting " + this.getPackageName() + ":" + this.getUid() + " " + name + "=" + value);
-            return value;
-        }
+        synchronized (this.settings) { return (this.settings.containsKey(name) ? this.settings.get(name) : null); }
     }
 
     @SuppressWarnings("unused")

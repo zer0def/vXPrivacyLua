@@ -1,4 +1,5 @@
 [
+  /*
   {
     "builtin": true,
     "collection": "Modifications",
@@ -672,5 +673,5 @@
     "usage":true,
     "notify":false,
     "luaScript": "@appdome_print_strings"
-  }
+  }*/
 ]

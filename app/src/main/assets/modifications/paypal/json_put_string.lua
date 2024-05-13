@@ -37,13 +37,13 @@ function before(hook, param)
 
     if al == "ef" then
         log("Bypassing Paypal Is Emulator Detection Bit Flags")
-        param:setArgument(1, param:paypalFillZeros(aTwo)) --Ensure the flags for emulator is all False
+        param:setArgument(1, param:createFilledString(aTwo, "0")) --Ensure the flags for emulator is all False
         return true
     end
 
     if al == "rf" then
         log("Bypassing Paypal Is Root Detection Bit Flags")
-        param:setArgument(1, param:paypalFillZeros(aTwo)) --Ensure the flags for Root is all False
+        param:setArgument(1, param:createFilledString(aTwo, "0")) --Ensure the flags for Root is all False
         return true
     end
 

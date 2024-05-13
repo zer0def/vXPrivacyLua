@@ -1,7 +1,7 @@
 [
   {
     "collection": "PrivacyEx",
-    "group": "Read.Account",
+    "group": "Get.Account",
     "name": "Account.createFromParcel",
     "author": "M66B",
     "className": "android.accounts.Account",

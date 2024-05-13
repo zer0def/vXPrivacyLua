@@ -61,6 +61,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.DiffUtil;
@@ -77,6 +78,7 @@ import eu.faircode.xlua.api.hook.assignment.LuaAssignmentPacket;
 
 import eu.faircode.xlua.api.app.XLuaApp;
 import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.ui.GroupHelper;
 import eu.faircode.xlua.ui.HookWarnings;
 import eu.faircode.xlua.ui.dialogs.HookWarningDialog;
 import eu.faircode.xlua.ui.interfaces.ILoader;
@@ -155,7 +157,7 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
             rvGroup.setLayoutManager(llm);
             adapter = new AdapterGroup(fragmentLoader);
             rvGroup.setAdapter(adapter);
-
+            rvGroup.addItemDecoration(GroupHelper.createGroupDivider(itemView.getContext()));
             grpExpanded = itemView.findViewById(R.id.grpExpanded);
         }
 
@@ -674,14 +676,11 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
     }
 
     @Override
-    public int getItemCount() {
-        return filtered.size();
-    }
+    public int getItemCount() { return filtered.size(); }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.app, parent, false));
-    }
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.app, parent, false)); }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
@@ -729,14 +728,10 @@ public class AdapterApp extends RecyclerView.Adapter<AdapterApp.ViewHolder> impl
                         : android.R.color.darker_gray, null)));
 
         holder.tvAndroid.setVisibility("android".equals(app.getPackageName()) ? View.VISIBLE : View.GONE);
-
         holder.cbForceStop.setChecked(app.getForceStop());
         holder.cbForceStop.setEnabled(!app.isPersistent());
-
         holder.adapter.set(app, selectedHooks, holder.itemView.getContext());
-
         holder.updateExpand();
-
         holder.wire();
     }
 }

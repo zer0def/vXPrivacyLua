@@ -19,6 +19,8 @@ import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.logger.XLog;
 
 public class LuaHooksGroup {
+    public String groupId;
+
     public int id;
     public String name;
     public String title;

@@ -92,11 +92,13 @@
   { "settingName": "bluetooth.soc", "propNames": [ "vendor.bluetooth.soc" ] },
 
   //Unique Identifiers
-  { "settingName": "unique.serial.no", "propNames": [  "ro.kernel.androidboot.serialno", "ro.build.serial", "persist.odm.ril.oem.sno", "persist.odm.ril.oem.psno", "persist.odm.ril.odm.ril.oem.psno", "ro.ril.oem.psno", "ro.ril.oem.sno","ro.serialno", "ro.boot.serialno", "ril.serialnumber", "gsm.sn1", "sys.serialnumber" ] },
-  { "settingName": "unique.gsm.imei", "propNames": [ "ro.ril.miui.imei2", "ro.ril.miui.imei1", "ro.ril.miui.imei0", "ro.ril.miui.imei", "persist.radio.imei2", "persist.radio.imei1", "persist.radio.imei0", "persist.radio.imei", "persist.odm.ril.oem.imei2", "persist.odm.ril.oem.imei1", "persist.odm.ril.oem.imei0", "persist.odm.ril.oem.imei", "persist.radio.imei1", "persist.radio.imei0", "ro.ril.oem.imei", "ro.ril.oem.imei0", "ro.ril.oem.imei1", "ro.ril.oem.imei2" ] },
+  { "settingName": "unique.serial.no", "propNames": [ "vendor.gsm.serial", "ro.kernel.androidboot.serialno", "ro.build.serial", "persist.odm.ril.oem.sno", "persist.odm.ril.oem.psno", "persist.odm.ril.odm.ril.oem.psno", "ro.ril.oem.psno", "ro.ril.oem.sno","ro.serialno", "ro.boot.serialno", "ril.serialnumber", "gsm.sn1", "sys.serialnumber" ] },
+  { "settingName": "unique.gsm.imei", "propNames": [ "persist.sys.imei1", "persist.sys.imei", "persist.sys.imei0",  "gsm.device.imei0", "gsm.device.imei", "gsm.device.imei1", "persist.sys.verizon_test_plan_imei", "ro.ril.miui.imei2", "ro.ril.miui.imei1", "ro.ril.miui.imei0", "ro.ril.miui.imei", "persist.radio.imei2", "persist.radio.imei1", "persist.radio.imei0", "persist.radio.imei", "persist.odm.ril.oem.imei2", "persist.odm.ril.oem.imei1", "persist.odm.ril.oem.imei0", "persist.odm.ril.oem.imei", "persist.radio.imei1", "persist.radio.imei0", "ro.ril.oem.imei", "ro.ril.oem.imei0", "ro.ril.oem.imei1", "ro.ril.oem.imei2" ] },
   { "settingName": "unique.gsm.meid", "propNames": [ "ro.ril.oem.meid" ] },
-  { "settingName": "unique.gsm.icc.id", "propNames": [  "ril.iccid.sim1", "ril.iccid.sim2", "gsm.sim.preiccid_0", "gsm.sim.preiccid_1", "persist.vendor.cfu.iccid.0", "persist.radio.data.iccido", "persist.vendor.radio.cfu.iccid.1" ] },
-  { "settingName": "unique.network.mac.address", "propNames": [ "ro.ril.oem.btmac", "persist.odm.ril.oem.btmac", "ro.ril.oem.wifimac", "wlan.driver.macaddr", "persist.odm.ril.oem.wifimac" ] },
+  { "settingName": "unique.gsm.icc.id", "propNames": [ "persist.sys.tctPowerIccid", "persist.sys.verizon_test_plan_iccid", "ril.iccid.sim1", "ril.iccid.sim2", "gsm.sim.preiccid_0", "gsm.sim.preiccid_1", "persist.vendor.cfu.iccid.0", "persist.radio.data.iccido", "persist.vendor.radio.cfu.iccid.1" ] },
+  { "settingName": "unique.network.mac.address", "propNames": [ "ro.boot.wifimacaddr", "ro.boot.wifi_mac", "ro.ril.oem.btmac", "persist.odm.ril.oem.btmac", "ro.ril.oem.wifimac", "wlan.driver.macaddr", "persist.odm.ril.oem.wifimac" ] },
+  { "settingName": "unique.bluetooth.address", "propNames": [ "ro.boot.bt_map" ] },
+
   { "settingName": "unique.netd.secret.key", "propNames": [ "persist.netd.stable_secret" ] },
 
 

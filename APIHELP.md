@@ -13,19 +13,16 @@ Alot of these functions will never need to be explicitly used as most of the fil
 //You can Define the Spoof Value within the App UI
 String filterBuildProperty(String property)
 
-//Filters Params from Settings$Secure
-//Currently only filters for "android_id" & "bluetooth_name"
-//Now supports "advertising_id" typically created by via Amazon Devices
+//Filters Params from Settings$Secure the Setting from there Second Param will be the Value to Replace it with if found
 //Returns True if the Fake Value was Set, From the Lua Script just return True else False
-boolean filterSettingsSecure(String setting)
+boolean filterSettingsSecure(String setting, String newValue)
 
-//Filters ".query" Commands from "ContentResolver" only Supports "gsf_id" and "fb_id" aka Facebook Tracking ID
-boolean queryFilterAfter(String filter)
-boolean queryFilterAfter(String filter, Uri uri)
+//Filters ".query" Commands from "ContentResolver" First Param will be the Package and or Service Name, Second Param will be the Column to Find and Modify, and the Third Param will be the Value to Modify as
+boolean queryFilterAfter(String serviceName, String columnName, String newValue)
 
 //Filter IBinder / BinderProxy
-//This is to help Filer (IPC) Inner Process Commmunication though it currently only supports one kind of Filter "adid" or advertising id
-//This will now set the "transact" result to "true" assuming this is coming from that Binder Fuction. There for you will have to set the value to "true" if it was modified or filtered
+//This is to help Filer (IPC) Inner Process Communication though it currently only supports one kind of Filter "adid" or advertising id
+//This will now set the "transact" result to "true" assuming this is coming from that Binder Function. There for you will have to set the value to "true" if it was modified or filtered
 //If the funciton returns a valid string value, then that indicates it was modified else if null or nil then it was not modified and or filtered.
 boolean filterBinderProxyAfter(String filterKind)
 
@@ -38,8 +35,8 @@ String filterBuildProperty(String property)
 
 //To Filter out Shell Command or Command executed via "exec" what not you can use the following functions
 //Using the following functions you either pass in a Command, Array of Commands and or a List of Commands, and if a new value returns then that idicates the command was intercepted else null / nil
-//This function will set the result of the targted hook function if the return type of the function is not "android.os.Process" then it will not set it but instead return the intercepted value
-//You then can do what you please with the new Mock Value, in the gernic case it will create a "echo" command with the fake data then set the result as that
+//This function will set the result of the targeted hook function if the return type of the function is not "android.os.Process" then it will not set it but instead return the intercepted value
+//You then can do what you please with the new Mock Value, in the general case it will create a "echo" command with the fake data then set the result as that
 public String interceptCommand(String command)
 public String interceptCommandArray(String[] commands)
 public String interceptCommandList(List<String> commands)
@@ -63,7 +60,7 @@ public String interceptCommandList(List<String> commands)
 
 ```LUA
 
-	local filtered = param:filterSettingsSecure("android_id")
+	local filtered = param:filterSettingsSecure("android_id", param:getSettingReMap("unique.android.id", "value.android_id", "0000000000000000"))
 	if filtered == true then
 		log("Secure Setting was Intercepted & Filtered")
 		return true
@@ -76,7 +73,7 @@ public String interceptCommandList(List<String> commands)
 
 ```LUA
 
-	local filtered = param:queryFilterAfter("gsf_id")
+	local filtered = param:queryFilterAfter("com.google.android.gsf.gservices", "android_id", param:getSetting("unique.gsf.id"))
 
 	if filtered == true then
 		log("Query Intercepted & Filtered")

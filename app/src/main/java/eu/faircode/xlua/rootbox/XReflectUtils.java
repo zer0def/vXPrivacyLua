@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class XReflectUtils {
-    private static final String TAG = "XLua.rootbox.xReflectMethod";
+    private static final String TAG = "XLua.rootbox.XReflectUtils";
 
     public static Class<?> getClassFor(String classPath) {
         try {
@@ -145,7 +145,6 @@ public class XReflectUtils {
         }
     }
 
-    public static boolean methodExists(String classPath, String methodName) {
-        return getMethodFor(classPath, methodName) != null;
-    }
+    public static boolean methodExists(String classPath, String methodName) { return getMethodFor(classPath, methodName) != null; }
+    public static boolean fieldExists(String str, String str2) { return getFieldFor(str, str2, true) != null; }
 }

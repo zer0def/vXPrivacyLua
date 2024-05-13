@@ -15,7 +15,6 @@
   { "name": "android.build.date.utc", "description": "Android ROM Build Date (Unix Epoc TimeStamp)",  "defaultValue": "1696343919" },
   { "name": "android.build.date", "description": "Android ROM Build Date (WEEKDAY MONTH DAY HOUR:MINUTE:SECOND YEAR)", "defaultValue": "Tue Oct 3 17:38:39 IDT 2023" },
 
-
   { "name": "android.build.version", "description": "Android version Determined by Number", "defaultValue": "13" },
   { "name": "android.build.version.sdk", "description": "Android version Determined by Number", "defaultValue": "33" },
   { "name": "android.build.version.min.sdk", "description": "Android version Build minimum SDK Version Number", "defaultValue": "23"},
@@ -130,6 +129,12 @@
   { "name": "unique.gsm.operator.msin", "description": "Mobile Subscription Identification Number (MSIN) is a 10-digit unique numeric code ", "defaultValue": "1234567890" },
 
 
+  { "name": "account.user.name", "description": "Account User Name", "defaultValue": "god" },
+  { "name": "account.user.serial", "description": "Account User Serial Number (Integer)", "defaultValue": "1337" },
+  { "name": "account.group.id", "description": "Account User Group ID (Integer)", "defaultValue": "1337" },
+  { "name": "account.id", "description": "Account User ID (Integer)", "defaultValue": "1337" },
+
+
   //Zone Default Settings (Time, Date, Region, Language)
   { "name": "zone.timezone.id", "description": "TimeZone ID (Atlantic/Reykjavik)", "defaultValue": "Atlantic/Reykjavik" },
   { "name": "zone.country.iso", "description": "Country ISO3 ID", "defaultValue": "IS" },
@@ -195,6 +200,10 @@
 
 
   //Emulator stuff
+  { "name": "hide.root*.bool", "description": "Flag help Control Hooks if they need to Hide Root Related Items (assuming the Hooks for Hide are Enabled and Intercept Properties and Intercept Shell)", "defaultValue": "true" },
+  { "name": "hide.emulator*.bool", "description": "Flag help Control Hooks if they need to Hide Emulator Related Items (assuming the Hooks for Hide are Enabled and Intercept Properties and Intercept Shell)", "defaultValue": "true" },
+
+
   { "name": "qemu.emulator*.bool", "description": "Control of all Emulator Functions (Hide/Skip....)", "defaultValue": "true" },
   { "name": "qemu.emulator.kernel", "description": "Emulator Qemu Kernel", "defaultValue": "N/A" },
   { "name": "qemu.emulator.props", "description": "Emulator Qemu Props", "defaultValue": "N/A" },
@@ -223,7 +232,7 @@
   { "name": "intercept.shell.getprop.bool", "description": "Should Shell Interceptor Intercept (getprop) command", "defaultValue": "true" },
   { "name": "intercept.shell.su.bool", "description": "Should Shell Interceptor Intercept (SU) command", "defaultValue": "true" },
   { "name": "intercept.shell.uname.bool", "description": "Should Shell Interceptor Intercept (uname) command", "defaultValue": "true" },
-
+  { "name": "intercept.shell.logcat.bool", "description": "Should Shell Interceptor Intercept (logcat) command", "defaultValue": "true" },
 
   { "name": "battery.charge.time.remaining", "description": "Battery Charge Time Remaining in Milliseconds", "defaultValue": "0" },
   { "name": "battery.percentage.left", "description": "Battery Percentage Level", "defaultValue": "100" },
@@ -236,7 +245,7 @@
 
   { "name": "applications.allow.list", "description": "List of Applications allowed through the filter example (cool.app,new.app,someother.app.name,amazon)", "defaultValue": "*" },
   { "name": "applications.block.list", "description": "List of Applications blocked through the filter example (cool.app,new.app,someother.app.name,amazon)", "defaultValue": "*" },
-  { "name": "applications.blacklist.mode.bool", "description": "", "defaultValue": "false" },
+  { "name": "applications.blacklist.mode.bool", "description": "If True then Black list mode is used else it will not be used and only allow application through IF they are on the allow list", "defaultValue": "false" },
 
 
 

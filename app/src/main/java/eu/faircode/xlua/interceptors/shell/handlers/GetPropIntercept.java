@@ -8,12 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.faircode.xlua.Str;
 import eu.faircode.xlua.api.properties.MockPropSetting;
 import eu.faircode.xlua.api.xstandard.interfaces.ICommandIntercept;
 import eu.faircode.xlua.interceptors.UserContextMaps;
 import eu.faircode.xlua.interceptors.shell.CommandInterceptor;
 import eu.faircode.xlua.interceptors.shell.ShellInterceptionResult;
 import eu.faircode.xlua.utilities.CollectionUtil;
+import eu.faircode.xlua.utilities.Evidence;
 import eu.faircode.xlua.utilities.ShellUtils;
 import eu.faircode.xlua.utilities.StringUtil;
 
@@ -56,8 +58,7 @@ public class GetPropIntercept extends CommandInterceptor implements ICommandInte
                     if(maps.isSettingsValid() && maps.isPropMapsValid()) {
                         if(!allowed.get(0).equals(this.command)) return false; //weird
                         if(allowed.size() == 1) {
-                            //assume its the getprop command
-                            createMap(result, maps);
+                            createMap(result, maps);    //assume its the getprop command
                             return true;
                         }
 
@@ -79,7 +80,7 @@ public class GetPropIntercept extends CommandInterceptor implements ICommandInte
                                 }
                             }
 
-                            if(toWrite.size() > 0) {
+                            if(!toWrite.isEmpty()) {
                                 StringBuilder sb = new StringBuilder();
                                 for(Map.Entry<String, String> e : toWrite.entrySet())
                                     sb.append("[").append(e.getKey()).append("]: ").append("[").append(e.getValue()).append("]\r\n");
@@ -89,22 +90,43 @@ public class GetPropIntercept extends CommandInterceptor implements ICommandInte
                                 return true;
                             }
                         }else {
+                            boolean cleanEmulator = maps.getSettingBool(Evidence.SETTING_QEMU_EMULATOR) || maps.getSettingBool(Evidence.SETTING_EMULATOR);
+                            boolean cleanRoot = Str.toBoolean(maps.getSetting(Evidence.SETTING_ROOT, Str.FALSE));
                             for(String s : allowed) {
                                 if(s == null || TextUtils.isEmpty(s)) continue;
                                 if(maps.hasProperty(s)) {
                                     Log.w(TAG, "Command Data contains a Targeted Property! =" + s);
+                                    if(cleanEmulator || cleanRoot) {
+                                        if((cleanEmulator && Evidence.property(s, 1)) || (cleanRoot && Evidence.property(s, 2))) {
+                                            result.setNewValue(Str.EMPTY);
+                                            result.setIsMalicious(true);
+                                            return true;
+                                        }
+                                        if(cleanRoot) {
+                                            if(s.equalsIgnoreCase(Evidence.PROP_DEBUGGABLE)) {
+                                                result.setNewValue(Evidence.PROP_DEBUGGABLE_GOOD);
+                                                result.setIsMalicious(true);
+                                                return true;
+                                            }
+                                            if(s.equalsIgnoreCase(Evidence.PROP_SECURE)) {
+                                                result.setNewValue(Evidence.PROP_SECURE_GOOD);
+                                                result.setIsMalicious(true);
+                                                return true;
+                                            }
+                                        }
+                                    }
+
                                     Integer code = maps.getPropertySetting(s);
                                     if(code != null) {
-                                        if(code == MockPropSetting.PROP_SKIP)
-                                            continue;
+                                        if(code == MockPropSetting.PROP_SKIP) continue;
                                         if(code == MockPropSetting.PROP_HIDE || !show(code, s)) {
-                                            result.setNewValue("");
+                                            result.setNewValue(Str.EMPTY);
                                             result.setIsMalicious(true);
                                             return true;
                                         }
                                     }
 
-                                    result.setNewValue(maps.getSetting(s, ""));
+                                    result.setNewValue(maps.getSetting(s, Str.EMPTY));
                                     result.setIsMalicious(true);
                                     return true;
                                 }

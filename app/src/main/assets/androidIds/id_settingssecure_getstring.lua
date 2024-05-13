@@ -1,9 +1,9 @@
 function after(hook, param)
-    local filtered = param:filterSettingsSecure("android_id")
+    local fake = param:getSettingReMap("unique.android.id", "value.android_id", "0000000000000000")
+    local filtered = param:filterSettingsSecure("android_id", fake)
     if filtered == true then
-        log("ANDROID ID SPOOFED")
-        return true
+        log("AID")
+        return true, "N/A", "Spoofed"
     end
-
 	return false
 end

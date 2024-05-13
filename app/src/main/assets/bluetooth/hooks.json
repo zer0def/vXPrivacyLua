@@ -3,7 +3,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "Intent.createFromParcel/bluetooth_state",
     "author": "OBC",
     "className": "android.content.Intent",
@@ -24,7 +24,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "List.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.getBondedDevices",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -46,7 +46,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.getState",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -68,7 +68,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.startDiscovery",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -90,7 +90,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.isDiscovering",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -112,7 +112,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.isEnabled",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -136,7 +136,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.getBluetoothLeAdvertiser",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -158,7 +158,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.getBluetoothLeScanner",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -180,7 +180,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.getRemoteDevice(Bytes)",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -202,7 +202,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.getRemoteDevice(String)",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -224,7 +224,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.getRemoteLeDevice",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -246,7 +246,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.getDefaultAdapter",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -268,7 +268,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.toString",
     "author": "OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -289,7 +289,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "BluetoothAdapter.getName",
     "author": "A200k, OBC",
     "className": "android.bluetooth.BluetoothAdapter",
@@ -311,7 +311,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "ID.Bluetooth",
+    "group": "Get.Bluetooth",
     "name": "SettingsSecure.getString/bluetooth_name",
     "author": "OBC",
     "className": "android.provider.Settings$Secure",

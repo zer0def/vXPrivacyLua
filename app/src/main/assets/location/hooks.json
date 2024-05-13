@@ -108,7 +108,7 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "Spoof.Cell.Location",
+    "group": "Spoof.Location.Cell",
     "name": "CellIdentityGsm.getCid",
     "author": "OBC",
     "className": "android.telephony.CellIdentityGsm",
@@ -129,7 +129,7 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "Spoof.Cell.Location",
+    "group": "Spoof.Location.Cell",
     "name": "CellIdentityLte.getCi",
     "author": "OBC",
     "className": "android.telephony.CellIdentityLte",
@@ -150,7 +150,7 @@
   {
     "builtin": false,
     "collection": "PrivacyEx",
-    "group": "Spoof.Cell.Location",
+    "group": "Spoof.Location.Cell",
     "name": "CellIdentityCdma.getBasestationId",
     "author": "OBC",
     "className": "android.telephony.CellIdentityCdma",
@@ -415,7 +415,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Get.Location",
+    "group": "Spoof.Location",
     "name": "LocationManager.addNmeaListener5",
     "author": "M66B",
     "className": "android.location.LocationManager",
@@ -435,7 +435,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Get.Location",
+    "group": "Spoof.Location",
     "name": "LocationManager.addNmeaListener24a",
     "author": "M66B",
     "className": "android.location.LocationManager",
@@ -455,7 +455,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Get.Location",
+    "group": "Spoof.Location",
     "name": "LocationManager.addNmeaListener24b",
     "author": "M66B",
     "className": "android.location.LocationManager",
@@ -475,7 +475,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Get.Location",
+    "group": "Spoof.Location",
     "name": "LocationManager.addProximityAlert",
     "author": "M66B",
     "className": "android.location.LocationManager",
@@ -516,7 +516,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Get.Location",
+    "group": "Spoof.Location",
     "name": "PlaceLikelihoodBuffer.getCount",
     "author": "M66B",
     "className": "com.google.android.gms.location.places.PlaceLikelihoodBuffer",
@@ -536,7 +536,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Get.Location",
+    "group": "Spoof.Location",
     "name": "PlaceLikelihoodBuffer.get",
     "author": "M66B",
     "className": "com.google.android.gms.location.places.PlaceLikelihoodBuffer",

@@ -215,7 +215,7 @@ public class XLuaAppProvider {
         SqlQuerySnake snake = SqlQuerySnake
                 .create(db, LuaSetting.Table.NAME)
                 .whereColumn("user", Integer.toString(userid))
-                .whereColumn("name", "'forcestop'")
+                .whereColumn("name", "forcestop")
                 .onlyReturnColumns("category", "value");
 
 

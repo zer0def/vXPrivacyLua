@@ -450,6 +450,14 @@ public class AdapterSetting extends RecyclerView.Adapter<AdapterSetting.ViewHold
     }
 
     List<LuaSettingExtended> getSettings() { return settings; }
+    List<LuaSettingExtended> getSettingsEnable() {
+        List<LuaSettingExtended> settingsCopy = new ArrayList<>();
+        for (LuaSettingExtended setting : settings)
+            if(setting.isEnabled())
+                settingsCopy.add(setting);
+
+        return settingsCopy;
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     void saveAll(Context context) {

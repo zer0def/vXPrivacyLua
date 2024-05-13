@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.Map;
 
+import eu.faircode.xlua.Str;
 import eu.faircode.xlua.utilities.CollectionUtil;
 import eu.faircode.xlua.utilities.StringUtil;
 
@@ -51,6 +52,13 @@ public class UserContextMaps {
         String s = getSetting(name);
         if(s == null) return defaultValue;
         return StringUtil.toInteger(s, defaultValue);
+    }
+
+    public boolean getSettingBool(String name) { return getSettingBool(name, false); }
+    public boolean getSettingBool(String name, boolean defaultValue) {
+        String v = getSetting(name);
+        if(v == null) return defaultValue;
+        return Str.toBoolean(v, defaultValue);
     }
 
     public String getSetting(String name, String defaultValue) {

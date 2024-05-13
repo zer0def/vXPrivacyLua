@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ProgressBar
+        android:id="@+id/pbDeployHooks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Base.Widget.AppCompat.ProgressBar"/>
+    <TextView
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textSize="20sp"
+        android:id="@+id/tvDeployHookName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FILLER"
+        android:maxLines="80"
+        android:layout_below="@+id/pbDeployHooks"/>
+</RelativeLayout>

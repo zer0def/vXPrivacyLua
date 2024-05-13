@@ -357,7 +357,8 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                                                         pName);
 
                                         if(!luaMember.isValid()) {
-                                            XLog.w("Lua Member is Not Valid [" + target.methodName + "] Most likely not a after or before : now a:" + function);
+                                            if(BuildConfig.DEBUG)
+                                                XLog.w("Lua Member is Not Valid [" + target.methodName + "] Most likely not a after or before : now a:" + function);
                                             return;
                                         }
                                     }

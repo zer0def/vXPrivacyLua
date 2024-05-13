@@ -127,7 +127,7 @@ public class SettingUtil {
             return "InputDevice";
 
         if(name.equalsIgnoreCase("timezone"))
-            return "time";
+            return "TimeZone";
 
         if((!EX_NAMES.contains(name)) &&  name.endsWith("ex") && name.length() > 3)
             return name.substring(0, name.length() -2) + " EX";

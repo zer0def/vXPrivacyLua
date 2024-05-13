@@ -2,7 +2,7 @@
   {
     "builtin": true,
     "collection": "PrivacyEx",
-    "group": "Determine.Activity",
+    "group": "Get.Activity",
     "name": "ActivityRecognitionResult.extractResult",
     "author": "M66B",
     "className": "com.google.android.gms.location.ActivityRecognitionResult",

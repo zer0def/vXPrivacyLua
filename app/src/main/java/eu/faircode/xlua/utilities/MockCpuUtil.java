@@ -19,6 +19,6 @@ public class MockCpuUtil {
 
     public static File generateFakeFile(MockCpu map) {
         Log.i(TAG, "MOCK File For: " + map);
-        return FileUtil.generateFakeFile(map.getContents());
+        return FileUtil.generateTempFakeFile(map.getContents());
     }
 }

@@ -15,25 +15,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import java.util.Objects;
+
 import eu.faircode.xlua.R;
 import eu.faircode.xlua.Str;
 import eu.faircode.xlua.api.XResult;
 import eu.faircode.xlua.api.configs.MockConfig;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
+import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.ui.interfaces.IConfigUpdate;
 import eu.faircode.xlua.ui.transactions.ConfigTransactionResult;
 
 public class RenameDialogEx extends AppCompatDialogFragment {
-    private EditText renamedConfig;
-    private TextView tvConfigOldName;
+    private Context context;
     private MockConfig config;
     private IConfigUpdate callback;
 
     public RenameDialogEx setConfig(MockConfig config) { this.config = config; return this; }
     public RenameDialogEx setCallback(IConfigUpdate callback) { this.callback = callback; return this; }
-
-
-    private Context context;
 
     public RenameDialogEx() { }
 
@@ -41,21 +40,17 @@ public class RenameDialogEx extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         View view = inflater.inflate(R.layout.configrename, null);
 
-        renamedConfig = view.findViewById(R.id.etConfigName);
-        tvConfigOldName = view.findViewById(R.id.tvOldName);
-
+        final EditText renamedConfig = view.findViewById(R.id.etConfigName);
+        final TextView tvConfigOldName = view.findViewById(R.id.tvOldName);
         tvConfigOldName.setText(config.getName());
-
         builder.setView(view)
                 .setTitle(getString(R.string.title_config_rename_config))
                 .setNegativeButton(R.string.option_cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Log.i(TAG, "Add Setting Dialog Was Cancelled");
-                    }
+                    public void onClick(DialogInterface dialog, int which) { XLog.i("Renaming Config Cancelled"); }
                 }).setPositiveButton(R.string.option_rename, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -63,6 +58,7 @@ public class RenameDialogEx extends AppCompatDialogFragment {
                             config.setName(renamedConfig.getText().toString());
                             //Check if duplicate names
                             ConfigTransactionResult res = new ConfigTransactionResult();
+                            res.context = context;
                             res.code = -1;
                             res.configs.add(config);
                             res.succeeded.add(config);

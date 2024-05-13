@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,6 +53,8 @@ import eu.faircode.xlua.api.hook.assignment.LuaAssignment;
 import eu.faircode.xlua.api.hook.XLuaHook;
 
 import eu.faircode.xlua.api.app.XLuaApp;
+import eu.faircode.xlua.api.xstandard.interfaces.IDividerKind;
+import eu.faircode.xlua.ui.GroupHelper;
 import eu.faircode.xlua.ui.HookWarnings;
 import eu.faircode.xlua.ui.dialogs.HookWarningDialog;
 import eu.faircode.xlua.ui.dialogs.SettingAddDialogEx;
@@ -59,12 +62,26 @@ import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.utilities.SettingUtil;
 
 
-public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> {
+public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> implements IDividerKind {
     private XLuaApp app;
     private List<LuaHooksGroup> groups = new ArrayList<>();
     private ILoader fragmentLoader;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
+    @Override
+    public String getDividerID(int position) { return groups.get(position).groupId; }
+
+    @Override
+    public String getLongID(int position) { return groups.get(position).name; }
+
+    @Override
+    public boolean isSearching() { return false; }
+
+    @Override
+    public boolean hasChanged() { return false; }
+
+    @Override
+    public void resetHashChanged() { }
 
     public class ViewHolder extends
             RecyclerView.ViewHolder
@@ -182,9 +199,8 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
                 group.id = resources.getIdentifier("group_" + name, "string", context.getPackageName());
                 group.name = hook.getGroup();
                 group.title = (group.id > 0 ? resources.getString(group.id) : hook.getGroup());
-
+                group.groupId = GroupHelper.getGroupId(group.name);
                 group.hasWarning = HookWarnings.hasWarning(context, group.name);
-
                 map.put(hook.getGroup(), group);
             }
             group.hooks.add(hook);
@@ -213,7 +229,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
         Collections.sort(this.groups, new Comparator<LuaHooksGroup>() {
             @Override
             public int compare(LuaHooksGroup group1, LuaHooksGroup group2) {
-                return collator.compare(group1.title, group2.title);
+                return collator.compare(group1.groupId, group2.groupId);
             }
         });
 
@@ -230,6 +246,7 @@ public class AdapterGroup extends RecyclerView.Adapter<AdapterGroup.ViewHolder> 
         return groups.size();
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.group, parent, false)); }
 

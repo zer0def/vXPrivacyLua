@@ -1,0 +1,74 @@
+[
+  // Get sensors
+  // https://developer.android.com/reference/android/hardware/SensorManager.html
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Sensors",
+    "name": "SensorManager.getDefaultSensor",
+    "author": "M66B",
+    "className": "android.hardware.SensorManager",
+    "methodName": "getDefaultSensor",
+    "parameterTypes": [
+      "int"
+    ],
+    "returnType": "android.hardware.Sensor",
+    "minSdk": 3,
+    "luaScript": "@generic_null_value"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Sensors",
+    "name": "SensorManager.getDefaultSensor/wakeup",
+    "author": "M66B",
+    "className": "android.hardware.SensorManager",
+    "methodName": "getDefaultSensor",
+    "parameterTypes": [
+      "int",
+      "boolean"
+    ],
+    "returnType": "android.hardware.Sensor",
+    "minSdk": 21,
+    "luaScript": "@generic_null_value"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Sensors",
+    "name": "SensorManager.getDynamicSensorList",
+    "author": "M66B",
+    "className": "android.hardware.SensorManager",
+    "methodName": "getDynamicSensorList",
+    "parameterTypes": [
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 24,
+    "luaScript": "@generic_empty_list"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Sensors",
+    "name": "SensorManager.getSensorList",
+    "author": "M66B",
+    "className": "android.hardware.SensorManager",
+    "methodName": "getSensorList",
+    "parameterTypes": [
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 3,
+    "luaScript": "@generic_empty_list"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Sensors",
+    "name": "SensorManager.getSensors",
+    "author": "M66B",
+    "className": "android.hardware.SensorManager",
+    "methodName": "getSensors",
+    "parameterTypes": [
+    ],
+    "returnType": "int",
+    "minSdk": 1,
+    "luaScript": "@generic_zero_value"
+  }
+]

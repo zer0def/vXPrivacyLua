@@ -1,0 +1,42 @@
+[
+  {
+    "builtin": true,
+    "collection": "Analytics",
+    "group": "AD.Analytics",
+    "name": "Ad/UMENG.UMConfigure.init",
+    "author": "OBC",
+    "className": "com.umeng.commonsdk.UMConfigure",
+    "methodName": "init",
+    "parameterTypes": [ "android.content.Context", "java.lang.String", "java.lang.String", "int", "java.lang.String"],
+    "returnType": "void",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@umeng_before_null"
+  },
+  {
+    "builtin": true,
+    "collection": "Analytics",
+    "group": "AD.Analytics",
+    "name": "Ad/UMENG.UMUtils.setAppKey",
+    "author": "OBC",
+    "className": "com.umeng.commonsdk.utils.UMUtils",
+    "methodName": "setAppKey",//Lowercase K ?
+    "parameterTypes": [ "android.content.Context", "java.lang.String"],
+    "returnType": "void",
+    "minSdk": 4,
+    "maxSdk": 999,
+    "version": 1,
+    "description": "",
+    "enabled":true,
+    "optional":true,
+    "usage":true,
+    "notify":false,
+    "luaScript": "@umeng_before_null"
+  }
+]

@@ -8,11 +8,23 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class Str {
+    public static final String EMPTY = "";
     public static final String ASTERISK = "*";
     public static final String COLLEN = ":";
     public static final String NEW_LINE = "\n";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
 
-    public static final Character EMPTY_CHAR = ' ';
+    public static final Character SPACE_CHAR = ' ';
+
+
+    public static String createFilledCopy(String str, String fillChar) {
+        if(str == null) return fillChar;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < str.length(); i++)
+            sb.append(fillChar);
+        return sb.toString();
+    }
 
     public static String combine(String str1, String str2) { return combine(str1, str2, true); }
     public static String combine(String str1, String str2, boolean useNewLine) {
@@ -83,6 +95,17 @@ public class Str {
         return hexString.toString().trim();
     }
 
+    public static String getFirstString(String str, String delimiter) { return getFirstString(str, delimiter, null); }
+    public static String getFirstString(String str, String delimiter, String defaultValue) {
+        String trim = trim(str, delimiter, true);
+        if (delimiter == null || delimiter.isEmpty()) return defaultValue != null ? defaultValue : trim;
+        if (trim == null || trim.isEmpty()) return defaultValue;
+        if (!trim.contains(delimiter)) return trim;
+        String[] split = trim.split(Pattern.quote(delimiter));
+        return split.length > 0 ? split[0] : defaultValue;
+    }
+
+
     public static String getLastString(String str, String delimiter) { return getLastString(str, delimiter, null); }
     public static String getLastString(String str, String delimiter, String defaultValue) {
         str = trim(str, delimiter, true);
@@ -138,5 +161,18 @@ public class Str {
         }
 
         return sb.toString();
+    }
+
+    public static Boolean toBoolean(String str) { return toBoolean(str, null); }
+    public static Boolean toBoolean(String str, Boolean defaultValue) {
+        try {
+            if(str == null || TextUtils.isEmpty(str)) return defaultValue;
+            str = str.trim().toLowerCase();
+            if(str.equals("yes") || str.equals("true") || str.equals("1") || str.equals("checked") || str.equals("enabled") || str.equals("succeed") || str.equals("succeeded")) return true;
+            if(str.equals("no") || str.equals("false") || str.equals("0") || str.equals("unchecked") || str.equals("disabled") || str.equals("fail") || str.equals("failed") || str.equals("error")) return false;
+            return defaultValue;
+        }catch (Exception ex) {
+            return defaultValue;
+        }
     }
 }

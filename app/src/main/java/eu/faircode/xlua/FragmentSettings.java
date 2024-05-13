@@ -35,21 +35,26 @@ import java.util.List;
 import java.util.Objects;
 
 import eu.faircode.xlua.api.XResult;
+import eu.faircode.xlua.api.configs.MockConfig;
 import eu.faircode.xlua.api.settings.LuaSettingExtended;
 import eu.faircode.xlua.api.xlua.XLuaCall;
 import eu.faircode.xlua.api.xmock.XMockQuery;
 import eu.faircode.xlua.api.xmock.call.ClearAppDataCommand;
 import eu.faircode.xlua.api.xmock.call.KillAppCommand;
 import eu.faircode.xlua.logger.XLog;
+import eu.faircode.xlua.ui.ConfigQue;
 import eu.faircode.xlua.ui.SettingsQue;
 import eu.faircode.xlua.ui.dialogs.ClearAppDataDialog;
+import eu.faircode.xlua.ui.dialogs.RenameDialogEx;
 import eu.faircode.xlua.ui.dialogs.SettingAddDialogEx;
 import eu.faircode.xlua.ui.dialogs.SettingsResetDialog;
+import eu.faircode.xlua.ui.interfaces.IConfigUpdate;
 import eu.faircode.xlua.ui.interfaces.ILoader;
 import eu.faircode.xlua.ui.dialogs.SettingAddDialog;
 import eu.faircode.xlua.ui.ViewFloatingAction;
 import eu.faircode.xlua.ui.interfaces.ISettingUpdateEx;
 import eu.faircode.xlua.ui.interfaces.ISettingsReset;
+import eu.faircode.xlua.ui.transactions.ConfigTransactionResult;
 import eu.faircode.xlua.ui.transactions.SettingTransactionResult;
 import eu.faircode.xlua.utilities.CollectionUtil;
 import eu.faircode.xlua.utilities.PrefUtil;
@@ -66,17 +71,16 @@ public class FragmentSettings
         CompoundButton.OnCheckedChangeListener,
         ILoader,
         ISettingUpdateEx,
-        ISettingsReset {
+        ISettingsReset,
+        IConfigUpdate {
 
-    private ProgressBar progressBar;
-    private SwipeRefreshLayout swipeRefresh;
     private AdapterSetting rvAdapter;
 
     private ImageView ivExpander;
     private CardView cvAppView;
     private CheckBox cbUseDefault;
 
-    private Button btProperties, btConfigs, btKill, btResetAll, btClearData, btSaveChecked;
+    private Button btProperties, btConfigs, btKill, btResetAll, btClearData, btSaveChecked, btSettingsToConfig;
     private boolean isViewOpen = true;
     private int lastHeight = 0;
 
@@ -84,6 +88,7 @@ public class FragmentSettings
     private static final String USE_DEFAULT = "useDefault";
     private static final String LAST_CHECKED = "lastChecked";
     private SettingsQue que;
+    private ConfigQue configQue;
 
     private List<String> lastChecked = null;
 
@@ -95,6 +100,7 @@ public class FragmentSettings
         cvAppView = main.findViewById(R.id.cvAppInfoSettings);
 
         que = new SettingsQue(this.application);
+        configQue = new ConfigQue(this.application);
         lastChecked = Str.splitToList(PrefUtil.getString(getContext(), LAST_CHECKED));
 
         btProperties = main.findViewById(R.id.btSettingsToProperties);
@@ -103,6 +109,7 @@ public class FragmentSettings
         btResetAll = main.findViewById(R.id.btSettingsResetAll);
         btClearData = main.findViewById(R.id.btSettingsClearData);
         btSaveChecked = main.findViewById(R.id.btSettingsSaveChecked);
+        btSettingsToConfig = main.findViewById(R.id.btSettingsExportToConfig);
 
         cbUseDefault = main.findViewById(R.id.cbUseDefaultSettings);
         if(this.application.isGlobal()) {
@@ -131,7 +138,7 @@ public class FragmentSettings
         rvList.setHasFixedSize(false);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity()) {
             @Override
-            public boolean onRequestChildFocus(RecyclerView parent, RecyclerView.State state, View child, View focused) { return true; }
+            public boolean onRequestChildFocus(@NonNull RecyclerView parent, @NonNull RecyclerView.State state, @NonNull View child, View focused) { return true; }
         };
 
         llm.setAutoMeasureEnabled(true);
@@ -202,6 +209,10 @@ public class FragmentSettings
             case R.id.btSettingsSaveChecked:
                 Snackbar.make(main, getString(R.string.button_settings_save_checked_hint), Snackbar.LENGTH_LONG).show();
                 break;
+            case R.id.btSettingsExportToConfig:
+                Snackbar.make(main, getString(R.string.button_settings_export_to_config_hint), Snackbar.LENGTH_LONG).show();
+                break;
+
         }
 
         return true;
@@ -267,6 +278,18 @@ public class FragmentSettings
                 if(!selected.isEmpty()) PrefUtil.setString(getContext(), LAST_CHECKED, Str.joinList(selected));
                 else PrefUtil.setString(getContext(), LAST_CHECKED, "");
                 break;
+            case R.id.btSettingsExportToConfig:
+                List<LuaSettingExtended> settings = rvAdapter.getSettingsEnable();
+                if(!settings.isEmpty()) {
+                    MockConfig config = new MockConfig();
+                    config.setName("test");
+                    config.setSettings(settings);
+                    new RenameDialogEx()
+                            .setConfig(config)
+                            .setCallback(this)
+                            .show(Objects.requireNonNull(getFragmentManager()), getString(R.string.title_config_rename_config));
+                }
+                break;
         }
 
     }
@@ -299,11 +322,14 @@ public class FragmentSettings
 
         btClearData.setOnClickListener(this);
         btClearData.setOnLongClickListener(this);
+
+        btSettingsToConfig.setOnClickListener(this);
+        btSettingsToConfig.setOnLongClickListener(this);
     }
 
     void updateExpanded() {
         isViewOpen = !isViewOpen;
-        ViewUtil.setViewsVisibility(ivExpander, isViewOpen, btProperties, btConfigs, btKill, cbUseDefault, btResetAll, btSaveChecked, btClearData);
+        ViewUtil.setViewsVisibility(ivExpander, isViewOpen, btProperties, btConfigs, btKill, cbUseDefault, btResetAll, btSaveChecked, btClearData, btSettingsToConfig);
     }
 
     @Override
@@ -332,7 +358,7 @@ public class FragmentSettings
     @Override
     public void loadData() {
         XLog.i("Starting data loader");
-        LoaderManager manager = getActivity().getSupportLoaderManager();
+        LoaderManager manager = Objects.requireNonNull(getActivity()).getSupportLoaderManager();
         manager.restartLoader(ActivityMain.LOADER_DATA, new Bundle(), dataLoaderCallbacks).forceLoad();
     }
 
@@ -341,7 +367,7 @@ public class FragmentSettings
         public Loader<SettingsDataHolder> onCreateLoader(int id, Bundle args) { return new SettingsDataLoader(getContext()).setApp(application); }
 
         @Override
-        public void onLoadFinished(Loader<SettingsDataHolder> loader, SettingsDataHolder data) {
+        public void onLoadFinished(@NonNull Loader<SettingsDataHolder> loader, SettingsDataHolder data) {
             XLog.i("onLoadFinished Data Loader Finished");
             if(data.exception == null) {
                 UiUtil.initTheme(getActivity(), data.theme);
@@ -351,13 +377,8 @@ public class FragmentSettings
                         for(LuaSettingExtended s : data.settings)
                             if(lastChecked.contains(s.getName()))
                                 s.setIsEnabled(true);
-                    }
-
-                    rvAdapter.set(data.settings, application);
-                }
-
-                swipeRefresh.setRefreshing(false);
-                progressBar.setVisibility(View.GONE);
+                    } rvAdapter.set(data.settings, application);
+                } setRefreshState(false);
             }else Snackbar.make(Objects.requireNonNull(getView()), data.exception.toString(), Snackbar.LENGTH_LONG).show();
         }
 
@@ -374,6 +395,21 @@ public class FragmentSettings
     @Override
     public void onFinish(XResult result) {
         loadData();
+    }
+
+    @Override
+    public void onConfigUpdate(ConfigTransactionResult result) {
+        if(result.hasAnySucceeded()) {
+            MockConfig config = result.getConfig();
+            Snackbar.make(main, getString(R.string.msg_settings_to_config_exporting) + " " + config.getName(), Snackbar.LENGTH_LONG).show();
+            configQue.sendConfig(
+                    getContext(),
+                    -1,
+                    config,
+                    false,
+                    false,
+                    null);
+        }
     }
 
     private static class SettingsDataLoader extends AsyncTaskLoader<SettingsDataHolder> {

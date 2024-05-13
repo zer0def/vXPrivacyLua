@@ -48,14 +48,14 @@
     <string name="menu_whats_new_button" translatable="false">Whats New!</string>
 
     <string name="whats_new" translatable="false">
-        Whats new in 1.4.2.4 Update XPL-EX (ObbedCode) v77
+        Whats new in 1.4.3.1 Update XPL-EX (ObbedCode) v1
         <![CDATA[<br><br>]]> !!!Warning this is BETA it WILL have Bugs but over time code will be cleaned and things will be fixed!!!
         <![CDATA[<br><br>]]> Privacy will never be lost I wont stop til each app is FULLY black boxed.
         <![CDATA[<br>]]>This is my Art, Quality over Quantity so be patience pls and thanks to all who are patient!.
         <![CDATA[<br>]]>Free, Open Source, No Analytics, No Servers, offline ...
         <![CDATA[<br><br>]]> Shout out to Hubert (always keeps me informed updated!) (want to hide root ? this is your man!)
         <![CDATA[<br>]]>Telegram: <![CDATA[<a href="https://t.me/HubertHub">HubertHub</a>]]>
-        <![CDATA[<br><br>]]> Shout out to AppListo (Gives me Apis to Hooks when I am lost! pls Purchase AppCloner!)
+        <![CDATA[<br><br>]]> Shout out to AppListo (Purchase AppCloner!)
         <![CDATA[<br>]]>Website: <![CDATA[<a href="https://appcloner.app/">AppCloner</a>]]>
 
         <![CDATA[<br><br>]]><![CDATA[<a href="https://t.me/xplexex">XPL-EX Announcements</a>]]>
@@ -69,7 +69,7 @@
         <![CDATA[<br>]]><![CDATA[<a href="https://xdaforums.com/t/app-vdinfos.4097379/">XDA</a>]]>
         <![CDATA[<br>]]><![CDATA[<a href="https://github.com/VD171/VD-Infos">GitHub</a>]]>
 
-        <![CDATA[<br><br>]]> 1.4.2.4 Changes v6
+        <![CDATA[<br><br>]]> 1.4.3 Changes v1
         <![CDATA[<br><br>]]>        [All]
         <![CDATA[<br>]]>    -> Improved Text View Lines using (maxLines) remove (Lines)
         <![CDATA[<br>]]>    -> Improved Reporter Code
@@ -113,6 +113,33 @@
         <![CDATA[<br>]]>    -> Added More Cell Location Hooks
         <![CDATA[<br>]]>    -> Added More Specific Unique ID Hooks
         <![CDATA[<br>]]>    -> Added Zone Randomizers (beta)
+        <![CDATA[<br>]]>    -> Added (Sensors) Hooks
+        <![CDATA[<br>]]>    -> Enhanced Properties Interceptor to work with Emulator Root Detection Hiding as well as Shell Intercept
+        <![CDATA[<br>]]>    -> Modified the Intercept Shell APIs to Set Result if Return of Hooked Function is java.lang.Process
+        <![CDATA[<br>]]>    -> Added Even more LUA APIs to use for you Script kitties !
+        <![CDATA[<br>]]>    -> Added logcat Command to Intercept
+        <![CDATA[<br>]]>    -> Added Stack Trace Hooks, to ensure Stack Trace dosnt show Traces of Hooks
+        <![CDATA[<br>]]>    -> Added more Properties (9+)
+        <![CDATA[<br>]]>        [1] gsm.device.imei0, gsm.device.imei1, gsm.device.imei
+        <![CDATA[<br>]]>        [2] persist.sys.tctPowerIccid
+        <![CDATA[<br>]]>        [3] ro.boot.wifimacaddr
+        <![CDATA[<br>]]>        [4] ro.boot.wifi_mac
+        <![CDATA[<br>]]>        [5] ro.boot.bt_mac
+        <![CDATA[<br>]]>        [6] persist.sys.imei0, persist.sys.imei1, persist.sys.imei
+        <![CDATA[<br>]]>        [7] persist.sys.verizon_test_plan_imei
+        <![CDATA[<br>]]>        [8] persist.sys.verizon_test_plan_iccid
+        <![CDATA[<br>]]>        [9] vendor.gsm.serial
+        <![CDATA[<br>]]>    -> Added Whoami Command to Intercept
+        <![CDATA[<br>]]>    -> Added UserInfo Hooks prevent reading of Device Account Profile User Name or Info
+        <![CDATA[<br>]]>    -> Added Main UI Group Dividers
+        <![CDATA[<br>]]>    -> Added Updating Assignments Dialog (Keep things looking smooth)
+        <![CDATA[<br>]]>    -> Added Option in Settings to Export Settings to a Config!
+        <![CDATA[<br>]]>    -> Added AdStir Analytics / Ads Hooks
+        <![CDATA[<br>]]>    -> Added Amazon Analytics / Ads Hooks
+        <![CDATA[<br>]]>    -> Added UMENG Analytics / Ads Hooks
+        <![CDATA[<br>]]>    -> Added Unity Analytics / Ads Hooks
+        <![CDATA[<br>]]>    -> Added AppsFlyer Analytics / Ads Hooks
+
 
         <![CDATA[<br><br>]]> 1.4.2.3 Changes
         <![CDATA[<br><br>]]>        [Coming Soon possibly next update...]
@@ -200,21 +227,22 @@
         <![CDATA[<br><br>]]>This is my Art, Quality over Quantity so be patience pls and thanks to all who are patient!.
    </string>
 
-    <string name="warning_hook_user_agent" translatable="false">If you have Installed a custom WebView on the Device Example like BroMite this hook MAY not work there for expect that. It will still work on applications that use OkHttp3 , HttpUrlConnection and GeckoWebView from Firefox. These hooks WILL not work on Chromium Based browsers no matter what like Chrome, Brave (anything that is built off of the chrome base as it uses native code to build its User Agent). Lastly using it on Such apps like DoorDash is Dumb as DoorDash uses their own type of User-Agent , if you do not spoof it correctly it can make doordash flag you. </string>
-    <string name="warning_hook_soc_ex" translatable="false">This Hook can cause Applications to Crash on Certain versions of Androids and or Devices so disable this if you have issues with the Application Crashing. Enable ONLY this hook open the App to see if this can be the reason for Application crashing. </string>
-    <string name="warning_hook_properties" translatable="false">To Control the Interception filter use the Properties UI. This hook currently right now does not Support Native Build Proper Properties Interception so if they are still getting the property despite your proper filter config then assume they are using Native methods!</string>
-    <string name="warning_hook_language" translatable="false">This will not ALWAYS work and can be unstable at times as it does target a lot of APIs that CAN be use for legitimate reasons. If you exhibit odd behaviour in the application disable this Hook!</string>
-    <string name="warning_hook_vpn_state" translatable="false">This will hide the fact that you have a VPN Enabled and Connected, but if the target application uses Server Sided methods to Detect the VPN it can not be bypassed via Hooks. This hook is a Local Detection bypass using 4 methods</string>
-    <string name="warning_hook_spoof_features" translatable="false">Enabling this Hook can cause odd behaviour in the application such as possible connection Issues. This filter out ALL (for now) device features there for when applications use this function to legitimately check if you have a Camera and or have Wifi Chip it will appear as if you do not since those are considered features.</string>
-    <string name="warning_hook_get_app" translatable="false">This will prevent the action of getting SINGLE application data, this will not filter the List of applications but it will intercept the functions that can get single pieces of data on the target application there for revealing that the app exists. HMA (Hide My App List) will block and filter the Lists this will cover everything else that is not listing of apps but getting something of A APP. You can have Whitelist mode or Blacklist mode control it all in settings.</string>
-
-    <string name="warning_hook_gsm_status" translatable="false">These hooks will only Spoof the State of Data as in it will show it as enabled despite it being disabled.</string>
-    <string name="warning_hook_embed_paypal" translatable="false">This will ATTEMPT to spoof the Environment to HELP trick Paypal payment gateways within apps that the phone its working off of is not Rooted or a Emulator. This is an ATTEMPT nothing bullet proof.</string>
-    <string name="warning_hook_intercept_shell" translatable="false">You can control the commands it will intercept (hardcoded) in the settings UI containing SHELL. If the app uses Native Shell this hook will not work!</string>
-    <string name="warning_hook_hide_environment" translatable="false">This hook will ATTEMPT to Hide if the System is an Emulator and or is Rooted. By NO means this Bulletproof or even SUPER especially if target app uses Native Detection methods. DO NOT complain if it does not Hide it for some APPS, to ensure it works the best select the (Intercept Shell, Intercept Properties, and Get Apps) Hooks. Of course combine Get Apps with HMA (Hide my App List) Get Apps Hook if Whitelist Mode is enabled will automatically block MY hardcoded list of Root packages to ensure strength put in your own list as well in settings.</string>
-
-
-    <string name="warning_hook_get_location" translatable="false">Get Location will will allow control over the target application if it is ALLOWED to get the Location versus Spoofing or Spoof Location will imply that you allow it to get location now you want to spoof it.</string>
+    <string name="warning_hook_ad_analytics" translatable="false">This will attempt to disable the analytics libraries from being loaded into the application. This does not support all (80+) right now, so be patient until I get around to all of them. If analytics are still being loaded in or ads are still appearing, it means they are not supported for now. This can also cause applications to crash if they heavily depend on the analytics/ad library. IF Application Crashes go into the New HOOK UI and disable some of the Ad Analytics Hooks test app rinse and repeat until you find the Hook that is crashing it. I WILL not help with this as Disabling ads and analytics can crash some apps so figure out your self what is causing it disable it!</string>
+    <string name="warning_hook_ad_analytics_spoof" translatable="false">This will not disable the analytics/ad libraries from being loaded in but will spoof unique/critical IDs and/or keys within the library to make analytics more difficult.</string>
+    <string name="warning_hook_embed_paypal" translatable="false">This will attempt to spoof the environment to help trick PayPal payment gateways within apps into thinking the phone is not rooted or an emulator. This is an attempt, not bulletproof.</string>
+    <string name="warning_hook_get_app" translatable="false">This will prevent the action of getting single application data. It will not filter the list of applications but will intercept the functions that can get single pieces of data on the target application, thus revealing that the app exists. HMA (Hide My App List) will block and filter the lists. This will cover everything else that is not listing apps but getting something from an app. You can have whitelist mode or blacklist mode, controlled in settings.</string>
+    <string name="warning_hook_get_apps_ex" translatable="false">Using this will most likely block all applications to be seen except usually the current app being hooked. That being said I was too behind to sit here and implement all these APIs to the new system from M66Bs so as an option you can select this instead of the Get.Apps Hooks I have made. No need to use both as this one will most likely override the other and display nothing versus the other one using a filter. Do not ask about this Hook or that I should update it , as I am aware and working on it so be patient or use Get.Apps Combined with HMA (Hide my applist) thanks!.</string>
+    <string name="warning_hook_get_location" translatable="false">Get Location will allow control over the target application if it is allowed to get the location versus spoofing it. Spoof Location will imply that you allow it to get the location, but you want to spoof it.</string>
+    <string name="warning_hook_gsm_status" translatable="false">These hooks will only spoof the state of data, showing it as enabled despite being disabled.</string>
+    <string name="warning_hook_hide_environment" translatable="false">This hook will attempt to hide if the system is an emulator and/or is rooted. By no means is this bulletproof or even super effective, especially if the target app uses native detection methods. Do not complain if it does not hide for some apps. To ensure it works the best, select the (Intercept Shell, Intercept Properties, and Get Apps) hooks. Combine Get Apps with HMA (Hide My App List). The Get Apps hook, if whitelist mode is enabled, will automatically block my hardcoded list of root packages. To ensure strength, add your own list in settings. Finally, in settings, enable (hide.root) and (hide.emulator).</string>
+    <string name="warning_hook_id_user" translatable="false">Enabling this will spoof the user via Activity Manager but not using the command `whoami`. To ensure this works, enable the `whoami` command intercept in settings, then select the Intercept Shell hook group. The Activity Manager method will also only be useful for applications that have higher-level privileges, either via system or root.</string>
+    <string name="warning_hook_intercept_shell" translatable="false">You can control the commands it will intercept (hardcoded) in the settings UI containing shell. If the app uses native shell, this hook will not work.</string>
+    <string name="warning_hook_language" translatable="false">This may not always work and can be unstable at times, as it targets many APIs that can be used for legitimate reasons. If you notice odd behavior in the application, disable this hook.</string>
+    <string name="warning_hook_properties" translatable="false">To control the interception filter, use the Properties UI. This hook currently does not support native build proper properties interception. If the property is still being intercepted despite your filter configuration, assume they are using native methods.</string>
+    <string name="warning_hook_soc_ex" translatable="false">This hook can cause applications to crash on certain versions of Android and/or devices. Disable this if you experience issues with the application crashing. Enable only this hook, open the app, and see if it causes the application to crash.</string>
+    <string name="warning_hook_spoof_features" translatable="false">Enabling this hook can cause odd behavior in the application, such as possible connection issues. This filter removes all device features for now. When applications use this function to check if you have a camera or Wi-Fi chip, it will appear as if you do not, since those are considered features.</string>
+    <string name="warning_hook_user_agent" translatable="false">If you have installed a custom WebView on the device, such as BroMite, this hook may not work as expected. It will still work on applications that use OkHttp3, HttpUrlConnection, and GeckoWebView from Firefox. These hooks will not work on Chromium-based browsers, such as Chrome and Brave, since they use native code to build their user agents. Lastly, using this on apps like DoorDash is unwise, as DoorDash uses its own type of user agent. If you do not spoof it correctly, it can make DoorDash flag you.</string>
+    <string name="warning_hook_vpn_state" translatable="false">This will hide the fact that you have a VPN enabled and connected. However, if the target application uses server-side methods to detect the VPN, it cannot be bypassed via hooks. This hook is a local detection bypass using four methods.</string>
 
 
     <string name="title_hook_warning" translatable="false">Hook Group Warning!</string>
@@ -355,7 +383,10 @@
     <string name="button_settings_reset_data" translatable="false">Clear Data</string>
     <string name="button_settings_save_checked_hint" translatable="false">Save what is Checked so next time you open the UI it will have those selections checked.</string>
     <string name="button_settings_save_checked" translatable="false">Save Checked</string>
+    <string name="button_settings_export_to_config_hint" translatable="false">Export the Selected Settings to a Config to be used in the Configs UI or for other out</string>
+    <string name="button_settings_export_to_config" translatable="false">Export to Config</string>
 
+    <string name="msg_settings_to_config_exporting" translatable="false">Exporting Settings to a Config</string>
 
 
     <string name="check_prop_hide_hint" translatable="false">Hide Specific Property from Build Props</string>
@@ -406,6 +437,8 @@
     <string name="title_hook_maxapk" translatable="false">Max. APK</string>
     <string name="title_hook_exclude" translatable="false">Exclude packages</string>
     <string name="title_hook_settings" translatable="false">Settings</string>
+    <string name="title_deploy_hooks" translatable="false">Updating Hook Assignments...</string>
+
 
     <string name="menu_hooks" translatable="false">Hook App Control</string>
     <string name="menu_props" translatable="false">Prop Values</string>
@@ -417,13 +450,14 @@
     <string name="menu_save" translatable="false">Save</string>
     <string name="menu_cpumaps" translatable="false">CPU Maps</string>
 
-
     <string name="msg_no_service">Module not running or updated</string>
     <string name="msg_review_settings">Review privacy settings</string>
     <string name="msg_usage">Restricted \'%1$s\'</string>
     <string name="msg_exception">Error in %1$s</string>
     <string name="msg_restrict_sure">Are you sure to toggle \'%1$s\' for all apps?</string>
     <string name="msg_no_browser">No browser available to open link</string>
+    <string name="msg_deploy_succeeded"  translatable="false">Updating Hook Assignments Succeeded!</string>
+
 
     <string name="group_determine_activity">Determine activity</string>
     <string name="group_get_applications">Get applications</string>

@@ -1,5 +1,354 @@
 [
   {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "ActivityManager.getRecentTasks",
+    "author": "M66B",
+    "className": "android.app.ActivityManager",
+    "methodName": "getRecentTasks",
+    "parameterTypes": [
+      "int",
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "maxSdk": 20,
+    // Android L returns filtered data
+    "luaScript": "@generic_empty_list"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "ActivityManager.getRunningAppProcesses",
+    "author": "M66B",
+    "className": "android.app.ActivityManager",
+    "methodName": "getRunningAppProcesses",
+    "parameterTypes": [
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 3,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "ActivityManager.getRunningServices",
+    "author": "M66B",
+    "className": "android.app.ActivityManager",
+    "methodName": "getRunningServices",
+    "parameterTypes": [
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "maxSdk": 25,
+    // Android O returns filtered data
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "ActivityManager.getRunningTasks",
+    "author": "M66B",
+    "className": "android.app.ActivityManager",
+    "methodName": "getRunningTasks",
+    "parameterTypes": [
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "maxSdk": 20,
+    // Android L returns filtered data
+    "luaScript": "@generic_empty_list"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "AppWidgetManager.getInstalledProviders",
+    "author": "M66B",
+    "className": "android.appwidget.AppWidgetManager",
+    "methodName": "getInstalledProviders",
+    "parameterTypes": [
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 3,
+    "luaScript": "@generic_empty_list"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "AppWidgetManager.getInstalledProvidersForPackage",
+    "author": "M66B",
+    "className": "android.appwidget.AppWidgetManager",
+    "methodName": "getInstalledProvidersForPackage",
+    "parameterTypes": [
+      "java.lang.String",
+      "android.os.UserHandle"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 26,
+    "luaScript": "@generic_empty_list"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "AppWidgetManager.getInstalledProvidersForProfile",
+    "author": "M66B",
+    "className": "android.appwidget.AppWidgetManager",
+    "methodName": "getInstalledProvidersForProfile",
+    "parameterTypes": [
+      "android.os.UserHandle"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 21,
+    "luaScript": "@generic_empty_list"
+  },
+
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "Intent.createFromParcel/package",
+    "author": "M66B",
+    "className": "android.content.Intent",
+    "methodName": "CREATOR:createFromParcel",
+    "parameterTypes": [
+      "android.os.Parcel"
+    ],
+    "returnType": "android.content.Intent",
+    "minSdk": 1,
+    "luaScript": "@intent_createfromparcel"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.getInstalledApplications",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "getInstalledApplications",
+    "parameterTypes": [
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.getInstalledApplications.33",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "getInstalledApplications",
+    "parameterTypes": [
+      "android.content.pm.PackageManager$ApplicationInfoFlags"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 33,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.getInstalledPackages",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "getInstalledPackages",
+    "parameterTypes": [
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.getInstalledPackages.33",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "getInstalledPackages",
+    "parameterTypes": [
+      "android.content.pm.PackageManager$PackageInfoFlags"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 33,
+    "luaScript": "@generic_filter_by_uid"
+  },
+
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.getPackagesHoldingPermissions",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "getPackagesHoldingPermissions",
+    "parameterTypes": [
+      "[Ljava.lang.String;",
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 18,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.getPackagesHoldingPermissions.33",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "getPackagesHoldingPermissions",
+    "parameterTypes": [
+      "[Ljava.lang.String;",
+      "android.content.pm.PackageManager$PackageInfoFlags"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 33,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.queryIntentActivities",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "queryIntentActivities",
+    "parameterTypes": [
+      "android.content.Intent",
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.queryIntentActivities.33",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "queryIntentActivities",
+    "parameterTypes": [
+      "android.content.Intent",
+      "android.content.pm.PackageManager$ResolveInfoFlags"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 33,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.getPreferredPackages",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "getPreferredPackages",
+    "parameterTypes": [
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.queryIntentActivityOptions",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "queryIntentActivityOptions",
+    "parameterTypes": [
+      "android.content.ComponentName",
+      "[Landroid.content.Intent;",
+      "android.content.Intent",
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 1,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.queryIntentActivityOptions.33",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "queryIntentActivityOptions",
+    "parameterTypes": [
+      "android.content.ComponentName",
+      "java.util.List",
+      "android.content.Intent",
+      "android.content.pm.PackageManager$ResolveInfoFlags"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 33,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.queryIntentContentProviders",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "queryIntentContentProviders",
+    "parameterTypes": [
+      "android.content.Intent",
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 19,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.queryIntentContentProviders.33",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "queryIntentContentProviders",
+    "parameterTypes": [
+      "android.content.Intent",
+      "android.content.pm.PackageManager$ResolveInfoFlags"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 33,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.queryIntentServices",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "queryIntentServices",
+    "parameterTypes": [
+      "android.content.Intent",
+      "int"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 19,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  {
+    "collection": "PrivacyEx",
+    "group": "Get.Apps.Ex",
+    "name": "PackageManager.queryIntentServices.33",
+    "author": "M66B",
+    "className": "android.content.pm.PackageManager",
+    "methodName": "queryIntentServices",
+    "parameterTypes": [
+      "android.content.Intent",
+      "android.content.pm.PackageManager$ResolveInfoFlags"
+    ],
+    "returnType": "java.util.List",
+    "minSdk": 33,
+    "luaScript": "@generic_filter_by_uid"
+  },
+  
+  
+  
+
+
+  {
     "builtin": true,
     "collection": "PrivacyEx",
     "group": "Get.Apps",
@@ -235,8 +584,6 @@
     "luaScript": "@pm_filter_packagename_seven",
     "settings":["applications.allow.list"]
   },
-
-
 
   {
     "builtin": true,

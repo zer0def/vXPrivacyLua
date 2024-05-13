@@ -98,34 +98,38 @@
             android:paddingBottom="15dp">
 
             <Button
+                android:id="@+id/btSettingsExportToConfig"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_remix_arrow_up_line"
+                android:text="@string/button_settings_export_to_config"
+                app:layout_constraintEnd_toEndOf="@+id/btSettingsClearData"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/btSettingsClearData"
+                app:layout_constraintTop_toBottomOf="@+id/btSettingsClearData" />
+
+            <Button
                 android:id="@+id/btSettingsSaveChecked"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="150dp"
-                android:layout_marginEnd="50dp"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_remix_check_double_fill"
                 android:text="@string/button_settings_save_checked"
-                app:layout_constraintBottom_toTopOf="@+id/btSettingsResetAll"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btSettingsToConfigs"
-                app:layout_constraintStart_toStartOf="@+id/btSettingsKillApp"
-                app:layout_constraintTop_toBottomOf="@+id/btSettingsClearData" />
+                app:layout_constraintEnd_toEndOf="@+id/btSettingsResetAll"
+                app:layout_constraintStart_toStartOf="@+id/btSettingsResetAll"
+                app:layout_constraintTop_toBottomOf="@+id/btSettingsResetAll" />
 
             <Button
                 android:id="@+id/btSettingsClearData"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="150dp"
-                android:layout_marginEnd="50dp"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_remix_delete_bin_3_line"
                 android:text="@string/button_settings_reset_data"
-                app:layout_constraintBottom_toBottomOf="@+id/btSettingsKillApp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btSettingsToConfigs"
-                app:layout_constraintStart_toStartOf="@+id/btSettingsKillApp"
-                app:layout_constraintTop_toTopOf="@+id/btSettingsKillApp" />
+                app:layout_constraintEnd_toEndOf="@+id/btSettingsSaveChecked"
+                app:layout_constraintStart_toStartOf="@+id/btSettingsSaveChecked"
+                app:layout_constraintTop_toBottomOf="@+id/btSettingsSaveChecked" />
 
             <Button
                 android:id="@+id/btSettingsResetAll"
@@ -134,11 +138,9 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_remix_logout_circle_line"
                 android:text="@string/button_reset_settings"
-                app:layout_constraintBottom_toBottomOf="@+id/btSettingsKillApp"
                 app:layout_constraintEnd_toEndOf="@+id/btSettingsToConfigs"
                 app:layout_constraintStart_toStartOf="@+id/btSettingsToConfigs"
-                app:layout_constraintTop_toBottomOf="@+id/btSettingsToConfigs"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/btSettingsToConfigs" />
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cbUseDefaultSettings"
@@ -271,7 +273,9 @@
             android:clipToPadding="false"
             android:paddingBottom="16dp"
             android:scrollbarStyle="outsideOverlay"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical" >
+
+        </androidx.recyclerview.widget.RecyclerView>
 
     <!-- FloatingActionButton and SwipeRefreshLayout -->
 

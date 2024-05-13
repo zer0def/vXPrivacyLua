@@ -101,6 +101,7 @@ public class FragmentMain extends Fragment implements ILoader {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View main = inflater.inflate(R.layout.restrictions, container, false);
 
+        //Ensure collections
         List<String> collections = XLuaCall.getCollections(getContext());
         if(!collections.isEmpty()) {
             if(collections.contains("Privacy")) {
@@ -108,10 +109,8 @@ public class FragmentMain extends Fragment implements ILoader {
                 if(!privacyWarning) {
                     PrefUtil.setBoolean(getContext(), "privacyWarn", true);
                     collections.remove("Privacy");
-                    if(collections.isEmpty())
-                        collections.add("PrivacyEx");
-
-                    XLuaCall.putSetting(getContext(), "collection", StringUtil.join(collections));
+                    if(collections.isEmpty()) collections.add("PrivacyEx");
+                    XLuaCall.putSetting(getContext(), "collection", Str.joinList(collections));
                     new PrivacyGroupWarningDialog()
                             .show(Objects.requireNonNull(getFragmentManager()), getString(R.string.title_collection_privacy));
                 }
@@ -123,7 +122,7 @@ public class FragmentMain extends Fragment implements ILoader {
         tvRestrict = main.findViewById(R.id.tvRestrict);
         grpApplication = main.findViewById(R.id.grpApplication);
 
-        int colorAccent = XUtil.resolveColor(getContext(), R.attr.colorAccent);
+        int colorAccent = XUtil.resolveColor(Objects.requireNonNull(getContext()), R.attr.colorAccent);
 
         swipeRefresh = main.findViewById(R.id.swipeRefresh);
         swipeRefresh.setColorSchemeColors(colorAccent, colorAccent, colorAccent);
@@ -141,7 +140,7 @@ public class FragmentMain extends Fragment implements ILoader {
         rvApplication.setHasFixedSize(false);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity()) {
             @Override
-            public boolean onRequestChildFocus(RecyclerView parent, RecyclerView.State state, View child, View focused) {
+            public boolean onRequestChildFocus(@NonNull RecyclerView parent, @NonNull RecyclerView.State state, @NonNull View child, View focused) {
                 return true;
             }
         };
@@ -169,7 +168,6 @@ public class FragmentMain extends Fragment implements ILoader {
             private void updateSelection() {
                 XUiGroup selected = (XUiGroup) spGroup.getSelectedItem();
                 String group = (selected == null ? null : selected.name);
-
                 if (group == null ? spGroup.getTag() != null : !group.equals(spGroup.getTag())) {
                     Log.i(TAG, "Select group=" + group);
                     spGroup.setTag(group);
@@ -257,10 +255,6 @@ public class FragmentMain extends Fragment implements ILoader {
         @Override
         public void onLoadFinished(@NonNull Loader<DataHolder> loader, DataHolder data) {
             if (data.exception == null) {
-                //ActivityBase activity = (ActivityBase) getActivity();
-                //if (!data.theme.equals(activity.getThemeName()))
-                //    activity.recreate();
-
                 UiUtil.initTheme(getActivity(), data.theme);
                 spAdapter.clear();
                 spAdapter.addAll(data.groups);
@@ -274,7 +268,7 @@ public class FragmentMain extends Fragment implements ILoader {
                 grpApplication.setVisibility(View.VISIBLE);
 
                 //This will determine if its all or a actual name
-                //If a actual grouup is selected then show the restrict button
+                //If a actual group is selected then show the restrict button
                 XUiGroup selected = (XUiGroup) spGroup.getSelectedItem();
                 String group = (selected == null ? null : selected.name);
                 tvRestrict.setVisibility(group == null ? View.VISIBLE : View.GONE);
@@ -386,11 +380,11 @@ public class FragmentMain extends Fragment implements ILoader {
         }
     }
 
-    private BroadcastReceiver packageChangedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver packageChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received " + intent);
-            String packageName = intent.getData().getSchemeSpecificPart();
+            String packageName = Objects.requireNonNull(intent.getData()).getSchemeSpecificPart();
             int uid = intent.getIntExtra(Intent.EXTRA_UID, -1);
             Log.i(TAG, "pkg=" + packageName + ":" + uid);
             loadData();

@@ -1,7 +1,7 @@
 [
   {
     "collection": "PrivacyEx",
-    "group": "Read.Clipboard",
+    "group": "Get.Clipboard",
     "name": "ClipData.createFromParcel",
     "author": "M66B x OBC",
     "className": "android.content.ClipData",
