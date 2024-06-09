@@ -7,7 +7,7 @@ Hooking + Privacy Framework For Android 6.0 +
 
 XPL-EX
 ------------
-
+<br>All though this is said to be a fork, this point of the Project it is taken a complete different direction and most code replaced over 50k lines while around 5k lines of the original code remain. I don't feel need at the moment to convert it to my own REPO so for now it will be linked to the base as a fork!<br>
 To understand it easily, XPL-EX is an application that conceals other applications from accessing any information about your device, whether the data is unique or generic. This project was originally forked from M66B's work, although, at this point, very few parts of the original code remain. Most of what exists now has been modified or added by me (over 40,000 lines modified/added). I further developed this app not just to fulfill a childhood dream but also to challenge the companies that trade our data, aiming to inspire hope for our future privacy. I seek no financial gain, only privacy for future generations.<br><br>
 <div align="center">We will prevail. Lets give a big F*ck you to the companies and show the power of XPL-EX!!! </div>
 <br><br>
@@ -51,6 +51,7 @@ Help
 ------------
 
 [XPL DEFINE](https://github.com/M66B/XPrivacyLua/blob/master/DEFINE.md) <br>
+[XPL-EX UI Help Docs or Usage Help Docs (How to use this damn f*cking app)](https://github.com/0bbedCode/XPL-EX/blob/new/APPHELP.md) <br>
 [XPL-EX API](https://github.com/0bbedCode/XPL-EX/blob/new/APIHELP.md) <br>
 [XPL-EX Examples](https://github.com/0bbedCode/XPL-EX/blob/new/LUAHELP.md) <br>
 [Hooked Apis in XPL-EX](https://github.com/0bbedCode/XPL-EX/blob/main/HOOKED.md) <br>
