@@ -10,7 +10,7 @@ import eu.faircode.xlua.random.IRandomizer;
 import eu.faircode.xlua.random.elements.ISpinnerElement;
 
 public class Random3DigitNumber implements IRandomizer {
-    private static final List<String> SETTINGS = Arrays.asList("gsm.operator.mnc", "gsm.operator.mcc", "gsm.operator.id", "android.build.radio");
+    private static final List<String> SETTINGS = Arrays.asList("gsm.operator.mnc", "gsm.operator.mcc", "android.build.radio");
 
     @Override
     public boolean isSetting(String setting) { return SETTINGS.contains(setting); }

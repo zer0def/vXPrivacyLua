@@ -27,7 +27,6 @@ import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Process;
 import android.os.SystemClock;
 import android.util.Log;
@@ -35,14 +34,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaError;
 import org.luaj.vm2.Prototype;
 import org.luaj.vm2.Varargs;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
@@ -70,11 +67,9 @@ import eu.faircode.xlua.hooks.LuaHookResolver;
 import eu.faircode.xlua.logger.XLog;
 import eu.faircode.xlua.logger.XReport;
 import eu.faircode.xlua.random.GlobalRandoms;
-import eu.faircode.xlua.random.IRandomizer;
-import eu.faircode.xlua.utilities.BundleUtil;
 
 import eu.faircode.xlua.api.hook.XLuaHook;
-import eu.faircode.xlua.utilities.ReflectUtil;
+import eu.faircode.xlua.utilities.ReflectUtilEx;
 
 public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
     private static final String TAG = "XLua.XCoreStartup";
@@ -110,6 +105,31 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
+                        // call(String method, String name, Bundle args)
+                        /*StringBuilder sb = new StringBuilder();
+                        sb.append("CALLING UID: " + Binder.getCallingUid() + "\n");
+                        try {
+                            sb.append((String)param.args[0] + "\n");
+                        }catch (Exception e) { }
+                        try {
+                            sb.append((String)param.args[1] + "\n");
+                        }catch (Exception e) { }
+                        try {
+                            Bundle b = (Bundle) param.args[2];
+                            for(String s : b.keySet()) {
+                               sb.append("KEY=" + s + "\n");
+                               try {
+                                   sb.append("VALUE=" + b.getString(s) + "\n");
+                               }catch (Exception ie) { }
+                            }
+                            //sb.append(b.toString());
+                        }catch (Exception e) { }
+                        Log.i(TAG, "CALL CALL CALL\n" + sb.toString());*/
+                        //GET_secure
+                        //android_id
+
+                        //_track_generation
+                        //We can target this!!
                         XCommandBridgeStatic.handeCall(param, lpparam.packageName);
                     }
                 });
@@ -120,9 +140,57 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
+                        //query(Uri uri, String[] projection, String where, String[] whereArgs,
+                        //            String order)
+                        /*StringBuilder sb = new StringBuilder();
+                        try {
+                            Uri uri = (Uri) param.args[0];
+                            sb.append("URI => " + uri.getAuthority() + "\n");
+                        }catch (Exception e) { }
+                        try {
+                            String[] projection = (String[]) param.args[1];
+                            sb.append("Projection => " +  Str.joinArray(projection) + "\n");
+                        }catch (Exception e) { }
+                        try {
+                            String where = (String)param.args[2];
+                            sb.append("Where => " + where + "\n");
+                        }catch (Exception e) { }
+                        try {
+                            String[] whereArgs = (String[]) param.args[3];
+                            sb.append("whereArgs => " + Str.joinArray(whereArgs) + "\n");
+                        }catch (Exception e) { }
+                        try {
+                            String order = (String) param.args[4];
+                            sb.append("Order => " + order);
+                        }catch (Exception e) { }
+
+                        Log.i(TAG, "QUERY QUERY\n" + sb.toString());*/
                         XCommandBridgeStatic.handleQuery(param, lpparam.packageName);
                     }
                 });
+
+        /*XposedBridge.hookMethod(
+                clsSet.getMethod("getAllSecureSettings", Integer.class, String[].class) ,
+                new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        int uid = (int)param.args[0];
+                        Log.i(TAG, "GETTING SETTINGS SECURE: " + uid);
+                        super.beforeHookedMethod(param);
+                    }
+                });
+
+        XposedBridge.hookMethod(
+                clsSet.getMethod("getSecureSetting", String.class, int.class),
+                new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        String name = (String)param.args[0];
+                        int uid = (int)param.args[1];
+                        Log.i(TAG, "GET SETTING SECURE: " + uid + " > " + name);
+                        super.beforeHookedMethod(param);
+                    }
+                });*/
     }
 
     private void hookAndroid(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -375,7 +443,7 @@ public class XLua implements IXposedHookZygoteInit, IXposedHookLoadPackage {
                 }
                 if (BuildConfig.DEBUG) XReport.install(hook, install, context);
             }catch (Throwable fe) {
-                if (hook.isOptional() && ReflectUtil.isReflectError(fe)) XLog.e("Optional Hook=" + hook.getId() + " class=" + fe.getClass().getName(), fe, true);
+                if (hook.isOptional() && ReflectUtilEx.isReflectError(fe)) XLog.e("Optional Hook=" + hook.getId() + " class=" + fe.getClass().getName(), fe, true);
                 else XReport.installException(hook, fe, context);
             }
         }
