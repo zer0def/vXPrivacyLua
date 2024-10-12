@@ -1,18 +1,10 @@
 # XPL-EX
 Hooking + Privacy Framework For Android 6.0 +
 
-
-![evangelion kw-23-03-2024-0001](https://github.com/0bbedCode/XPL-EX/assets/114315756/6181c2a8-adc6-4d5a-b81c-cbf3f768c709)
-
-
 XPL-EX
 ------------
-<br>All though this is said to be a fork, this point of the Project it is taken a complete different direction and most code replaced over 50k lines while around 5k lines of the original code remain. I don't feel need at the moment to convert it to my own REPO so for now it will be linked to the base as a fork!<br>
+All though this is said to be a fork, this point of the Project it is taken a complete different direction and most code replaced over 50k lines while around 5k lines of the original code remain. I don't feel need at the moment to convert it to my own REPO so for now it will be linked to the base as a fork!<br>
 To understand it easily, XPL-EX is an application that conceals other applications from accessing any information about your device, whether the data is unique or generic. This project was originally forked from M66B's work, although, at this point, very few parts of the original code remain. Most of what exists now has been modified or added by me (over 40,000 lines modified/added). I further developed this app not just to fulfill a childhood dream but also to challenge the companies that trade our data, aiming to inspire hope for our future privacy. I seek no financial gain, only privacy for future generations.<br><br>
-<div align="center">We will prevail. Lets give a big F*ck you to the companies and show the power of XPL-EX!!! </div>
-<br><br>
-
-
 
 XPL-EX is a hooking framework designed for privacy, arguably the best privacy-focused Xposed application for Android. It offers numerous hooks, significantly more than its competitors, and it is entirely open-source and free. No internet connection is required, no background analytics, no logging to servers – nothing! Just pure Java Android native UI, no authentication, all free and open-source.
 
@@ -23,11 +15,6 @@ We live in a world where applications consistently collect and sell user data. I
 Beyond privacy, this app serves various other purposes, allowing you to manipulate target applications if you know how to write LUA (the scripts executed within the hooks use LUA). XPL-EX is more than just a privacy tool; it's a comprehensive hooking framework that allows users to define hooks dynamically within the app.
 
 As of now (March 26, 2024), XPL-EX only supports Java hooks, not native hooks. However, since most data requests are served through Java APIs, native APIs are less crucial (even with JNI, the execution still transitions through Java, where XPL-EX can intercept). In the future, XPL-EX plans to support native hooking, aiming to be an all-in-one hooking solution and the best application for protecting privacy from other apps.
-
-<br><br>
-Me
-------------
-I'm not a professional outside work environments. Away from professional settings, I pursue what pleases me, in the manner I choose, and at my convenience. My focus isn't on maintaining a professional facade; instead, I wish to showcase my art, my work, and my passion. My identity as an individual is secondary to what I create and contribute. I aim to enlighten and inspire, to demystify the seemingly incomprehensible, and to share knowledge. I am committed to learning whatever is necessary, hoping others will also pursue learning and achieve anything they aspire to. My journey has included reverse engineering, obfuscation, malware development, app development, Android game modding, among other skills. Time is the one commodity you cannot buy, sell, reverse, or trade. You can only spend it—so spend it on what your heart desires, and you will lead a fulfilling life.<br>Ps yes top half was refined with CHAT GPT ikik again im not professional :)<br><br><div align="center"> <3 Much love from ObbedCode </div> <br>
 
 In App
 ------------
@@ -51,7 +38,7 @@ Help
 ------------
 
 [XPL DEFINE](https://github.com/M66B/XPrivacyLua/blob/master/DEFINE.md) <br>
-[XPL-EX UI Help Docs or Usage Help Docs (How to use this damn f*cking app)](https://github.com/0bbedCode/XPL-EX/blob/new/APPHELP.md) <br>
+[XPL-EX UI Help Docs or Usage Help Docs (How to use this app)](https://github.com/0bbedCode/XPL-EX/blob/new/APPHELP.md) <br>
 [XPL-EX API](https://github.com/0bbedCode/XPL-EX/blob/new/APIHELP.md) <br>
 [XPL-EX Examples](https://github.com/0bbedCode/XPL-EX/blob/new/LUAHELP.md) <br>
 [Hooked Apis in XPL-EX](https://github.com/0bbedCode/XPL-EX/blob/main/HOOKED.md) <br>
@@ -151,9 +138,6 @@ Installation
 
 LSPosed: please make sure that any app you want to restrict is [in the 'scope'](https://github.com/LSPosed/LSPosed/wiki/How-to-use-it#install--activate-modules) of LSposed.
 
-
-
-
 Frequently Asked Questions
 --------------------------
 
@@ -161,69 +145,17 @@ See [here](https://github.com/0bbedCode/XPL-EX/blob/master/FAQ.md) for a list of
 
 
 Donate
-------------
+------
 
-<br>Me (ObbedCode)<br><br>
-BTC:<br>
-bc1q9daenk4sdfcxnqxducrxy69zfyruf6un5wytge
-<br><br>
-XMR:<br>
-489AB9gBxvKDbF1cJXXpFnWZ7ZPKsp6JWdZrxaytS4ceZV53fQ1Wj9nWBAotYEWGwPZByJyySmwPD1q8F1g7Pags6gHcKHa
-<br><br>
-ETH:<br>
-0x4282Bc864B29Dbd62B9A9960A71e8343eDA44707
-<br><br>
-LTC:<br>
-ltc1qlhlnfspn6j8v5s9xxp297zq2m3vhlk9dlrrvvk
-<br><br>
-BCH<br>
-bitcoincash:qz5scaha4gyh92pjw5z5uhuy33sm2rdh5v0tpw2ggm
-<br><br>
+### ObbedCode
 
-<br> M66B
+- BTC: `bc1q9daenk4sdfcxnqxducrxy69zfyruf6un5wytge`
+- XMR: `489AB9gBxvKDbF1cJXXpFnWZ7ZPKsp6JWdZrxaytS4ceZV53fQ1Wj9nWBAotYEWGwPZByJyySmwPD1q8F1g7Pags6gHcKHa`
+- ETH: `0x4282Bc864B29Dbd62B9A9960A71e8343eDA44707`
+- LTC: `ltc1qlhlnfspn6j8v5s9xxp297zq2m3vhlk9dlrrvvk`
+- BCH: `bitcoincash:qz5scaha4gyh92pjw5z5uhuy33sm2rdh5v0tpw2ggm`
 
-https://lua.xprivacy.eu/<br>
-https://github.com/M66B/XPrivacyLua
+### M66B
 
-Thanks M66B for what you have left us now I will continue <3 
-
-
-More From Obbed
-------------
-
-This app alone is not enough to "hide" you more so combine it with a Complex Security System. XPL-EX will only protect apps from identifying you in any way.
-
-***[AFWall+]*** with AFWall Anti Leak Module (Dont allow anything through that firewall not even the kernel) <br>
-***[AppOps]*** rikka.appops to have Permission Control over your Apps (further restrict them)<br>
-***[OVPN/Mullvad]*** Super Private <3 or Just use TOR ORBot (AFWalls has ability block those apps with allowed internet to only use the Internet if TOR is Connected)<br>
-***[Hail]*** Disable / Freeze System Apps such as Google Play Services, Google Play etc <br>
-***[Greenify]*** 5.0 Beta (because it is still useful all apps need to die in the background no matter)<br>
-***[AdAway]*** Open Source System Wide AdBlocker allows you to add Repos to Block custom or more Trackers / Ads. (SYSTEM WIDE) so its super cool<br>
-***[BromiteWebview]*** Modifed System Webview with More Pirvacy<br>
-***[Sensor Disabler]*** Sensors Matter , Disable them all or Mock them ! Ps newer versions of Android has a Disable all Sensors on the Device Button<br>
-***[Camera/Mic Blocker]*** Or you have have a phyisical pop up camera like the one seen on the Oneplus7 Pro to truly know if your being peeped on. Newer versions of Android also notifys you when your MIC or CAM are being used<br>
-***[SD Maid]*** Version before there new version is good at being a System UTIL but also shows you all apps that start when the Phone Starts allowing you to disable them<br>
-***[Hide My Applist]*** Best Xposed App to Hide Apps from other Apps<br>
-***[Custom Router Firmware w VPN & Firewall & AdBlock]***  OpenWRT <3<br>
-***[Custom ROM + Custom kernel]*** Open Source Cool ROM with a Cool String Kernel >:)<br><br>
-
-Once again do not let anything through that firewall not even on that list (AdAway, VPN, Webview) sure but the rest dont even let those through the great wall
-Ps its not poor security having root if the user isnt the user to get click jacked or tricked into installing fake modules... dont be dumb<br><br>
-
-<br><br>Songs I like:<br>
-
-[Until the End](https://www.youtube.com/watch?v=mvZJAmA5ct0)<br>
-[Hell on Earth](https://www.youtube.com/watch?v=B1EOkFeD3Ho)<br>
-[Ill](https://www.youtube.com/watch?v=ZgEH6lUYy-E)<br>
-[Sonne](https://www.youtube.com/watch?v=StZcUAPRRac)<br>
-[Vanished](https://www.youtube.com/watch?v=6e6Hj7MwWaI)<br>
-[Sleep Mode](https://www.youtube.com/watch?v=sl2Z1qGOUhY)<br>
-[Morning Dew](https://www.youtube.com/watch?v=f8FrZUF7xF0)<br>
-[Aint Heard About you](https://www.youtube.com/watch?v=G7_v_WetRAI)<br>
-[F*cking your Culture](https://www.youtube.com/watch?v=nZgIFDnJfTA)<br>
-[The Call of Ktulu](https://www.youtube.com/watch?v=3vSH9pMzHm0)<br>
-
-Cool Band
-
-
-![292759617-b59f1a2a-a4b5-4276-97f1-796175aee834](https://github.com/0bbedCode/XPL-EX/assets/114315756/17a59b9d-6e1e-43e9-9aa8-0cccb81a1164)
+- https://lua.xprivacy.eu/
+- https://github.com/M66B/XPrivacyLua

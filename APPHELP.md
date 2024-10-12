@@ -1,5 +1,4 @@
-
-# How can I use this Damn F*cking App
+# How can I use this app
 <br><br>
 ## Issues with Simplicity
 Due to the Complex nature of the Application (it allowing for Dynamic Definition of Hooks, ability to have 90% Control over Hooks and its Behaviour) it makes it difficult to "make the application more simple". Also due to its size of elements it contributes to the difficult in "making it simple".<br>
