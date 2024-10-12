@@ -17,20 +17,6 @@ When Comparing with GrapheneOS like Projects, XPL-EX will give you more Anti Tra
 
 <br>
 
-Motivation
-------------
-
-<details>
-<summary>Click here for Blah Blah ....  </summary>
-  Some reason I have always been Schizo from a young age. That being Said when Growing up I always wanted an Application for Xposed that would be the ultimate All in One Solutions for manipulating your Device Identifiers from Applications. During these Times many years ago I would Layer as Many Xposed Modules over to Spoof as Many IDs, rendering a lot of instability, all the while these Applications to Spoof your Device Identifiers also had Advertisements and Tracking built into the App how Ironic.<br><br>
-Many years later here I am, following in the path of the Computer, Ive become less paranoid now as I am trying to be a more open person. I still had a vision and when I Seen M66B will Discontinue XPrivacyLua my I seized the moment to use this app for a base of what I visioned.<br>
-Now with the support from the Community, I shall build a Powerful Application that will ensure tracking from Applications, all the while being FOSS, Free, No Analytics, No Ads...<br>
-Many changes were made (100k+ Lines of Code Contributed many more Modified) to make it into the monster it is Now. If an Application Somehow Slips through, I spend many Hours and Days Reverse Engineering these Applications to ensure XPL-EX will always succeed in making you un identifiable.<br><br><br>
-
-<div align="center"> My name is ObbedCode, join me on this Adventure giving Privacy back to the Users, and giving a big F*ck you to Big Data, and the Three letter agencies. Much love <3 </div><br>
-</details>
-
-<br><br>
 Installation / Requirements
 ------------
 
@@ -204,7 +190,3 @@ Credits / Help
 *VDInfos Dev [VD-8](https://github.com/VD171/VD-Infos)*
 <br>
 *Detections research etc. [HUBERTH](https://t.me/HubertHub)*
-
-
-
-
