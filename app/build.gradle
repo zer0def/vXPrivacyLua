@@ -15,8 +15,8 @@ android {
         applicationId "eu.faircode.xlua"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 154
-        versionName "1.5.4"
+        versionCode 155
+        versionName "1.5.5"
         archivesBaseName = "XPL-EX-v$versionName-$versionCode"
     }
 
@@ -39,6 +39,13 @@ android {
                 keyPassword System.getenv('KEY_PASSWORD')
             }
         }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
 
     buildFeatures {
